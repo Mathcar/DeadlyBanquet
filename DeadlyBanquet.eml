@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inheritJdk="true">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="libs" scope="COMPILE">
+		<relative-module-cls project-related="file://$PROJECT_DIR$/libs"/>
+	</lib>
+	<levels>
+		<level name="Slick" value="project"/>
+	</levels>
+</component>
