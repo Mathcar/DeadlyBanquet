@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="Castle2" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="Castle2.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="257" name="wooden_floors" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+  <image source="wooden_floors.png" width="256" height="256"/>
+ </tileset>
+ <tileset firstgid="321" name="Furniture-Wealthy-byLunarea" tilewidth="32" tileheight="32" tilecount="300" columns="20">
+  <image source="Furniture-Wealthy-byLunarea.png" width="640" height="480"/>
+ </tileset>
+ <tileset firstgid="621" name="windowsNstuff" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="windowsNstuff.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="877" name="kitchen_stuff" tilewidth="32" tileheight="32" tilecount="72" columns="8">
+  <image source="kitchen_stuff.png" width="256" height="288"/>
+ </tileset>
+ <tileset firstgid="949" name="NewestFr_byLunarea" tilewidth="32" tileheight="32" tilecount="25" columns="5">
+  <image source="NewestFr_byLunarea.png" width="188" height="160"/>
+ </tileset>
+ <tileset firstgid="974" name="furnitureyay" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="furnitureyay.png" width="512" height="512"/>
+ </tileset>
+ <layer name="Layer1" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAACzNiYGAwoiJ2ogFmY6QOHjVv1LxR8+hvHjUxAI9lwxCwBAAA
+  </data>
+ </layer>
+ <layer name="Layer2" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC9XS1w3CMBSFYQNmEcoClCkYgglooZcn9qAktNCrBIvxzo8gshMheAEER/p0dW1fR4oshMrZL1xx+pTv9Rk9Hda66KEPExaCgdt+WrvvuhaRQkRhSHfvZMnsCmtssMXuwXedJJhNoi3d/acTkso7EpPKNzPg3w4xga1Vb8JSeZY9swcccdKqN3Gp/Fo6vMsueujDhIUBhvd3naFmkUMeBRgoohRw3zeiH2MCG1PMMMfifrZMraCKGupooImW576lp9dzeLL3b7kAoZQ93LAEAAA=
+  </data>
+ </layer>
+ <layer name="Layer3" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWDFXxkZmD4BMSfmaljHiMLAwMTEDOzUMc8QaA5QkAsTCXzRsEoIAQAMTYSaLAEAAA=
+  </data>
+ </layer>
+</map>
