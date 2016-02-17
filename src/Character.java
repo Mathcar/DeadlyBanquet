@@ -21,6 +21,15 @@ public class Character implements GameObject{
 		
 		traits = new LinkedList<Trait>();
 	}
+
+
+	public Character(String name, int x, int y){
+		this.name=name;
+		this.xPos=x;
+		this.yPos=y;
+
+		traits = new LinkedList<Trait>();
+	}
 	
 	public void addTrait(Trait t){
 		for(Trait trait: traits){
@@ -31,11 +40,26 @@ public class Character implements GameObject{
 		traits.add(t);
 	}
 
+    /*
+    Do NOT use this
+     */
 	public List<Trait> getTraits(){
 		LinkedList<Trait> returnList = new LinkedList<Trait>();
 		returnList.addAll(traits); // still a shallow copy. Needs to be fixed.
 		return returnList;
 	}
+
+    /*
+    Check if trait exists
+    return true if it dose, and false if not.
+     */
+    public Boolean traitExist(Trait t){
+        if(traits.contains(t)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 	
 	@Override
 	public int getX() {
