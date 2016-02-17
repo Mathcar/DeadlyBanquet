@@ -21,7 +21,7 @@ public class SetUpClass extends BasicGame {
 	}
 
 	public void init(GameContainer container) throws SlickException {
-		map = new TiledMap("maps/living_room2.tmx"); 
+		map = new TiledMap("res/pictures/living_room2.tmx");
 	}
 
 	public void update(GameContainer container, int delta) throws SlickException {
