@@ -1,3 +1,4 @@
+import org.newdawn.slick.Graphics;
 
 public interface GameObject {
 
@@ -7,7 +8,7 @@ public interface GameObject {
 	
 	public void uppdate();
 
-	public void draw();
+	public void draw(Graphics g);
 	
 	public boolean isSolid();
 	
