@@ -10,7 +10,7 @@ public class Character implements GameObject{
 	private List<Trait> traits;
 	
 	private String name;
-	
+	private TraitInfo traitInfo;
 	
 	private TravaresableState state = TravaresableState.SOLID;
 	
@@ -18,18 +18,17 @@ public class Character implements GameObject{
 		this.name = name;
 		this.xPos = 0;
 		this.yPos = 0;
-		
-		traits = new LinkedList<Trait>();
-	}
-
-
-	public Character(String name, int x, int y){
-		this.name=name;
-		this.xPos=x;
-		this.yPos=y;
 
 		traits = new LinkedList<Trait>();
 	}
+
+    /*
+    Set the trait option, for the first time.
+    Has to be ALL the stuff that is in TraitOption
+     */
+    public void initTraitInfo(TraitInfo.Sex sex){
+        this.traitInfo = new TraitInfo(sex);
+    }
 	
 	public void addTrait(Trait t){
 		for(Trait trait: traits){
