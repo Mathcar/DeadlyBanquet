@@ -9,7 +9,7 @@ public interface GameObject {
 	
 	public boolean isSolid();
 	
-	enum travaresableState{
+	enum TravaresableState{
 		SOLID, SMALL, FLAT;
 	}
 }

@@ -12,7 +12,7 @@ public class Character implements GameObject{
 	private String name;
 	
 	
-	private travaresableState state = travaresableState.SOLID;
+	private TravaresableState state = TravaresableState.SOLID;
 	
 	public Character(String name){
 		this.name = name;
@@ -55,7 +55,7 @@ public class Character implements GameObject{
 
 	@Override
 	public boolean isSolid() {
-		if(state==travaresableState.SOLID){
+		if(state==TravaresableState.SOLID){
 			return true;
 		}
 		return false;
