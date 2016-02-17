@@ -9,13 +9,13 @@ public class Character implements GameObject{
 	
 	private List<Trait> traits;
 	
-	private enum travaresableState{
-		SOLID, SMALL
-	}
+	private String name;
+	
 	
 	private travaresableState state = travaresableState.SOLID;
 	
-	public Character(){
+	public Character(String name){
+		this.name = name;
 		this.xPos = 0;
 		this.yPos = 0;
 		
