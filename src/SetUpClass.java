@@ -28,16 +28,5 @@ public class SetUpClass extends BasicGame {
 
 		
 	}
-	
-	public static void main(String[] args) throws SlickException {
-		AppGameContainer app = new AppGameContainer(new SetUpClass("SetUpTest"));
-		
-		app.setDisplayMode(640, 480, false);
-		app.setShowFPS(true);
-		app.setAlwaysRender(true);
-		app.setVSync(true);
-		app.setMaximumLogicUpdateInterval(60);
-		app.start(); 
-	}
 
 }
