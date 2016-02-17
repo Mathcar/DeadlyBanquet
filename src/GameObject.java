@@ -9,6 +9,8 @@ public interface GameObject {
 	
 	public boolean isSolid();
 	
+//	public TileID getTileID();
+	
 	enum TravaresableState{
 		SOLID, SMALL, FLAT;
 	}

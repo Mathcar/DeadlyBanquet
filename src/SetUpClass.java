@@ -14,7 +14,6 @@ public class SetUpClass extends BasicGame {
 		super(title);
 	}
 
-
 	public void render(GameContainer container, Graphics arg1) throws SlickException {
 		map.render(0,0);
 		
@@ -22,6 +21,7 @@ public class SetUpClass extends BasicGame {
 
 	public void init(GameContainer container) throws SlickException {
 		map = new TiledMap("res/pictures/living_room2.tmx");
+		
 	}
 
 	public void update(GameContainer container, int delta) throws SlickException {
