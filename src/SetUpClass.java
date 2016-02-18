@@ -30,9 +30,13 @@ public class SetUpClass extends BasicGame {
 	public void render(GameContainer container, Graphics arg1) throws SlickException {
 		if(roomNum == 1){
 			map1.render(0, 0);
+            pathfindingMap = new LayerBasedTileMap(map1);
+            pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		}
 		else if(roomNum == 2){
 			map2.render(0, 0);
+            pathfindingMap = new LayerBasedTileMap(map2);
+            pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		}
 
         //----------PATHFINDING TEST RENDERS------------------------

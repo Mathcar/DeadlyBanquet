@@ -38,6 +38,7 @@ public class LayerBasedTileMap implements TileBasedMap {
     @Override
     public boolean blocked(PathFindingContext pfx, int x, int y) {
         return isBlocked(x,y);
+
     }
 
     @Override
@@ -47,7 +48,7 @@ public class LayerBasedTileMap implements TileBasedMap {
 
     public boolean isBlocked(int x, int y){
         for(int i = map.getLayerCount()-1; i>=0;i--){
-            if(i%2 == 0 && i != 0) {
+            if(i!=0) {
                 if (map.getTileId(x, y, i) != 0) {
                     return true;
                 }
