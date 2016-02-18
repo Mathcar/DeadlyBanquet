@@ -1,21 +1,28 @@
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.BasicGameState;
+import org.newdawn.slick.state.GameState;
+import org.newdawn.slick.state.StateBasedGame;
 
+import states.*;
 
-public class Main {
+public class Main extends StateBasedGame{
+
+	public Main() {
+		super("Deadly Banquet");
+	}
 
 	public static void main(String[] args) {
 		
 		AppGameContainer app;
 		try {
-			app = new AppGameContainer(new SetUpClass("SetUpTest"));
+			app = new AppGameContainer(new Main());
 			
 			app.setDisplayMode(640, 480, false);
-			app.setShowFPS(true);
-			app.setAlwaysRender(true);
-			app.setVSync(true);
-			app.setMaximumLogicUpdateInterval(60);
 			app.start(); 
+
 			
 		} catch (SlickException e) {
 			e.printStackTrace();
@@ -23,5 +30,20 @@ public class Main {
 		}
 
 	}
+
+	@Override
+	public void initStatesList(GameContainer gc) throws SlickException {
+		gc.setShowFPS(true);
+		gc.setAlwaysRender(true);
+		gc.setVSync(true);
+		gc.setMaximumLogicUpdateInterval(60);
+		
+		this.addState(new Menu());
+		this.addState(new SetUpClass());
+		this.addState(new Pause());
+		
+		
+	}
+
 
 }
