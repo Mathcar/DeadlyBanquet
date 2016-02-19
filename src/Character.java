@@ -1,12 +1,20 @@
 
 import org.newdawn.slick.Graphics;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 public class Character implements GameObject{
-	
+
+    /*
+    Counter to set specific ID for each character.
+     */
+    private static int idCounter =0;
+
+    private int id;
 	private int xPos;
 	private int yPos;
 	
@@ -14,16 +22,26 @@ public class Character implements GameObject{
 	
 	private String name;
 	private TraitInfo traitInfo;
+
+    private Map opinions = new HashMap<>();
 	
 	private TravaresableState state = TravaresableState.SOLID;
 	
 	public Character(String name){
+        //set ID
+        idCounter++;
+        this.id=idCounter;
+        //done with ID set
 		this.name = name;
 		this.xPos = 0;
 		this.yPos = 0;
 
 		traits = new LinkedList<Trait>();
 	}
+
+    public void meetNewCharacter(Character person){
+        opinions.put(new Opinion(),person.getId());
+    }
 
     /*
     Set the trait option, for the first time.
@@ -53,6 +71,10 @@ public class Character implements GameObject{
 		}
 		traits.add(t);
 	}
+
+    public int getId() {
+        return id;
+    }
 
     /*
     Do NOT use this
