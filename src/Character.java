@@ -1,3 +1,6 @@
+
+import org.newdawn.slick.Graphics;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,7 +32,19 @@ public class Character implements GameObject{
     public void initTraitInfo(TraitInfo.Sex sex){
         this.traitInfo = new TraitInfo(sex);
     }
-	
+
+    public void draw(Graphics g){
+
+    }
+
+    public void setxPos(int x){
+        this.xPos=x;
+    }
+
+    public void setyPos(int y){
+        this.yPos=y;
+    }
+
 	public void addTrait(Trait t){
 		for(Trait trait: traits){
 			if(t.equals(trait)){
