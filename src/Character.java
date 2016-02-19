@@ -40,7 +40,8 @@ public class Character implements GameObject{
 	}
 
     public void meetNewCharacter(Character person){
-        opinions.put(new Opinion(),person.getId());
+        //opinions.put(new Opinion(),person.getId());
+        opinions.put(person.getId(), new Opinion());
     }
 
     /*
@@ -53,6 +54,13 @@ public class Character implements GameObject{
 
     public void draw(Graphics g){
 
+    }
+
+    //todo this is just being tested.
+    public Opinion getOpinion(Character person){
+        int pid = person.getId();
+        Opinion temp = (Opinion) opinions.get(pid);
+        return temp;
     }
 
     public void setxPos(int x){

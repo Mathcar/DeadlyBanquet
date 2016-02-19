@@ -19,4 +19,8 @@ public class Opinion {
     public int getLove(){
         return this.love;
     }
+    // use this for both add and subtract.
+    public void changeLove(int value){
+        this.love += value;
+    }
 }
