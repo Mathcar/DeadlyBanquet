@@ -105,6 +105,9 @@ public class SetUpClass extends BasicGameState {
 			input.clearKeyPressedRecord();
 			s.enterState(States.pause);;
 		}
+		else if(input.isKeyPressed(Input.KEY_T)) 
+			input.clearKeyPressedRecord();
+    		s.enterState(States.talk);
         
     	
     	//Code for moving a small image on the map
