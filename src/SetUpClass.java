@@ -1,4 +1,5 @@
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
 import states.*;
 
@@ -8,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
@@ -27,17 +29,34 @@ public class SetUpClass extends BasicGameState {
 	private int currentLayer = 0;
 	private NPCMover testNPC;
 	
-	private Image player;
+	private Image playerdown,playerup,playerleft,playerright,playerup2,playerup3;
 	private int playerx = 100;
 	private int playery = 100;
 	private Boolean playerDown;
 	private Boolean playerUp;
 	private Boolean playerLeft;
 	private Boolean playerRight;
+	private Boolean playerLookingDown = true;
+	private Boolean playerLookingUp = false;
+	private Boolean playerLookingLeft = false;
+	private Boolean playerLookingRight = false;
 	private Boolean leftStop;
 	private Boolean rightStop;
 	private Boolean upStop;
 	private Boolean downStop;
+	private SpriteSheet moveUpSheet;
+	private Animation moveUpAni;
+	private Boolean playerMovingUp;
+	private SpriteSheet moveDownSheet;
+	private Animation moveDownAni;
+	private Boolean playerMovingDown;
+	private SpriteSheet moveLeftSheet;
+	private Animation moveLeftAni;
+	private Boolean playerMovingLeft;
+	private SpriteSheet moveRightSheet;
+	private Animation moveRightAni;
+	private Boolean playerMovingRight;
+	
 	//-------------------------------------------
 
 	public SetUpClass() {
@@ -59,12 +78,43 @@ public class SetUpClass extends BasicGameState {
 			map2.render(0, 0);
             pathfindingMap = new LayerBasedTileMap(map2);
             pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		}
+		}	
 		
 		
-		player.getScaledCopy(32,32).draw(playerx,playery);
 		
 		
+		if (playerLookingDown){
+			if(playerMovingDown){
+ 	 			moveDownAni.draw(playerx,playery);
+ 	 			moveDownAni.setPingPong(true);
+ 			}else{
+ 				playerdown.draw(playerx,playery);
+ 			}
+ 		}else if (playerLookingLeft){
+ 			if(playerMovingLeft){
+ 	 			moveLeftAni.draw(playerx,playery);
+ 	 			moveLeftAni.setPingPong(true);
+ 			}else{
+ 				playerleft.draw(playerx,playery);
+ 			}
+ 		}else if (playerLookingUp){
+ 			if(playerMovingUp){
+ 	 			moveUpAni.draw(playerx,playery);
+ 	 			moveUpAni.setPingPong(true);
+ 			}else{
+ 				playerup.draw(playerx,playery);
+ 			}
+ 			
+ 		}else if (playerLookingRight){
+ 			if(playerMovingRight){
+ 	 			moveRightAni.draw(playerx,playery);
+ 	 			moveRightAni.setPingPong(true);
+ 			}else{
+ 				playerright.draw(playerx,playery);
+ 			}
+ 		}
+		
+	
 
         //----------PATHFINDING TEST RENDERS------------------------
         //drawGrid(arg1);
@@ -76,7 +126,19 @@ public class SetUpClass extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame s) throws SlickException {
 		map1 = new TiledMap("res/pictures/living_room2.tmx");
 		map2 = new TiledMap("res/pictures/kitchen.tmx");
-		player = new Image("res/pictures/images.jpg");
+		moveUpSheet = new SpriteSheet("res/pictures/upanimation.png",32,32);
+		moveUpAni = new Animation(moveUpSheet,300);
+		moveDownSheet = new SpriteSheet("res/pictures/downanimation.png",32,32);
+		moveDownAni = new Animation(moveDownSheet,300);
+		moveLeftSheet = new SpriteSheet("res/pictures/leftanimation.png",32,32);
+		moveLeftAni = new Animation(moveLeftSheet,300);
+		moveRightSheet = new SpriteSheet("res/pictures/rightanimation.png",32,32);
+		moveRightAni = new Animation(moveRightSheet,300);
+		
+		playerdown = new Image("res/pictures/lookingdown.png");
+		playerup = new Image("res/pictures/lookingup.png");
+		playerleft = new Image("res/pictures/lookingleft.png");
+		playerright = new Image("res/pictures/lookingright.png");
         //Pathfinding test inits-----------------------------
 		pathfindingMap = new LayerBasedTileMap(map1);
 		pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
@@ -90,65 +152,29 @@ public class SetUpClass extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame s, int delta) throws SlickException {
 		testNPC.update();
 
-		Input input = container.getInput();
 
-		if (playerx / 32 == 5 && playery / 32 == 2 || (input.isKeyPressed(Input.KEY_1))) {
+		Input input = container.getInput();
+		if (playerx / 32 == 5 && playery / 32 == 2 && playerLookingUp && input.isKeyPressed(Input.KEY_E)|| (input.isKeyPressed(Input.KEY_1))) {
 			playerx = 9 * 32;
-			playery = 3 * 32;
+			playery = 2 * 32;
 			roomNum = 2;
-		} else if (playerx / 32 == 9 && playery / 32 == 2 || input.isKeyPressed(Input.KEY_2)) {
+			playerLookingDown = true;
+			playerLookingUp = false;
+		} else if (playerx / 32 == 9 && playery / 32 == 2 && playerLookingUp && input.isKeyPressed(Input.KEY_E)|| input.isKeyPressed(Input.KEY_2)) {
 			playerx = 5 * 32;
-			playery = 3 * 32;
+			playery = 2 * 32;
 			roomNum = 1;
+			playerLookingDown = true;
+			playerLookingUp = false;
 		} else if (input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE)) {
 			input.clearKeyPressedRecord();
 			s.enterState(States.pause);
-		} else if(input.isKeyPressed(Input.KEY_T)) {
-			//input.clearKeyPressedRecord();
+		} else if(input.isKeyPressed(Input.KEY_E)) {
+			input.clearKeyPressedRecord();
 			s.enterState(States.talk);
 		}
-    	
-    	//Code for moving a small image on the map
-        playerDown = input.isKeyDown(Input.KEY_S) || input.isKeyDown(Input.KEY_DOWN);
-        playerUp = input.isKeyDown(Input.KEY_W) || input.isKeyDown(Input.KEY_UP);
-        playerLeft = input.isKeyDown(Input.KEY_A) || input.isKeyDown(Input.KEY_LEFT);
-        playerRight = input.isKeyDown(Input.KEY_D) || input.isKeyDown(Input.KEY_RIGHT);
-        
-        leftStop = pathfindingMap.isBlocked((playerx-1)/32,playery/32);
-    	rightStop = pathfindingMap.isBlocked((playerx+33)/32,playery/32);
-    	upStop = pathfindingMap.isBlocked((playerx+16)/32,(playery-1)/32);
-    	downStop = pathfindingMap.isBlocked((playerx+16)/32,(playery+33)/32);
-        
-		if (playerRight && playerLeft){
-			playerx += 0;
-		}else if (playerUp && playerDown){
-			playery += 0;
-		}else if (playerDown && playerLeft && !downStop && !leftStop){
-			playery += 1;
-			playerx -= 1;
-		}
-		else if (playerDown && playerRight && !downStop && !rightStop){
-			playery += 1;
-			playerx += 1;
-		}
-		else if (playerUp && playerLeft && !upStop && !leftStop){
-			playery -= 1;
-			playerx -= 1;
-		}
-		else if (playerUp && playerRight && !upStop && !rightStop){
-			playery -= 1;
-			playerx += 1;
-		}else if (playerDown && !downStop){
-			playery += 1;
-		}else if (playerLeft && !leftStop){
-			playerx -= 1;
-		}else if (playerUp && !upStop){
-			playery -= 1;
-		}else if (playerRight && !rightStop){
-			playerx += 1;
-		}
 		
-		
+		playerMovement(input, delta);
 		
         //PATHFINDING TEST INPUTS-----------------------------------------
         if(input.isMousePressed(0)) {
@@ -158,7 +184,7 @@ public class SetUpClass extends BasicGameState {
         }
         //-----------------------------------------------------------------
         
-        
+        input.clearKeyPressedRecord();
 	}
 
 
@@ -170,6 +196,69 @@ public class SetUpClass extends BasicGameState {
             }
         }
 
+    }
+    
+    public void playerMovement(Input input,int delta){
+    	
+    	playerDown = input.isKeyDown(Input.KEY_S) || input.isKeyDown(Input.KEY_DOWN);
+        playerUp = input.isKeyDown(Input.KEY_W) || input.isKeyDown(Input.KEY_UP);
+        playerLeft = input.isKeyDown(Input.KEY_A) || input.isKeyDown(Input.KEY_LEFT);
+        playerRight = input.isKeyDown(Input.KEY_D) || input.isKeyDown(Input.KEY_RIGHT);
+        
+        playerMovingUp = false;
+        playerMovingDown = false;
+        playerMovingLeft = false;
+        playerMovingRight = false;
+        
+        leftStop = pathfindingMap.isBlocked((playerx-1)/32,playery/32);
+     	rightStop = pathfindingMap.isBlocked((playerx+33)/32,playery/32);
+     	upStop = pathfindingMap.isBlocked((playerx+16)/32,(playery-1)/32);
+     	downStop = pathfindingMap.isBlocked((playerx+16)/32,(playery+33)/32);
+     	
+
+ 		if (playerDown){
+ 			playerLookingDown = true;
+ 			playerLookingUp = false;
+ 			playerLookingLeft = false;
+ 			playerLookingRight = false;
+ 			playerMovingDown = true;
+ 			moveDownAni.update(delta);
+ 			if(!downStop){
+ 				playery += 1;
+ 			}
+ 		}else if (playerLeft){
+ 			playerLookingLeft = true;
+ 			playerLookingUp = false;
+ 			playerLookingDown = false;
+ 			playerLookingRight = false;
+ 			playerMovingLeft = true;
+ 			moveUpAni.update(delta);
+ 			if(!leftStop){
+ 				playerx -= 1;
+ 			}
+ 		}else if (playerUp){
+ 			playerLookingUp = true;
+ 			playerLookingDown = false;
+ 			playerLookingLeft = false;
+ 			playerLookingRight = false;
+ 			playerMovingUp = true;
+ 			moveUpAni.update(delta);
+ 			if(!upStop){
+ 				playery -= 1;
+ 			}
+ 		}else if (playerRight){
+ 			playerLookingRight = true;
+ 			playerLookingUp = false;
+ 			playerLookingDown = false;
+ 			playerLookingLeft = false;
+ 			playerMovingRight = true;
+ 			moveUpAni.update(delta);
+ 			
+ 			if(!rightStop){
+ 				playerx += 1;
+ 			}
+ 		}
+    	
     }
 
 
