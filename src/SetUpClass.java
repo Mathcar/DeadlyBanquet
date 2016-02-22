@@ -90,25 +90,23 @@ public class SetUpClass extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame s, int delta) throws SlickException {
 		testNPC.update();
 
-        Input input = container.getInput();
-        
-    	if(playerx/32 == 5 && playery/32 == 2 || (input.isKeyPressed(Input.KEY_1))){
-			playerx = 9*32;
-			playery = 3*32;
+		Input input = container.getInput();
+
+		if (playerx / 32 == 5 && playery / 32 == 2 || (input.isKeyPressed(Input.KEY_1))) {
+			playerx = 9 * 32;
+			playery = 3 * 32;
 			roomNum = 2;
-		}else if (playerx/32 == 9 && playery/32 == 2 || input.isKeyPressed(Input.KEY_2)){
-			playerx = 5*32;
-			playery = 3*32;
+		} else if (playerx / 32 == 9 && playery / 32 == 2 || input.isKeyPressed(Input.KEY_2)) {
+			playerx = 5 * 32;
+			playery = 3 * 32;
 			roomNum = 1;
-		}
-		else if(input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE) ){
+		} else if (input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE)) {
 			input.clearKeyPressedRecord();
 			s.enterState(States.pause);
+		} else if(input.isKeyPressed(Input.KEY_T)) {
+			//input.clearKeyPressedRecord();
+			s.enterState(States.talk);
 		}
-		else if(input.isKeyPressed(Input.KEY_T)) 
-			input.clearKeyPressedRecord();
-    		s.enterState(States.talk);
-        
     	
     	//Code for moving a small image on the map
         playerDown = input.isKeyDown(Input.KEY_S) || input.isKeyDown(Input.KEY_DOWN);

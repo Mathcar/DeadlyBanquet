@@ -22,7 +22,7 @@ public class Talk extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame s, int arg2) throws SlickException {
 		if(gc.getInput().isKeyPressed(Input.KEY_T)){
 			gc.getInput().clearKeyPressedRecord();
-			s.enterState(States.talk);
+			s.enterState(States.game);
 			
 		}
 		

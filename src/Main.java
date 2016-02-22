@@ -41,6 +41,7 @@ public class Main extends StateBasedGame{
 		this.addState(new Menu());
 		this.addState(new SetUpClass());
 		this.addState(new Pause());
+		this.addState(new Talk());
 		
 		
 	}
