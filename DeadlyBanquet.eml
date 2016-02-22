@@ -6,6 +6,7 @@
 		<relative-module-cls project-related="file://$PROJECT_DIR$/libs"/>
 	</lib>
 	<levels>
-		<level name="Slick" value="project"/>
+		<level name="Slick2d" value="project"/>
+		<level name="slick2d" value="project"/>
 	</levels>
 </component>

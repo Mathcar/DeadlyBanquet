@@ -1,6 +1,7 @@
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.pathfinding.PathFindingContext;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
+import sun.java2d.pipe.ShapeSpanIterator;
 
 /**
  * Created by Hampus on 2016-02-18.
@@ -9,16 +10,18 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
  */
 public class LayerBasedTileMap implements TileBasedMap {
     private TiledMap map;
-    //private int blockingIndex = 2;   //can be used if a single layer can represent collision to simplify the code
+    private boolean[][] blockMap;
 
     public LayerBasedTileMap(TiledMap baseMap){
         map = baseMap;
+        //create a blockMap for manual blocking, and intialize it to not block anything.
+        blockMap = new boolean[getHeightInTiles()][getWidthInTiles()];
+        for(int i = 0; i< blockMap.length; i++){
+            for(int j=0; j<blockMap[i].length; j++){
+                blockMap[i][j] = false;
+            }
+        }
     }
-
-   /* public LayerBasedTileMap(TiledMap baseMap, int bi){
-        map = baseMap;
-        blockingIndex = bi;
-    }*/
 
     @Override
     public int getWidthInTiles() {
@@ -41,19 +44,35 @@ public class LayerBasedTileMap implements TileBasedMap {
 
     }
 
+    //Update the whole blockmap by supplying a new one to overwrite the old.
+    public void updateBlockmap(boolean[][] newBlockMap){
+        if(newBlockMap.length == blockMap.length && newBlockMap[0].length == blockMap.length){
+            blockMap = newBlockMap;
+        }
+
+    }
+
+    //Update the manual blocking of a single tile.
+    public void updateBlockStatus(int x, int y, boolean blocked){
+        blockMap[x][y] = blocked;
+    }
+
     @Override
     public float getCost(PathFindingContext pfx, int x, int y) {
         return 1;
     }
 
     public boolean isBlocked(int x, int y){
+        if(blockMap[x][y]){
+            return true;        //Tile is manually blocked
+        }
         for(int i = map.getLayerCount()-1; i>=0;i--){
             if(i!=0) {
                 if (map.getTileId(x, y, i) != 0) {
-                    return true;
+                    return true;       //Tile has something in the blocked layers
                 }
             }
         }
-        return false;
+        return false;       //Tile is unblocked, both manually and in the tilemap
     }
 }

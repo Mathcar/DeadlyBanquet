@@ -103,7 +103,7 @@ public class SetUpClass extends BasicGameState {
 		}
 		else if(input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE) ){
 			input.clearKeyPressedRecord();
-			s.enterState(States.pause);;
+			s.enterState(States.pause);
 		}
 		else if(input.isKeyPressed(Input.KEY_T)) 
 			input.clearKeyPressedRecord();
