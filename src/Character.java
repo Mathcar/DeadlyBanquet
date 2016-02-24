@@ -1,4 +1,5 @@
 
+import AI.Opinion;
 import org.newdawn.slick.Graphics;
 
 import java.util.HashMap;
