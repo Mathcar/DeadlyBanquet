@@ -9,6 +9,14 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Talk extends BasicGameState {
 
+
+	/*
+	Some comments and questions about this Class // Tom
+
+	Could this class have two characters? so we know whom are talking?
+	Cuz if we can do that, we can quite easly send SpeachActs from each Charater.
+	 */
+
 	public void init(GameContainer gc, StateBasedGame s) throws SlickException {
 		
 	}
