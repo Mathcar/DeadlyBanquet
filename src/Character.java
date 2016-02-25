@@ -133,13 +133,13 @@ public class Character implements GameObject{
 	/*
 	Should probably be different methods for NPC and player.
 	 */
-	public void reciveSpeachAct(SpeachAct s, Character c){
+	public void reciveSpeachAct(SpeechAct s, Character c){
 		this.getOpinion(c).changeLove(s.getLoveChange());
-		SpeachAct[] answers = s.getAproprietAnswers(s);
+		SpeechAct[] answers = s.getAproprietAnswers(s);
 		boolean endConversation = false;
 		// Here for player choose an answer, and NPC have to decide as well
 		// is there any method in the dialouge state that takes a list of answers??
-		// something like:  SpeachAct choosenAnswer=chooseAnswer(answers);
+		// something like:  SpeechAct choosenAnswer=chooseAnswer(answers);
 
 		/*
 		if(choosenAnswer.isEndConversation()){
@@ -161,7 +161,7 @@ public class Character implements GameObject{
 	/*
 	Makes Character C run his/hers reciveSpeachActFunktion.
 	 */
-	public void sendSpeachAct(SpeachAct s,Character c){
+	public void sendSpeachAct(SpeechAct s, Character c){
 		/*
 		Here should there probably be some checks to see if there actually is a conversation and stuff like that
 		 */

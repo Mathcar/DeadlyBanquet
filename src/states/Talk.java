@@ -14,7 +14,10 @@ public class Talk extends BasicGameState {
 	Some comments and questions about this Class // Tom
 
 	Could this class have two characters? so we know whom are talking?
-	Cuz if we can do that, we can quite easly send SpeachActs from each Charater.
+	Cuz if we can do that, we can quite easily send SpeechActs from each Character.
+	This would mean that instead of switching to the "Talk" State, we much switch
+	to a new Talk, Don't know if that is posible. The other alternative would be
+	to have a dialogue class that the "Talk" state are "talking" to.
 	 */
 
 	public void init(GameContainer gc, StateBasedGame s) throws SlickException {

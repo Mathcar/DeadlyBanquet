@@ -1,7 +1,7 @@
 /**
  * Created by Tom on 2016-02-25.
  */
-public class SpeachAct {
+public class SpeechAct {
     String text;
 
     // loveChange is probably wrong, but don't know what to do here.
@@ -10,20 +10,20 @@ public class SpeachAct {
     // if this is true, that means this is an speachAct that dose NOT gonna be replied.
     boolean endConversation;
 
-    public SpeachAct(String s,int change){
+    public SpeechAct(String s, int change){
         this.loveChange=change;
         this.text=s;
     }
 
-    public SpeachAct(String s,int change,boolean end){
+    public SpeechAct(String s, int change, boolean end){
         this.loveChange=change;
         this.text=s;
         this.endConversation=end;
     }
 
-    public static SpeachAct[] getAproprietAnswers(SpeachAct act){
-        SpeachAct[] answers = {new SpeachAct("something nice",10),new SpeachAct("something rude",-10),
-                new SpeachAct("Bye",0,true)};
+    public static SpeechAct[] getAproprietAnswers(SpeechAct act){
+        SpeechAct[] answers = {new SpeechAct("something nice",10),new SpeechAct("something rude",-10),
+                new SpeechAct("Bye",0,true)};
         return answers;
     }
 
