@@ -28,7 +28,9 @@ public class SetUpClass extends BasicGameState {
 	private int currentY = 0;
 	private int currentLayer = 0;
 	private NPCMover testNPC;
-	
+	private Image npcImage;
+	private Player thePlayer;
+	/*
 	private Image playerdown,playerup,playerleft,playerright,npcImage;
 	private int playerx = 100;
 	private int playery = 100;
@@ -56,7 +58,8 @@ public class SetUpClass extends BasicGameState {
 	private SpriteSheet moveRightSheet;
 	private Animation moveRightAni;
 	private Boolean playerMovingRight;
-	
+	COPIED______--------------*/
+
 	//-------------------------------------------
 
 	public SetUpClass() {
@@ -69,49 +72,24 @@ public class SetUpClass extends BasicGameState {
 
 	public void render(GameContainer container, StateBasedGame s,Graphics g) throws SlickException {
 //>>>>>>> fa02dda0394f532fc64d37fc0e0ce0477c95c778
-		 
+
 		if(roomNum == 1){
 			map1.render(0, 0);
-           // pathfindingMap = new LayerBasedTileMap(map1);
-           // pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		}
 		else if(roomNum == 2){
 			map2.render(0, 0);
-            //pathfindingMap = new LayerBasedTileMap(map2);
-            //pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		}	
-		
+		}
 		npcImage.draw(testNPC.x, testNPC.y);
-		
-		playerAnimation();
-		
-
-        //----------PATHFINDING TEST RENDERS------------------------
-        //drawGrid(arg1);
-		//arg1.drawString("X=" + currentX + "   Y=" + currentY + "    Layer=" + currentLayer + "     ID =" + map1.getTileId(currentX,currentY,currentLayer), 100,100);
-		
-        //---------------------------------------------------------
+		thePlayer.render();			//play the player animation
 	}
 
 	public void init(GameContainer container, StateBasedGame s) throws SlickException {
 		map1 = new TiledMap("res/pictures/living_room2.tmx");
 		map2 = new TiledMap("res/pictures/kitchen.tmx");
-		moveUpSheet = new SpriteSheet("res/pictures/upanimation.png",32,32);
-		moveUpAni = new Animation(moveUpSheet,300);
-		moveDownSheet = new SpriteSheet("res/pictures/downanimation.png",32,32);
-		moveDownAni = new Animation(moveDownSheet,300);
-		moveLeftSheet = new SpriteSheet("res/pictures/leftanimation.png",32,32);
-		moveLeftAni = new Animation(moveLeftSheet,300);
-		moveRightSheet = new SpriteSheet("res/pictures/rightanimation.png",32,32);
-		moveRightAni = new Animation(moveRightSheet,300);
-		
-		playerdown = new Image("res/pictures/lookingdown.png");
-		playerup = new Image("res/pictures/lookingup.png");
-		playerleft = new Image("res/pictures/lookingleft.png");
-		playerright = new Image("res/pictures/lookingright.png");
+		thePlayer = new Player(); //create the player object
 		
         //Pathfinding test inits-----------------------------
-		npcImage = new Image("res/pictures/testNPC.png");
+		npcImage = new Image("res/pictures/testNPC.png");    //ALSO MOVED
 		pathfindingMap = new LayerBasedTileMap(map1);
 		pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		testNPC = new NPCMover(9*32,9*32);
@@ -122,31 +100,16 @@ public class SetUpClass extends BasicGameState {
 	public void update(GameContainer container, StateBasedGame s, int delta) throws SlickException {
 		testNPC.update();
 		Input input = container.getInput();
-		if (playerx / 32 == 5 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E)|| (input.isKeyPressed(Input.KEY_1))) {
-			playerx = 9 * 32;
-			playery = 2 * 32;
-			roomNum = 2;
-			playerLookingDown = true;
-			playerLookingUp = false;
-			pathfindingMap = new LayerBasedTileMap(map2);
-	        pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		} else if (playerx / 32 == 9 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E)|| input.isKeyPressed(Input.KEY_2)) {
-			playerx = 5 * 32;
-			playery = 2 * 32;
-			roomNum = 1;
-			playerLookingDown = true;
-			playerLookingUp = false;
-			pathfindingMap = new LayerBasedTileMap(map1);
-            pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		} else if (input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE)) {
+		thePlayer.update(input,delta,this);			//run the players own update method
+		if (input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE)) {
 			input.clearKeyPressedRecord();
 			s.enterState(States.pause);
-		} else if(input.isKeyPressed(Input.KEY_E) && nextToNPC()) {
+		} else if(input.isKeyPressed(Input.KEY_E) && thePlayer.nextToNPC(testNPC)) {
 			input.clearKeyPressedRecord();
 			s.enterState(States.talk);
 		}
-		
-		playerMovement(input, delta);
+
+
         //PATHFINDING TEST INPUTS-----------------------------------------
         if(input.isMousePressed(0)) {
             System.out.println("mouse is at " + input.getMouseX() / 32 + "   " + input.getMouseY() / 32);
@@ -160,8 +123,6 @@ public class SetUpClass extends BasicGameState {
         	pathfindingMap.updateBlockStatus(testNPC.x/32, testNPC.y/32, true);
         	pathfindingMap.updateBlockStatus(testNPC.prevTilex,testNPC.prevTiley , false);
         }
-        
-        
         input.clearKeyPressedRecord();
 	}
 
@@ -175,123 +136,25 @@ public class SetUpClass extends BasicGameState {
         }
 
     }
-    
-    public void playerMovement(Input input,int delta){
-    	
-    	playerDown = input.isKeyDown(Input.KEY_S) || input.isKeyDown(Input.KEY_DOWN);
-        playerUp = input.isKeyDown(Input.KEY_W) || input.isKeyDown(Input.KEY_UP);
-        playerLeft = input.isKeyDown(Input.KEY_A) || input.isKeyDown(Input.KEY_LEFT);
-        playerRight = input.isKeyDown(Input.KEY_D) || input.isKeyDown(Input.KEY_RIGHT);
-        
-        playerMovingUp = false;
-        playerMovingDown = false;
-        playerMovingLeft = false;
-        playerMovingRight = false;
 
-        leftStop = pathfindingMap.isBlocked((playerx)/32,(playery+21)/32);
-     	rightStop = pathfindingMap.isBlocked((playerx+32)/32,(playery+21)/32);
-     	upStop = pathfindingMap.isBlocked((playerx+16)/32,(playery+20)/32);
-     	downStop = pathfindingMap.isBlocked((playerx+16)/32,(playery+33)/32);
-     	
 
- 		if (playerDown){
- 			playerLookingDown = true;
- 			playerLookingUp = false;
- 			playerLookingLeft = false;
- 			playerLookingRight = false;
- 			playerMovingDown = true;
- 			moveDownAni.update(delta);
- 			if(!downStop){
- 				playery += 1;
- 			}
- 		}else if (playerLeft){
- 			playerLookingLeft = true;
- 			playerLookingUp = false;
- 			playerLookingDown = false;
- 			playerLookingRight = false;
- 			playerMovingLeft = true;
- 			moveUpAni.update(delta);
- 			if(!leftStop){
- 				playerx -= 1;
- 			}
- 		}else if (playerUp){
- 			playerLookingUp = true;
- 			playerLookingDown = false;
- 			playerLookingLeft = false;
- 			playerLookingRight = false;
- 			playerMovingUp = true;
- 			moveUpAni.update(delta);
- 			if(!upStop){
- 				playery -= 1;
- 			}
- 		}else if (playerRight){
- 			playerLookingRight = true;
- 			playerLookingUp = false;
- 			playerLookingDown = false;
- 			playerLookingLeft = false;
- 			playerMovingRight = true;
- 			moveUpAni.update(delta);
- 			
- 			if(!rightStop){
- 				playerx += 1;
- 			}
- 		}
-    	
-    }
+	//Needs to be updated when rooms are fully defined!!!
+	public void swapRooms(int roomID){
 
-    
-    public void playerAnimation(){
-    	
-    	if (playerLookingDown){
-			if(playerMovingDown){
- 	 			moveDownAni.draw(playerx,playery);
- 	 			moveDownAni.setPingPong(true);
- 			}else{
- 				playerdown.draw(playerx,playery);
- 			}
-			npcImage.draw(testNPC.x, testNPC.y);
- 		}else if (playerLookingLeft){
- 			if(playerMovingLeft){
- 	 			moveLeftAni.draw(playerx,playery);
- 	 			moveLeftAni.setPingPong(true);
- 			}else{
- 				playerleft.draw(playerx,playery);
- 			}
- 		}else if (playerLookingUp){
- 			npcImage.draw(testNPC.x, testNPC.y);
- 			if(playerMovingUp){
- 	 			moveUpAni.draw(playerx,playery);
- 	 			moveUpAni.setPingPong(true);
- 			}else{
- 				playerup.draw(playerx,playery);
- 			}
- 		}else if (playerLookingRight){
- 			if(playerMovingRight){
- 	 			moveRightAni.draw(playerx,playery);
- 	 			moveRightAni.setPingPong(true);
- 			}else{
- 				playerright.draw(playerx,playery);
- 			}
- 		}
-    }
-    
-    //Test for facing and talking to the testNPC
-    public boolean nextToNPC(){
-	
-    	if((playerx+16)/32 == testNPC.x/32 && ((playery+21)/32 - testNPC.y/32) == 1 && playerLookingUp){
-    		return true;
-    	}else if((playerx+16)/32 == testNPC.x/32 && ((playery+21)/32 - testNPC.y/32) == -1 && playerLookingDown){
-    		return true;
-    	}else if((playerx+16)/32 - testNPC.x/32 == 1 && ((playery+21)/32 == testNPC.y/32) && playerLookingLeft){
-    		return true;
-    	}else if((playerx+16)/32 - testNPC.x/32 == -1 && ((playery+21)/32 == testNPC.y/32) && playerLookingRight){
-    		return true;
-    	}else{
-    		return false;
-    	}
-    }
-    
+		if(roomID == 2) {
+			roomNum = 2;
+			pathfindingMap = new LayerBasedTileMap(map2);
+			pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
+		}else{
+			roomNum=1;
+			pathfindingMap = new LayerBasedTileMap(map1);
+			pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
+		}
+	}
 
+	public LayerBasedTileMap getMap(){
+		return pathfindingMap;
+	}
 	@Override
 	public int getID() {
 		// TODO Auto-generated method stub

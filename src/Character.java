@@ -24,7 +24,7 @@ public class Character implements GameObject{
 	private String name;
 	private TraitInfo traitInfo;
 
-    private Map opinions = new HashMap<>();
+    private Map opinions = new HashMap<Integer, Opinion>();
 	
 	private TravaresableState state = TravaresableState.SOLID;
 	
