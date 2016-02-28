@@ -10,16 +10,23 @@ public class NPCMover implements Mover {
     public int x,y;
     private Path currentPath;
     private int pathCounter = 0;
+    public int prevTilex,prevTiley;
 
     public NPCMover(int startX, int startY){
         x = startX;
         y = startY;
+        prevTilex = 0;
+        prevTiley = 0;
     }
 
     //Small template on an update method regarding movement along a path
     public void update(){
         //Move along the current path if there is one
         if(currentPath!=null) {
+        	if(pathCounter != 0){
+        		prevTilex = currentPath.getStep(pathCounter-1).getX();
+        		prevTiley = currentPath.getStep(pathCounter-1).getY();
+        	}
             int targetX = currentPath.getStep(pathCounter).getX()*32;
             int targetY = currentPath.getStep(pathCounter).getY()*32;
             if (targetX != x) {
@@ -33,6 +40,7 @@ public class NPCMover implements Mover {
             }
         }
     }
+    
 
     public void addPath(Path p){
         pathCounter = 0;

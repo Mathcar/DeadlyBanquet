@@ -15,7 +15,7 @@ public class LayerBasedTileMap implements TileBasedMap {
     public LayerBasedTileMap(TiledMap baseMap){
         map = baseMap;
         //create a blockMap for manual blocking, and intialize it to not block anything.
-        blockMap = new boolean[getHeightInTiles()][getWidthInTiles()];
+        blockMap = new boolean[getWidthInTiles()][getHeightInTiles()];
         for(int i = 0; i< blockMap.length; i++){
             for(int j=0; j<blockMap[i].length; j++){
                 blockMap[i][j] = false;

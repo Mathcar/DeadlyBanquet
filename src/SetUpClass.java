@@ -29,7 +29,7 @@ public class SetUpClass extends BasicGameState {
 	private int currentLayer = 0;
 	private NPCMover testNPC;
 	
-	private Image playerdown,playerup,playerleft,playerright,playerup2,playerup3;
+	private Image playerdown,playerup,playerleft,playerright,npcImage;
 	private int playerx = 100;
 	private int playery = 100;
 	private Boolean playerDown;
@@ -67,59 +67,29 @@ public class SetUpClass extends BasicGameState {
 //	public void render(GameContainer container, Graphics arg1) throws SlickException {
 //=======
 
-	public void render(GameContainer container, StateBasedGame s,Graphics arg1) throws SlickException {
+	public void render(GameContainer container, StateBasedGame s,Graphics g) throws SlickException {
 //>>>>>>> fa02dda0394f532fc64d37fc0e0ce0477c95c778
+		 
 		if(roomNum == 1){
 			map1.render(0, 0);
-            pathfindingMap = new LayerBasedTileMap(map1);
-            pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
+           // pathfindingMap = new LayerBasedTileMap(map1);
+           // pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		}
 		else if(roomNum == 2){
 			map2.render(0, 0);
-            pathfindingMap = new LayerBasedTileMap(map2);
-            pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
+            //pathfindingMap = new LayerBasedTileMap(map2);
+            //pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		}	
 		
+		npcImage.draw(testNPC.x, testNPC.y);
 		
+		playerAnimation();
 		
-		
-		if (playerLookingDown){
-			if(playerMovingDown){
- 	 			moveDownAni.draw(playerx,playery);
- 	 			moveDownAni.setPingPong(true);
- 			}else{
- 				playerdown.draw(playerx,playery);
- 			}
- 		}else if (playerLookingLeft){
- 			if(playerMovingLeft){
- 	 			moveLeftAni.draw(playerx,playery);
- 	 			moveLeftAni.setPingPong(true);
- 			}else{
- 				playerleft.draw(playerx,playery);
- 			}
- 		}else if (playerLookingUp){
- 			if(playerMovingUp){
- 	 			moveUpAni.draw(playerx,playery);
- 	 			moveUpAni.setPingPong(true);
- 			}else{
- 				playerup.draw(playerx,playery);
- 			}
- 			
- 		}else if (playerLookingRight){
- 			if(playerMovingRight){
- 	 			moveRightAni.draw(playerx,playery);
- 	 			moveRightAni.setPingPong(true);
- 			}else{
- 				playerright.draw(playerx,playery);
- 			}
- 		}
-		
-	
 
         //----------PATHFINDING TEST RENDERS------------------------
         //drawGrid(arg1);
 		//arg1.drawString("X=" + currentX + "   Y=" + currentY + "    Layer=" + currentLayer + "     ID =" + map1.getTileId(currentX,currentY,currentLayer), 100,100);
-        arg1.drawOval(testNPC.x, testNPC.y, 20,20);
+		
         //---------------------------------------------------------
 	}
 
@@ -139,50 +109,58 @@ public class SetUpClass extends BasicGameState {
 		playerup = new Image("res/pictures/lookingup.png");
 		playerleft = new Image("res/pictures/lookingleft.png");
 		playerright = new Image("res/pictures/lookingright.png");
+		
         //Pathfinding test inits-----------------------------
+		npcImage = new Image("res/pictures/testNPC.png");
 		pathfindingMap = new LayerBasedTileMap(map1);
 		pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		testNPC = new NPCMover(64,64);
+		testNPC = new NPCMover(9*32,9*32);
         //----------------------------------------------------
-		
-		
 
 	}
 
 	public void update(GameContainer container, StateBasedGame s, int delta) throws SlickException {
 		testNPC.update();
-
-
 		Input input = container.getInput();
-		if (playerx / 32 == 5 && playery / 32 == 2 && playerLookingUp && input.isKeyPressed(Input.KEY_E)|| (input.isKeyPressed(Input.KEY_1))) {
+		if (playerx / 32 == 5 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E)|| (input.isKeyPressed(Input.KEY_1))) {
 			playerx = 9 * 32;
 			playery = 2 * 32;
 			roomNum = 2;
 			playerLookingDown = true;
 			playerLookingUp = false;
-		} else if (playerx / 32 == 9 && playery / 32 == 2 && playerLookingUp && input.isKeyPressed(Input.KEY_E)|| input.isKeyPressed(Input.KEY_2)) {
+			pathfindingMap = new LayerBasedTileMap(map2);
+	        pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
+		} else if (playerx / 32 == 9 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E)|| input.isKeyPressed(Input.KEY_2)) {
 			playerx = 5 * 32;
 			playery = 2 * 32;
 			roomNum = 1;
 			playerLookingDown = true;
 			playerLookingUp = false;
+			pathfindingMap = new LayerBasedTileMap(map1);
+            pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		} else if (input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE)) {
 			input.clearKeyPressedRecord();
 			s.enterState(States.pause);
-		} else if(input.isKeyPressed(Input.KEY_E)) {
+		} else if(input.isKeyPressed(Input.KEY_E) && nextToNPC()) {
 			input.clearKeyPressedRecord();
 			s.enterState(States.talk);
 		}
 		
 		playerMovement(input, delta);
-		
         //PATHFINDING TEST INPUTS-----------------------------------------
         if(input.isMousePressed(0)) {
             System.out.println("mouse is at " + input.getMouseX() / 32 + "   " + input.getMouseY() / 32);
             testNPC.addPath(pathFinder.findPath(testNPC, testNPC.x / 32, testNPC.y / 32, input.getMouseX() / 32, input.getMouseY() / 32));
-            System.out.println("Path made");
+            System.out.println("Path made ");
         }
+        
         //-----------------------------------------------------------------
+
+        if(!pathfindingMap.isBlocked(testNPC.x/32, testNPC.y/32)){
+        	pathfindingMap.updateBlockStatus(testNPC.x/32, testNPC.y/32, true);
+        	pathfindingMap.updateBlockStatus(testNPC.prevTilex,testNPC.prevTiley , false);
+        }
+        
         
         input.clearKeyPressedRecord();
 	}
@@ -209,10 +187,10 @@ public class SetUpClass extends BasicGameState {
         playerMovingDown = false;
         playerMovingLeft = false;
         playerMovingRight = false;
-        
-        leftStop = pathfindingMap.isBlocked((playerx-1)/32,playery/32);
-     	rightStop = pathfindingMap.isBlocked((playerx+33)/32,playery/32);
-     	upStop = pathfindingMap.isBlocked((playerx+16)/32,(playery-1)/32);
+
+        leftStop = pathfindingMap.isBlocked((playerx)/32,(playery+21)/32);
+     	rightStop = pathfindingMap.isBlocked((playerx+32)/32,(playery+21)/32);
+     	upStop = pathfindingMap.isBlocked((playerx+16)/32,(playery+20)/32);
      	downStop = pathfindingMap.isBlocked((playerx+16)/32,(playery+33)/32);
      	
 
@@ -261,6 +239,58 @@ public class SetUpClass extends BasicGameState {
     	
     }
 
+    
+    public void playerAnimation(){
+    	
+    	if (playerLookingDown){
+			if(playerMovingDown){
+ 	 			moveDownAni.draw(playerx,playery);
+ 	 			moveDownAni.setPingPong(true);
+ 			}else{
+ 				playerdown.draw(playerx,playery);
+ 			}
+			npcImage.draw(testNPC.x, testNPC.y);
+ 		}else if (playerLookingLeft){
+ 			if(playerMovingLeft){
+ 	 			moveLeftAni.draw(playerx,playery);
+ 	 			moveLeftAni.setPingPong(true);
+ 			}else{
+ 				playerleft.draw(playerx,playery);
+ 			}
+ 		}else if (playerLookingUp){
+ 			npcImage.draw(testNPC.x, testNPC.y);
+ 			if(playerMovingUp){
+ 	 			moveUpAni.draw(playerx,playery);
+ 	 			moveUpAni.setPingPong(true);
+ 			}else{
+ 				playerup.draw(playerx,playery);
+ 			}
+ 		}else if (playerLookingRight){
+ 			if(playerMovingRight){
+ 	 			moveRightAni.draw(playerx,playery);
+ 	 			moveRightAni.setPingPong(true);
+ 			}else{
+ 				playerright.draw(playerx,playery);
+ 			}
+ 		}
+    }
+    
+    //Test for facing and talking to the testNPC
+    public boolean nextToNPC(){
+	
+    	if((playerx+16)/32 == testNPC.x/32 && ((playery+21)/32 - testNPC.y/32) == 1 && playerLookingUp){
+    		return true;
+    	}else if((playerx+16)/32 == testNPC.x/32 && ((playery+21)/32 - testNPC.y/32) == -1 && playerLookingDown){
+    		return true;
+    	}else if((playerx+16)/32 - testNPC.x/32 == 1 && ((playery+21)/32 == testNPC.y/32) && playerLookingLeft){
+    		return true;
+    	}else if((playerx+16)/32 - testNPC.x/32 == -1 && ((playery+21)/32 == testNPC.y/32) && playerLookingRight){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
+    
 
 	@Override
 	public int getID() {
