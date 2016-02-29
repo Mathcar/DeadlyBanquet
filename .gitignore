@@ -30,4 +30,5 @@ nb-configuration.xml
 # Package Files #
 *.war
 *.ear
+*.jar
 /bin
