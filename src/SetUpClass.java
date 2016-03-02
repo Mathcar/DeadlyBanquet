@@ -75,11 +75,11 @@ public class SetUpClass extends BasicGameState {
 
 		if(roomNum == 1){
 			map1.render(0, 0);
+			npcImage.draw(testNPC.x, testNPC.y);
 		}
 		else if(roomNum == 2){
 			map2.render(0, 0);
 		}
-		npcImage.draw(testNPC.x, testNPC.y);
 		thePlayer.render();			//play the player animation
 	}
 
