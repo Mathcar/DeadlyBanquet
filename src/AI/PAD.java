@@ -4,7 +4,7 @@ import static java.lang.Math.*;
  *
  * @author omega
  */
-/*The PAD model describes a unit cube where points can describe 
+/*The PAD model describes a cube where points can describe 
 either a current feeling or personality (that is, "the emotions somebody
 usually feels" or an average of feelings over a long time period)
 The octants of the unit cube can be labelled as follows:
@@ -92,12 +92,11 @@ public class PAD {
         return A;
     }
 
-    //This is really just an example method showing how one could
-    //get a measure of somebody's inclination to murder somebody
     public double getD() {
         return D;
     }
-
+    //This is really just an example method showing how one could
+    //get a measure of somebody's inclination to murder somebody
     //(or other information)
     //The lower the value, the more hostile the character is feeling.
     public double murderousness() {
