@@ -19,7 +19,7 @@ import org.newdawn.slick.util.pathfinding.Path;
 
 public class SetUpClass extends BasicGameState {
 
-	private TiledMap map1, map2;
+	private TiledMap map1, map2, map3;
 	private int roomNum = 1;
 	// A*pathfinding testing variables-------------
 	private AStarPathFinder pathFinder;
@@ -79,6 +79,8 @@ public class SetUpClass extends BasicGameState {
 		}
 		else if(roomNum == 2){
 			map2.render(0, 0);
+		}else if(roomNum == 3){
+			map3.render(0, 0);
 		}
 		thePlayer.render();			//play the player animation
 	}
@@ -86,6 +88,7 @@ public class SetUpClass extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame s) throws SlickException {
 		map1 = new TiledMap("res/pictures/living_room2.tmx");
 		map2 = new TiledMap("res/pictures/kitchen.tmx");
+		map3 = new TiledMap("res/pictures/bedroom.tmx");
 		thePlayer = new Player(); //create the player object
 		
         //Pathfinding test inits-----------------------------
@@ -112,6 +115,7 @@ public class SetUpClass extends BasicGameState {
 
         //PATHFINDING TEST INPUTS-----------------------------------------
         if(input.isMousePressed(0)) {
+        	
             System.out.println("mouse is at " + input.getMouseX() / 32 + "   " + input.getMouseY() / 32);
             testNPC.addPath(pathFinder.findPath(testNPC, testNPC.x / 32, testNPC.y / 32, input.getMouseX() / 32, input.getMouseY() / 32));
             System.out.println("Path made ");
@@ -145,9 +149,14 @@ public class SetUpClass extends BasicGameState {
 			roomNum = 2;
 			pathfindingMap = new LayerBasedTileMap(map2);
 			pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		}else{
+		}else if(roomID == 1){
 			roomNum=1;
 			pathfindingMap = new LayerBasedTileMap(map1);
+			pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
+		}
+		else{
+			roomNum=3;
+			pathfindingMap = new LayerBasedTileMap(map3);
 			pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		}
 	}

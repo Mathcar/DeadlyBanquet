@@ -53,14 +53,14 @@ public class Player {
     }
 
     public void update(Input input, int delta, SetUpClass world) {
-        if ((playerx / 32 == 5 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E)) || (input.isKeyPressed(Input.KEY_1))) {
+        if ((playerx / 32 == 5 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E)) || (input.isKeyPressed(Input.KEY_2))) {
             System.out.println("Should be changing room now!");
             playerx = 9 * 32;
             playery = 2 * 32;
             world.swapRooms(2);     //Request the world to change active room
             playerLookingDown = true;
             playerLookingUp = false;
-        } else if (playerx / 32 == 9 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E) || input.isKeyPressed(Input.KEY_2)) {
+        } else if (playerx / 32 == 9 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E) || input.isKeyPressed(Input.KEY_1)) {
             System.out.println("Should be changing room now!");
             playerx = 5 * 32;
             playery = 2 * 32;
@@ -68,6 +68,15 @@ public class Player {
             playerLookingDown = true;
             playerLookingUp = false;
         }
+        else if (playerx / 32 == 9 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E) || input.isKeyPressed(Input.KEY_3)) {
+        	System.out.println("Should be changing room now!");
+        	playerx = 9 * 32;
+        	playery = 4 * 32;
+        	world.swapRooms(3);    //Request the world to change active room
+        	playerLookingDown = true;
+        	playerLookingUp = false;
+        }
+    
 
         playerMovement(input, delta, world.getMap());
     }
