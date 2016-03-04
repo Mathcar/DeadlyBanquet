@@ -1,4 +1,4 @@
-package AI;
+package deadlybanquet.states.AI;
 
 import org.junit.Test;
 import static org.junit.Assert.*;

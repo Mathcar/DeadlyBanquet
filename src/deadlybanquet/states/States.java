@@ -1,4 +1,4 @@
-package states;
+package deadlybanquet.states;
 
 public class States {
 

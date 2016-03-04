@@ -1,4 +1,4 @@
-package states;
+package deadlybanquet.states;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -32,13 +32,13 @@ public class Talk extends BasicGameState {
 		
 		if(answer == 1){
 			g.drawString("NPC: I'm great, but I'm late for a meeting.",100,60);
-			g.drawString("Player: \n 2. Ok! Good bye! ",100,100);
+			g.drawString("deadlybanquet.Player: \n 2. Ok! Good bye! ",100,100);
 		}else if(answer == 2){
 			g.drawString("NPC: Talk to you later!",100,60);
 			g.drawString("Press 'e' to leave",100,100);
 		}else{
 			g.drawString("NPC: Hi!",100,60);	
-			g.drawString("Player: \n 1. Hello! How are you? \n 2. Good bye! ",100,100);
+			g.drawString("deadlybanquet.Player: \n 1. Hello! How are you? \n 2. Good bye! ",100,100);
 		}
 		
 		

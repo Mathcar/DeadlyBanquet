@@ -1,3 +1,6 @@
+package deadlybanquet;
+
+import deadlybanquet.states.GameWindow;
 import org.newdawn.slick.*;
 
 /**

@@ -1,4 +1,4 @@
-package AI;
+package deadlybanquet.AI;
 
 /**
  * Created by Tom on 2016-02-19.

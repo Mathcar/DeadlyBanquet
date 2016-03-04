@@ -1,4 +1,4 @@
-package AI;
+package deadlybanquet.AI;
 
 /**
  * Representation of a desire or goal.

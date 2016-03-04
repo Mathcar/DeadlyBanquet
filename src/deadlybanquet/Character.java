@@ -1,5 +1,5 @@
-
-import AI.Opinion;
+package deadlybanquet;
+import deadlybanquet.AI.Opinion;
 import org.newdawn.slick.Graphics;
 
 import java.util.HashMap;
@@ -139,7 +139,7 @@ public class Character implements GameObject{
 		boolean endConversation = false;
 		// Here for player choose an answer, and NPC have to decide as well
 		// is there any method in the dialouge state that takes a list of answers??
-		// something like:  SpeechAct choosenAnswer=chooseAnswer(answers);
+		// something like:  deadlybanquet.SpeechAct choosenAnswer=chooseAnswer(answers);
 
 		/*
 		if(choosenAnswer.isEndConversation()){

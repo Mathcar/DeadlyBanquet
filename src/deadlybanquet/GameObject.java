@@ -1,3 +1,5 @@
+package deadlybanquet;
+
 import org.newdawn.slick.Graphics;
 
 public interface GameObject {

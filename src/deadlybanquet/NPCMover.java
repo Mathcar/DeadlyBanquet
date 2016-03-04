@@ -1,3 +1,5 @@
+package deadlybanquet;
+
 import org.newdawn.slick.util.pathfinding.Mover;
 import org.newdawn.slick.util.pathfinding.Path;
 

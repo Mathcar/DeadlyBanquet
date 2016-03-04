@@ -1,4 +1,4 @@
-package AI;
+package deadlybanquet.AI;
 import static java.lang.Math.*;
 /**
  *

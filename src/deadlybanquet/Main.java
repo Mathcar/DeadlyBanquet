@@ -1,9 +1,14 @@
+package deadlybanquet;
+
+import deadlybanquet.states.Menu;
+import deadlybanquet.states.Pause;
+import deadlybanquet.states.Talk;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import states.*;
+import deadlybanquet.states.*;
 
 public class Main extends StateBasedGame{
 

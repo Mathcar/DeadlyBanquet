@@ -1,20 +1,15 @@
+package deadlybanquet.states;
 
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.AppGameContainer;
-import states.*;
-
-import org.newdawn.slick.BasicGame;
+import deadlybanquet.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
-import org.newdawn.slick.util.pathfinding.Path;
 
 
 public class GameWindow extends BasicGameState {

@@ -1,4 +1,4 @@
-package AI;
+package deadlybanquet.AI;
 
 /**
  * This class is the memory of the NPC or player. 

@@ -1,3 +1,5 @@
+package deadlybanquet;
+
 /**
  * Created by Tom on 2016-02-17.
  */
