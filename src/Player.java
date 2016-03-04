@@ -1,5 +1,4 @@
 import org.newdawn.slick.*;
-import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 
 /**
  * Created by Hampus on 2016-02-28.
@@ -52,7 +51,7 @@ public class Player {
 
     }
 
-    public void update(Input input, int delta, SetUpClass world) {
+    public void update(Input input, int delta, GameWindow world) {
         if ((playerx / 32 == 5 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E)) || (input.isKeyPressed(Input.KEY_2))) {
             System.out.println("Should be changing room now!");
             playerx = 9 * 32;

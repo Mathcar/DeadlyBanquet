@@ -17,7 +17,7 @@ import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 import org.newdawn.slick.util.pathfinding.Path;
 
 
-public class SetUpClass extends BasicGameState {
+public class GameWindow extends BasicGameState {
 
 	private TiledMap map1, map2, map3;
 	private int roomNum = 1;
@@ -30,39 +30,8 @@ public class SetUpClass extends BasicGameState {
 	private NPCMover testNPC;
 	private Image npcImage;
 	private Player thePlayer;
-	/*
-	private Image playerdown,playerup,playerleft,playerright,npcImage;
-	private int playerx = 100;
-	private int playery = 100;
-	private Boolean playerDown;
-	private Boolean playerUp;
-	private Boolean playerLeft;
-	private Boolean playerRight;
-	private Boolean playerLookingDown = true;
-	private Boolean playerLookingUp = false;
-	private Boolean playerLookingLeft = false;
-	private Boolean playerLookingRight = false;
-	private Boolean leftStop;
-	private Boolean rightStop;
-	private Boolean upStop;
-	private Boolean downStop;
-	private SpriteSheet moveUpSheet;
-	private Animation moveUpAni;
-	private Boolean playerMovingUp;
-	private SpriteSheet moveDownSheet;
-	private Animation moveDownAni;
-	private Boolean playerMovingDown;
-	private SpriteSheet moveLeftSheet;
-	private Animation moveLeftAni;
-	private Boolean playerMovingLeft;
-	private SpriteSheet moveRightSheet;
-	private Animation moveRightAni;
-	private Boolean playerMovingRight;
-	COPIED______--------------*/
 
-	//-------------------------------------------
-
-	public SetUpClass() {
+	public GameWindow() {
 		super();
 	}
 
