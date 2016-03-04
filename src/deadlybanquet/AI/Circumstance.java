@@ -1,4 +1,4 @@
-package deadlybanquet.AI;
+package deadlybanquet.ai;
 
 /**
  *Represents one particular field in for example a model of 

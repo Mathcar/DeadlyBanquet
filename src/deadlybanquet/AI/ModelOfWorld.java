@@ -1,4 +1,4 @@
-package deadlybanquet.AI;
+package deadlybanquet.ai;
 
 /**
  *
