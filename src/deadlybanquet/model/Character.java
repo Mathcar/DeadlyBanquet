@@ -137,6 +137,9 @@ public class Character implements GameObject {
 	/*
 	Should probably be different methods for NPC and player.
 	 */
+
+	/* I want to save this to but it should not be here, but please DONT remove.
+
 	public void reciveSpeachAct(SpeechAct s, Character c){
 		this.getOpinion(c).changeLove(s.getLoveChange());
 		SpeechAct[] answers = s.getAproprietAnswers(s);
@@ -145,31 +148,31 @@ public class Character implements GameObject {
 		// is there any method in the dialouge state that takes a list of answers??
 		// something like:  deadlybanquet.SpeechAct choosenAnswer=chooseAnswer(answers);
 
-		/*
-		if(choosenAnswer.isEndConversation()){
-			endConversation=true;
-		}
-		 */
+
+		//if(choosenAnswer.isEndConversation()){
+		//	endConversation=true;
+		//}
+
 
 		if(!endConversation){
 			//sendSpeachAct(choosenAnswer,c);
 		}else{
 			// Change the state to Normal, the conversation is now ended.
 		}
-		/*
-		Should a NPC wait for answer here??
-		Is the game paused, or do we need a semaphore here to make sure the NPC dosnt just walk away?
-		 */
+
+		//Should a NPC wait for answer here??
+		//Is the game paused, or do we need a semaphore here to make sure the NPC dosnt just walk away?
+
 	}
 
-	/*
-	Makes Character C run his/hers reciveSpeachActFunktion.
-	 */
+
+	//Makes Character C run his/hers reciveSpeachActFunktion.
+
 	public void sendSpeachAct(SpeechAct s, Character c){
-		/*
-		Here should there probably be some checks to see if there actually is a conversation and stuff like that
-		 */
+
+		//Here should there probably be some checks to see if there actually is a conversation and stuff like that
+
 		c.reciveSpeachAct(s,this);
-	}
+	}*/
 
 }
