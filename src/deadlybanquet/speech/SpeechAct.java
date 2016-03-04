@@ -1,4 +1,4 @@
-package deadlybanquet;
+package deadlybanquet.speech;
 
 import java.util.List;
 import java.util.Map;
@@ -13,5 +13,7 @@ public interface SpeechAct {
     public boolean isEndConversation();
 
     public Map<String,Integer> getOpinionChanges();
+
+    public List<String> getProperties();
 
 }

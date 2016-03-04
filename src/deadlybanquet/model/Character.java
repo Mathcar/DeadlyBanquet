@@ -1,7 +1,6 @@
 package deadlybanquet.model;
 import deadlybanquet.ai.Opinion;
 import deadlybanquet.GameObject;
-import deadlybanquet.SpeechAct;
 import deadlybanquet.Trait;
 import deadlybanquet.TraitInfo;
 import org.newdawn.slick.Graphics;
@@ -146,7 +145,7 @@ public class Character implements GameObject {
 		boolean endConversation = false;
 		// Here for player choose an answer, and NPC have to decide as well
 		// is there any method in the dialouge state that takes a list of answers??
-		// something like:  deadlybanquet.SpeechAct choosenAnswer=chooseAnswer(answers);
+		// something like:  deadlybanquet.speech.SpeechAct choosenAnswer=chooseAnswer(answers);
 
 
 		//if(choosenAnswer.isEndConversation()){
