@@ -1,9 +1,12 @@
 package deadlybanquet.model;
 import deadlybanquet.ai.Opinion;
 import deadlybanquet.GameObject;
+import deadlybanquet.RenderObject;
+import deadlybanquet.Renderable;
 import deadlybanquet.SpeechAct;
 import deadlybanquet.Trait;
 import deadlybanquet.TraitInfo;
+
 import org.newdawn.slick.Graphics;
 
 import java.util.HashMap;
@@ -12,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Character implements GameObject {
+public class Character implements Renderable{
 
     /*
     Counter to set specific ID for each character.
@@ -22,24 +25,25 @@ public class Character implements GameObject {
     private int id;
 	private int xPos;
 	private int yPos;
+	private Direction direction;
 	
 	private List<Trait> traits;
 	
 	private String name;
-	private TraitInfo traitInfo;
+	private TraitInfo traitInfo;//???
 
     private Map opinions = new HashMap<Integer, Opinion>();
 	
-	private TravaresableState state = TravaresableState.SOLID;
 	
-	public Character(String name){
+	public Character(String name, int xPos, int yPos){
         //set ID
         idCounter++;
         this.id=idCounter;
         //done with ID set
 		this.name = name;
-		this.xPos = 0;
-		this.yPos = 0;
+		this.xPos = xPos;
+		this.yPos = yPos;
+		this.direction=Direction.SOUTH;
 
 		traits = new LinkedList<Trait>();
 	}
@@ -110,28 +114,12 @@ public class Character implements GameObject {
         }
     }
 	
-	@Override
 	public int getX() {
 		return xPos;
 	}
 
-	@Override
 	public int getY() {
 		return yPos;
-	}
-
-	@Override
-	public void uppdate() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isSolid() {
-		if(state==TravaresableState.SOLID){
-			return true;
-		}
-		return false;
 	}
 
 	/*
@@ -170,6 +158,12 @@ public class Character implements GameObject {
 		Here should there probably be some checks to see if there actually is a conversation and stuff like that
 		 */
 		c.reciveSpeachAct(s,this);
+	}
+
+	@Override
+	public RenderObject getRenderObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
