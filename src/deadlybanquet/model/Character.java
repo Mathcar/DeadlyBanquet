@@ -1,5 +1,9 @@
-package deadlybanquet;
-import deadlybanquet.AI.Opinion;
+package deadlybanquet.model;
+import deadlybanquet.ai.Opinion;
+import deadlybanquet.GameObject;
+import deadlybanquet.SpeechAct;
+import deadlybanquet.Trait;
+import deadlybanquet.TraitInfo;
 import org.newdawn.slick.Graphics;
 
 import java.util.HashMap;
@@ -8,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Character implements GameObject{
+public class Character implements GameObject {
 
     /*
     Counter to set specific ID for each character.

@@ -1,4 +1,4 @@
-package deadlybanquet.AI;
+package deadlybanquet.ai;
 
 /**
  * This represents an action such as walking somewhere,
