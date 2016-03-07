@@ -5,7 +5,7 @@ package deadlybanquet.ai;
  * @author omega
  */
 public class Desire {
-    public Circumstance what;
+    public IThought what;
     //Might want to restrict the value of this at some point
     public double strength;
     //TODO order by strength;
