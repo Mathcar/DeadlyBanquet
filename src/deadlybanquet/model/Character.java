@@ -7,6 +7,8 @@ import deadlybanquet.Trait;
 import deadlybanquet.TraitInfo;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -30,6 +32,11 @@ public class Character implements Renderable{
 	
 	private String name;
 	private TraitInfo traitInfo;//???
+	
+	private Image imageS;
+	private Image imageE;
+	private Image imageW;
+	private Image imageN;
 
     private Map opinions = new HashMap<Integer, Opinion>();
 	
@@ -42,7 +49,17 @@ public class Character implements Renderable{
 		this.name = name;
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.direction=Direction.SOUTH;
+		this.direction = Direction.SOUTH;
+		
+		try {
+			imageS = new Image("res/pictures/lookingdown.png");
+			imageN = new Image("res/pictures/lookingup.png");
+			imageW = new Image("res/pictures/lookingleft.png");
+			imageE = new Image("res/pictures/lookingright.png");
+
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 
 		traits = new LinkedList<Trait>();
 	}
@@ -162,10 +179,24 @@ public class Character implements Renderable{
 		c.reciveSpeachAct(s,this);
 	}*/
 
+	
+	/**
+	 * returns a RenderObject different image depending on
+	 * witch direction the character is facing.
+	 */
 	@Override
 	public RenderObject getRenderObject() {
-		// TODO Auto-generated method stub
-		return null;
+		switch(this.direction){
+			case SOUTH:
+				return new RenderObject(xPos,yPos, imageS);
+			case EAST:
+				return new RenderObject(xPos,yPos, imageE);
+			case WEST:
+				return new RenderObject(xPos,yPos, imageW);
+			case NORTH:
+				return new RenderObject(xPos,yPos, imageN);
+		}
+		return new RenderObject(xPos,yPos, imageS); //
 	}
 
 }
