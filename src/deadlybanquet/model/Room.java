@@ -75,6 +75,10 @@ public class Room implements TileBasedMap {
     public float getCost(PathFindingContext pathFindingContext, int i, int i1) {
         return 1;
     }
+    
+    public void addCharacter(Character character){
+    	this.characters.add(character);
+    }
 
 
 }
