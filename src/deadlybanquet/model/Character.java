@@ -137,6 +137,22 @@ public class Character implements Renderable{
 	public int getY() {
 		return yPos;
 	}
+	
+	public void moveE(){
+		this.xPos++;
+	}
+	
+	public void moveW(){
+		this.xPos--;
+	}
+	
+	public void moveN(){
+		this.yPos--;
+	}
+	
+	public void moveS(){
+		this.yPos++;
+	}
 
 	/*
 	Should probably be different methods for NPC and player.
