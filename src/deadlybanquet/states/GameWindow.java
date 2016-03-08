@@ -24,7 +24,7 @@ public class GameWindow extends BasicGameState {
 	private int currentLayer = 0;
 	private NPCMover testNPC;
 	private Image npcImage;
-	private Player thePlayer;
+	private OldPlayer thePlayer;
 
 	public GameWindow() {
 		super();
@@ -53,7 +53,7 @@ public class GameWindow extends BasicGameState {
 		map1 = new TiledMap("res/pictures/living_room2.tmx");
 		map2 = new TiledMap("res/pictures/kitchen.tmx");
 		map3 = new TiledMap("res/pictures/bedroom.tmx");
-		thePlayer = new Player(); //create the player object
+		thePlayer = new OldPlayer(); //create the player object
 		
         //Pathfinding test inits-----------------------------
 		npcImage = new Image("res/pictures/testNPC.png");    //ALSO MOVED

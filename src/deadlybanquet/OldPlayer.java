@@ -6,7 +6,7 @@ import org.newdawn.slick.*;
 /**
  * Created by Hampus on 2016-02-28.
  */
-public class Player {
+public class OldPlayer {
     private Image playerdown,playerup,playerleft,playerright;
     private int playerx = 100;
     private int playery = 100;
@@ -35,7 +35,7 @@ public class Player {
     private Animation moveRightAni;
     private Boolean playerMovingRight;
 
-    public Player() throws SlickException {
+    public OldPlayer() throws SlickException {
         moveUpSheet = new SpriteSheet("res/pictures/upanimation.png",32,32);
         moveUpAni = new Animation(moveUpSheet,300);
         moveDownSheet = new SpriteSheet("res/pictures/downanimation.png",32,32);
