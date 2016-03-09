@@ -18,7 +18,7 @@ public class View {
 	
 	public void drawRednerObjects(ArrayList<RenderObject> ro, Graphics g){
 		for(RenderObject r : ro){
-			r.getImage().draw(convert(r.getPosition().getX()), convert(r.getPosition().getY())); 
+			r.getImage().draw(convert(r.getPos().getX()), convert(r.getPos().getY())); 
 		}
 	}		
 	
