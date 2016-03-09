@@ -15,7 +15,7 @@ public class World implements ActionListener {
     public World(){
         roomMap = new Room[2][2];       //Needs to be updated as more rooms are added
         //add room initiations
-        roomMap[0][0] = new Room("Living room");
+        roomMap[0][0] = new Room("Living room", "Living Room");
         Character playerCharacter = new Character("Gandalf", 3, 3);
         player = new Player(playerCharacter);
         roomMap[0][0].addCharacter(playerCharacter);
@@ -26,6 +26,11 @@ public class World implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        for(Room[] rm : roomMap){
+            for(Room r : rm) {
+                r.moveWithCollision(e);
+            }
 
+        }
     }
 }
