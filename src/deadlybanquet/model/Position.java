@@ -10,6 +10,11 @@ public class Position {
         this.x = x;
         this.y = y;
     }
+    
+    public Position(Position p){
+    	this.x = p.getX();
+    	this.y = p.getY();
+    }
 
     public int getX(){
         return x;
@@ -41,5 +46,9 @@ public class Position {
     
     public void decY(){
     	y--;
+    }
+    
+    public Position copy(){
+    	return new Position(this);
     }
 }

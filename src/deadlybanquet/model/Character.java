@@ -26,8 +26,9 @@ public class Character implements Renderable{
     private static int idCounter =0;
 
     private int id;
-	private int xPos;
-	private int yPos;
+//	private int xPos;
+//	private int yPos;
+	private Position pos;
 	private Direction direction;
 	
 	private ActionListener actList;
@@ -51,8 +52,7 @@ public class Character implements Renderable{
         this.id=idCounter;
         //done with ID set
 		this.name = name;
-		this.xPos = xPos;
-		this.yPos = yPos;
+		this.pos = new Position(xPos, yPos);
 		this.direction = Direction.SOUTH;
 		
 		this.actList = al;
@@ -94,12 +94,9 @@ public class Character implements Renderable{
         return temp;
     }
 
-    public void setxPos(int x){
-        this.xPos=x;
-    }
-
-    public void setyPos(int y){
-        this.yPos=y;
+    public void setPos(Position p){
+        pos.setX(p.getX());
+        pos.setY(p.getY());
     }
 
 	public void addTrait(Trait t){
@@ -136,12 +133,8 @@ public class Character implements Renderable{
         }
     }
 	
-	public int getX() {
-		return xPos;
-	}
-
-	public int getY() {
-		return yPos;
+	public int getPos() {
+		return new Position(this.pos);
 	}
 	
 	public void moveE(){
@@ -167,13 +160,13 @@ public class Character implements Renderable{
 	public void move(){
 		switch(this.direction){
 			case NORTH:
-				yPos--;
+				pos.incY();
 			case SOUTH:
-				yPos++;
+				pos.decY();
 			case WEST:
-				xPos--;
+				pos.decX();
 			case EAST:
-				xPos++;
+				pos.incX();
 			default:
 				break;
 		}
@@ -229,15 +222,15 @@ public class Character implements Renderable{
 	public RenderObject getRenderObject() {
 		switch(this.direction){
 			case SOUTH:
-				return new RenderObject(xPos,yPos, imageS);
+				return new RenderObject(pos.getX(), pos.getY(), imageS);
 			case EAST:
-				return new RenderObject(xPos,yPos, imageE);
+				return new RenderObject(pos.getX(), pos.getY(), imageE);
 			case WEST:
-				return new RenderObject(xPos,yPos, imageW);
+				return new RenderObject(pos.getX(), pos.getY(), imageW);
 			case NORTH:
-				return new RenderObject(xPos,yPos, imageN);
+				return new RenderObject(pos.getX(), pos.getY(), imageN);
 		}
-		return new RenderObject(xPos,yPos, imageS); //
+		return new RenderObject(pos.getX(), pos.getY(), imageS); //
 	}
 
 }
