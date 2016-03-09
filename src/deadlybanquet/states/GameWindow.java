@@ -61,7 +61,6 @@ public class GameWindow extends BasicGameState {
 		pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		testNPC = new NPCMover(9*32,9*32);
         //----------------------------------------------------
-
 	}
 
 	public void update(GameContainer container, StateBasedGame s, int delta) throws SlickException {

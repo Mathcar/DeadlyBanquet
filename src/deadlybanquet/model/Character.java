@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,6 +29,8 @@ public class Character implements Renderable{
 	private int xPos;
 	private int yPos;
 	private Direction direction;
+	
+	private ActionListener actList;
 	
 	private List<Trait> traits;
 	
@@ -51,6 +54,8 @@ public class Character implements Renderable{
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.direction = Direction.SOUTH;
+		
+		this.actList = al;
 		
 		try {
 			imageS = new Image("res/pictures/lookingdown.png");
@@ -140,19 +145,38 @@ public class Character implements Renderable{
 	}
 	
 	public void moveE(){
-		this.xPos++;
+		this.direction = Direction.EAST;
+		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
 	}
 	
 	public void moveW(){
-		this.xPos--;
+		this.direction = Direction.WEST;
+		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
 	}
 	
 	public void moveN(){
-		this.yPos--;
+		this.direction = Direction.NORTH;
+		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
 	}
 	
 	public void moveS(){
-		this.yPos++;
+		this.direction = Direction.SOUTH;
+		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
+	}
+	
+	public void move(){
+		switch(this.direction){
+			case NORTH:
+				yPos--;
+			case SOUTH:
+				yPos++;
+			case WEST:
+				xPos--;
+			case EAST:
+				xPos++;
+			default:
+				break;
+		}
 	}
 
 	/*
