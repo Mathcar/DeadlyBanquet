@@ -7,8 +7,13 @@ package deadlybanquet.ai;
  */
 import java.util.*;
 public class Memory {
-    //The current subject's thoughts about others
-    HashMap<String, ModelOfWorld> otherPeople = new HashMap<>();
-    //Key is object identifier, Value is person or room identifier
-    HashMap<String, String> objectPosition = new HashMap<>();
+    //This contains all information which the player has got, in random order.
+    //If performance becomes too bad, may have to invent better data structure.
+    ArrayList<IThought> information = new ArrayList<>();
+    public Memory(ArrayList<IThought> information){
+        //if a null object is supplied, object will be initialized with empty list.
+        if (information!=null)
+            this.information=information;
+    }
+   
 }

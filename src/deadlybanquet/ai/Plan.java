@@ -10,7 +10,7 @@ public class Plan implements IThought{
         WILL, DID;
     }
     public String person;
-    public Action action;
+    public PlanElement action;
     public wd willordid;
     //TODO time;
 }
