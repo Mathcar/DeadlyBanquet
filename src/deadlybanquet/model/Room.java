@@ -44,7 +44,7 @@ public class Room implements TileBasedMap {
 
     private boolean isBlocked(int x, int y){
         for(Character c : characters){
-            if(c.getX() == x && c.getY() == y){
+            if(c.getPos().getX() == x && c.getPos().getY() == y){
                 return true;                    //A Characters is occupying this tile
             }
         }
@@ -58,8 +58,18 @@ public class Room implements TileBasedMap {
         return false;       //Tile is unblocked;
     }
 
+    //Checks if a character can move to its desired destination.
+    //tells the character to conduct its move if it can, otherwise notifies
+    //the character through "notifyBlocked()"
     public void moveWithCollision(ActionEvent e){
         Character c = (Character)e.getSource();
+        Position newPos = c.getFacedTilePos();
+        if(isBlocked(newPos.getX(), newPos.getY())){
+            //tile is blocked, send notification to related ai/character?
+            c.notifyBlocked();
+        }else{
+            c.move(); //character can move
+        }
     }
 
     @Override

@@ -112,6 +112,9 @@ public class Character implements Renderable{
         return id;
     }
 
+	public Position getFacedTilePos(){
+		return new Position(0,0);
+	}
     /*
     Do NOT use this
      */
