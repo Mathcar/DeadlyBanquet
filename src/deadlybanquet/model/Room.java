@@ -1,5 +1,6 @@
 package deadlybanquet.model;
 
+import deadlybanquet.AI;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
@@ -14,25 +15,32 @@ import java.util.ArrayList;
  * Created by Hampus on 2016-03-04.
  */
 public class Room implements TileBasedMap {
+    private String name;
     private TiledMap map;
     private AStarPathFinder pathFinder;
     private ArrayList<Character> characters;
 
 
-    public Room(String tilemapURL){
+    public Room(String tilemapURL, String name){
         try {
             map = new TiledMap(tilemapURL);
         }catch(SlickException se){
             se.printStackTrace();
         }
+        this.name = name;
         pathFinder = new AStarPathFinder(this, 50, false);
         characters = new ArrayList<Character>();
 
     }
 
+    public String getName(){
+        return name;
+    }
+
     public ArrayList<Character> getCharactersInRoom(){
         return characters;
     }
+
 
     private boolean isBlocked(int x, int y){
         for(Character c : characters){
@@ -48,6 +56,10 @@ public class Room implements TileBasedMap {
             }
         }
         return false;       //Tile is unblocked;
+    }
+
+    public void moveWithCollision(ActionEvent e){
+        Character c = (Character)e.getSource();
     }
 
     @Override
