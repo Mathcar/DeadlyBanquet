@@ -8,9 +8,11 @@ package deadlybanquet.ai;
  * There should be nothing in this file which could not technically be expressed as a list
  * of IThought objects.
  */
+import deadlybanquet.speech.SpeechAct;
 import java.util.*;
 public class Brain extends Memory {
     //Current emotion - may be changed by events.
+    private String currentRoom;
     private PAD emotion = new PAD(0,0,0);
     //Personality. May not change. Emotion object regresses
     //to this in the absence of new stimuli.
@@ -35,5 +37,20 @@ public class Brain extends Memory {
         if (desires !=null) this.desires = desires;
         if (goals!=null) this.goals = goals;
         if (plan!=null) this.plan = plan;
+    }
+    
+    @Override
+    //This class evaluates the content, changing both opinions and information
+    //according to some smart algorithm we haven't got.
+    public void hear(SpeechAct act){
+        
+    }
+    //Character does some thinking, cooling down, executing plan etc.
+    public void update(){
+        
+    }
+    //this method creates plans for any goals and puts
+    private void plan(){
+        
     }
 }

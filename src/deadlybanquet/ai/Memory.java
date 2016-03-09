@@ -5,6 +5,7 @@ package deadlybanquet.ai;
  * Contains everything which the NPC and player have in common.
  * @author omega
  */
+import deadlybanquet.speech.SpeechAct;
 import java.util.*;
 public class Memory {
     //This contains all information which the player has got, in random order.
@@ -14,6 +15,11 @@ public class Memory {
         //if a null object is supplied, object will be initialized with empty list.
         if (information!=null)
             this.information=information;
+    }
+    //this method accepts a speech act and adds the information to its memory.
+    //This method should not evaluate memory as that is the (human) player's job.
+    public void hear(SpeechAct act){
+        
     }
    
 }

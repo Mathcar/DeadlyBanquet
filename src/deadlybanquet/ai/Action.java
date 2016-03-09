@@ -5,6 +5,10 @@ package deadlybanquet.ai;
  * picking something up or getting or giving information.
  * @author omega
  */
-public interface Action {
-    
+public enum Action {
+    MOVETO, 
+    PICKUP,
+    ASK,
+    INFORM,
+    GREET;
 }
