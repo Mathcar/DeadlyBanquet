@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class Character implements Renderable{
     private Map opinions = new HashMap<Integer, Opinion>();
 	
 	
-	public Character(String name, int xPos, int yPos){
+	public Character(ActionListener al, String name, int xPos, int yPos){
         //set ID
         idCounter++;
         this.id=idCounter;
