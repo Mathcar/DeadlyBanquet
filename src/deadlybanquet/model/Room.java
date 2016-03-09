@@ -60,6 +60,8 @@ public class Room implements TileBasedMap {
 
     public void moveWithCollision(ActionEvent e){
         Character c = (Character)e.getSource();
+        Position newPos = c.getFacedTile();
+
     }
 
     @Override
