@@ -12,4 +12,8 @@ public class NPC extends Character{
 		
 	}
 	
+	public NPC(ActionListener al, Character c){
+		super(al, c);
+	}
+	
 }

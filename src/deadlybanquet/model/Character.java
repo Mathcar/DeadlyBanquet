@@ -45,6 +45,9 @@ public class Character implements Renderable{
 
     private Map opinions = new HashMap<Integer, Opinion>();
 	
+    public Character(ActionListener al, Character c){
+    	new Character(al, c.name, c.pos.getX(), c.pos.getY());
+    }
 	
 	public Character(ActionListener al, String name, int xPos, int yPos){
         //set ID
