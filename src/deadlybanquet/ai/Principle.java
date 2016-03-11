@@ -5,6 +5,10 @@ package deadlybanquet.ai;
  * @author omega
  */
 public class Principle implements IThought{
-    public Action what;
+    public PlanElement what;
     public PAD opinion;
+    @Override
+    public String toString(){
+        return what +" is " + opinion;
+    }
 }
