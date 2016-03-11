@@ -13,4 +13,8 @@ public class Desire implements IThought{
     public double strength;
     //TODO order by strength;
     public dg desireorgoal;
+    @Override
+    public String toString(){
+        return desireorgoal + ": " + what + " with strength " + strength;
+    }
 }

@@ -27,12 +27,16 @@ public class Player {
 				movmentTimer = MOVEMNET_DELAY;
 			}else if(in.isKeyPressed(Input.KEY_DOWN)){
 				character.moveS();
+				movmentTimer = MOVEMNET_DELAY;
 			}else if(in.isKeyPressed(Input.KEY_LEFT)){
 				character.moveW();
+				movmentTimer = MOVEMNET_DELAY;
 			}else if(in.isKeyPressed(Input.KEY_RIGHT)){
 				character.moveE();
+				movmentTimer = MOVEMNET_DELAY;
 			}
 		}
+		movmentTimer--;
 	}
 	
 }

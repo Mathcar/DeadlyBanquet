@@ -6,9 +6,11 @@ import deadlybanquet.Renderable;
 import deadlybanquet.Trait;
 import deadlybanquet.TraitInfo;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,6 +34,8 @@ public class Character implements Renderable{
 //	private int yPos;
 	private Position pos;
 	private Direction direction;
+	private int distance;
+	
 	
 	private ActionListener actList;
 	
@@ -44,6 +48,8 @@ public class Character implements Renderable{
 	private Image imageE;
 	private Image imageW;
 	private Image imageN;
+	private Animation aniS,aniN,aniW,aniE;
+	private boolean moving = false;
 
     private Map opinions = new HashMap<Integer, Opinion>();
 	
@@ -59,6 +65,7 @@ public class Character implements Renderable{
 		this.name = name;
 		this.pos = new Position(xPos, yPos);
 		this.direction = Direction.SOUTH;
+		distance = 32;
 		
 		this.actList = al;
 		
@@ -67,6 +74,10 @@ public class Character implements Renderable{
 			imageN = new Image("res/pictures/lookingup.png");
 			imageW = new Image("res/pictures/lookingleft.png");
 			imageE = new Image("res/pictures/lookingright.png");
+			aniS = new Animation(new SpriteSheet("res/pictures/downanimation.png",32,32), 300);
+			aniN = new Animation(new SpriteSheet("res/pictures/upanimation.png",32,32), 300);
+			aniW = new Animation(new SpriteSheet("res/pictures/leftanimation.png",32,32), 300);
+			aniE = new Animation(new SpriteSheet("res/pictures/rightanimation.png",32,32), 300);
 
 		} catch (SlickException e) {
 			e.printStackTrace();
@@ -171,12 +182,16 @@ public class Character implements Renderable{
 		switch(this.direction){
 			case NORTH:
 				pos.incY();
+				moving = true;
 			case SOUTH:
 				pos.decY();
+				moving = true;
 			case WEST:
 				pos.decX();
+				moving = true;
 			case EAST:
 				pos.incX();
+				moving = true;
 			default:
 				break;
 		}
@@ -232,15 +247,57 @@ public class Character implements Renderable{
 	public RenderObject getRenderObject() {
 		switch(this.direction){
 			case SOUTH:
-				return new RenderObject(pos.getX(), pos.getY(), imageS);
+				if(moving){
+					
+					if(distance == 1){
+						moving = false;
+						distance = 32;
+					}
+					distance--;
+					return new RenderObject(pos.getX(), pos.getY(), aniS, moving, 0, distance);
+				}else{
+					return new RenderObject(pos.getX(), pos.getY(), imageS, moving);
+				}
 			case EAST:
-				return new RenderObject(pos.getX(), pos.getY(), imageE);
+				if(moving){
+					
+					if(distance == 1){
+						moving = false;
+						distance = 32;
+					}
+					distance--;
+					return new RenderObject(pos.getX(), pos.getY(), aniE, moving, distance, 0);
+				}else{
+					return new RenderObject(pos.getX(), pos.getY(), imageE, moving);
+				}
 			case WEST:
-				return new RenderObject(pos.getX(), pos.getY(), imageW);
+				if(moving){
+					
+					if(distance == 1){
+						moving = false;
+						distance = 32;
+					}
+					distance--;
+					return new RenderObject(pos.getX(), pos.getY(), aniW, moving, -1*distance, 0 );
+				}else{
+					return new RenderObject(pos.getX(), pos.getY(), imageW, moving);
+				}
 			case NORTH:
-				return new RenderObject(pos.getX(), pos.getY(), imageN);
+				if(moving){
+					
+					if(distance == 1){
+						moving = false;
+						distance = 32;
+					}
+					distance--;
+					return new RenderObject(pos.getX(), pos.getY(), aniN, moving, 0, -1*distance);
+				}else{
+					return new RenderObject(pos.getX(), pos.getY(), imageN, moving);
+				}
+			default:
+				return new RenderObject(pos.getX(), pos.getY(), imageS, moving);
 		}
-		return new RenderObject(pos.getX(), pos.getY(), imageS); //
+		//return new RenderObject(pos.getX(), pos.getY(), imageS, moving); //
 	}
 
 	public void notifyBlocked() {
