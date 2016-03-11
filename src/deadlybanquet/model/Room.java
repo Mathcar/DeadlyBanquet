@@ -66,7 +66,7 @@ public class Room implements TileBasedMap {
         Position newPos = c.getFacedTilePos();
         if(isBlocked(newPos.getX(), newPos.getY())){
             //tile is blocked, send notification to related ai/character?
-            c.notifyBlocked();
+            //c.notifyBlocked();
         }else{
             c.move(); //character can move
         }
