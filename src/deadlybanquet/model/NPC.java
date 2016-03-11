@@ -16,4 +16,5 @@ public class NPC extends Character{
 		super(al, c);
 	}
 	
+	
 }

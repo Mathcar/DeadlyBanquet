@@ -24,6 +24,8 @@ public class Character implements Renderable{
     Counter to set specific ID for each character.
      */
     private static int idCounter =0;
+    
+    private boolean blocked;
 
     private int id;
 //	private int xPos;
@@ -71,6 +73,8 @@ public class Character implements Renderable{
 		}
 
 		traits = new LinkedList<Trait>();
+		
+		this.blocked=false;
 	}
 
     public void meetNewCharacter(Character person){
@@ -237,6 +241,18 @@ public class Character implements Renderable{
 				return new RenderObject(pos.getX(), pos.getY(), imageN);
 		}
 		return new RenderObject(pos.getX(), pos.getY(), imageS); //
+	}
+
+	public void notifyBlocked() {
+		this.blocked=true;
+	}
+	
+	public boolean isBlocked() {
+		return this.blocked;
+	}
+	
+	public void unblock(){
+		this.blocked = true;
 	}
 
 }
