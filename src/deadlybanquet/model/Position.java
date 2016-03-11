@@ -51,4 +51,16 @@ public class Position {
     public Position copy(){
     	return new Position(this);
     }
+
+    public static Position getAdjacentPositionInDirection(Position org, Direction dir){
+        if(dir == Direction.NORTH){
+            return new Position(org.getX(), org.getY()+1);
+        }else if(dir == Direction.WEST){
+            return new Position(org.getX()-1, org.getY());
+        }else if(dir == Direction.EAST){
+            return new Position(org.getX()+1, org.getY());
+        }else{
+            return new Position(org.getX(), org.getY()-1);
+        }
+    }
 }

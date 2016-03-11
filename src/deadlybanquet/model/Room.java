@@ -1,11 +1,11 @@
 package deadlybanquet.model;
 
 import deadlybanquet.AI;
+import deadlybanquet.RenderObject;
+import deadlybanquet.RenderSet;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.tiled.TiledMap;
-import org.newdawn.slick.util.pathfinding.AStarPathFinder;
-import org.newdawn.slick.util.pathfinding.PathFindingContext;
-import org.newdawn.slick.util.pathfinding.TileBasedMap;
+import org.newdawn.slick.util.pathfinding.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,7 +19,8 @@ public class Room implements TileBasedMap {
     private TiledMap map;
     private AStarPathFinder pathFinder;
     private ArrayList<Character> characters;
-
+    private ArrayList<Door> doors;
+    public static final int DOOR_LAYER = 4;
 
     public Room(String tilemapURL, String name){
         try {
@@ -31,6 +32,40 @@ public class Room implements TileBasedMap {
         pathFinder = new AStarPathFinder(this, 50, false);
         characters = new ArrayList<Character>();
 
+    }
+
+    public void createDoors(){
+        for(int x = 0; x<getWidthInTiles(); x++){
+            for(int y = 0; y<getHeightInTiles(); y++){
+                int tileID = map.getTileId(x,y, DOOR_LAYER);
+                if(tileID != 0){
+                    //A door was found, create door object
+                    Door tempDoor = new Door(new Position(x,y));
+                    doors.add(tempDoor);
+                }
+            }
+        }
+    }
+    //Creates the doors connections to the correct rooms.
+    //Presumes that doors have a valid connection!
+    public void assignDoorConnections(String northRoom, String southRoom,
+                                      String eastRoom, String westRoom){
+        //Create the connection for every initiated door
+        for(Door d : doors){
+            if(d.getX() == 0){
+                //Door is on the left wall, create connection to west neighbour
+                d.createConnection(name, westRoom, Direction.WEST);
+            } else if(d.getY() == 0){
+                //Door is on the top wall, create connection to north neighbour
+                d.createConnection(name, northRoom, Direction.NORTH);
+            }else if(d.getX() == getWidthInTiles()-1){
+                //Door is on the right wall, create connection to east neighbour
+                d.createConnection(name, eastRoom, Direction.EAST);
+            }else{
+                //Door is on the bottom wall, create connection to south neighbour
+                d.createConnection(name, southRoom, Direction.SOUTH);
+            }
+        }
     }
 
     public String getName(){
@@ -58,6 +93,21 @@ public class Room implements TileBasedMap {
         return false;       //Tile is unblocked;
     }
 
+    public RenderSet getRenderSet(){
+        ArrayList<RenderObject> ros = new ArrayList<>();
+        for(Character c : characters){
+            ros.add(c.getRenderObject());
+        }
+        return new RenderSet(map, ros);
+
+    }
+
+    public Path getPath(Mover mover, Position origin, Position target){
+        return pathFinder.findPath(mover, origin.getX(), origin.getY(),
+                                target.getX(), target.getY());
+
+    }
+
     //Checks if a character can move to its desired destination.
     //tells the character to conduct its move if it can, otherwise notifies
     //the character through "notifyBlocked()"
@@ -66,11 +116,23 @@ public class Room implements TileBasedMap {
         Position newPos = c.getFacedTilePos();
         if(isBlocked(newPos.getX(), newPos.getY())){
             //tile is blocked, send notification to related ai/character?
-            c.notifyBlocked();
+            //c.notifyBlocked();
         }else{
             c.move(); //character can move
         }
     }
+
+    public boolean entranceIsBlocked(Direction origin){
+        for(Door d : doors) {
+            if(d.getDirection()==Direction.getOppositeDirection(origin)){
+                Position pos = Position.getAdjacentPositionInDirection(d.getPos(),
+                                                                        origin);
+                return isBlocked(pos.getX(), pos.getY());
+            }
+        }
+        return true;
+    }
+
 
     @Override
     public int getWidthInTiles() {
@@ -100,6 +162,10 @@ public class Room implements TileBasedMap {
     
     public void addCharacter(Character character){
     	this.characters.add(character);
+    }
+
+    public void removeCharacter(Character character){
+        characters.remove(character);
     }
 
 
