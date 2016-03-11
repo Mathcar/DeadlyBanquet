@@ -9,5 +9,4 @@ package deadlybanquet.ai;
  * @author omega
  */
 public interface IThought {
-    
 }

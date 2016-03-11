@@ -10,5 +10,9 @@ package deadlybanquet.ai;
  */
 public class Rule implements IThought{
     public IThought[] ifs;
-    public Action action;
+    public PlanElement action;
+    @Override
+    public String toString(){
+        return "if " + ifs + " then it is suitable to do" + action;
+    }
 }
