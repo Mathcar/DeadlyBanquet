@@ -13,4 +13,8 @@ public class Plan implements IThought{
     public PlanElement action;
     public wd willordid;
     //TODO time;
+    @Override
+    public String toString(){
+        return person + willordid + action;
+    }
 }
