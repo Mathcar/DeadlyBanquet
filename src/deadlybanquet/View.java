@@ -16,9 +16,14 @@ public class View {
 		this.width = width;
 	}
 	
-	public void drawRednerObjects(ArrayList<RenderObject> ro, Graphics g){
+	public void drawRenderObjects(ArrayList<RenderObject> ro, Graphics g){
 		for(RenderObject r : ro){
-			r.getImage().draw(convert(r.getPos().getX()), convert(r.getPos().getY())); 
+			if(r.isMoving() == false){
+				r.getImage().draw(convert(r.getPos().getX()), convert(r.getPos().getY())); 
+			}
+			else{
+				r.getAnimation().draw(convert(r.getPos().getX() - r.getDistX()), convert(r.getPos().getY() - r.getDistY()));
+			}
 		}
 	}		
 	
