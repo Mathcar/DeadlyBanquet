@@ -1,16 +1,19 @@
 package deadlybanquet.model;
 
+import java.awt.event.ActionListener;
+
 import org.newdawn.slick.Input;
 
 public class Player {
 	
 	private Character character;
 	
+	
 	private final static int MOVEMNET_DELAY = 500;
 	private int movmentTimer = 0;
 	
-	public Player(){
-		this.character = new Character("Gandalf", 5, 5);
+	public Player(ActionListener al){
+		this.character = new Character(al, "Gandalf", 5, 5);
 	}
 	
 	public Player(Character c){

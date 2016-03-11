@@ -11,9 +11,11 @@ import java.util.ArrayList;
 public interface SpeechAct {
 
     public String getText();
-    
+
     //gets the information content of the speech act.
-    public ArrayList<IThought> getContent();
+    public ArrayList<IThought> getContent(); // return the info
+
+    public ArrayList<IThought> getProperties(); //return the
     
     //Gets the identifier of the speaker.
     public String getSpeaker();
@@ -21,7 +23,5 @@ public interface SpeechAct {
     public boolean isEndConversation();
 
     public Map<String,Integer> getOpinionChanges();
-
-    public List<String> getProperties();
 
 }

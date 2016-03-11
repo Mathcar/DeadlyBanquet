@@ -2,27 +2,31 @@ package deadlybanquet;
 
 import org.newdawn.slick.Image;
 
+import deadlybanquet.model.Position;
+
 /**
  * Created by Hampus on 2016-03-04.
  */
 public class RenderObject {
 	
-	private int xPos;
-	private int yPos;
+	private Position pos;
 	private Image image;
 	
 	public RenderObject(int xPos, int yPos, Image im){
-		this.xPos = xPos;
-		this.yPos = yPos;
+		this.pos = new Position(xPos, yPos);
 		this.image = im;
 	}
 	
 	public int getXPos(){
-		return xPos;
+		return pos.getX();
 	}
 	
 	public int getYPos(){
-		return yPos;
+		return pos.getY();
+	}
+	
+	public Position getPos(){
+		return pos;
 	}
 	
 	public Image getImage(){

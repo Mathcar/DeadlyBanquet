@@ -10,6 +10,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,9 +26,12 @@ public class Character implements Renderable{
     private static int idCounter =0;
 
     private int id;
-	private int xPos;
-	private int yPos;
+//	private int xPos;
+//	private int yPos;
+	private Position pos;
 	private Direction direction;
+	
+	private ActionListener actList;
 	
 	private List<Trait> traits;
 	
@@ -41,15 +46,16 @@ public class Character implements Renderable{
     private Map opinions = new HashMap<Integer, Opinion>();
 	
 	
-	public Character(String name, int xPos, int yPos){
+	public Character(ActionListener al, String name, int xPos, int yPos){
         //set ID
         idCounter++;
         this.id=idCounter;
         //done with ID set
 		this.name = name;
-		this.xPos = xPos;
-		this.yPos = yPos;
+		this.pos = new Position(xPos, yPos);
 		this.direction = Direction.SOUTH;
+		
+		this.actList = al;
 		
 		try {
 			imageS = new Image("res/pictures/lookingdown.png");
@@ -88,12 +94,9 @@ public class Character implements Renderable{
         return temp;
     }
 
-    public void setxPos(int x){
-        this.xPos=x;
-    }
-
-    public void setyPos(int y){
-        this.yPos=y;
+    public void setPos(Position p){
+        pos.setX(p.getX());
+        pos.setY(p.getY());
     }
 
 	public void addTrait(Trait t){
@@ -109,6 +112,9 @@ public class Character implements Renderable{
         return id;
     }
 
+	public Position getFacedTilePos(){
+		return new Position(0,0);
+	}
     /*
     Do NOT use this
      */
@@ -130,28 +136,43 @@ public class Character implements Renderable{
         }
     }
 	
-	public int getX() {
-		return xPos;
-	}
-
-	public int getY() {
-		return yPos;
+	public Position getPos() {
+		return new Position(this.pos);
 	}
 	
 	public void moveE(){
-		this.xPos++;
+		this.direction = Direction.EAST;
+		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
 	}
 	
 	public void moveW(){
-		this.xPos--;
+		this.direction = Direction.WEST;
+		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
 	}
 	
 	public void moveN(){
-		this.yPos--;
+		this.direction = Direction.NORTH;
+		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
 	}
 	
 	public void moveS(){
-		this.yPos++;
+		this.direction = Direction.SOUTH;
+		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
+	}
+	
+	public void move(){
+		switch(this.direction){
+			case NORTH:
+				pos.incY();
+			case SOUTH:
+				pos.decY();
+			case WEST:
+				pos.decX();
+			case EAST:
+				pos.incX();
+			default:
+				break;
+		}
 	}
 
 	/*
@@ -204,15 +225,15 @@ public class Character implements Renderable{
 	public RenderObject getRenderObject() {
 		switch(this.direction){
 			case SOUTH:
-				return new RenderObject(xPos,yPos, imageS);
+				return new RenderObject(pos.getX(), pos.getY(), imageS);
 			case EAST:
-				return new RenderObject(xPos,yPos, imageE);
+				return new RenderObject(pos.getX(), pos.getY(), imageE);
 			case WEST:
-				return new RenderObject(xPos,yPos, imageW);
+				return new RenderObject(pos.getX(), pos.getY(), imageW);
 			case NORTH:
-				return new RenderObject(xPos,yPos, imageN);
+				return new RenderObject(pos.getX(), pos.getY(), imageN);
 		}
-		return new RenderObject(xPos,yPos, imageS); //
+		return new RenderObject(pos.getX(), pos.getY(), imageS); //
 	}
 
 }

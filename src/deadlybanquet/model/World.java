@@ -15,8 +15,8 @@ public class World implements ActionListener {
     public World(){
         roomMap = new Room[2][2];       //Needs to be updated as more rooms are added
         //add room initiations
-        roomMap[0][0] = new Room("Living room", "Living Room");
-        Character playerCharacter = new Character("Gandalf", 3, 3);
+        Character playerCharacter = new Character(this, "Gandalf", 3, 3);
+        roomMap[0][0] = new Room("res/pictures/living_room2.tmx", "Living Room");
         player = new Player(playerCharacter);
         roomMap[0][0].addCharacter(playerCharacter);
         
@@ -30,7 +30,6 @@ public class World implements ActionListener {
             for(Room r : rm) {
                 r.moveWithCollision(e);
             }
-
         }
     }
 }
