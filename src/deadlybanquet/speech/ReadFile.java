@@ -37,7 +37,7 @@ public class ReadFile {
                     list.add(i,div[i]);
                 }
                 // Now list is a list of each "thing" in each line.
-                TextPropertyEnum textEnum=TextPropertyEnum.NUTRAL;
+                TextPropertyEnum textEnum=TextPropertyEnum.NEUTRAL;
                 try{
                     textEnum = TextPropertyEnum.valueOf(list.get(1));
                 }catch(Exception e){
