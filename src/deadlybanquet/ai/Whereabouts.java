@@ -11,4 +11,8 @@ public class Whereabouts implements IThought{
     public PAD opinion;
     public double howsure;
      //TODO time information;
+    @Override
+    public String toString(){
+        return whoorwhat + " is with " + howsure + "certainty " + "in the " + where + "of which circumstance current person thinks" + opinion;
+    }
 }

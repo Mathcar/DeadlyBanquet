@@ -1,9 +1,12 @@
 package deadlybanquet.speech;
 
+import deadlybanquet.ai.IThought;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,39 +17,14 @@ public class GreetingFrase implements SpeechAct {
     private String text;
     private boolean endConversation;
 
-    private Map<String,Integer> opinion;
+    private String property;
 
-    private List<String> properties;
+    private ArrayList<IThought> listOfproperties;
 
     public GreetingFrase(String property){
+        this.property=property;
+        listOfproperties=new ArrayList<IThought>();
 
-    }
-
-    private void readFile(){
-        BufferedReader br = null;
-        String line = "";
-        try{
-            //everything here
-            br = new BufferedReader(new FileReader("/res/sppch/greetingFrase.txt"));
-            while ((line = br.readLine()) != null){
-                System.out.println("test");
-            }
-        }catch (IOException e){
-            //something
-        }finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    @Override
-    public String getText() {
-        return this.text;
     }
 
     @Override
@@ -59,8 +37,22 @@ public class GreetingFrase implements SpeechAct {
         return null;
     }
 
+    public ArrayList<IThought> getProperties(){
+        return this.listOfproperties;
+    }
+
     @Override
-    public List<String> getProperties(){
-        return this.properties;
+    public String getSpeaker() {
+        return null;
+    }
+
+    @Override
+    public String getText() {
+        return this.text;
+    }
+
+    @Override
+    public ArrayList<IThought> getContent() {
+        return null;
     }
 }

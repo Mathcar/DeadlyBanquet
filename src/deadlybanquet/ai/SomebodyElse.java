@@ -13,4 +13,8 @@ public class SomebodyElse implements IThought{
     //TODO restrict to smaller range
     public double howsure;
     //TODO time information;
+    @Override
+    public String toString(){
+        return ("think with " + howsure + " certainty and " + opinion + "opinion that " + aboutPerson + " thinks that " + what);
+    }
 }

@@ -8,5 +8,11 @@ public class EmotionThought implements IThought{
     public enum et {
         EMOTION, TEMPERAMENT;
     }
-    public et desireorgoal;
+    public et emotionortemperament;
+    public PAD pad;
+    
+    @Override
+    public String toString(){
+        return emotionortemperament + " with value " + pad;
+    }
 }
