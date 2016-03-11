@@ -136,7 +136,7 @@ public class Character implements Renderable{
         }
     }
 	
-	public int getPos() {
+	public Position getPos() {
 		return new Position(this.pos);
 	}
 	
