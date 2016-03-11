@@ -49,6 +49,11 @@ public class ReadFile {
                 for(int i = 2;i<list.size();i++){
                     IThought iThought;
                     try{
+                        /*
+                        the prereq and result, will probably be needed later for more other stuff,
+                        how will they be used?
+                        For now this ONLY(maybe) work for greetings!
+                         */
                         iThought=new PlanElement(null, Action.valueOf(list.get(i)),null);
                         iThoughts.add(iThought);
                     }catch(Exception e){
