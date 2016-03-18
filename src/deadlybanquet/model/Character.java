@@ -90,7 +90,7 @@ public class Character implements Renderable{
 
     public void meetNewCharacter(Character person){
         //opinions.put(new Opinion(),person.getId());
-        opinions.put(person.getId(), new Opinion());
+        //opinions.put(person.getId(), new Opinion()); //todo commented out by Tom
     }
 
     /*

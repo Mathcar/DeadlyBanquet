@@ -60,7 +60,7 @@ public class World implements ActionListener {
         }
         if(e.getID() == EventEnum.CHANGE_ROOMS.ordinal()){
             //Check if new room has space, remove from old room, add to new
-            if(entranceIsBlocked(Direction.EAST))
+            //if(entranceIsBlocked(Direction.EAST)) //todo commented out by Tom
         }
     }
 }

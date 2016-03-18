@@ -21,6 +21,7 @@ public class Main extends StateBasedGame{
 
 		//create a readFile class,that reads all the texts files and has a lot of lists
 		ReadFile readFile = ReadFile.getInstance();
+		readFile.createListFromFiles();
 
 		AppGameContainer app;
 		try {

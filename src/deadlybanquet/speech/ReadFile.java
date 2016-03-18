@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,14 +20,43 @@ import java.util.HashMap;
 public class ReadFile {
     private static ReadFile instance = null;
 
-    private HashMap<String,Pair<TextPropertyEnum,ArrayList<IThought>>> greetingsList;
+    private HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>> greetingsList;
 
     public ReadFile(){
 
     }
 
-    public HashMap<String,Pair<TextPropertyEnum,ArrayList<IThought>>> readFile(File file){
-        HashMap temp = new HashMap<String,Pair<TextPropertyEnum,ArrayList<IThought>>>();
+    public static ReadFile getInstance(){
+        if(instance==null){
+            instance=new ReadFile();
+        }
+        return instance;
+    }
+
+    public void createListFromFiles(){
+
+        File directory = new File("res\\speech");
+        //get all the files from a directory
+        File[] fList = directory.listFiles();
+        for (File file : fList){
+            if (file.isFile()){
+                if(file.getName().equals("greetingFrase")){
+                    greetingsList=readFile(file);
+                }
+                else if(file.getName().equals("something else")){
+                    greetingsList=readFile(file);
+                }
+                // and so on...;
+            }
+        }
+
+        /*Pair test = greetingsList.get(TextPropertyEnum.PROPER);
+        String text = (String)test.getKey();
+        System.err.println(text);*/
+    }
+
+    private HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>> readFile(File file){
+        HashMap temp = new HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>>();
         BufferedReader br = null;
         String line = "";
         try{
@@ -64,7 +95,7 @@ public class ReadFile {
                 }
 
 
-                temp.put(list.get(0),new Pair(textEnum,iThoughts));
+                temp.put(textEnum,new Pair(list.get(0),iThoughts));
                 // This will make each line in the text files will be matched to one "thing" i the HashMap
             }
         }catch (IOException e){
@@ -85,16 +116,5 @@ public class ReadFile {
 
         return temp;
     }
-
-    public static ReadFile getInstance(){
-        if(instance==null){
-            instance=new ReadFile();
-        }
-        return instance;
-    }
-
-    /*
-    here follows a lot of lists...
-     */
 
 }
