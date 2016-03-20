@@ -30,8 +30,9 @@ public class Brain extends Memory {
                     PAD temperament, 
                     ArrayList<Desire>desires,
                     ArrayList<Desire>goals,
-                    ArrayList<PlanElement>plan){
-        super(information);
+                    ArrayList<PlanElement>plan,
+                    String currentRoom){
+        super(information, currentRoom);
         if (emotion!=null) this.emotion=emotion;
         if (temperament!=null) this.temperament=temperament;
         if (desires !=null) this.desires = desires;
@@ -43,6 +44,21 @@ public class Brain extends Memory {
     //This class evaluates the content, changing both opinions and information
     //according to some smart algorithm we haven't got.
     public void hear(SpeechAct act){
+        
+    }
+    
+    @Override
+    public void observeRoomChange(String person, String origin, String destination){
+        
+    }
+    
+    @Override
+    public void observeInteraction(String who, String with){
+        
+    }
+    
+    @Override
+    public void observePickUp(String who, String what){
         
     }
     //Character does some thinking, cooling down, executing plan etc.
