@@ -2,23 +2,15 @@ package deadlybanquet.speech;
 
 import deadlybanquet.ai.IThought;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Tom on 2016-03-04.
  */
-public class GreetingFrase implements SpeechAct {
+public class GreetingFrase implements SpeechAct { //should we combine this with VALEDICTIONS???
     private String text;
 
     //private SomeCharatcterEnumBothNpcAndPlayerAre speaker;
-
-    private boolean endConversation;
 
     private TextPropertyEnum property;
 
@@ -26,14 +18,12 @@ public class GreetingFrase implements SpeechAct {
 
 
     public GreetingFrase(){
-        endConversation=false;
         property=null;
         content=null;
         text="";
     }
 
     public GreetingFrase(String text,TextPropertyEnum property,ArrayList<IThought> contentList){
-        endConversation=false;
         this.text=text;
         this.property=property;
         this.content=contentList;
@@ -72,10 +62,5 @@ public class GreetingFrase implements SpeechAct {
     @Override
     public String getSpeaker() {
         return null;
-    }
-
-    @Override
-    public boolean isEndConversation() {
-        return endConversation;
     }
 }

@@ -18,6 +18,7 @@ public class SpeechActHolder {
 
     //private HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>> greetingsList;
     private ArrayList<SpeechAct> greetingsList;
+    private ArrayList<SpeechAct> valedictionList;
 
     public SpeechActHolder(){
 
