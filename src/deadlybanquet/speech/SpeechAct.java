@@ -12,16 +12,22 @@ public interface SpeechAct {
 
     public String getText();
 
+    public void setText(String text);
+
     //gets the information content of the speech act.
     public ArrayList<IThought> getContent(); // return the info
 
-    public ArrayList<IThought> getProperties(); //return the
+    public void setContent(ArrayList<IThought> thoughts);
+
+    //public ArrayList<IThought> getProperties(); //Tom has questions about this.
+
+    public void setTextProperty(TextPropertyEnum property);
+
+    public TextPropertyEnum getTextProperty();
     
     //Gets the identifier of the speaker.
     public String getSpeaker();
 
     public boolean isEndConversation();
-
-    public Map<String,Integer> getOpinionChanges();
 
 }

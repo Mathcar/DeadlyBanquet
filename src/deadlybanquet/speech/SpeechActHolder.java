@@ -3,32 +3,29 @@ package deadlybanquet.speech;
 import deadlybanquet.ai.Action;
 import deadlybanquet.ai.IThought;
 import deadlybanquet.ai.PlanElement;
-import javafx.util.Pair;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Tom on 2016-03-11.
  */
-public class ReadFile {
-    private static ReadFile instance = null;
+public class SpeechActHolder {
+    private static SpeechActHolder instance = null;
 
-    private HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>> greetingsList;
+    //private HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>> greetingsList;
+    private ArrayList<SpeechAct> greetingsList;
 
-    public ReadFile(){
+    public SpeechActHolder(){
 
     }
 
-    public static ReadFile getInstance(){
+    public static SpeechActHolder getInstance(){
         if(instance==null){
-            instance=new ReadFile();
+            instance=new SpeechActHolder();
         }
         return instance;
     }
@@ -41,10 +38,11 @@ public class ReadFile {
         for (File file : fList){
             if (file.isFile()){
                 if(file.getName().equals("greetingFrase")){
-                    greetingsList=readFile(file);
+                    GreetingFrase temp = new GreetingFrase();
+                    greetingsList=readFile(file,temp);
                 }
                 else if(file.getName().equals("something else")){
-                    greetingsList=readFile(file);
+                    //greetingsList=readFile(file);
                 }
                 // and so on...;
             }
@@ -55,8 +53,9 @@ public class ReadFile {
         System.err.println(text);*/
     }
 
-    private HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>> readFile(File file){
-        HashMap temp = new HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>>();
+    private ArrayList<SpeechAct> readFile(File file, SpeechAct act){
+        //HashMap temp = new HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>>();
+        ArrayList<SpeechAct> tempList = new ArrayList<>();
         BufferedReader br = null;
         String line = "";
         try{
@@ -72,7 +71,7 @@ public class ReadFile {
                 try{
                     textEnum = TextPropertyEnum.valueOf(list.get(1));
                 }catch(Exception e){
-                    System.err.println("Something is wrong: could not make string to TextPropery enum[ReadFile class]" +
+                    System.err.println("Something is wrong: could not make string to TextPropery enum[SpeechActHolder class]" +
                             "\nThe enum is set to NEUTRAL");
                 }
 
@@ -88,15 +87,17 @@ public class ReadFile {
                         iThought=new PlanElement(null, Action.valueOf(list.get(i)),null);
                         iThoughts.add(iThought);
                     }catch(Exception e){
-                        System.err.println("Something is wrong: could not make string to Action enum[ReadFile class]" +
+                        System.err.println("Something is wrong: could not make string to Action enum[SpeechActHolder class]" +
                                 "\nThe program has to close here");
                         System.exit(3);
                     }
                 }
 
-
-                temp.put(textEnum,new Pair(list.get(0),iThoughts));
-                // This will make each line in the text files will be matched to one "thing" i the HashMap
+                if(act.getClass().equals(GreetingFrase.class)){
+                    tempList.add(new GreetingFrase(list.get(0),textEnum,iThoughts));
+                }/*else if(act.getClass().equals(QuestionAboutSomethingFrase.class)){
+                    tempList.add(new whatever(list.get(0),textEnum,iThoughts));
+                }*/
             }
         }catch (IOException e){
             System.err.println("IOException while reading file");
@@ -113,8 +114,11 @@ public class ReadFile {
                 }
             }
         }
-
-        return temp;
+        System.err.println(tempList.size());
+        System.err.println(tempList.get(0).getText());
+        System.err.println(tempList.get(1).getText());
+        System.err.println(tempList.get(2).getText());
+        return tempList;
     }
 
 }
