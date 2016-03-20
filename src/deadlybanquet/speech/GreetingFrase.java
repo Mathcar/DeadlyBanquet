@@ -15,30 +15,58 @@ import java.util.Map;
  */
 public class GreetingFrase implements SpeechAct {
     private String text;
+
+    //private SomeCharatcterEnumBothNpcAndPlayerAre speaker;
+
     private boolean endConversation;
 
-    private String property;
+    private TextPropertyEnum property;
 
-    private ArrayList<IThought> listOfproperties;
+    private ArrayList<IThought> content;
 
-    public GreetingFrase(String property){
+
+    public GreetingFrase(){
+        endConversation=false;
+        property=null;
+        content=null;
+        text="";
+    }
+
+    public GreetingFrase(String text,TextPropertyEnum property,ArrayList<IThought> contentList){
+        endConversation=false;
+        this.text=text;
         this.property=property;
-        listOfproperties=new ArrayList<IThought>();
-
+        this.content=contentList;
     }
 
     @Override
-    public boolean isEndConversation() {
-        return this.endConversation;
+    public String getText() {
+        return text;
     }
 
     @Override
-    public Map<String, Integer> getOpinionChanges() {
-        return null;
+    public void setText(String text) {
+        this.text=text;
     }
 
-    public ArrayList<IThought> getProperties(){
-        return this.listOfproperties;
+    @Override
+    public ArrayList<IThought> getContent() {
+        return this.content;
+    }
+
+    @Override
+    public void setContent(ArrayList<IThought> thoughts) {
+        this.content=thoughts;
+    }
+
+    @Override
+    public void setTextProperty(TextPropertyEnum property) {
+        this.property=property;
+    }
+
+    @Override
+    public TextPropertyEnum getTextProperty(){
+        return this.property;
     }
 
     @Override
@@ -47,12 +75,7 @@ public class GreetingFrase implements SpeechAct {
     }
 
     @Override
-    public String getText() {
-        return this.text;
-    }
-
-    @Override
-    public ArrayList<IThought> getContent() {
-        return null;
+    public boolean isEndConversation() {
+        return endConversation;
     }
 }

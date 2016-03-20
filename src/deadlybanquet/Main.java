@@ -1,6 +1,6 @@
 package deadlybanquet;
 
-import deadlybanquet.speech.ReadFile;
+import deadlybanquet.speech.SpeechActHolder;
 import deadlybanquet.states.Menu;
 import deadlybanquet.states.Pause;
 import deadlybanquet.states.Talk;
@@ -19,9 +19,9 @@ public class Main extends StateBasedGame{
 
 	public static void main(String[] args) {
 
-		//create a readFile class,that reads all the texts files and has a lot of lists
-		ReadFile readFile = ReadFile.getInstance();
-		readFile.createListFromFiles();
+		//create a speechActHolder class,that reads all the texts files and has a lot of lists
+		SpeechActHolder speechActHolder = SpeechActHolder.getInstance();
+		speechActHolder.createListFromFiles();
 
 		AppGameContainer app;
 		try {
