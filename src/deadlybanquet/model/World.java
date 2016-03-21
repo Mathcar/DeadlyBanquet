@@ -10,6 +10,7 @@ import deadlybanquet.RenderSet;
  * Created by Hampus on 2016-03-04.
  */
 public class World implements ActionListener {
+    private static Time time;
     private ArrayList ais;
     private Player player;
     private Room[][] roomMap;
@@ -25,6 +26,19 @@ public class World implements ActionListener {
         //This must be done after all rooms that are intended to be there
         //are created and added to the roomMap!
         createDoorsInRooms();
+        time = new Time();
+
+    }
+
+    //World's update function, somewhat unsure  as to what parameters are supposed
+    //to be here
+    public void update(float deltaTime){
+        time.incrementTime(deltaTime);
+    }
+
+    //return time in hours, DO NOT USE THIS TO SET THE TIME
+    public static Time getTime(){
+        return time;
     }
 
     public void createDoorsInRooms(){
@@ -50,9 +64,32 @@ public class World implements ActionListener {
         }
     }
 
+    //Returns position of a room in the roomMap by its name
+    public Position  getRoomPosition(String name){
+        for(int i=0; i<roomMap.length;i++){
+            for(int j = 0; j<roomMap[i].length;j++){
+                if(roomMap != null && roomMap[i][j].getName().equals(name)){
+                    return new Position(i,j);
+                }
+            }
+        }
+        return null;
+    }
+
+    public Room getRoomRef(String name){
+        for(int i=0; i<roomMap.length;i++){
+            for(int j = 0; j<roomMap[i].length;j++){
+                if(roomMap != null && roomMap[i][j].getName().equals(name)){
+                    return roomMap[i][j];
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        //ActionEvent fired when a character wished to move
         if(e.getID() == EventEnum.MOVE.ordinal()) {
             for (Room[] rm : roomMap) {
                 for (Room r : rm) {
@@ -60,9 +97,16 @@ public class World implements ActionListener {
                 }
             }
         }
-        if(e.getID() == EventEnum.CHANGE_ROOMS.ordinal()){
+        //ActionEvent fired when a character wants to change room/walk through a door
+        if(e.getID() == EventEnum.CHANGE_ROOMS.ordinal()) {
+            ChangeRoomEvent ce = (ChangeRoomEvent)e;
             //Check if new room has space, remove from old room, add to new
-            //if(entranceIsBlocked(Direction.EAST)) //todo commented out by Tom
+            Room targetRoom = getRoomRef(ce.getTargetRoom());
+            Room originRoom = getRoomRef(ce.getOriginRoom());
+            if (!targetRoom.entranceIsBlocked(ce.getEnterDirection())) { //todo commented out by Tom
+                originRoom.removeCharacter((Character)ce.getSource());
+                targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
+            }
         }
     }
     

@@ -16,8 +16,9 @@ public class View {
 		this.width = width;
 	}
 	
-	public void drawRenderObjects(ArrayList<RenderObject> ro, Graphics g){
-		for(RenderObject r : ro){
+	public void drawRenderObjects(RenderSet rs, Graphics g){
+		rs.getMap().render(0, 0);
+		for(RenderObject r : rs.getRenderObjects()){
 			if(r.isMoving() == false){
 				r.getImage().draw(convert(r.getPos().getX()), convert(r.getPos().getY())); 
 			}
