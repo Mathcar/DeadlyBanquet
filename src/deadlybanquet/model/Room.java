@@ -176,5 +176,16 @@ public class Room implements TileBasedMap {
         characters.remove(character);
     }
 
+    //Character to enter room and the direction in which he is entering the room
+    public void addCharacterToRoom(Character character, Direction dir){
+        for(Door d : doors){
+            if(d.getDirection() == dir){
+                //Set position of character to just inside the door
+                character.setPos(Position.getAdjacentPositionInDirection(d.getPos(),dir));
+                addCharacter(character);
+            }
+        }
+    }
+
 
 }
