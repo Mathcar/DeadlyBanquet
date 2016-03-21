@@ -20,6 +20,10 @@ public class Player {
 		this.character = c;
 	}
 	
+	public Character getCharacter(){
+		return this.character;
+	}
+	
 	public void uppdate(Input in, int dt){
 		if(this.movmentTimer < 1){
 			if(in.isKeyPressed(Input.KEY_UP)){

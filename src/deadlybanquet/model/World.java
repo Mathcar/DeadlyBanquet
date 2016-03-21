@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import deadlybanquet.RenderSet;
+
 /**
  * Created by Hampus on 2016-03-04.
  */
@@ -62,5 +64,16 @@ public class World implements ActionListener {
             //Check if new room has space, remove from old room, add to new
             //if(entranceIsBlocked(Direction.EAST)) //todo commented out by Tom
         }
+    }
+    
+    public RenderSet getRenderSet(){
+    	for(Room[] roomList: roomMap){
+    		for(Room room: roomList){
+    			if(room != null && room.hasCharacter(player.getCharacter())){
+    				return room.getRenderSet();
+    			}
+    		}
+    	}
+		return null;
     }
 }

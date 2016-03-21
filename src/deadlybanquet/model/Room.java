@@ -75,6 +75,13 @@ public class Room implements TileBasedMap {
     public ArrayList<Character> getCharactersInRoom(){
         return characters;
     }
+    
+    public boolean hasCharacter(Character searchChar){
+    	for(Character c: characters){
+    		if(c==searchChar) return true; //.equals instead
+    	}
+    	return false;
+    }
 
 
     private boolean isBlocked(int x, int y){
