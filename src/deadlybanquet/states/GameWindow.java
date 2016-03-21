@@ -31,7 +31,7 @@ public class GameWindow extends BasicGameState {
 	}
 
 	public void render(GameContainer container, StateBasedGame s,Graphics g) throws SlickException {
-
+		
 
 		if(roomNum == 1){
 			map1.render(0, 0);
