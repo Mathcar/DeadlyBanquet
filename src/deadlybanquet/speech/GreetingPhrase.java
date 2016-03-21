@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * Created by Tom on 2016-03-04.
  */
-public class GreetingFrase implements SpeechAct {
+public class GreetingPhrase implements SpeechAct {
     private String text;
 
     //private SomeCharatcterEnumBothNpcAndPlayerAre speaker;
@@ -25,14 +25,14 @@ public class GreetingFrase implements SpeechAct {
     private ArrayList<IThought> content;
 
 
-    public GreetingFrase(){
+    public GreetingPhrase(){
         endConversation=false;
         property=null;
         content=null;
         text="";
     }
 
-    public GreetingFrase(String text,TextPropertyEnum property,ArrayList<IThought> contentList){
+    public GreetingPhrase(String text,TextPropertyEnum property,ArrayList<IThought> contentList){
         endConversation=false;
         this.text=text;
         this.property=property;

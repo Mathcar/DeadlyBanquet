@@ -20,6 +20,16 @@ public class Memory {
         if(room==null) throw new IllegalArgumentException("No room supplied for Memory constructor");
         currentRoom=room;
     }
+    /**
+     * 
+     * @param what - what to find. Describes what it expects to find, including placeholders.
+     * Null values are taken to mean "any value"
+     * @return 
+     */
+    IThought[] find (IThought what){
+        if(what==null) throw new NullPointerException();
+        return null;
+    }
     //this method accepts a speech act and adds the information to its memory.
     //This method should not evaluate memory as that is the (human) player's job.
     public void hear(SpeechAct act){

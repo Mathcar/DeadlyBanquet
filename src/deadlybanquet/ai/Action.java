@@ -10,5 +10,6 @@ public enum Action {
     PICKUP,
     ASK,
     INFORM,
-    GREET;
+    GREET,
+    AGREE;
 }

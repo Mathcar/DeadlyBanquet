@@ -23,6 +23,7 @@ public class Brain extends Memory {
     private ArrayList<Desire> goals = new ArrayList<>();
     //This uses plan elements rather than actions in order to facilitate reevaluation of the plan.
     private ArrayList<PlanElement> plan = new ArrayList<>();
+    private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
     
     //this constructor replaces any bad values by defaults.
     public Brain(   ArrayList<IThought> information, 
@@ -42,9 +43,30 @@ public class Brain extends Memory {
     
     @Override
     //This class evaluates the content, changing both opinions and information
-    //according to some smart algorithm we haven't got.
+    //This method is also responsible for sending answers.
     public void hear(SpeechAct act){
-        
+        ArrayList<IThought> content = act.getContent();
+        for (IThought t : content){
+            switch(t.getClass().getSimpleName()){
+                case "Opinion":
+                case "SomebodyElse":
+                case "BackStory": System.out.println("switch statement works.");
+                case "Whereabouts":
+                case "Plan":
+                case "PlanElement":
+                case "EmotionThought":
+                case "Principle":
+                case "Desire":
+                case "Rule":
+                default: System.out.println("You missed a case.");
+            }
+        }
+    }
+    
+    //selects which statement to respond to in the case that an incoming speech act
+    //contains several pieces of information
+    private ArrayList<IThought> selectResponse(ArrayList<IThought>[] possibleResponses){
+        return null;
     }
     
     @Override
