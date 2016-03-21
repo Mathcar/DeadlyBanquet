@@ -1,6 +1,8 @@
 package deadlybanquet.states;
 
 import deadlybanquet.*;
+import deadlybanquet.model.World;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -25,6 +27,8 @@ public class GameWindow extends BasicGameState {
 	private NPCMover testNPC;
 	private Image npcImage;
 	private OldPlayer thePlayer;
+	
+	private World model;
 
 	public GameWindow() {
 		super();
@@ -57,6 +61,9 @@ public class GameWindow extends BasicGameState {
 		pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		testNPC = new NPCMover(9*32,9*32);
         //----------------------------------------------------
+		
+		//this. model = new World(); crashes due to error in World-class
+		
 	}
 
 	public void update(GameContainer container, StateBasedGame s, int delta) throws SlickException {

@@ -35,13 +35,13 @@ public class World implements ActionListener {
                     String south = "";
                     String east = "";
                     String west = "";
-                    if(roomMap[i-1][j] != null)
+                    if(roomMap[i-1][j] != null)	// i-1 gives indexOutOfBound when i=0
                         west = roomMap[i-1][j].getName();
                     if(roomMap[i+1][j] != null)
                         east = roomMap[i+1][j].getName();
                     if(roomMap[i][j+1] != null)
                         north = roomMap[i][j+1].getName();
-                    if(roomMap[i][j-1] != null)
+                    if(roomMap[i][j-1] != null)	//j-1 gives indexOutOfBound when j=0
                         south = roomMap[i][j-1].getName();
                     //All neighbours have been compiled, now notify the room
                     roomMap[i][j].assignDoorConnections(north, south, east, west);
