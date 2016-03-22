@@ -4,36 +4,71 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import deadlybanquet.AI;
 import deadlybanquet.RenderSet;
+import deadlybanquet.View;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
  * Created by Hampus on 2016-03-04.
  */
 public class World implements ActionListener {
     private static Time time;
-    private ArrayList ais;
+    private ArrayList<AI> ais;
     private Player player;
+
+    //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
+    //for the rooms to get their connections made
     private Room[][] roomMap;
 
     public World(){
-        roomMap = new Room[2][2];       //Needs to be updated as more rooms are added
-        //add room initiations
-        Character playerCharacter = new Character(this, "Gandalf", 3, 3);
-        roomMap[0][0] = new Room("res/pictures/living_room2.tmx", "Living Room");
-        player = new Player(playerCharacter);
-        roomMap[0][0].addCharacter(playerCharacter);
-        
+        //Create all rooms and place them in the roomMap
+        initRoomMap();
         //This must be done after all rooms that are intended to be there
         //are created and added to the roomMap!
         createDoorsInRooms();
+        //Initialized all AI/NPC and their Characters
+        initAIs();
+        //Initialize all player related data
+        initPlayer();
+        //Create the time object (it's initialization is done in it's constructor)
         time = new Time();
+    }
 
+    public void initPlayer(){
+        Character playerCharacter = new Character(this, "Gandalf", 3, 3);
+        player = new Player(playerCharacter);
+        roomMap[1][1].addCharacter(playerCharacter);
+    }
+
+    public void initAIs(){
+        //Not really sure in which order these thing are supposed to be initialized, but regardless
+        //it should be done in here
+        ais = new ArrayList<>();
+    }
+
+    public void initRoomMap(){
+        roomMap = new Room[4][4];       //Needs to be updated as more rooms are added
+        //add room initiations
+        roomMap[1][1] = new Room("res/pictures/living_room2.tmx", "Living Room");
     }
 
     //World's update function, somewhat unsure  as to what parameters are supposed
     //to be here
-    public void update(float deltaTime){
+    public void update(GameContainer container, StateBasedGame s, int deltaTime){
+
         time.incrementTime(deltaTime);
+        for(Room[] rs : roomMap){
+            for(Room r : rs){
+                if(r != null)
+                    r.update(container,  s, deltaTime);
+            }
+        }
+        for(AI ai : ais){
+            ai.update(container, s, deltaTime);
+        }
+        player.update(container, s, deltaTime);
     }
 
     //return time in hours, DO NOT USE THIS TO SET THE TIME
@@ -42,8 +77,8 @@ public class World implements ActionListener {
     }
 
     public void createDoorsInRooms(){
-        for(int i = 0; i< roomMap.length; i++){
-            for(int j= 0; j<roomMap.length; j++){
+        for(int i = 1; i< roomMap.length-1; i++){
+            for(int j= 1; j<roomMap.length-1; j++){
                 if(roomMap[i][j] != null){
                     String north = "";
                     String south = "";
@@ -93,7 +128,8 @@ public class World implements ActionListener {
         if(e.getID() == EventEnum.MOVE.ordinal()) {
             for (Room[] rm : roomMap) {
                 for (Room r : rm) {
-                    r.moveWithCollision(e);
+                    if(r!= null)
+                        r.moveWithCollision(e);
                 }
             }
         }

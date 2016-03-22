@@ -1,5 +1,9 @@
 package deadlybanquet;
 
+
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.state.StateBasedGame;
+
 /**
  * Created by Hampus on 2016-03-04.
  * 
@@ -14,6 +18,11 @@ package deadlybanquet;
  * 
  */
 public class AI {
+
+    public void update(GameContainer container, StateBasedGame s, int deltaTime){
+        //All update calls for AIs needs to be directed from here, like calls to the brain and such
+    }
+
     public void moveToCharacter(String name){
 
     }

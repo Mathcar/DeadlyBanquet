@@ -105,6 +105,10 @@ public class Character implements Renderable{
 
     }
 
+	public String getName(){
+		return name;
+	}
+
     //todo this is just being tested.
     public Opinion getOpinion(Character person){
         int pid = person.getId();
@@ -131,7 +135,8 @@ public class Character implements Renderable{
     }
 
 	public Position getFacedTilePos(){
-		return new Position(0,0);
+		return Position.getAdjacentPositionInDirection(pos, direction);
+
 	}
     /*
     Do NOT use this
@@ -179,12 +184,16 @@ public class Character implements Renderable{
 	}
 	
 	public void move(){
+        Position newPos = getFacedTilePos();
+        moving = true;
+        setPos(newPos);
+        /*      Functionality held in getFacedTilePos renders this obsolete
 		switch(this.direction){
 			case NORTH:
-				pos.incY();
+				pos.decY();
 				moving = true;
 			case SOUTH:
-				pos.decY();
+				pos.incY();
 				moving = true;
 			case WEST:
 				pos.decX();
@@ -195,6 +204,7 @@ public class Character implements Renderable{
 			default:
 				break;
 		}
+		*/
 	}
 
 	/*
@@ -309,7 +319,7 @@ public class Character implements Renderable{
 	}
 	
 	public void unblock(){
-		this.blocked = true;
+		this.blocked = false;
 	}
 
 }

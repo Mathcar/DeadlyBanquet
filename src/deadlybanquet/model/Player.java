@@ -2,15 +2,17 @@ package deadlybanquet.model;
 
 import java.awt.event.ActionListener;
 
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.state.StateBasedGame;
 
 public class Player {
 	
 	private Character character;
 	
 	
-	private final static int MOVEMNET_DELAY = 500;
-	private int movmentTimer = 0;
+	private final static int MOVEMENT_DELAY = 40;
+	private int movementTimer = 0;
 	
 	public Player(ActionListener al){
 		this.character = new Character(al, "Gandalf", 5, 5);
@@ -23,24 +25,26 @@ public class Player {
 	public Character getCharacter(){
 		return this.character;
 	}
-	
-	public void uppdate(Input in, int dt){
-		if(this.movmentTimer < 1){
+
+	//Changed parameters so that ALL update methods are of the same structure
+	public void update(GameContainer container, StateBasedGame s, int dt){
+		Input in = container.getInput();
+		if(this.movementTimer < 1){
 			if(in.isKeyPressed(Input.KEY_UP)){
 				character.moveN();
-				movmentTimer = MOVEMNET_DELAY;
+				movementTimer = MOVEMENT_DELAY;
 			}else if(in.isKeyPressed(Input.KEY_DOWN)){
 				character.moveS();
-				movmentTimer = MOVEMNET_DELAY;
+				movementTimer = MOVEMENT_DELAY;
 			}else if(in.isKeyPressed(Input.KEY_LEFT)){
 				character.moveW();
-				movmentTimer = MOVEMNET_DELAY;
+				movementTimer = MOVEMENT_DELAY;
 			}else if(in.isKeyPressed(Input.KEY_RIGHT)){
 				character.moveE();
-				movmentTimer = MOVEMNET_DELAY;
+				movementTimer = MOVEMENT_DELAY;
 			}
 		}
-		movmentTimer--;
+		movementTimer--;
 	}
 	
 }
