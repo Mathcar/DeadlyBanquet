@@ -22,12 +22,17 @@
  </layer>
  <layer name="Layer2" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACzNiYGAwIgEHszAwhLDg5juRiJOBelNYcPNBmFpg1LxR80bNo7951MQA1uVWQ7AEAAA=
+   H4sIAAAAAAAACzNiYGAwIgEHszAwhLDg5juRiJOBelNYcPNBmFpg1LzBZx41wVDw70g0jxAmRS0AnzOl3LAEAAA=
   </data>
  </layer>
  <layer name="Layer3" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC9XSSQuCQBjG8cnx03Wtc5f6Wi1W1xa3Y0EbdSlooy6eO3n22l8mSFIZjAp64Ify4jyOg0KoVEwhqqa6LxvpWdHUWdd4rK0Z6dmtJERTCtFCGx1Y6KKHviz2voi+AWuGGGEMGw5ceAX7fhGLc1mz7w06xnMeSGWCaeIaaL7Bp+NC1xVeoi+Uyha7xDXU9OXt793k7e8Tif+n19jMHLjx++BnPJOXKOPZGbM5FlhipenTnd+e+QFHnHDW9H3z/P4ld+NkXNGwBAAA
+   H4sIAAAAAAAAC9XSywqCQBiG4T/1DusO6rYqrbYdPC0LOlGbgk7UxnUr1257xUUWDpNRQR88CD/jN+OgSJaqJVKz5CFFs1dT572GpZ5dKyJNU6SFNmw46KCLnlluv4S+Pu8MMMQILjz4CEr2/SKOIbLi3GvYxn0emZkxJrlnpPmGkI4zXRcEub7YzGywzT1jTZ/qfO9Gdb5PJP2fnuMy8+Cn+yEsWKNKUrB2ymyGORZYavp097djvscBR5w0fd+8v3/JDdP3FgmwBAAA
+  </data>
+ </layer>
+ <layer name="Layer4" width="20" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAC2NgGAWjYOBA/UA7YBQMOCAlDQAAc604drAEAAA=
   </data>
  </layer>
 </map>

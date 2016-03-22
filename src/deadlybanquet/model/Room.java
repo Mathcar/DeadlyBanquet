@@ -22,7 +22,7 @@ public class Room implements TileBasedMap {
     private AStarPathFinder pathFinder;
     private ArrayList<Character> characters;
     private ArrayList<Door> doors;
-    public static final int DOOR_LAYER = 2;
+    public static final int DOOR_LAYER = 3;
 
     public Room(String tilemapURL, String name){
         try {

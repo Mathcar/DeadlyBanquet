@@ -42,7 +42,7 @@ public class World implements ActionListener {
     public void initPlayer(){
         Character playerCharacter = new Character(this, "Gandalf", 3, 3);
         player = new Player(playerCharacter);
-        roomMap[1][1].addCharacter(playerCharacter);
+        roomMap[2][2].addCharacter(playerCharacter);
     }
 
     public void initAIs(){
@@ -59,7 +59,9 @@ public class World implements ActionListener {
     public void initRoomMap(){
         roomMap = new Room[4][4];       //Needs to be updated as more rooms are added
         //add room initiations
-        roomMap[1][1] = new Room("res/pictures/living_room2.tmx", "Living Room");
+        roomMap[2][2] = new Room("res/pictures/living_room2.tmx", "Living Room");
+        roomMap[1][2] = new Room("res/pictures/bedroom.tmx", "Bedroom");
+        roomMap[2][1] = new Room("res/pictures/kitchen.tmx", "Kitchen");
     }
 
     //World's update function, somewhat unsure  as to what parameters are supposed
@@ -151,6 +153,17 @@ public class World implements ActionListener {
                 originRoom.removeCharacter((Character)ce.getSource());
                 targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
             }
+        }
+        if(e.getID() == 2){
+        	Character characterTemp = (Character) e.getSource();
+        	((Character) e.getSource()).getFacedTilePos();
+        	for (Room[] rm : roomMap) {
+                for (Room r : rm) {
+                    if(r.hasCharacter(characterTemp)){
+                    	
+                    }
+                }
+        	}
         }
     }
     

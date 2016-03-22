@@ -166,6 +166,7 @@ public class Character implements Renderable{
 	public void moveE(){
 		this.direction = Direction.EAST;
 		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
+		
 	}
 	
 	public void moveW(){
@@ -324,6 +325,10 @@ public class Character implements Renderable{
 	
 	public void unblock(){
 		this.blocked = false;
+	}
+	
+	public void attemptRoomChange() {
+		this.actList.actionPerformed(new ActionEvent(this, 2, ""));
 	}
 
 }

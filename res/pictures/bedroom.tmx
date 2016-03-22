@@ -16,7 +16,7 @@
  </layer>
  <layer name="Tile Layer 2" width="20" height="10">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACzNiYGAwoiJ2ogGmFhg1b2SYR00MAOXBnAEgAwAA
+   H4sIAAAAAAAACzNiYGAwoiJ2ogGmFhjs5sHMpKZZI9E8amIAfkOngiADAAA=
   </data>
  </layer>
  <layer name="Tile Layer 3" width="20" height="10">
@@ -26,7 +26,7 @@
  </layer>
  <layer name="Tile Layer 4" width="20" height="10">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgIAy8GYlQRAKIp7J5o2AU0AoAABs+09QgAwAA
+   H4sIAAAAAAAAC2NgGAWDBdQPtANGAQYAADoxoz8gAwAA
   </data>
  </layer>
 </map>
