@@ -15,4 +15,14 @@ public class Whereabouts implements IThought{
     public String toString(){
         return whoorwhat + " is with " + howsure + "certainty " + "in the " + where + "of which circumstance current person thinks" + opinion;
     }
+    
+    @Override
+    public boolean contains(IThought i) {
+        //Wrong type of information
+        if(i==null) throw new NullPointerException();
+        if(!this.getClass().equals(i.getClass())) return false;
+        Whereabouts d = (Whereabouts) i;
+        if (d.where!=""&&d.where!=where) return false;
+        return !(d.whoorwhat!=""&&d.whoorwhat!=whoorwhat);
+    }
 }

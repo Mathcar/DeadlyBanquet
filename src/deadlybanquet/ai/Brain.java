@@ -48,7 +48,11 @@ public class Brain extends Memory {
         ArrayList<IThought> content = act.getContent();
         for (IThought t : content){
             switch(t.getClass().getSimpleName()){
-                case "Opinion":
+                case "Opinion"://first, find any data you already have about this.
+                    //If there is none, take this data at face value.
+                    //Otherwise, think about this circumstance.
+                    //Suggest appropriate response.
+                    //Adjust opinion of speaker, using other information if necessary.
                 case "SomebodyElse":
                 case "BackStory": System.out.println("switch statement works.");
                 case "Whereabouts":

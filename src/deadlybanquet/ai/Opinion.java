@@ -15,4 +15,16 @@ public class Opinion implements IThought{
     public String toString(){
         return "feeling " + pad + " about " + aboutPersonRoomObject;
     }
+
+    @Override
+    /**
+     * It is not possible to find opinions with a particular emotional value.
+     */
+    public boolean contains(IThought i) {
+        //Wrong type of information
+        if(i==null) throw new NullPointerException();
+        if(!this.getClass().equals(i.getClass())) return false;
+        Opinion d = (Opinion) i;
+        return aboutPersonRoomObject==d.aboutPersonRoomObject;
+    }
 }

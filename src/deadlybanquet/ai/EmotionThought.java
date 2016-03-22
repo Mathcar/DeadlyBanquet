@@ -5,10 +5,20 @@ package deadlybanquet.ai;
  * @author omega
  */
 public class EmotionThought implements IThought{
+
+    @Override
+    public boolean contains(IThought i) {
+        //Wrong type of information
+        if(i==null) throw new NullPointerException();
+        if(!this.getClass().equals(i.getClass())) return false;
+        EmotionThought d = (EmotionThought) i;
+        return (d.emotionortemperament==et.ETPLACEHOLDER||d.emotionortemperament==emotionortemperament);
+    }
     public enum et {
-        EMOTION, TEMPERAMENT;
+        EMOTION, TEMPERAMENT, ETPLACEHOLDER;
     }
     public et emotionortemperament;
+    
     public PAD pad;
     
     @Override

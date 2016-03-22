@@ -26,9 +26,13 @@ public class Memory {
      * Null values are taken to mean "any value"
      * @return 
      */
-    IThought[] find (IThought what){
+    LinkedList<IThought> find (IThought what){
         if(what==null) throw new NullPointerException();
-        return null;
+        LinkedList<IThought> results = new LinkedList<>();
+        for (IThought i: information){
+            if (i.contains(what)) results.add(i);
+        }
+        return results;
     }
     //this method accepts a speech act and adds the information to its memory.
     //This method should not evaluate memory as that is the (human) player's job.

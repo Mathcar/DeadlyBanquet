@@ -84,7 +84,7 @@ public class SpeechActHolder {
                         how will they be used?
                         For now this ONLY(maybe) work for greetings!
                          */
-                        iThought=new PlanElement(null, Action.valueOf(list.get(i)),null);
+                        iThought=new PlanElement(null, Action.valueOf(list.get(i)),null, PlanElement.pe.PLAN);
                         iThoughts.add(iThought);
                     }catch(Exception e){
                         System.err.println("Something is wrong: could not make string to Action enum[SpeechActHolder class]" +

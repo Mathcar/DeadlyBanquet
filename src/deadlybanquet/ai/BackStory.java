@@ -9,4 +9,10 @@ package deadlybanquet.ai;
  */
 public enum BackStory implements IThought{
     SNOWEDIN, NOMOBILESIGNAL;
+
+    @Override
+    public boolean contains(IThought i) {
+        if(!this.getClass().equals(i.getClass())) return false;
+        return this==i;
+    }
 }
