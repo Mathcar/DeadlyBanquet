@@ -213,7 +213,7 @@ public class Character implements Renderable{
 
 	/* I want to save this to but it should not be here, but please DONT remove.
 
-	public void reciveSpeachAct(SpeechAct s, Character c){
+	public void receiveSpeechAct(SpeechAct s, Character c){
 		this.getOpinion(c).changeLove(s.getLoveChange());
 		SpeechAct[] answers = s.getAproprietAnswers(s);
 		boolean endConversation = false;

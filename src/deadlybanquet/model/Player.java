@@ -44,7 +44,7 @@ public class Player {
 				movementTimer = MOVEMENT_DELAY;
 			}
 		}
-		movementTimer--;
+		movementTimer-=dt;
 	}
 	
 }
