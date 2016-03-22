@@ -47,7 +47,7 @@ public class Player {
 				character.attemptRoomChange();
 			}
 		}
-		movementTimer-=dt;
+		movementTimer--;
 	}
 	
 }

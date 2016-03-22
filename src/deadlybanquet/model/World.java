@@ -52,7 +52,7 @@ public class World implements ActionListener {
     	ai = new AIControler(this,npc);
     	aiss = new ArrayList<>();
     	aiss.add(ai);
-    	roomMap[1][1].addCharacter(npc);
+    	roomMap[2][2].addCharacter(npc);
   
     }
 
@@ -156,11 +156,10 @@ public class World implements ActionListener {
         }
         if(e.getID() == 2){
         	Character characterTemp = (Character) e.getSource();
-        	((Character) e.getSource()).getFacedTilePos();
         	for (Room[] rm : roomMap) {
                 for (Room r : rm) {
                     if(r.hasCharacter(characterTemp)){
-                    	
+                    	r.checkDoor(e);
                     }
                 }
         	}
