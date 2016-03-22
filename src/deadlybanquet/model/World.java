@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import deadlybanquet.AI;
 import deadlybanquet.RenderSet;
 import deadlybanquet.View;
+import deadlybanquet.ai.AIControler;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -15,8 +17,9 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class World implements ActionListener {
     private static Time time;
-    private ArrayList<AI> ais;
     private Player player;
+    private AIControler ai;
+    private ArrayList<AIControler> aiss;
 
     //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
     //for the rooms to get their connections made
@@ -45,7 +48,12 @@ public class World implements ActionListener {
     public void initAIs(){
         //Not really sure in which order these thing are supposed to be initialized, but regardless
         //it should be done in here
-        ais = new ArrayList<>();
+    	Character npc = new Character(this, "Frådo", 9, 5);
+    	ai = new AIControler(this,npc);
+    	aiss = new ArrayList<>();
+    	aiss.add(ai);
+    	roomMap[1][1].addCharacter(npc);
+  
     }
 
     public void initRoomMap(){
@@ -65,9 +73,9 @@ public class World implements ActionListener {
                     r.update(container,  s, deltaTime);
             }
         }
-        for(AI ai : ais){
-            ai.update(container, s, deltaTime);
-        }
+       // for(AI ai : ais){
+         //   ai.update(container, s, deltaTime);
+        //}
         player.update(container, s, deltaTime);
     }
 
