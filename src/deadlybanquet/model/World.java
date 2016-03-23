@@ -40,7 +40,7 @@ public class World implements ActionListener {
     }
 
     public void initPlayer(){
-        Character playerCharacter = new Character(this, "Gandalf", 3, 3);
+        Character playerCharacter = new Character(this, "Gandalf", 9, 13);
         player = new Player(playerCharacter);
         roomMap[2][2].addCharacter(playerCharacter);
     }
@@ -59,9 +59,9 @@ public class World implements ActionListener {
     public void initRoomMap(){
         roomMap = new Room[4][4];       //Needs to be updated as more rooms are added
         //add room initiations
-        roomMap[2][2] = new Room("res/pictures/living_room2.tmx", "Living Room");
-        roomMap[1][2] = new Room("res/pictures/bedroom.tmx", "Bedroom");
-        roomMap[2][1] = new Room("res/pictures/kitchen.tmx", "Kitchen");
+        roomMap[2][2] = new Room("res/pictures/living_room2.tmx", "Living Room",this);
+        roomMap[1][2] = new Room("res/pictures/bedroom.tmx", "Bedroom",this);
+        roomMap[2][1] = new Room("res/pictures/kitchen.tmx", "Kitchen",this);
     }
 
     //World's update function, somewhat unsure  as to what parameters are supposed
@@ -122,9 +122,10 @@ public class World implements ActionListener {
     }
 
     public Room getRoomRef(String name){
+    	
         for(int i=0; i<roomMap.length;i++){
             for(int j = 0; j<roomMap[i].length;j++){
-                if(roomMap != null && roomMap[i][j].getName().equals(name)){
+                if(roomMap[i][j] != null && roomMap[i][j].getName().equals(name)){
                     return roomMap[i][j];
                 }
             }
@@ -143,22 +144,24 @@ public class World implements ActionListener {
                 }
             }
         }
+       
         //ActionEvent fired when a character wants to change room/walk through a door
         if(e.getID() == EventEnum.CHANGE_ROOMS.ordinal()) {
             ChangeRoomEvent ce = (ChangeRoomEvent)e;
             //Check if new room has space, remove from old room, add to new
             Room targetRoom = getRoomRef(ce.getTargetRoom());
             Room originRoom = getRoomRef(ce.getOriginRoom());
-            if (!targetRoom.entranceIsBlocked(ce.getEnterDirection())) { //todo commented out by Tom
+            if (!targetRoom.entranceIsBlocked(ce.getEnterDirection())) { //todo commented out by Tom	
                 originRoom.removeCharacter((Character)ce.getSource());
                 targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
             }
         }
+        
         if(e.getID() == 2){
         	Character characterTemp = (Character) e.getSource();
         	for (Room[] rm : roomMap) {
-                for (Room r : rm) {
-                    if(r.hasCharacter(characterTemp)){
+        		for (Room r : rm) {
+                    if(r != null && r.hasCharacter(characterTemp)){
                     	r.checkDoor(e);
                     }
                 }

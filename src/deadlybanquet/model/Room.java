@@ -22,9 +22,11 @@ public class Room implements TileBasedMap {
     private AStarPathFinder pathFinder;
     private ArrayList<Character> characters;
     private ArrayList<Door> doors;
+    private ActionListener actList; 
     public static final int DOOR_LAYER = 3;
+    
 
-    public Room(String tilemapURL, String name){
+    public Room(String tilemapURL, String name, ActionListener al){
         try {
             map = new TiledMap(tilemapURL);
         }catch(SlickException se){
@@ -34,6 +36,8 @@ public class Room implements TileBasedMap {
         pathFinder = new AStarPathFinder(this, 50, false);
         characters = new ArrayList<Character>();
         createDoors();
+        
+        this.actList = al;
 
     }
 
@@ -88,7 +92,7 @@ public class Room implements TileBasedMap {
     
     public boolean hasCharacter(Character searchChar){
     	for(Character c: characters){
-    		if(c==searchChar) return true; //.equals instead
+    		if(c.equals(searchChar)) return true; //.equals instead
     	}
     	return false;
     }
@@ -152,9 +156,8 @@ public class Room implements TileBasedMap {
     public boolean entranceIsBlocked(Direction origin){
         for(Door d : doors) {
             if(d.getDirection()==Direction.getOppositeDirection(origin)){
-                Position pos = Position.getAdjacentPositionInDirection(d.getPos(),
-                                                                        origin);
-                return isBlocked(pos.getX(), pos.getY());
+                Position pos = Position.getAdjacentPositionInDirection(d.getPos(),origin);
+                return isBlocked(pos.getX(), pos.getY()+1);
             }
         }
         return true;
@@ -198,7 +201,8 @@ public class Room implements TileBasedMap {
     //Character to enter room and the direction in which he is entering the room
     public void addCharacterToRoom(Character character, Direction dir){
         for(Door d : doors){
-            if(d.getDirection() == dir){
+        	System.out.println(d.getDirection() + " "+ dir);
+            if(d.getDirection() == Direction.getOppositeDirection(dir)){
                 //Set position of character to just inside the door
                 character.setPos(Position.getAdjacentPositionInDirection(d.getPos(),dir));
                 addCharacter(character);
@@ -208,8 +212,8 @@ public class Room implements TileBasedMap {
     public void checkDoor(ActionEvent e){
     	Position p = ((Character) e.getSource()).getFacedTilePos();
     	for(Door d : doors){
-    		if(d.getPos() == p){
-    			ActionEvent dr = new ActionEvent(this, 0, "CHANGE_ROOM");
+    		if(d.getX() == p.getX() && d.getY() == p.getY()){
+    			((Character) e.getSource()).enterDoor(d.getDestinationRoom(), d.getOriginRoom());
     		}
     	}
     }

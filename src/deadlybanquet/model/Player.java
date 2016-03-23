@@ -43,7 +43,7 @@ public class Player {
 				character.moveE();
 				movementTimer = MOVEMENT_DELAY;
 			}
-			else if(in.isKeyPressed(Input.KEY_E)){
+			if(in.isKeyPressed(Input.KEY_E)){
 				character.attemptRoomChange();
 			}
 		}
