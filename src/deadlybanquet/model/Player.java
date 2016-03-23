@@ -6,13 +6,15 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
+import deadlybanquet.states.States;
+
 public class Player {
 	
 	private Character character;
 	
 	
 	private final static int MOVEMENT_DELAY = 32;
-	private int movementTimer = 0;
+	private int movementTimer = MOVEMENT_DELAY;
 	
 	public Player(ActionListener al){
 		this.character = new Character(al, "Gandalf", 5, 5);
