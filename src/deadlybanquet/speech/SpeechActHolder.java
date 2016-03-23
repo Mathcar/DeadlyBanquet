@@ -39,7 +39,7 @@ public class SpeechActHolder {
         for (File file : fList){
             if (file.isFile()){
                 if(file.getName().equals("greetingFrase")){
-                    GreetingFrase temp = new GreetingFrase();
+                    GreetingPhrase temp = new GreetingPhrase();
                     greetingsList=readFile(file,temp);
                 }
                 else if(file.getName().equals("something else")){
@@ -85,7 +85,7 @@ public class SpeechActHolder {
                         how will they be used?
                         For now this ONLY(maybe) work for greetings!
                          */
-                        iThought=new PlanElement(null, Action.valueOf(list.get(i)),null);
+                        iThought=new PlanElement(null, Action.valueOf(list.get(i)),null, PlanElement.pe.PLAN);
                         iThoughts.add(iThought);
                     }catch(Exception e){
                         System.err.println("Something is wrong: could not make string to Action enum[SpeechActHolder class]" +
@@ -94,8 +94,8 @@ public class SpeechActHolder {
                     }
                 }
 
-                if(act.getClass().equals(GreetingFrase.class)){
-                    tempList.add(new GreetingFrase(list.get(0),textEnum,iThoughts));
+                if(act.getClass().equals(GreetingPhrase.class)){
+                    tempList.add(new GreetingPhrase(list.get(0),textEnum,iThoughts));
                 }/*else if(act.getClass().equals(QuestionAboutSomethingFrase.class)){
                     tempList.add(new whatever(list.get(0),textEnum,iThoughts));
                 }*/

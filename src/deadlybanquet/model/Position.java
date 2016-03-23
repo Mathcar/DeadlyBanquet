@@ -15,6 +15,9 @@ public class Position {
     	this.x = p.getX();
     	this.y = p.getY();
     }
+    public boolean equals(Position p){
+    	return p.getX() == x && p.getY() == y;
+    }
 
     public int getX(){
         return x;
@@ -54,13 +57,13 @@ public class Position {
 
     public static Position getAdjacentPositionInDirection(Position org, Direction dir){
         if(dir == Direction.NORTH){
-            return new Position(org.getX(), org.getY()+1);
+            return new Position(org.getX(), org.getY()-1);
         }else if(dir == Direction.WEST){
             return new Position(org.getX()-1, org.getY());
         }else if(dir == Direction.EAST){
             return new Position(org.getX()+1, org.getY());
         }else{
-            return new Position(org.getX(), org.getY()-1);
+            return new Position(org.getX(), org.getY()+1);
         }
     }
 }

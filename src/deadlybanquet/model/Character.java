@@ -105,6 +105,10 @@ public class Character implements Renderable{
 
     }
 
+	public String getName(){
+		return name;
+	}
+
     //todo this is just being tested.
     public Opinion getOpinion(Character person){
         int pid = person.getId();
@@ -131,7 +135,8 @@ public class Character implements Renderable{
     }
 
 	public Position getFacedTilePos(){
-		return new Position(0,0);
+		return Position.getAdjacentPositionInDirection(pos, direction);
+
 	}
     /*
     Do NOT use this
@@ -161,6 +166,7 @@ public class Character implements Renderable{
 	public void moveE(){
 		this.direction = Direction.EAST;
 		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
+		
 	}
 	
 	public void moveW(){
@@ -179,12 +185,16 @@ public class Character implements Renderable{
 	}
 	
 	public void move(){
+        Position newPos = getFacedTilePos();
+        moving = true;
+        setPos(newPos);
+        /*      Functionality held in getFacedTilePos renders this obsolete
 		switch(this.direction){
 			case NORTH:
-				pos.incY();
+				pos.decY();
 				moving = true;
 			case SOUTH:
-				pos.decY();
+				pos.incY();
 				moving = true;
 			case WEST:
 				pos.decX();
@@ -195,6 +205,7 @@ public class Character implements Renderable{
 			default:
 				break;
 		}
+		*/
 	}
 
 	/*
@@ -203,7 +214,7 @@ public class Character implements Renderable{
 
 	/* I want to save this to but it should not be here, but please DONT remove.
 
-	public void reciveSpeachAct(SpeechAct s, Character c){
+	public void receiveSpeechAct(SpeechAct s, Character c){
 		this.getOpinion(c).changeLove(s.getLoveChange());
 		SpeechAct[] answers = s.getAproprietAnswers(s);
 		boolean endConversation = false;
@@ -248,13 +259,14 @@ public class Character implements Renderable{
 		switch(this.direction){
 			case SOUTH:
 				if(moving){
-					
 					if(distance == 1){
 						moving = false;
 						distance = 32;
+						return new RenderObject(pos.getX(), pos.getY(), imageS, moving);
 					}
 					distance--;
 					return new RenderObject(pos.getX(), pos.getY(), aniS, moving, 0, distance);
+					
 				}else{
 					return new RenderObject(pos.getX(), pos.getY(), imageS, moving);
 				}
@@ -264,6 +276,7 @@ public class Character implements Renderable{
 					if(distance == 1){
 						moving = false;
 						distance = 32;
+						return new RenderObject(pos.getX(), pos.getY(), imageE, moving);
 					}
 					distance--;
 					return new RenderObject(pos.getX(), pos.getY(), aniE, moving, distance, 0);
@@ -276,6 +289,7 @@ public class Character implements Renderable{
 					if(distance == 1){
 						moving = false;
 						distance = 32;
+						return new RenderObject(pos.getX(), pos.getY(), imageW, moving);
 					}
 					distance--;
 					return new RenderObject(pos.getX(), pos.getY(), aniW, moving, -1*distance, 0 );
@@ -288,6 +302,7 @@ public class Character implements Renderable{
 					if(distance == 1){
 						moving = false;
 						distance = 32;
+						return new RenderObject(pos.getX(), pos.getY(), imageN, moving);
 					}
 					distance--;
 					return new RenderObject(pos.getX(), pos.getY(), aniN, moving, 0, -1*distance);
@@ -309,7 +324,11 @@ public class Character implements Renderable{
 	}
 	
 	public void unblock(){
-		this.blocked = true;
+		this.blocked = false;
+	}
+	
+	public void attemptRoomChange() {
+		this.actList.actionPerformed(new ActionEvent(this, 2, ""));
 	}
 
 }

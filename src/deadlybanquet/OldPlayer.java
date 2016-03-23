@@ -7,6 +7,7 @@ import org.newdawn.slick.*;
  * Created by Hampus on 2016-02-28.
  */
 public class OldPlayer {
+    /* COMMENTING OUT ALL OF THIS OBSOLETE CODE TO PREVENT COMPILE ERRORS!---------------------------------------------------
     private Image playerdown,playerup,playerleft,playerright;
     private int playerx = 100;
     private int playery = 100;
@@ -191,6 +192,8 @@ public class OldPlayer {
             return false;
         }
     }
+
+    ----------------------------------------------------------------------------------------------*/
 
 
 

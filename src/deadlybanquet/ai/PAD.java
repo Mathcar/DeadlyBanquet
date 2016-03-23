@@ -59,6 +59,15 @@ public class PAD {
         }
         D=i;
     }
+    
+    /** Calculates the distance to the input PAD.
+     * 
+     * @param pad
+     * @return distance
+     */
+    public double distanceTo(PAD pad){
+        return Math.sqrt(pow(this.P-pad.P,2)+pow(this.A-pad.A,2)+pow(this.D-pad.D,2));
+    }
     /**This is currently a very simple linear model.
     No idea if this is sufficiently expressive.
     This method should be called on the PAD object

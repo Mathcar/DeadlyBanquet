@@ -13,8 +13,26 @@ public class SomebodyElse implements IThought{
     //TODO restrict to smaller range
     public double howsure;
     //TODO time information;
+    public SomebodyElse(IThought w, String a, PAD o, double h){
+        what=w;
+        aboutPerson =a;
+        opinion = o;
+        howsure=h;
+    }
+    
+    
     @Override
     public String toString(){
         return ("think with " + howsure + " certainty and " + opinion + "opinion that " + aboutPerson + " thinks that " + what);
+    }
+    
+    @Override
+    public boolean contains(IThought i) {
+        //Wrong type of information
+        if(i==null) throw new NullPointerException();
+        if(!this.getClass().equals(i.getClass())) return false;
+        SomebodyElse d = (SomebodyElse) i;
+        if (d.aboutPerson!=""&&d.aboutPerson!=aboutPerson) return false;
+        return what.contains(d.what);
     }
 }

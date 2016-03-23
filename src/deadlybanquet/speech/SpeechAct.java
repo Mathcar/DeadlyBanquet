@@ -25,5 +25,4 @@ public interface SpeechAct {
     
     //Gets the identifier of the speaker.
     public String getSpeaker();
-
 }

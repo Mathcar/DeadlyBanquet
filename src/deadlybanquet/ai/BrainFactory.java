@@ -22,7 +22,8 @@ public class BrainFactory {
                     PAD temperament, 
                     ArrayList<Desire>desires,
                     ArrayList<Desire>goals,
-                    ArrayList<PlanElement>plan){
+                    ArrayList<PlanElement>plan,
+                    String room){
         if (emotion==null){
             double p = Math.random()*2-1;
             double a = Math.random()*2-1;
@@ -35,6 +36,6 @@ public class BrainFactory {
             double d = Math.random()*2-1;
             temperament = new PAD(p,a,d);
         }
-       return new Brain (information, emotion, temperament, desires, goals, plan);      
+       return new Brain (information, emotion, temperament, desires, goals, plan, room);      
     }
 }

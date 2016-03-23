@@ -1,6 +1,8 @@
 package deadlybanquet.states;
 
 import deadlybanquet.*;
+import deadlybanquet.model.World;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -13,7 +15,7 @@ import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 
 
 public class GameWindow extends BasicGameState {
-
+	/*------------OBSOLETE VARIABLES-----------------
 	private TiledMap map1, map2, map3;
 	private int roomNum = 1;
 	// A*pathfinding testing variables-------------
@@ -25,18 +27,16 @@ public class GameWindow extends BasicGameState {
 	private NPCMover testNPC;
 	private Image npcImage;
 	private OldPlayer thePlayer;
+	*/
+	private View view;
+	private World model;
 
 	public GameWindow() {
 		super();
 	}
 
-//<<<<<<< HEAD
-//	public void render(GameContainer container, Graphics arg1) throws SlickException {
-//=======
-
 	public void render(GameContainer container, StateBasedGame s,Graphics g) throws SlickException {
-//>>>>>>> fa02dda0394f532fc64d37fc0e0ce0477c95c778
-
+	/*			OBSOLETE
 		if(roomNum == 1){
 			map1.render(0, 0);
 			npcImage.draw(testNPC.x, testNPC.y);
@@ -47,10 +47,12 @@ public class GameWindow extends BasicGameState {
 			map3.render(0, 0);
 		}
 		thePlayer.render();			//play the player animation
+		*/
+		view.drawRenderObjects(model.getRenderSet(),g);
 	}
 
 	public void init(GameContainer container, StateBasedGame s) throws SlickException {
-		map1 = new TiledMap("res/pictures/living_room2.tmx");
+		/*map1 = new TiledMap("res/pictures/living_room2.tmx");
 		map2 = new TiledMap("res/pictures/kitchen.tmx");
 		map3 = new TiledMap("res/pictures/bedroom.tmx");
 		thePlayer = new OldPlayer(); //create the player object
@@ -61,10 +63,17 @@ public class GameWindow extends BasicGameState {
 		pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		testNPC = new NPCMover(9*32,9*32);
         //----------------------------------------------------
+        		OLD CODE
+        */
+
+
+		model = new World();
+		view = new View(container.getHeight(), container.getWidth());
+		
 	}
 
 	public void update(GameContainer container, StateBasedGame s, int delta) throws SlickException {
-		testNPC.update();
+		/*testNPC.update();
 		Input input = container.getInput();
 		thePlayer.update(input,delta,this);			//run the players own update method
 		if (input.isKeyPressed(Input.KEY_P) || input.isKeyPressed(Input.KEY_ESCAPE)) {
@@ -91,9 +100,19 @@ public class GameWindow extends BasicGameState {
         	pathfindingMap.updateBlockStatus(testNPC.prevTilex,testNPC.prevTiley , false);
         }
         input.clearKeyPressedRecord();
+        --------------------------OLD CODE ABOVE----------------------------------*/
+
+		//Update the model
+		model.update(container, s, delta);
 	}
 
+	@Override
+	public int getID() {
+		// TODO Auto-generated method stub
+		return States.game;
+	}
 
+	/* OBSOLETE
     //Draws a grid over the background TiledMap, currently requires origin of (0,0)
     public void drawGrid(Graphics g){
         for(int i = 0; i<pathfindingMap.getWidthInTiles(); i++){
@@ -103,8 +122,9 @@ public class GameWindow extends BasicGameState {
         }
 
     }
+    */
 
-
+/*			OBSOLETE
 	//Needs to be updated when rooms are fully defined!!!
 	public void swapRooms(int roomID){
 
@@ -123,15 +143,9 @@ public class GameWindow extends BasicGameState {
 			pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
 		}
 	}
+					NOT USED IN NEW MODEL*/
 
-	public LayerBasedTileMap getMap(){
-		return pathfindingMap;
-	}
-	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return States.game;
-	}
+
 
 
 }

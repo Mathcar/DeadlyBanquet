@@ -3,7 +3,9 @@ package deadlybanquet.model;
 import deadlybanquet.AI;
 import deadlybanquet.RenderObject;
 import deadlybanquet.RenderSet;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.tiled.TiledMap;
 import org.newdawn.slick.util.pathfinding.*;
 
@@ -20,7 +22,7 @@ public class Room implements TileBasedMap {
     private AStarPathFinder pathFinder;
     private ArrayList<Character> characters;
     private ArrayList<Door> doors;
-    public static final int DOOR_LAYER = 4;
+    public static final int DOOR_LAYER = 3;
 
     public Room(String tilemapURL, String name){
         try {
@@ -31,10 +33,18 @@ public class Room implements TileBasedMap {
         this.name = name;
         pathFinder = new AStarPathFinder(this, 50, false);
         characters = new ArrayList<Character>();
+        createDoors();
 
     }
 
+    public void update(GameContainer container, StateBasedGame s, int deltaTime){
+        //Maybe something wants to update in each specific room?
+        //Like possibly gameobject/pickups or whatever if taht is added
+        // Will leave this like this for now, it is called for each room in world!
+    }
+
     public void createDoors(){
+        doors = new ArrayList<>();
         for(int x = 0; x<getWidthInTiles(); x++){
             for(int y = 0; y<getHeightInTiles(); y++){
                 int tileID = map.getTileId(x,y, DOOR_LAYER);
@@ -75,6 +85,13 @@ public class Room implements TileBasedMap {
     public ArrayList<Character> getCharactersInRoom(){
         return characters;
     }
+    
+    public boolean hasCharacter(Character searchChar){
+    	for(Character c: characters){
+    		if(c==searchChar) return true; //.equals instead
+    	}
+    	return false;
+    }
 
 
     private boolean isBlocked(int x, int y){
@@ -108,18 +125,27 @@ public class Room implements TileBasedMap {
 
     }
 
+    //Answers: "Is this positions x and y within the limits of the room?"
+    public boolean isInBoundaries(Position pos){
+        return pos.getY()<getHeightInTiles() && pos.getX()<getWidthInTiles() &&
+                pos.getX() >=0 && pos.getY() >=0;
+    }
+
     //Checks if a character can move to its desired destination.
     //tells the character to conduct its move if it can, otherwise notifies
     //the character through "notifyBlocked()"
     public void moveWithCollision(ActionEvent e){
         Character c = (Character)e.getSource();
-        Position newPos = c.getFacedTilePos();
-        if(isBlocked(newPos.getX(), newPos.getY())){
-            //tile is blocked, send notification to related ai/character?
-           //c.notifyBlocked();
+        if(hasCharacter(c)){
+        	Position newPos = c.getFacedTilePos();
+        	if(!isInBoundaries(newPos) || isBlocked(newPos.getX(), newPos.getY())){
+        		System.out.println(" Tile was blocked on " + newPos.getX() +", " + newPos.getY());
+        		//tile is blocked, send notification to related ai/character?
+        		c.notifyBlocked();
 
-        }else{
-            c.move(); //character can move
+        	}else{
+        		c.move(); //character can move
+        	}
         }
     }
 
@@ -167,6 +193,25 @@ public class Room implements TileBasedMap {
 
     public void removeCharacter(Character character){
         characters.remove(character);
+    }
+
+    //Character to enter room and the direction in which he is entering the room
+    public void addCharacterToRoom(Character character, Direction dir){
+        for(Door d : doors){
+            if(d.getDirection() == dir){
+                //Set position of character to just inside the door
+                character.setPos(Position.getAdjacentPositionInDirection(d.getPos(),dir));
+                addCharacter(character);
+            }
+        }
+    }
+    public void checkDoor(ActionEvent e){
+    	Position p = ((Character) e.getSource()).getFacedTilePos();
+    	for(Door d : doors){
+    		if(d.getPos() == p){
+    			ActionEvent dr = new ActionEvent(this, 0, "CHANGE_ROOM");
+    		}
+    	}
     }
 
 

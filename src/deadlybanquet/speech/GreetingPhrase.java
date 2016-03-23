@@ -7,7 +7,8 @@ import java.util.ArrayList;
 /**
  * Created by Tom on 2016-03-04.
  */
-public class GreetingFrase implements SpeechAct { //should we combine this with VALEDICTIONS???
+
+public class GreetingPhrase implements SpeechAct {
     private String text;
 
     //private SomeCharatcterEnumBothNpcAndPlayerAre speaker;
@@ -17,13 +18,13 @@ public class GreetingFrase implements SpeechAct { //should we combine this with 
     private ArrayList<IThought> content;
 
 
-    public GreetingFrase(){
+    public GreetingPhrase(){
         property=null;
         content=null;
         text="";
     }
 
-    public GreetingFrase(String text,TextPropertyEnum property,ArrayList<IThought> contentList){
+    public GreetingPhrase(String text,TextPropertyEnum property,ArrayList<IThought> contentList){
         this.text=text;
         this.property=property;
         this.content=contentList;
