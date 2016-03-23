@@ -1,5 +1,7 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Time;
+
 /**
  * Represents the idea that I think with howsure certainty that aboutPerson thinks... 
  * Opinion is my opinion, not that of aboutPerson
@@ -12,7 +14,8 @@ public class SomebodyElse implements IThought{
     public PAD opinion;
     //TODO restrict to smaller range
     public double howsure;
-    //TODO time information;
+    public Time time;
+    public SomebodyElse previous;
     public SomebodyElse(IThought w, String a, PAD o, double h){
         what=w;
         aboutPerson =a;

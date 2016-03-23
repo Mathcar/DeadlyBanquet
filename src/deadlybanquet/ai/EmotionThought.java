@@ -1,5 +1,7 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Time;
+
 /**
  * Representation of an emotion or temperament
  * @author omega
@@ -20,6 +22,9 @@ public class EmotionThought implements IThought{
     public et emotionortemperament;
     
     public PAD pad;
+    
+    public Time time;
+    public EmotionThought previous;
     
     @Override
     public String toString(){

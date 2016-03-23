@@ -17,5 +17,6 @@ public enum Action {
     MURDER,
     GETCONFIRMATION,
     CONFIRM,
+    TALKTO,
     ACTIONPLACEHOLDER;
 }

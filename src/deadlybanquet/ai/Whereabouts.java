@@ -1,5 +1,7 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Time;
+
 /**
  * Represents that somebody or something is/was somewhere (in a room)
  * @author omega
@@ -10,7 +12,8 @@ public class Whereabouts implements IThought{
     public String whoorwhat;
     public PAD opinion;
     public double howsure;
-     //TODO time information;
+    public Time time;
+    public Whereabouts previous;
     @Override
     public String toString(){
         return whoorwhat + " is with " + howsure + "certainty " + "in the " + where + "of which circumstance current person thinks" + opinion;

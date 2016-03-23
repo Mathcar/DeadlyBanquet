@@ -35,13 +35,15 @@ public class Brain extends Memory {
                     ArrayList<Desire>desires,
                     ArrayList<Desire>goals,
                     ArrayList<PlanElement>plan,
-                    String currentRoom){
+                    String currentRoom,
+                    String name){
         super(information, currentRoom);
         if (emotion!=null) this.emotion=emotion;
         if (temperament!=null) this.temperament=temperament;
         if (desires !=null) this.desires = desires;
         if (goals!=null) this.goals = goals;
         if (plan!=null) this.plan = plan;
+        me = name;
     }
     
     @Override
@@ -51,8 +53,7 @@ public class Brain extends Memory {
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         for (IThought t : content){
-            ArrayList<IThought> foundData;
-            
+            ArrayList<IThought> foundData;            
             switch(t.getClass().getSimpleName()){
                 case "Opinion": Opinion incoming = (Opinion) t;
                                 Opinion o = new Opinion(incoming.aboutPersonRoomObject, null);

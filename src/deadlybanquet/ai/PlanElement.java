@@ -1,6 +1,7 @@
 package deadlybanquet.ai;
 
 import static deadlybanquet.ai.Action.ACTIONPLACEHOLDER;
+import deadlybanquet.model.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,6 +24,8 @@ public class PlanElement implements IThought {
     public Action action;
     public ArrayList<IThought> results;
     public pe type;
+    public Time time;
+    public PlanElement previous;
     
     public PlanElement(ArrayList<IThought> pre, Action a, ArrayList<IThought> r, pe type){
         prerequisites=pre;
