@@ -33,7 +33,7 @@ public class SpeechActHolder {
 
     public void createListFromFiles(){
 
-        File directory = new File("res\\speech");
+        File directory = new File("res/speech");
         //get all the files from a directory
         File[] fList = directory.listFiles();
         for (File file : fList){
