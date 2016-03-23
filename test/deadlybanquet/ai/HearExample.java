@@ -23,7 +23,7 @@ public class HearExample {
     public void hello() {
         SpeechAct input = new GreetingPhrase();
         ArrayList<IThought> content = new ArrayList<>();
-        content.add(BackStory.SNOWEDIN);
+        content.add(new Opinion("Bill", new PAD(1,1,1)));
         input.setContent(content);
         Brain npc = makeBrain(null,null,null, null, null, null, "Hell");
         npc.hear(input);

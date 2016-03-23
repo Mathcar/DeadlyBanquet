@@ -1,5 +1,7 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Time;
+
 /**
  * Created by Tom on 2016-02-19.
  * This IThought expresses the fact that (implied person) has opinion pad about aboutPersonRoomObject
@@ -7,6 +9,9 @@ package deadlybanquet.ai;
 public class Opinion implements IThought{
     public String aboutPersonRoomObject;
     public PAD pad;
+    //The time when this opinion first became current.
+    public Time time;
+    public Opinion previous;
     public Opinion(String about, PAD pad){
         this.pad = pad;
         aboutPersonRoomObject = about;

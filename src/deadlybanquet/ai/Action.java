@@ -15,5 +15,7 @@ public enum Action {
     AGREE,
     DISAGREE,
     MURDER,
+    GETCONFIRMATION,
+    CONFIRM,
     ACTIONPLACEHOLDER;
 }

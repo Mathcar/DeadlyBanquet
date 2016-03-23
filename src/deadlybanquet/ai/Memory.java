@@ -26,9 +26,9 @@ public class Memory {
      * Null values are taken to mean "any value"
      * @return 
      */
-    LinkedList<IThought> find (IThought what){
+    public ArrayList<IThought> find (IThought what){
         if(what==null) throw new NullPointerException();
-        LinkedList<IThought> results = new LinkedList<>();
+        ArrayList<IThought> results = new ArrayList<>();
         for (IThought i: information){
             if (i.contains(what)) results.add(i);
         }

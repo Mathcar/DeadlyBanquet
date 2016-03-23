@@ -1,6 +1,7 @@
 package deadlybanquet;
 
 
+import deadlybanquet.speech.SpeechAct;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -19,20 +20,24 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class AI {
 
-    public void update(GameContainer container, StateBasedGame s, int deltaTime){
+    public static void update(GameContainer container, StateBasedGame s, int deltaTime){
         //All update calls for AIs needs to be directed from here, like calls to the brain and such
     }
 
-    public void moveToCharacter(String name){
+    public static void moveToCharacter(String name){
 
     }
 
-    public void moveToRoom(String name){
+    public static void moveToRoom(String name){
 
     }
     
-    public void moveToObject(String name){
+    public static void moveToObject(String name){
         
+    }
+    
+    public static void speak (SpeechAct speech){
+  
     }
     
     

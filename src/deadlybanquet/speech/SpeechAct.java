@@ -29,5 +29,5 @@ public interface SpeechAct {
     public String getSpeaker();
 
     public boolean isEndConversation();
-
+    
 }
