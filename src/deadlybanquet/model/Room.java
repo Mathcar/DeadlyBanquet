@@ -214,5 +214,28 @@ public class Room implements TileBasedMap {
     	}
     }
 
+    public boolean isCharacterOn(Position p){
+    	for(Character c: characters){
+    		if(c.getPos().equals(p)){
+    			return true;
+    		}
+    			
+    	}
+		return false;
+    	
+    }
+    /*
+     * these should be in the same method chain to avoid multiple unececery searches in lists.
+     * 
+     */
+    public Character getCharacterOnPos(Position p){
+    	for(Character c: characters){
+    		if(c.getPos().equals(p)){
+    			return c;
+    		}
+    			
+    	}
+		return null;
+    }
 
 }

@@ -164,6 +164,20 @@ public class World implements ActionListener {
                 }
         	}
         }
+        if(e.getID() == 3){
+        	Character characterTemp = (Character) e.getSource();
+        	for (Room[] rm : roomMap) {
+                for (Room r : rm) {
+                    if(r !=null && r.hasCharacter(characterTemp)){
+                    	if(r.isCharacterOn(characterTemp.getFacedTilePos())){
+                    		System.out.println(characterTemp.getName() + " talkes to " + 
+                    				r.getCharacterOnPos(characterTemp.getFacedTilePos()).getName());
+                    		//change to talk state between cahracterTemp and r.getCharacterOnPos(characterTemp.getFacedTilePos()
+                    	}
+                    }
+                }
+        	}
+        }
     }
     
     public RenderSet getRenderSet(){

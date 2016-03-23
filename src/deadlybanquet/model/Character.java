@@ -330,5 +330,9 @@ public class Character implements Renderable{
 	public void attemptRoomChange() {
 		this.actList.actionPerformed(new ActionEvent(this, 2, ""));
 	}
+	
+	public void tryTalk(){
+		this.actList.actionPerformed(new ActionEvent(this, 3, ""));
+	}
 
 }
