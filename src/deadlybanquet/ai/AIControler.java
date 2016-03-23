@@ -10,7 +10,7 @@ public class AIControler {
 	private NPC npc;
 	
 	
-	private final static int MOVEMNET_DELAY = 500;
+	private final static int MOVEMNET_DELAY = 32;
 	private int movmentTimer = 0;
 	
 	private Path path;

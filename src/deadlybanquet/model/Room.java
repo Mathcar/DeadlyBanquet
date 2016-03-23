@@ -22,7 +22,7 @@ public class Room implements TileBasedMap {
     private AStarPathFinder pathFinder;
     private ArrayList<Character> characters;
     private ArrayList<Door> doors;
-    public static final int DOOR_LAYER = 2;
+    public static final int DOOR_LAYER = 3;
 
     public Room(String tilemapURL, String name){
         try {
@@ -136,14 +136,16 @@ public class Room implements TileBasedMap {
     //the character through "notifyBlocked()"
     public void moveWithCollision(ActionEvent e){
         Character c = (Character)e.getSource();
-        Position newPos = c.getFacedTilePos();
-        if(!isInBoundaries(newPos) || isBlocked(newPos.getX(), newPos.getY())){
-            System.out.println(" Tile was blocked on " + newPos.getX() +", " + newPos.getY());
-            //tile is blocked, send notification to related ai/character?
-            c.notifyBlocked();
+        if(hasCharacter(c)){
+        	Position newPos = c.getFacedTilePos();
+        	if(!isInBoundaries(newPos) || isBlocked(newPos.getX(), newPos.getY())){
+        		System.out.println(" Tile was blocked on " + newPos.getX() +", " + newPos.getY());
+        		//tile is blocked, send notification to related ai/character?
+        		c.notifyBlocked();
 
-        }else{
-            c.move(); //character can move
+        	}else{
+        		c.move(); //character can move
+        	}
         }
     }
 
@@ -202,6 +204,14 @@ public class Room implements TileBasedMap {
                 addCharacter(character);
             }
         }
+    }
+    public void checkDoor(ActionEvent e){
+    	Position p = ((Character) e.getSource()).getFacedTilePos();
+    	for(Door d : doors){
+    		if(d.getPos() == p){
+    			ActionEvent dr = new ActionEvent(this, 0, "CHANGE_ROOM");
+    		}
+    	}
     }
 
 

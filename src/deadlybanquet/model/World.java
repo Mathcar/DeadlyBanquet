@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import deadlybanquet.AI;
 import deadlybanquet.RenderSet;
 import deadlybanquet.View;
+import deadlybanquet.ai.AIControler;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -15,8 +17,9 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class World implements ActionListener {
     private static Time time;
-    private ArrayList<AI> ais;
     private Player player;
+    private AIControler ai;
+    private ArrayList<AIControler> aiss;
 
     //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
     //for the rooms to get their connections made
@@ -39,19 +42,26 @@ public class World implements ActionListener {
     public void initPlayer(){
         Character playerCharacter = new Character(this, "Gandalf", 3, 3);
         player = new Player(playerCharacter);
-        roomMap[1][1].addCharacter(playerCharacter);
+        roomMap[2][2].addCharacter(playerCharacter);
     }
 
     public void initAIs(){
         //Not really sure in which order these thing are supposed to be initialized, but regardless
         //it should be done in here
-        ais = new ArrayList<>();
+    	Character npc = new Character(this, "Frådo", 9, 5);
+    	ai = new AIControler(this,npc);
+    	aiss = new ArrayList<>();
+    	aiss.add(ai);
+    	roomMap[2][2].addCharacter(npc);
+  
     }
 
     public void initRoomMap(){
         roomMap = new Room[4][4];       //Needs to be updated as more rooms are added
         //add room initiations
-        roomMap[1][1] = new Room("res/pictures/living_room2.tmx", "Living Room");
+        roomMap[2][2] = new Room("res/pictures/living_room2.tmx", "Living Room");
+        roomMap[1][2] = new Room("res/pictures/bedroom.tmx", "Bedroom");
+        roomMap[2][1] = new Room("res/pictures/kitchen.tmx", "Kitchen");
     }
 
     //World's update function, somewhat unsure  as to what parameters are supposed
@@ -65,9 +75,9 @@ public class World implements ActionListener {
                     r.update(container,  s, deltaTime);
             }
         }
-        for(AI ai : ais){
-            ai.update(container, s, deltaTime);
-        }
+       // for(AI ai : ais){
+         //   ai.update(container, s, deltaTime);
+        //}
         player.update(container, s, deltaTime);
     }
 
@@ -143,6 +153,16 @@ public class World implements ActionListener {
                 originRoom.removeCharacter((Character)ce.getSource());
                 targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
             }
+        }
+        if(e.getID() == 2){
+        	Character characterTemp = (Character) e.getSource();
+        	for (Room[] rm : roomMap) {
+                for (Room r : rm) {
+                    if(r.hasCharacter(characterTemp)){
+                    	r.checkDoor(e);
+                    }
+                }
+        	}
         }
     }
     

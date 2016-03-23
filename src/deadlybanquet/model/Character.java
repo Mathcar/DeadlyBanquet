@@ -166,6 +166,7 @@ public class Character implements Renderable{
 	public void moveE(){
 		this.direction = Direction.EAST;
 		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
+		
 	}
 	
 	public void moveW(){
@@ -258,13 +259,14 @@ public class Character implements Renderable{
 		switch(this.direction){
 			case SOUTH:
 				if(moving){
-					
 					if(distance == 1){
 						moving = false;
 						distance = 32;
+						return new RenderObject(pos.getX(), pos.getY(), imageS, moving);
 					}
 					distance--;
 					return new RenderObject(pos.getX(), pos.getY(), aniS, moving, 0, distance);
+					
 				}else{
 					return new RenderObject(pos.getX(), pos.getY(), imageS, moving);
 				}
@@ -274,6 +276,7 @@ public class Character implements Renderable{
 					if(distance == 1){
 						moving = false;
 						distance = 32;
+						return new RenderObject(pos.getX(), pos.getY(), imageE, moving);
 					}
 					distance--;
 					return new RenderObject(pos.getX(), pos.getY(), aniE, moving, distance, 0);
@@ -286,6 +289,7 @@ public class Character implements Renderable{
 					if(distance == 1){
 						moving = false;
 						distance = 32;
+						return new RenderObject(pos.getX(), pos.getY(), imageW, moving);
 					}
 					distance--;
 					return new RenderObject(pos.getX(), pos.getY(), aniW, moving, -1*distance, 0 );
@@ -298,6 +302,7 @@ public class Character implements Renderable{
 					if(distance == 1){
 						moving = false;
 						distance = 32;
+						return new RenderObject(pos.getX(), pos.getY(), imageN, moving);
 					}
 					distance--;
 					return new RenderObject(pos.getX(), pos.getY(), aniN, moving, 0, -1*distance);
@@ -320,6 +325,10 @@ public class Character implements Renderable{
 	
 	public void unblock(){
 		this.blocked = false;
+	}
+	
+	public void attemptRoomChange() {
+		this.actList.actionPerformed(new ActionEvent(this, 2, ""));
 	}
 
 }

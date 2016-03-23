@@ -11,7 +11,7 @@ public class Player {
 	private Character character;
 	
 	
-	private final static int MOVEMENT_DELAY = 40;
+	private final static int MOVEMENT_DELAY = 32;
 	private int movementTimer = 0;
 	
 	public Player(ActionListener al){
@@ -30,21 +30,24 @@ public class Player {
 	public void update(GameContainer container, StateBasedGame s, int dt){
 		Input in = container.getInput();
 		if(this.movementTimer < 1){
-			if(in.isKeyPressed(Input.KEY_UP)){
+			if(in.isKeyDown(Input.KEY_UP) || in.isKeyDown(Input.KEY_W)){
 				character.moveN();
 				movementTimer = MOVEMENT_DELAY;
-			}else if(in.isKeyPressed(Input.KEY_DOWN)){
+			}else if(in.isKeyDown(Input.KEY_DOWN) || in.isKeyDown(Input.KEY_S)){
 				character.moveS();
 				movementTimer = MOVEMENT_DELAY;
-			}else if(in.isKeyPressed(Input.KEY_LEFT)){
+			}else if(in.isKeyDown(Input.KEY_LEFT) || in.isKeyDown(Input.KEY_A)){
 				character.moveW();
 				movementTimer = MOVEMENT_DELAY;
-			}else if(in.isKeyPressed(Input.KEY_RIGHT)){
+			}else if(in.isKeyDown(Input.KEY_RIGHT) || in.isKeyDown(Input.KEY_D)){
 				character.moveE();
 				movementTimer = MOVEMENT_DELAY;
 			}
+			else if(in.isKeyPressed(Input.KEY_E)){
+				character.attemptRoomChange();
+			}
 		}
-		movementTimer-=dt;
+		movementTimer--;
 	}
 	
 }
