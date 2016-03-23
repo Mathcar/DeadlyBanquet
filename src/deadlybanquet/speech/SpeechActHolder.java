@@ -115,11 +115,43 @@ public class SpeechActHolder {
                 }
             }
         }
-        System.err.println(tempList.size());
-        System.err.println(tempList.get(0).getText());
-        System.err.println(tempList.get(1).getText());
-        System.err.println(tempList.get(2).getText());
+        testConversation(tempList);
         return tempList;
+    }
+
+    private void testConversation(ArrayList<SpeechAct> tempList){
+
+        //TEST FOR CONVERSATION
+        //the NPC is...
+        System.err.println("lets asume that you meet a NPC here");
+        TextPropertyEnum prop=TextPropertyEnum.NEUTRAL;  // <--------Set the way the NPC talks
+        SpeechAct npcSay=null;
+        for(int i=0;i<tempList.size();i++){
+            PlanElement a=(PlanElement) tempList.get(i).getContent().get(0);
+            if(tempList.get(i).getTextProperty()==prop && a.action==Action.GREET){
+                npcSay=tempList.get(i);
+                break;
+            }
+        }
+        System.err.println("NPC: "+npcSay.getText());
+        System.err.println("the player will recive posible answers");
+        for(int i=0;i<tempList.size();i++){
+            PlanElement a=(PlanElement) tempList.get(i).getContent().get(0);
+            if(a.action==Action.GREET){
+                System.err.println(i+1+":"+tempList.get(i).getText());
+            }
+        }
+        int playerChoise=2; //<------------Set player choice (1-3)
+        System.err.println("player choose option number "+playerChoise);
+        System.err.println("player: "+tempList.get(playerChoise-1).getText());
+        for(int i=0;i<tempList.size();i++){
+            PlanElement a=(PlanElement) tempList.get(i).getContent().get(0);
+            if(tempList.get(i).getTextProperty()==prop && a.action==Action.VALEDICTION){
+                npcSay=tempList.get(i);
+                break;
+            }
+        }
+        System.err.println("NPC says: "+npcSay.getText());
     }
 
 }
