@@ -19,15 +19,10 @@ public interface SpeechAct {
 
     public void setContent(ArrayList<IThought> thoughts);
 
-    //public ArrayList<IThought> getProperties(); //Tom has questions about this.
-
     public void setTextProperty(TextPropertyEnum property);
 
     public TextPropertyEnum getTextProperty();
     
     //Gets the identifier of the speaker.
     public String getSpeaker();
-
-    public boolean isEndConversation();
-    
 }

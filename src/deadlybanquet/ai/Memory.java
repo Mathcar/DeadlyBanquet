@@ -11,6 +11,9 @@ public class Memory {
     //This contains all information which the player has got, in random order.
     //If performance becomes too bad, may have to invent better data structure.
     ArrayList<IThought> information = new ArrayList<>();
+    //Contains everything the person has done or seen done so far.
+    //Does not contain received speech acts.
+    ArrayList<PlanElement> history = new ArrayList<>();
     
     String currentRoom;
     public Memory(ArrayList<IThought> information, String room){
@@ -23,7 +26,7 @@ public class Memory {
     /**
      * 
      * @param what - what to find. Describes what it expects to find, including placeholders.
-     * Null values are taken to mean "any value"
+     * Null values are taken to mean "any value" TODO or is it the other way around?
      * @return 
      */
     public ArrayList<IThought> find (IThought what){

@@ -5,26 +5,20 @@ import deadlybanquet.ai.IThought;
 import java.util.ArrayList;
 
 /**
- * Created by Tom on 2016-03-04.
+ * Created by Tom on 2016-03-23.
  */
-
-public class GreetingPhrase implements SpeechAct {
+public class InformPhrase implements SpeechAct {
     private String text;
-
-    //private SomeCharatcterEnumBothNpcAndPlayerAre speaker;
-
     private TextPropertyEnum property;
-
     private ArrayList<IThought> content;
 
-
-    public GreetingPhrase(){
+    public InformPhrase(){
         property=null;
         content=null;
         text="";
     }
 
-    public GreetingPhrase(String text,TextPropertyEnum property,ArrayList<IThought> contentList){
+    public InformPhrase(String text,TextPropertyEnum property,ArrayList<IThought> contentList){
         this.text=text;
         this.property=property;
         this.content=contentList;

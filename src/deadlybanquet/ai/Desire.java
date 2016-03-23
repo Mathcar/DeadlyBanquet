@@ -1,5 +1,7 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Time;
+
 /**
  * Representation of a desire or goal.
  * @author omega
@@ -27,6 +29,9 @@ public class Desire implements IThought{
      * object useless.
      */
     public IThought what;
+    
+    public Time time;
+    public Desire previous;
     
     /** This should lie between 0 and 1.
      *  Placeholder is a value larger than 1. Null is a negative value.

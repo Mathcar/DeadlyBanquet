@@ -15,6 +15,7 @@ public class BrainFactory {
      * @param desires - if null will create empty list
      * @param goals - if null will create empty list
      * @param plan - if null will create empty list
+     * @param name - character identifier
      * @return 
      */
     public static Brain makeBrain(ArrayList<IThought> information, 
@@ -23,7 +24,8 @@ public class BrainFactory {
                     ArrayList<Desire>desires,
                     ArrayList<Desire>goals,
                     ArrayList<PlanElement>plan,
-                    String room){
+                    String room,
+                    String name){
         if (emotion==null){
             double p = Math.random()*2-1;
             double a = Math.random()*2-1;
@@ -36,6 +38,8 @@ public class BrainFactory {
             double d = Math.random()*2-1;
             temperament = new PAD(p,a,d);
         }
-       return new Brain (information, emotion, temperament, desires, goals, plan, room);      
+        
+       if(name==null) throw new NullPointerException("No name supplied for new NPC.");
+       return new Brain (information, emotion, temperament, desires, goals, plan, room, name);      
     }
 }

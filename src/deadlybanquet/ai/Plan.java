@@ -1,5 +1,7 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Time;
+
 /**
  * IThought wrapper for a single plan element. "person intends to do action."
  * also "person has done action", "person intended to do action but chose not to"
@@ -26,7 +28,9 @@ public class Plan implements IThought{
     //This has placeholder null and no null value.
     public PlanElement action;
     public wd willordid;
-    //TODO time;
+    
+    public Time time;
+    public Plan previous;
     @Override
     public String toString(){
         return person + willordid + action;

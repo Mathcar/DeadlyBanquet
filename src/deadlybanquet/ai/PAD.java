@@ -1,17 +1,24 @@
 package deadlybanquet.ai;
 import static java.lang.Math.*;
 /**
- *
+ * Placeholder value is a PAD object containing nonsense values. 
+ * The placeholder must have nonsense in all three fields; it is therefore
+ * enough to check just one value.
  * @author omega
  */
 /*The PAD model describes a cube where points can describe 
 either a current feeling or personality (that is, "the emotions somebody
 usually feels" or an average of feelings over a long time period)
 The octants of the unit cube can be labelled as follows:
-Exuberant (+P+A+D) Bored (-P-A-D) 
-Dependent (+P+A-D) Disdainful (-P-A+D) 
-Relaxed (+P-A+D) Anxious (-P+A-D) 
-Docile (+P-A-D) Hostile (-P+A+D)
+(In brackets our own words)
+Exuberant (+P+A+D) 
+Bored (-P-A-D) 
+Dependent (+P+A-D) 
+Disdainful (-P-A+D) 
+Relaxed (+P-A+D) (is friends with, likes)
+Anxious (-P+A-D) (scared of)
+Docile (+P-A-D) 
+Hostile (-P+A+D) (hates)
 Mehrabian suggests that Hostile temperament probably being more 
 descriptive of the violent antisocial personality type and 
 Disdainful temperament being descriptive of 
@@ -22,15 +29,6 @@ as what we have so far called the "murder trait".
 
 public class PAD {
     public PAD (double p,double a, double d){
-        if (p<-1|| p>1){
-            throw new IllegalArgumentException();
-        }
-        if (a<-1|| a>1){
-            throw new IllegalArgumentException();
-        }
-        if (a<-1|| a>1){
-            throw new IllegalArgumentException();
-        }
         P=p;
         A=a;
         D=d;
@@ -42,21 +40,12 @@ public class PAD {
     //Dominance
     private double D;
     public void setP(double i){
-        if (i<-1|| i>1){
-            throw new IllegalArgumentException();
-        }
         P=i;
     }
     public void setA(double i){
-        if (i<-1|| i>1){
-            throw new IllegalArgumentException();
-        }
         A=i;
     }
     public void setD(double i){
-        if (i<-1|| i>1){
-            throw new IllegalArgumentException();
-        }
         D=i;
     }
     

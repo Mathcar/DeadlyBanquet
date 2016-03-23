@@ -11,11 +11,13 @@ public enum Action {
     ASK,
     INFORM,
     GREET,
+    VALEDICTION,
     GOODBYE,
     AGREE,
     DISAGREE,
     MURDER,
     GETCONFIRMATION,
     CONFIRM,
+    TALKTO,
     ACTIONPLACEHOLDER;
 }

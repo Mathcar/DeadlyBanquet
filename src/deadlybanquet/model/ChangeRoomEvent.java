@@ -12,9 +12,9 @@ public class ChangeRoomEvent extends ActionEvent {
     //Direction is the direction in which the door the
     // character enters has its connection
     private Direction enterDirection;
-    public ChangeRoomEvent(Object source, int id, String fromRoom, String toRoom,
+    public ChangeRoomEvent(Object source, String fromRoom, String toRoom,
                             Direction enterDirection){
-        super(source, id, "");
+        super(source, EventEnum.CHANGE_ROOMS.ordinal(), "");
         targetRoom = toRoom;
         originRoom = fromRoom;
         this.enterDirection = enterDirection;

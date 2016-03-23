@@ -15,7 +15,7 @@ public class IThoughtTest {
     @Test
     //Really just a usage example.
     public void testSomeMethod() {
-        IThought[] list = {BackStory.SNOWEDIN, new SomebodyElse()};
+        IThought[] list = {BackStory.SNOWEDIN};
     }
     
 }

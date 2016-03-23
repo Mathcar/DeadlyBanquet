@@ -31,6 +31,13 @@ public class Door {
         else
             return "Door not initialized";
     }
+    
+    public String getOriginRoom(){
+        if(initiationComplete)
+            return origin;
+        else
+            return "Door not initialized";
+    }
     //Can only be called once for a single door object
     public void createConnection(String org, String dest, Direction dir){
         if(!initiationComplete) {
