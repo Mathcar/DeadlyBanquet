@@ -45,6 +45,7 @@ public class Room implements TileBasedMap {
         //Maybe something wants to update in each specific room?
         //Like possibly gameobject/pickups or whatever if taht is added
         // Will leave this like this for now, it is called for each room in world!
+
     }
 
     public void createDoors(){
@@ -52,6 +53,15 @@ public class Room implements TileBasedMap {
         for(int x = 0; x<getWidthInTiles(); x++){
             for(int y = 0; y<getHeightInTiles(); y++){
                 int tileID = map.getTileId(x,y, DOOR_LAYER);
+
+                // THIS NEEDS TO REMOVED ONCE THE TILEMAP FOR THE KITCHEN HAS BEEN FIXED
+                if(getName() == "Kitchen" && y ==0){
+                    //Seems one tile above the door is in the wrong layer
+                    // so to make all interactions work, then it needs to removed.
+                    //This will temporarily make it so no door is made on its position
+                    tileID = 0;
+                }
+
                 if(tileID != 0){
                     //A door was found, create door object
                     Door tempDoor = new Door(new Position(x,y));
@@ -69,7 +79,7 @@ public class Room implements TileBasedMap {
             if(d.getX() == 0){
                 //Door is on the left wall, create connection to west neighbour
                 d.createConnection(name, westRoom, Direction.WEST);
-            } else if(d.getY() == 0){
+            } else if(d.getY() == 1){
                 //Door is on the top wall, create connection to north neighbour
                 d.createConnection(name, northRoom, Direction.NORTH);
             }else if(d.getX() == getWidthInTiles()-1){
@@ -80,6 +90,16 @@ public class Room implements TileBasedMap {
                 d.createConnection(name, southRoom, Direction.SOUTH);
             }
         }
+        //----------------------------------Debug-----------------------------
+        String debugMsg = "In room : " + getName() + " these doors have been made";
+        for(Door d : doors){
+            debugMsg = debugMsg + "\n Door at " + d.getPos().toString()+ " has: ";
+            debugMsg = debugMsg + "\n Origin Room :  " + d.getOriginRoom();
+            debugMsg = debugMsg + "\n Destination Room : " + d.getDestinationRoom();
+            debugMsg = debugMsg + "\n With the direction : " + d.getDirection();
+        }
+        System.out.println(debugMsg);
+        //--------------------------------------------------------------------
     }
 
     public String getName(){
@@ -101,12 +121,15 @@ public class Room implements TileBasedMap {
     private boolean isBlocked(int x, int y){
         for(Character c : characters){
             if(c.getPos().getX() == x && c.getPos().getY() == y){
+                System.out.println("Character is blocking tile " + c.getName());
                 return true;                    //A Characters is occupying this tile
             }
         }
         for(int i = map.getLayerCount()-1; i>=0;i--){
             if(i!=0) {
                 if (map.getTileId(x, y, i) != 0) {
+                    System.out.println("tile at " + x + ", " + y +" was blocked on layer " +
+                                        i);
                     return true;       //Tile has something static in the blocked layers
                 }
             }
@@ -143,7 +166,6 @@ public class Room implements TileBasedMap {
         if(hasCharacter(c)){
         	Position newPos = c.getFacedTilePos();
         	if(!isInBoundaries(newPos) || isBlocked(newPos.getX(), newPos.getY())){
-        		System.out.println(" Tile was blocked on " + newPos.getX() +", " + newPos.getY());
         		//tile is blocked, send notification to related ai/character?
         		c.notifyBlocked();
 
@@ -157,12 +179,21 @@ public class Room implements TileBasedMap {
         for(Door d : doors) {
             if(d.getDirection()==Direction.getOppositeDirection(origin)){
                 Position pos = Position.getAdjacentPositionInDirection(d.getPos(),origin);
-                return isBlocked(pos.getX(), pos.getY()+1);
+                System.out.println(pos.toString());
+                return isBlocked(pos.getX(), pos.getY());
             }
         }
         return true;
     }
 
+    ///Debug function, used to print out a list of all layers which are occupied on a tile
+    public void debugTileOnPos(Position pos){
+        System.out.println("Tile at " + pos.toString() + "  has something on layers: ");
+        for(int i = 0; i<map.getLayerCount();i++){
+            if(map.getTileId(pos.getX(), pos.getY(), i)!=0)
+                System.out.println( i + ",          ");
+        }
+    }
 
     @Override
     public int getWidthInTiles() {
@@ -201,7 +232,6 @@ public class Room implements TileBasedMap {
     //Character to enter room and the direction in which he is entering the room
     public void addCharacterToRoom(Character character, Direction dir){
         for(Door d : doors){
-        	System.out.println(d.getDirection() + " "+ dir);
             if(d.getDirection() == Direction.getOppositeDirection(dir)){
                 //Set position of character to just inside the door
                 character.setPos(Position.getAdjacentPositionInDirection(d.getPos(),dir));
