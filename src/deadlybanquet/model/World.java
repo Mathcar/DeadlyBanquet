@@ -10,6 +10,7 @@ import deadlybanquet.View;
 import deadlybanquet.ai.AIControler;
 
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
@@ -30,7 +31,7 @@ public class World implements ActionListener {
         initRoomMap();
         //This must be done after all rooms that are intended to be there
         //are created and added to the roomMap!
-        createDoorsInRooms();
+        createDoorConnectionsInRooms();
         //Initialized all AI/NPC and their Characters
         initAIs();
         //Initialize all player related data
@@ -48,7 +49,7 @@ public class World implements ActionListener {
     public void initAIs(){
         //Not really sure in which order these thing are supposed to be initialized, but regardless
         //it should be done in here
-    	Character npc = new Character(this, "Frådo", 9, 5);
+    	Character npc = new Character(this, "Frï¿½do", 9, 5);
     	ai = new AIControler(this,npc);
     	aiss = new ArrayList<>();
     	aiss.add(ai);
@@ -67,18 +68,28 @@ public class World implements ActionListener {
     //World's update function, somewhat unsure  as to what parameters are supposed
     //to be here
     public void update(GameContainer container, StateBasedGame s, int deltaTime){
-
+        Input input = container.getInput();
         time.incrementTime(deltaTime);
         for(Room[] rs : roomMap){
             for(Room r : rs){
-                if(r != null)
-                    r.update(container,  s, deltaTime);
+                if(r != null) {
+                    r.update(container, s, deltaTime);
+                    //-----------------DEBUG-------------------------------
+                    if(r.hasCharacter(player.getCharacter())){
+                        if(input.isKeyPressed(Input.KEY_T)){
+                            r.debugTileOnPos(player.getCharacter().getPos());
+                        }
+                    }
+                    //--------------------------------------------------------
+                }
+
             }
         }
        // for(AI ai : ais){
          //   ai.update(container, s, deltaTime);
         //}
         player.update(container, s, deltaTime);
+
     }
 
     //return time in hours, DO NOT USE THIS TO SET THE TIME
@@ -86,7 +97,7 @@ public class World implements ActionListener {
         return time;
     }
 
-    public void createDoorsInRooms(){
+    public void createDoorConnectionsInRooms(){
         for(int i = 1; i< roomMap.length-1; i++){
             for(int j= 1; j<roomMap.length-1; j++){
                 if(roomMap[i][j] != null){
@@ -102,6 +113,15 @@ public class World implements ActionListener {
                         north = roomMap[i][j+1].getName();
                     if(roomMap[i][j-1] != null)	//j-1 gives indexOutOfBound when j=0
                         south = roomMap[i][j-1].getName();
+                    /*//--------------------DEBUG------------------------------------
+                    //Debugmessage to see if the correct interpretation of the roomMap
+                    // is made
+                    String debugMsg = "North : " + north + "\n South : " + south
+                                        + "\n West : " + west + "\n East : " + east;
+                    debugMsg = "Room namned : " + roomMap[i][j].getName() +
+                                "\n Room at position (" + i + ", " + j + ") \n" + debugMsg ;
+                    System.out.println(debugMsg);
+                    //---------------------------------------------------------------*/
                     //All neighbours have been compiled, now notify the room
                     roomMap[i][j].assignDoorConnections(north, south, east, west);
                 }
@@ -151,10 +171,20 @@ public class World implements ActionListener {
             //Check if new room has space, remove from old room, add to new
             Room targetRoom = getRoomRef(ce.getTargetRoom());
             Room originRoom = getRoomRef(ce.getOriginRoom());
+            /*//----------------------------------DEBUG--------------------------------
+            System.out.println(originRoom.getName() + "   to   " + targetRoom.getName()
+                                + " entering from " + ce.getEnterDirection().toString() );
+            //-----------------------------------------------------------------------*/
+
             if (!targetRoom.entranceIsBlocked(ce.getEnterDirection())) { //todo commented out by Tom	
                 originRoom.removeCharacter((Character)ce.getSource());
                 targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
             }
+            /*//----------------------------------DEBUG--------------------------------
+            else{
+                System.out.println(ce.getTargetRoom() + " Was blocked from " + ce.getEnterDirection().toString());
+            }
+            //-----------------------------------------------------------------------*/
         }
         
         if(e.getID() == 2){

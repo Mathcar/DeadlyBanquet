@@ -66,4 +66,10 @@ public class Position {
             return new Position(org.getX(), org.getY()+1);
         }
     }
+
+    @Override
+    public String toString(){
+        String temp = "(" + x + ", " + y + ")";
+        return temp;
+    }
 }
