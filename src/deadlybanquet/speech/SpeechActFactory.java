@@ -26,6 +26,7 @@ public class SpeechActFactory {
      * into words and must return null.
      */
     public static SpeechAct makeSpeechAct(ArrayList<IThought> intendedcontent, String speaker){
+        System.out.println(speaker + " says:");
         for (IThought i: intendedcontent){
             System.out.println(i);
         }

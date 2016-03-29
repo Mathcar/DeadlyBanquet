@@ -16,31 +16,27 @@ import java.util.Arrays;
  * prerequisite = don't know X
  * action = ASK
  * results = know X
+ * If Action is null, then this is a rule (If...then).
  * @author omega
  */
 public class PlanElement implements IThought {
+    //Null is the empty list. Placeholder is null.
     public ArrayList<IThought> prerequisites;
     //Placeholder is ACTIONPLACEHOLDER. Null is null.
     public Action action;
+    //Null is the empty list. Placeholder is null.
     public ArrayList<IThought> results;
-    public pe type;
     public Time time;
     public PlanElement previous;
     
-    public PlanElement(ArrayList<IThought> pre, Action a, ArrayList<IThought> r, pe type){
+    public PlanElement(ArrayList<IThought> pre, Action a, ArrayList<IThought> r){
         prerequisites=pre;
         action = a;
         results = r;
-        this.type = type;
-    }
-    public enum pe{
-        RULE,
-        PLAN,
-        PEPLACEHOLDER; //TODO there must be more to this
     }
     @Override
     public String toString(){
-        return ("I want to do " + action.toString() + "in order that " + results.toString() + "because " + prerequisites.toString());
+        return ("I want to do " + action + "in order that " + results + "because " + prerequisites);
     }
 
     @Override
@@ -49,7 +45,6 @@ public class PlanElement implements IThought {
         if(i==null) throw new NullPointerException();
         if(!this.getClass().equals(i.getClass())) return false;
         PlanElement d = (PlanElement) i;
-        if (d.type!=pe.PEPLACEHOLDER && d.type!=type) return false;
         if (d.action!=ACTIONPLACEHOLDER && d.action!=action) return false;
         ArrayList<IThought> temp = new ArrayList<>();
         //Any given prerequisites must be matched

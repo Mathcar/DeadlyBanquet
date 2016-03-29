@@ -9,6 +9,7 @@ package deadlybanquet.ai;
  * of IThought objects.
  */
 import static deadlybanquet.AI.speak;
+import static deadlybanquet.ai.Action.*;
 import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
@@ -27,7 +28,7 @@ public class Brain extends Memory {
     //This uses plan elements rather than actions in order to facilitate reevaluation of the plan.
     private ArrayList<PlanElement> plan = new ArrayList<>();
     private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
-    
+    private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
     //this constructor replaces any bad values by defaults.
     public Brain(   ArrayList<IThought> information, 
                     PAD emotion, 
@@ -53,10 +54,14 @@ public class Brain extends Memory {
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         for (IThought t : content){
-            ArrayList<IThought> foundData;            
+            ArrayList<IThought> foundData = new ArrayList<>(); 
+            //A new list for places where that is useful.
+            ArrayList<IThought> r = new ArrayList<>();
+            //A plan element for responses
+            PlanElement c;
             switch(t.getClass().getSimpleName()){
-                case "Opinion": Opinion incoming = (Opinion) t;
-                                Opinion o = new Opinion(incoming.aboutPersonRoomObject, null);
+                case "Opinion": Opinion inOpinion = (Opinion) t;
+                                Opinion o = new Opinion(inOpinion.aboutPersonRoomObject, null);
                                 SomebodyElse previnfo = new SomebodyElse (o, act.getSpeaker(), null, 0.0);
                                 foundData = find(previnfo);
                                 //TODO do something smarter here
@@ -66,9 +71,9 @@ public class Brain extends Memory {
                                     SomebodyElse e = new SomebodyElse(o, act.getSpeaker(), null, 1.0);
                                     //TODO time
                                     information.add(e);
-                                    Opinion response = new Opinion (incoming.aboutPersonRoomObject, null);
+                                    Opinion response = new Opinion (inOpinion.aboutPersonRoomObject, null);
                                     for (Opinion i : opinions){
-                                        if (i.aboutPersonRoomObject==incoming.aboutPersonRoomObject)
+                                        if (i.aboutPersonRoomObject==inOpinion.aboutPersonRoomObject)
                                             response.pad=i.pad;
                                     }
                                     possibleAnswers.add(response);
@@ -76,36 +81,91 @@ public class Brain extends Memory {
                                     //Way too simple
                                     information.remove(foundData.get(0));
                                     Opinion previous = (Opinion) ((SomebodyElse)foundData.get(0)).what;
-                                    incoming.previous = previous;
+                                    inOpinion.previous = previous;
                                     information.add(new SomebodyElse(o, act.getSpeaker(), null, 1.0));
                                     possibleAnswers.add(foundData.get(0));
                                 }
-                                selectResponse(possibleAnswers);
                                 break;
                     
-                    //Otherwise, think about this circumstance.
-                    //Suggest appropriate response.
-                    //Adjust opinion of speaker, using other information if necessary.
-                case "SomebodyElse":
-                case "BackStory": 
-                case "Whereabouts":
-                case "Plan":
-                case "PlanElement":
-                case "EmotionThought":
-                case "Principle":
+                case "SomebodyElse":SomebodyElse inElse = (SomebodyElse) t;
+                                    if (inElse.aboutPerson==me){
+                                        //find out what they are saying (new method)
+                                        //react
+                                    }
+                                    else {
+                                        //This should get a match if there - there should be at most
+                                        //one of these, probably.
+                                        foundData = find(inElse);
+                                        possibleAnswers.add(foundData.get(0));
+                                    }
+                                    break;
+                    
+                case "BackStory": BackStory back = (BackStory) t;
+                                  Action a;
+                                  if (find(back).isEmpty()) {
+                                      a =GETCONFIRMATION;
+                                      information.add(t);
+                                  }
+                                  else {
+                                      a=AGREE;
+                                  }
+                                  r.add(t);
+                                  c = new PlanElement(null,a, r);
+                                  possibleAnswers.add(c);
+                                  break;
+                case "Whereabouts": Whereabouts w = (Whereabouts) t;
+                                    for (Whereabouts b:whereabouts){
+                                        if (b.whoorwhat==w.whoorwhat)
+                                                foundData.add(b);
+                                    }
+                                    Whereabouts tofind = new Whereabouts(w.whoorwhat,"",null,0.0);
+                                    if(foundData.isEmpty()) foundData=find(tofind);
+                                    //if I have no idea whatsoever about where the person is
+                                    if(foundData.isEmpty()){
+                                        r.add(w);
+                                        c= new PlanElement(null, GETCONFIRMATION, r);
+                                        possibleAnswers.add(c);
+                                    }
+                                    else {
+                                        possibleAnswers.add(foundData.get(0));
+                                    }
+                                    break;
+                    
+                case "Plan":    //Intimately connected with time
+                                //We'll wait with this until we are really doing time.
+                                //TODO
+                    
+                case "PlanElement": possibleAnswers.add(respondToPlanElement ((PlanElement) t));
+                                    break;
+                    
+                case "EmotionThought":  EmotionThought e = (EmotionThought) t;
+                                        SomebodyElse s = new SomebodyElse (e, act.getSpeaker(), null, 1.0);
+                                        information.add(s);
+                                        r.add(s);
+                                        c = new PlanElement(null,ASK,r);
+                                        possibleAnswers.add(c);
+                                        break;
+                    
+                case "Principle":   
                 case "Desire":
-                case "Rule":
                 default: System.out.println("You missed a case.");
             }
+            selectResponse(possibleAnswers);
         }
     }
     
-    //selects which statement to respond to in the case that an incoming speech act
+    //selects which statement to respond to in the case that an inOpinion speech act
     //contains several pieces of information
     //responsible for sending the response and updating one's own opinion of the
     //world in accordance with how one believes the statement to change the world/
     private void selectResponse(ArrayList<IThought> possibleResponses){
-        speak(makeSpeechAct(possibleResponses, me));
+        //This is the real thing
+        //speak(makeSpeechAct(possibleResponses, me));
+        makeSpeechAct(possibleResponses, me);
+    }
+    
+    private IThought respondToPlanElement(PlanElement e){
+        return null; //TODO
     }
     
     @Override

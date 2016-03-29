@@ -31,7 +31,6 @@ public class Desire implements IThought{
     public IThought what;
     
     public Time time;
-    public Desire previous;
     
     /** This should lie between 0 and 1.
      *  Placeholder is a value larger than 1. Null is a negative value.

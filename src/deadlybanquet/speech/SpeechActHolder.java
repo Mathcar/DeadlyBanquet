@@ -85,7 +85,7 @@ public class SpeechActHolder {
                         how will they be used?
                         For now this ONLY(maybe) work for greetings!
                          */
-                        iThought=new PlanElement(null, Action.valueOf(list.get(i)),null, PlanElement.pe.PLAN);
+                        iThought=new PlanElement(null, Action.valueOf(list.get(i)),null);
                         iThoughts.add(iThought);
                     }catch(Exception e){
                         System.err.println("Something is wrong: could not make string to Action enum[SpeechActHolder class]" +
@@ -146,7 +146,7 @@ public class SpeechActHolder {
         System.err.println("player: "+tempList.get(playerChoise-1).getText());
         for(int i=0;i<tempList.size();i++){
             PlanElement a=(PlanElement) tempList.get(i).getContent().get(0);
-            if(tempList.get(i).getTextProperty()==prop && a.action==Action.VALEDICTION){
+            if(tempList.get(i).getTextProperty()==prop && a.action==Action.GOODBYE){
                 npcSay=tempList.get(i);
                 break;
             }

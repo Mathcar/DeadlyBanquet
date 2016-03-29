@@ -3,7 +3,9 @@ package deadlybanquet.model;
 /**
  * Created by Hampus on 2016-03-21.
  */
+//Placeholder object has negative day value
 public class Time {
+    
     private int hour, day;
     private float minutes;
 

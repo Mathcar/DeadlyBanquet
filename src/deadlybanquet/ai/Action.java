@@ -8,16 +8,17 @@ package deadlybanquet.ai;
 public enum Action {
     MOVETO, 
     PICKUP,
+    PUTDOWN, //object somewhere
     ASK,
     INFORM,
     GREET,
-    VALEDICTION,
     GOODBYE,
     AGREE,
     DISAGREE,
     MURDER,
-    GETCONFIRMATION,
+    GETCONFIRMATION, //Yes-no question
     CONFIRM,
-    TALKTO,
+    REQUEST,
+    TALKTO, //This one is really just for internal representation of history
     ACTIONPLACEHOLDER;
 }
