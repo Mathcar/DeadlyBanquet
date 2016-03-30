@@ -54,14 +54,6 @@ public class Room implements TileBasedMap {
             for(int y = 0; y<getHeightInTiles(); y++){
                 int tileID = map.getTileId(x,y, DOOR_LAYER);
 
-                // THIS NEEDS TO REMOVED ONCE THE TILEMAP FOR THE KITCHEN HAS BEEN FIXED
-                if(getName() == "Kitchen" && y ==0){
-                    //Seems one tile above the door is in the wrong layer
-                    // so to make all interactions work, then it needs to removed.
-                    //This will temporarily make it so no door is made on its position
-                    tileID = 0;
-                }
-
                 if(tileID != 0){
                     //A door was found, create door object
                     Door tempDoor = new Door(new Position(x,y));
