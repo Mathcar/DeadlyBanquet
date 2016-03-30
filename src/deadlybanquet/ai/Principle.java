@@ -12,6 +12,14 @@ public class Principle implements IThought{
     public Time time;
     public Principle previous;
     
+    public Principle(PlanElement w, PAD o, Time t){
+        what=w;
+        opinion=o;
+        time=t;
+    }
+    
+    
+    
     @Override
     public String toString(){
         return what +" is " + opinion;
@@ -25,4 +33,6 @@ public class Principle implements IThought{
         Principle d = (Principle) i;
         return what.contains(d.what);
     }
+    
+   
 }

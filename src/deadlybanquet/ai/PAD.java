@@ -49,6 +49,9 @@ public class PAD {
         D=i;
     }
     
+    public static PAD placeholderPAD(){
+        return new PAD (-5, -5, -5);
+    }
     /** Calculates the distance to the input PAD.
      * 
      * @param pad

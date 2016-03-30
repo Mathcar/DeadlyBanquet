@@ -61,5 +61,10 @@ public class Memory {
     public void observePickUp(String who, String what){
         
     }
+    
+    //Called on every person in the room (apart from who) when somebody puts down an object.
+    public void observePutDown(String who, String what){
+        
+    }
    
 }

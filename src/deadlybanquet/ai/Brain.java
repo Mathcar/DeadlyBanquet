@@ -10,6 +10,7 @@ package deadlybanquet.ai;
  */
 import static deadlybanquet.AI.speak;
 import static deadlybanquet.ai.Action.*;
+import static deadlybanquet.ai.PAD.placeholderPAD;
 import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
@@ -29,6 +30,7 @@ public class Brain extends Memory {
     private ArrayList<PlanElement> plan = new ArrayList<>();
     private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
+    private ArrayList<Principle> principles = new ArrayList<>();
     //this constructor replaces any bad values by defaults.
     public Brain(   ArrayList<IThought> information, 
                     PAD emotion, 
@@ -146,8 +148,45 @@ public class Brain extends Memory {
                                         possibleAnswers.add(c);
                                         break;
                     
-                case "Principle":   
-                case "Desire":
+                case "Principle":   Principle p = (Principle) t;
+                                    Principle own=null;
+                                    //Returns own opinion of action if present, 
+                                    //or says that they have not thought about it before
+                                    for (Principle i : principles){
+                                        if (p.what.contains(i.what))
+                                            own=i;
+                                    }
+                                    if (own==null)
+                                        own= new Principle(p.what, null, null);
+                                    possibleAnswers.add(own);
+                                    break;
+                    
+                case "Desire":  Desire d = (Desire) t;
+                                Desire ownd = null;
+                                //Find any goal
+                                for (Desire i : goals){
+                                    if(d.what.contains(i.what))
+                                        ownd=i;
+                                }
+                                if (ownd!=null){
+                                    possibleAnswers.add(ownd);
+                                    break;
+                                }
+                                //Find any own desire
+                                for (Desire i : desires){
+                                    if(d.what.contains(i.what))
+                                        ownd=i;
+                                }
+                                if (ownd==null || ownd.strength*d.strength>=0){
+                                    SomebodyElse offer = new SomebodyElse(d.what, me, placeholderPAD(),1.0);
+                                    r.add(offer);
+                                    possibleAnswers.add(new PlanElement(null, ASK, r));
+                                }
+                                else {
+                                    possibleAnswers.add(ownd);
+                                }
+                                break;
+                                
                 default: System.out.println("You missed a case.");
             }
             selectResponse(possibleAnswers);
@@ -188,6 +227,11 @@ public class Brain extends Memory {
     }
     //this method creates plans for any goals and puts
     private void plan(){
+        
+    }
+    
+    @Override
+    public void observePutDown(String who, String what){
         
     }
 }
