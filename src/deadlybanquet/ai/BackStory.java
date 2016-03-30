@@ -10,7 +10,7 @@ package deadlybanquet.ai;
  * @author omega
  */
 public enum BackStory implements IThought{
-    SNOWEDIN, NOMOBILESIGNAL;
+    SNOWEDIN, NOMOBILESIGNAL, DOTDOTDOT;
 
     @Override
     public boolean contains(IThought i) {

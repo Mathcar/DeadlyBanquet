@@ -204,7 +204,24 @@ public class Brain extends Memory {
     }
     
     private IThought respondToPlanElement(PlanElement e){
-        return null; //TODO
+        switch (e.action){
+            case MOVETO: 
+            case PICKUP:
+            case PUTDOWN:
+            case ASK:
+            case INFORM:
+            case GREET:
+            case GOODBYE:
+            case AGREE:
+            case DISAGREE:
+            case MURDER:
+            case GETCONFIRMATION:
+            case CONFIRM:
+            case REQUEST:
+            case TALKTO:
+            case ACTIONPLACEHOLDER:
+            default: return null;
+        }
     }
     
     @Override
