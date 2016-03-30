@@ -11,6 +11,7 @@ public class InformPhrase implements SpeechAct {
     private String text;
     private TextPropertyEnum property;
     private ArrayList<IThought> content;
+    private String speaker;
 
     public InformPhrase(){
         property=null;
@@ -56,6 +57,11 @@ public class InformPhrase implements SpeechAct {
 
     @Override
     public String getSpeaker() {
-        return null;
+        return this.speaker;
+    }
+
+    @Override
+    public void setSpeaker(String name){
+        this.speaker=name;
     }
 }

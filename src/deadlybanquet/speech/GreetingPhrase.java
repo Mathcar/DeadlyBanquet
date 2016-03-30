@@ -17,6 +17,8 @@ public class GreetingPhrase implements SpeechAct {
 
     private ArrayList<IThought> content;
 
+    private String speaker;
+
 
     public GreetingPhrase(){
         property=null;
@@ -62,6 +64,11 @@ public class GreetingPhrase implements SpeechAct {
 
     @Override
     public String getSpeaker() {
-        return null;
+        return this.speaker;
+    }
+
+    @Override
+    public void setSpeaker(String name){
+        this.speaker=name;
     }
 }
