@@ -25,9 +25,9 @@ public class ConversationModel {
             SpeechAct p = player.saySomeThing();
             p.setSpeaker(player.getName());
             npc.getBrain.hear(p);
-            SpeechAct n = npc.saySomeThing();
-            n.setSpeaker(npc.getName());
-            player.hear(n);
+            npc.think();
+            SpeechAct n= npc.getAi.createSpeechAct();
+            player.getBrain.hear(n);
             if(p.getContent().contains(Action.GOODBYE) || n.getContent().contains(Action.GOODBYE)){
                 end=true;
             }
