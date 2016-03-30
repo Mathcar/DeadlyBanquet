@@ -30,12 +30,12 @@
  </layer>
  <layer name="Layer3" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgQICvTAwogBAfl9hcoNg8IJ4PxAuAeCEQLwJiVmZUdTA+NwsDAw8QR7JAxGB8SkEmFcwYSHADGBY3gfgWM2G1xIAXQHNeAvErKpn3A2jOTyD+RSXzRsEoIAQAOV4bZLAEAAA=
+   H4sIAAAAAAAAC2NgQICvTAwoAMb3ZsQuj0tsLlBsHhDPB+IFQLwQiBcBMSszqjoYn5uFgYEHiCNZIGIwPqUgkwpmDCS4AQyLm0B8i5mwWmLAC6A5L4H4FZXM+wE05ycQ/6KSeaNgFBACALrccUawBAAA
   </data>
  </layer>
  <layer name="Layer4" width="20" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgIAy8GYlQRAKIp7J5o2AUjIKRAQCZDa7nsAQAAA==
+   H4sIAAAAAAAAC2NgoD+IZxwAS0fBKBgFQx4AABqPxMWwBAAA
   </data>
  </layer>
 </map>
