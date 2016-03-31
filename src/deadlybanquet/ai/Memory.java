@@ -13,7 +13,7 @@ public class Memory {
     ArrayList<IThought> information = new ArrayList<>();
     //Contains everything the person has done or seen done so far.
     
-    ArrayList<PlanElement> history = new ArrayList<>();
+    ArrayList<IThought> history = new ArrayList<>();
     
     String currentRoom;
     public Memory(ArrayList<IThought> information, String room){

@@ -23,7 +23,7 @@ public class BrainFactory {
                     PAD temperament, 
                     ArrayList<Desire>desires,
                     ArrayList<Desire>goals,
-                    ArrayList<PlanElement>plan,
+                    ArrayList<IThought>plan,
                     String room,
                     String name){
         if (emotion==null){

@@ -3,11 +3,11 @@ package deadlybanquet.ai;
 import deadlybanquet.model.Time;
 
 /**
- *
+ * This is possible too advanced? We'll wait with this, maybe not do at all.
  * @author omega
- */
+ 
 public class Principle implements IThought{
-    public PlanElement what;
+    public IThought what;
     public PAD opinion;
     public Time time;
     public Principle previous;
@@ -36,3 +36,4 @@ public class Principle implements IThought{
     
    
 }
+*/

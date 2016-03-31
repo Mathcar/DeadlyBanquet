@@ -10,7 +10,7 @@ package deadlybanquet.ai;
  * @author omega
  */
 public enum BackStory implements IThought{
-    SNOWEDIN, NOMOBILESIGNAL, GREET, GOODBYE;
+    SNOWEDIN, NOMOBILESIGNAL;
     //NOTE: DOTDOTDOT is gone; it just struck me that a SpeechAct with an empty content 
     //list will do exactly the same thing.
     @Override
