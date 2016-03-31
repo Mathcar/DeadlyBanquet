@@ -12,9 +12,7 @@ public class Memory {
     //If performance becomes too bad, may have to invent better data structure.
     ArrayList<IThought> information = new ArrayList<>();
     //Contains everything the person has done or seen done so far.
-    //Does not contain received speech acts.
-    //Does, however, contain a recounting of sent speech acts. Intended recipient
-    // is marked by a SomebodyElse 
+    
     ArrayList<PlanElement> history = new ArrayList<>();
     
     String currentRoom;

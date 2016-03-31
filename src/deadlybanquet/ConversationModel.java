@@ -1,6 +1,6 @@
 package deadlybanquet;
 
-import deadlybanquet.ai.Action;
+import deadlybanquet.ai.BeingPolite;
 import deadlybanquet.model.NPC;
 import deadlybanquet.model.Player;
 import deadlybanquet.speech.SpeechAct;
@@ -28,7 +28,7 @@ public class ConversationModel {
             npc.think();
             SpeechAct n= npc.getAi.createSpeechAct();
             player.getBrain.hear(n);
-            if(p.getContent().contains(Action.GOODBYE) || n.getContent().contains(Action.GOODBYE)){
+            if(p.getContent().contains(BeingPolite.GOODBYE) || n.getContent().contains(BeingPolite.GOODBYE)){
                 end=true;
             }
         }*/

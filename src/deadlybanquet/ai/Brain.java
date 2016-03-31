@@ -9,7 +9,7 @@ package deadlybanquet.ai;
  * of IThought objects.
  */
 import static deadlybanquet.AI.speak;
-import static deadlybanquet.ai.Action.*;
+import static deadlybanquet.ai.BeingPolite.*;
 import static deadlybanquet.ai.PAD.placeholderPAD;
 import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
@@ -103,7 +103,7 @@ public class Brain extends Memory {
                                     break;
                     
                 case "BackStory": BackStory back = (BackStory) t;
-                                  Action a;
+                                  BeingPolite a;
                                   if (find(back).isEmpty()) {
                                       a =GETCONFIRMATION;
                                       information.add(t);
@@ -210,11 +210,9 @@ public class Brain extends Memory {
             case GOODBYE:
             case AGREE:
             case DISAGREE:
-            case MURDER:
             case GETCONFIRMATION:
             case CONFIRM:
             case REQUEST:
-            case TALKTO:
             case ACTIONPLACEHOLDER:
             default:    System.err.println("Error - no meaning given in this context");
                         return null;
