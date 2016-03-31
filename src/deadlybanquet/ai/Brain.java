@@ -205,11 +205,7 @@ public class Brain extends Memory {
     
     private IThought respondToPlanElement(PlanElement e){
         switch (e.action){
-            case MOVETO: 
-            case PICKUP:
-            case PUTDOWN:
             case ASK:
-            case INFORM:
             case GREET:
             case GOODBYE:
             case AGREE:
@@ -220,7 +216,8 @@ public class Brain extends Memory {
             case REQUEST:
             case TALKTO:
             case ACTIONPLACEHOLDER:
-            default: return null;
+            default:    System.err.println("Error - no meaning given in this context");
+                        return null;
         }
     }
     
@@ -238,6 +235,12 @@ public class Brain extends Memory {
     public void observePickUp(String who, String what){
         
     }
+    
+     @Override
+    public void observePutDown(String who, String what){
+        
+    }
+    
     //Character does some thinking, cooling down, executing plan etc.
     public void update(){
         
@@ -247,8 +250,5 @@ public class Brain extends Memory {
         
     }
     
-    @Override
-    public void observePutDown(String who, String what){
-        
-    }
+   
 }

@@ -23,6 +23,8 @@ public class AI {
         //All update calls for AIs needs to be directed from here, like calls to the brain and such
     }
 //Result indicates success
+    //It might be simplest for these functions to just move one step in the right direction.
+    //Although I made three stubs, it might work just fine with one function.
     public static boolean moveToCharacter(String name){
         return true;
     }
@@ -35,10 +37,16 @@ return true;
         return true;
     }
     
+    //Tom says that in order for his code to work, hear (in Brain) must guarantee
+    //to call this function, with an empty SpeechAct if necessary.
+    //It might therefore be more convenient for hear to return the 
+    //SpeechAct directly, instead of sending it here; the only thing is that
+    //in that case one can no longer use the same type signature for player and NPC objects.
     public static boolean speak (SpeechAct speech){
   return true;
     }
     
+    //pick up and put down an object, provided you are standing next to it.
     public static boolean pickUp(String object){
         return true;
     }

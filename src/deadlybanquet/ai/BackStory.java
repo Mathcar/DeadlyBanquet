@@ -10,8 +10,9 @@ package deadlybanquet.ai;
  * @author omega
  */
 public enum BackStory implements IThought{
-    SNOWEDIN, NOMOBILESIGNAL, DOTDOTDOT;
-
+    SNOWEDIN, NOMOBILESIGNAL;
+    //NOTE: DOTDOTDOT is gone; it just struck me that a SpeechAct with an empty content 
+    //list will do exactly the same thing.
     @Override
     public boolean contains(IThought i) {
         if(!this.getClass().equals(i.getClass())) return false;
