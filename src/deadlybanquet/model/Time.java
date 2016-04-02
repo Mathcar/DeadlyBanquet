@@ -14,6 +14,12 @@ public class Time {
         day = 0;
         minutes = 0;
     }
+    
+    public Time placeholderTime(){
+        Time t = new Time();
+        t.forceSetTime(-1, 0, 0);
+        return t;
+    }
 
     public void incrementTime(float deltaTime){
         //1 second real time => 1 minute

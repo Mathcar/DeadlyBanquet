@@ -18,4 +18,9 @@ public enum BackStory implements IThought{
         if(!this.getClass().equals(i.getClass())) return false;
         return this==i;
     }
+
+    @Override
+    public void setPlaceHolderToNull() {
+        //No placeholders here
+    }
 }

@@ -12,6 +12,14 @@ public class Do implements IThought{
     public boolean contains(IThought i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void setPlaceHolderToNull() {
+        if (doer=="") doer=null;
+        if (withWhat=="") withWhat=null;
+        if (when.getDay()<0) when=null;
+    }
+    
     public enum What{
         MOVETO,
         PICKUP,
@@ -19,21 +27,17 @@ public class Do implements IThought{
         MURDER;
     }
     
-    public enum Wd{
-        WILL, INTENDS;
-    }
     public What what;
+    //Placeholder is empty string, null is null.
     public String doer;
     //who is murdered, what is picked up...
     public String withWhat;
     public Time when;
     //Describes whether somebody actually does/did item or just intended to do so
-    public Wd willormight;
-    public Do(What what, String doer, String to, Time time, Wd w) {
+    public Do(What what, String doer, String to, Time time) {
         this.what=what;
         this.doer=doer;
         this.when=time;
         this.withWhat=to;
-        willormight = w;
     }
 }

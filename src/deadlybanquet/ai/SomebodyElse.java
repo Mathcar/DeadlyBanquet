@@ -38,4 +38,11 @@ public class SomebodyElse implements IThought{
         if (d.aboutPerson!=""&&d.aboutPerson!=aboutPerson) return false;
         return what.contains(d.what);
     }
+
+    @Override
+    public void setPlaceHolderToNull() {
+        what.setPlaceHolderToNull();
+        if (aboutPerson=="") aboutPerson=null;
+        if (opinion.isPlaceholder()) opinion=null;
+    }
 }

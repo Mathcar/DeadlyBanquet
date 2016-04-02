@@ -19,4 +19,9 @@ public interface IThought {
      * @return whether the IThought contains the desired information
      */
     public boolean contains(IThought i);
+    
+    /**
+     * Sets the any placeholder to null.
+     */
+    public void setPlaceHolderToNull();
 }

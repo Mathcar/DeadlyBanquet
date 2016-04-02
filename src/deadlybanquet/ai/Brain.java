@@ -11,9 +11,8 @@ package deadlybanquet.ai;
 import static deadlybanquet.AI.speak;
 import static deadlybanquet.ai.BeingPolite.*;
 import static deadlybanquet.ai.PAD.placeholderPAD;
-import static deadlybanquet.ai.Say.How.AGREE;
-import static deadlybanquet.ai.Say.How.GETCONFIRMATION;
-import static deadlybanquet.ai.Say.How.SAY;
+import static deadlybanquet.ai.Say.How.*;
+import deadlybanquet.model.Time;
 import static deadlybanquet.model.World.getTime;
 import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
@@ -59,24 +58,21 @@ public class Brain extends Memory {
     public void hear(SpeechAct act){
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
+        String you = act.getSpeaker();
         for (IThought t : content){
             ArrayList<IThought> foundData = new ArrayList<>(); 
-            //A new list for places where that is useful.
-            ArrayList<IThought> r = new ArrayList<>();
             //A say object for responses
             Say c;
             switch(t.getClass().getSimpleName()){
+                //If you have said something else before, point that out.
+                //Otherwise, give your own opinion.
                 case "Opinion": Opinion inOpinion = (Opinion) t;
+                                //find a previous opinion the you held about this subject
                                 Opinion o = new Opinion(inOpinion.aboutPersonRoomObject, null);
-                                SomebodyElse previnfo = new SomebodyElse (o, act.getSpeaker(), null, 0.0);
-                                foundData = find(previnfo);
-                                //TODO do something smarter here
+                                SomebodyElse previnfo = new SomebodyElse (o, you, null, 0.0);
+                                foundData = find(previnfo, information);
+                                acceptUncritically(you,inOpinion);
                                 if (foundData.isEmpty()){
-                                    //If there is none, take this data at face value.
-                                    //TODO instead of null and 1.0 get sensible values
-                                    SomebodyElse e = new SomebodyElse(o, act.getSpeaker(), null, 1.0);
-                                    //TODO time
-                                    information.add(e);
                                     Opinion response = new Opinion (inOpinion.aboutPersonRoomObject, null);
                                     for (Opinion i : opinions){
                                         if (i.aboutPersonRoomObject==inOpinion.aboutPersonRoomObject)
@@ -84,74 +80,179 @@ public class Brain extends Memory {
                                     }
                                     possibleAnswers.add(response);
                                 } else {
-                                    //Way too simple
-                                    information.remove(foundData.get(0));
-                                    Opinion previous = (Opinion) ((SomebodyElse)foundData.get(0)).what;
-                                    inOpinion.previous = previous;
-                                    information.add(new SomebodyElse(o, act.getSpeaker(), null, 1.0));
                                     possibleAnswers.add(foundData.get(0));
                                 }
                                 break;
                     
                 case "SomebodyElse":SomebodyElse inElse = (SomebodyElse) t;
                                     if (inElse.aboutPerson==me){
+                                        //TODO
                                         //find out what they are saying (new method)
                                         //react
                                     }
                                     else {
-                                        //This should get a match if there - there should be at most
-                                        //one of these, probably.
-                                        foundData = find(inElse);
+                                        //TODO: what if person is saying x thinks that you...
+                                        //Find your own matching info about this person, if any.
+                                        foundData = find(inElse, information);
+                                        //If none is found, make polite response.
+                                        if(foundData.isEmpty()){
+                                            c= new Say(me, you, inElse, YESNO, null);
+                                            possibleAnswers.add(c);
+                                            break;
+                                        }
                                         possibleAnswers.add(foundData.get(0));
                                     }
                                     break;
                     
-                case "BackStory": BackStory back = (BackStory) t;
+                case "BackStory": BackStory inBack = (BackStory) t;
                                   Say.How a;
-                                  if (find(back).isEmpty()) {
-                                      a =GETCONFIRMATION;
+                                  if (find(inBack, information).isEmpty()) {
+                                      a =YESNO;
                                       information.add(t);
                                   }
                                   else {
                                       a=AGREE;
                                   }
-                                  c = new Say(me, act.getSpeaker(), back, a, null);
+                                  c = new Say(me, you, inBack, a, null);
                                   possibleAnswers.add(c);
                                   break;
                     
-                case "Whereabouts": Whereabouts w = (Whereabouts) t;
+                case "Whereabouts": Whereabouts inWhere = (Whereabouts) t;
+                                    //Check if I have an idea about where the person is
                                     for (Whereabouts b:whereabouts){
-                                        if (b.whoorwhat==w.whoorwhat)
+                                        if (b.whoorwhat==inWhere.whoorwhat)
                                                 foundData.add(b);
                                     }
-                                    Whereabouts tofind = new Whereabouts(w.whoorwhat,"",null,0.0);
-                                    if(foundData.isEmpty()) foundData=find(tofind);
+                                    //Check if I have an idea that somebody else might know
+                                    Whereabouts tofind = new Whereabouts(inWhere.whoorwhat,"",null,0.0);
+                                    if(foundData.isEmpty()) foundData=find(tofind, information);
                                     //if I have no idea whatsoever about where the person is
                                     if(foundData.isEmpty()){
-                                        foundData.add(new Say(me, act.getSpeaker(),w, GETCONFIRMATION,null));
+                                        foundData.add(new Say(me, you,inWhere, YESNO,null));
                                     }
-                                        possibleAnswers.add(foundData.get(0));
+                                    possibleAnswers.add(foundData.get(0));
                                     break;
                     
-                case "BeingPolite": c= new Say(me, act.getSpeaker(),t,AGREE,null);
+                case "BeingPolite": c= new Say(me, you,t,AGREE,null);
                                     possibleAnswers.add(c);
                                     break;
                 
-                case "Say": //TODO
+                case "Say": Say inSay = (Say) t;
+                            if (inSay.when==null){
+                                //This means that speaker is performing speech act
+                                //by saying it. Can therefore assume that me is recipient
+                                //and speaker is current speaker.
+                                switch (inSay.type){
+                                    case SAY:   //This must obviously be a question
+                                                //since if it were information you would 
+                                                //just give the info instead of saying I hereby inform you that...
+                                                foundData= find(inSay.content, information);
+                                                if (foundData.isEmpty()){
+                                                    inSay.content.setPlaceHolderToNull();
+                                                    possibleAnswers.add(inSay.content);
+                                                }
+                                                possibleAnswers.add(foundData.get(0));
+                                                break;
+                             
+                                        
+                                    case AGREE: if(inSay.content instanceof Say){
+                                                    Say h = (Say) inSay.content;
+                                                    //Speaker has acceded to a request we made
+                                                    if (h.type==REQUEST){
+                                                        //content of a request should be either a do or a say object.
+                                                        Time time = getTime();
+                                                        time.incrementTime(60);
+                                                        //TODO maybe add another interface to avoid such code?
+                                                        if(h.content instanceof Say){
+                                                            Say z = (Say) h.content;
+                                                            z.when=time;
+                                                            information.add(z);
+                                                        }
+                                                        if (h.content instanceof Do){
+                                                            Do z = (Do) h.content;
+                                                            z.when=time;
+                                                            information.add(z);
+                                                        }
+                                                    }
+                                                    possibleAnswers.add(THANKS);
+                                                }
+                                                else {
+                                                    acceptUncritically(you, inSay.content);
+                                                }
+                                                break;
+                                        
+                                    case DISAGREE:  if(inSay.content instanceof Say){
+                                                    Say h = (Say) inSay.content;
+                                                    //Speaker has refused to accomodate a request we made
+                                                    if (h.type==REQUEST){
+                                                        //TODO get angry
+                                                    }
+                                                    possibleAnswers.add(THANKSANYWAY);
+                                                }
+                                                else {
+                                                    acceptUncritically(you, inSay.content);
+                                                }
+                                                break;
+                                        
+                                    case YESNO: foundData = find(inSay.content, information);
+                                                //TODO need to check other relevant registers as well
+                                                if (foundData.isEmpty()){
+                                                    //Say that this is the case
+                                                    possibleAnswers.add(new Say(me, you, inSay.content, DISAGREE, null));
+                                                }
+                                                else {
+                                                    //Say that this is not the case
+                                                    possibleAnswers.add(new Say(me, you, inSay.content, AGREE, null));
+                                                }
+                                                break;
+                                        
+                                    case REQUEST:   //this one is intimately connected
+                                                    //with planning, so leave out until plans are constructed.
+                                                    //Therefore, NPC refuses to do anything for anyone right now.
+                                                    possibleAnswers.add(new Say(me, you, inSay, DISAGREE, null));
+                                                    break;
+                                    default: System.out.println(me + "says: Incoming Say object is making my mind boggle.");
+                                }
+                            }
+                            else {
+                                //In this case, the person is informing me
+                                //that somebody else said something yet another person.
+                                //TODO: Look for relevant information,
+                                //first in history, then in information
+                                possibleAnswers.add(new Say(me, you, inSay, YESNO, null));
+                            }
                             break;
                     
-                case "Do": //Conveys that somebody does or did something.
+                case "Do":  Do inDo = (Do) t;
+                            //Check if I saw this happen
+                            foundData = find (inDo, history);
+                            if (!foundData.isEmpty()){
+                                //I did see this happen
+                                c = new Say (me, you, inDo, AGREE, null);
+                                possibleAnswers.add(c);
+                                break;
+                            }
+                            
+                            //Check if I have heard from somebody else 
+                            //that this has happened
+                            foundData = find (inDo, information);
+                            if (foundData.isEmpty()){
+                                c= new Say(me, you, inDo, YESNO, null);
+                                possibleAnswers.add(c);
+                                break;
+                            }
+                            possibleAnswers.add(foundData.get(0));
                             break;
                     
-                case "EmotionThought":  EmotionThought e = (EmotionThought) t;
-                                        SomebodyElse s = new SomebodyElse (e, act.getSpeaker(), null, 1.0);
-                                        foundData = find(s);
+                case "EmotionThought":  EmotionThought inEmotion = (EmotionThought) t;
+                                        SomebodyElse s = new SomebodyElse (inEmotion, you, null, 1.0);
+                                        foundData = find(s, information);
                                         if (foundData.isEmpty()){
                                             //If no previous information is available, return
                                             //I am happy/sad for you.
                                             s.time=getTime();
                                             information.add(s);
-                                            PAD opinion = new PAD(e.pad.getP(), 0, 0);
+                                            PAD opinion = new PAD(inEmotion.pad.getP(), 0, 0);
                                             s.opinion = opinion;
                                             possibleAnswers.add(s);
                                             information.add(s);
@@ -166,11 +267,11 @@ public class Brain extends Memory {
                                         }
                                         break;
                     
-                case "Desire":  Desire d = (Desire) t;
+                case "Desire":  Desire inDesire = (Desire) t;
                                 Desire ownd = null;
                                 //Find any goal
                                 for (Desire i : goals){
-                                    if(d.what.contains(i.what))
+                                    if(inDesire.what.contains(i.what))
                                         ownd=i;
                                 }
                                 //If this is a goal of yours, say so.
@@ -180,25 +281,35 @@ public class Brain extends Memory {
                                 }
                                 //Find any own desire
                                 for (Desire i : desires){
-                                    if(d.what.contains(i.what))
+                                    if(inDesire.what.contains(i.what))
                                         ownd=i;
                                 }
                                 //If I do not have a desire, or if my desire
                                 //is positive when opponent's is positive (or the reverse)
-                                if (ownd==null || ownd.strength*d.strength>=0){
-                                    SomebodyElse offer = new SomebodyElse(d.what, me, placeholderPAD(),1.0);
-                                    r.add(offer);
-                                    possibleAnswers.add(new Say(me, act.getSpeaker(), offer, SAY, null));
+                                if (ownd==null || ownd.strength*inDesire.strength>=0){
+                                    SomebodyElse offer = new SomebodyElse(inDesire.what, me, placeholderPAD(),1.0);
+                                    possibleAnswers.add(new Say(me, you, offer, SAY, null));
                                 }
                                 else {
                                     possibleAnswers.add(ownd);
                                 }
                                 break;
                                 
-                default: System.out.println("You missed a case.");
+                default: System.out.println(me + " says: I didn't understand a word of that.");
             }
             selectResponse(possibleAnswers);
         }
+    }
+    
+    public void acceptUncritically(String person, IThought stateofworld){
+        SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, 1.0);
+        previnfo.time=getTime();
+        ArrayList<IThought> foundData = find (previnfo, information);
+        if (!foundData.isEmpty()){
+            information.remove(foundData.get(0));
+            previnfo.previous= (SomebodyElse) foundData.get(0);      
+        }
+        information.add(previnfo);
     }
     
     //selects which statement to respond to in the case that an inOpinion speech act

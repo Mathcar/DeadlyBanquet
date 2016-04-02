@@ -27,16 +27,19 @@ public class Memory {
      * 
      * @param what - what to find. Describes what it expects to find, including placeholders.
      * Null values are taken to mean "any value" TODO or is it the other way around?
+     * This function, and the contain functions, are probably full of bugs.
      * @return 
      */
-    public ArrayList<IThought> find (IThought what){
+    public ArrayList<IThought> find (IThought what, ArrayList<IThought> where){
         if(what==null) throw new NullPointerException();
         ArrayList<IThought> results = new ArrayList<>();
-        for (IThought i: information){
+        for (IThought i: where){
             if (i.contains(what)) results.add(i);
         }
         return results;
     }
+    
+    
     //this method accepts a speech act and adds the information to its memory.
     //This method should not evaluate memory as that is the (human) player's job.
     public void hear(SpeechAct act){

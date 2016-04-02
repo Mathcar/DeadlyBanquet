@@ -36,4 +36,10 @@ public class Whereabouts implements IThought{
         if (d.where!=""&&d.where!=where) return false;
         return !(d.whoorwhat!=""&&d.whoorwhat!=whoorwhat);
     }
+
+    @Override
+    public void setPlaceHolderToNull() {
+        if (where=="") where = null;
+        if (whoorwhat=="") whoorwhat=null;
+    }
 }

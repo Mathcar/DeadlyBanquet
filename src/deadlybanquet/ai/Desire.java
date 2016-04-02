@@ -8,6 +8,32 @@ import deadlybanquet.model.Time;
  */
 public class Desire implements IThought{
 
+    public enum dg {
+        DESIRE, GOAL, DGPLACEHOLDER;
+    }
+    /**
+     * Placeholder is null. There is no null value as that would render the whole
+     * object useless.
+     */
+    public IThought what;
+    
+    /**
+     * Null means always current. No placeholder (no way to ask when)
+     */
+    public Time time;
+    
+    /** This should lie between -1 and 1.
+     *  Placeholder is a value larger than 1. Null is a value smaller than -1
+     * A negative value implies that NPC wants this not to be the case.
+     */
+    public double strength;
+    //TODO order by strength;
+    
+    /**
+     * Placeholder is DGPLACEHOLDER. Null is null.
+     */
+    public dg desireorgoal;
+    
     @Override
     //It is not possible to get a match on strength.
     public boolean contains(IThought i) {
@@ -21,27 +47,17 @@ public class Desire implements IThought{
         if (d.what==null) return true;
         return what.contains(d.what);
     }
-    public enum dg {
-        DESIRE, GOAL, DGPLACEHOLDER;
+
+    @Override
+    public void setPlaceHolderToNull() {
+        if (what==null)
+            throw new RuntimeException("You are trying to set Desire.what to null");
+        if (strength>1) strength = -strength;
+        if (desireorgoal==dg.DGPLACEHOLDER) desireorgoal=null;
     }
-    /**
-     * Placeholder is null. There is no null value as that would render the whole
-     * object useless.
-     */
-    public IThought what;
     
-    public Time time;
     
-    /** This should lie between 0 and 1.
-     *  Placeholder is a value larger than 1. Null is a negative value.
-     */
-    public double strength;
-    //TODO order by strength;
     
-    /**
-     * Placeholder is DGPLACEHOLDER. Null is null.
-     */
-    public dg desireorgoal;
     @Override
     public String toString(){
         return desireorgoal + ": " + what + " with strength " + strength;

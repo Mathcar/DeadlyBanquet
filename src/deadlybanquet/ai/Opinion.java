@@ -3,7 +3,7 @@ package deadlybanquet.ai;
 import deadlybanquet.model.Time;
 
 /**
- * Created by Tom on 2016-02-19.
+ * 
  * This IThought expresses the fact that (implied person) has opinion pad about aboutPersonRoomObject
  */
 public class Opinion implements IThought{
@@ -31,5 +31,10 @@ public class Opinion implements IThought{
         if(!this.getClass().equals(i.getClass())) return false;
         Opinion d = (Opinion) i;
         return aboutPersonRoomObject==d.aboutPersonRoomObject;
+    }
+
+    @Override
+    public void setPlaceHolderToNull() {
+        if (pad.getP()<-1) pad=null;
     }
 }

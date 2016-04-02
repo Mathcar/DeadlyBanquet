@@ -16,6 +16,11 @@ public class EmotionThought implements IThought{
         EmotionThought d = (EmotionThought) i;
         return (d.emotionortemperament==et.ETPLACEHOLDER||d.emotionortemperament==emotionortemperament);
     }
+
+    @Override
+    public void setPlaceHolderToNull() {
+        if (pad.getP()<-1) pad=null;
+    }
     public enum et {
         EMOTION, TEMPERAMENT, ETPLACEHOLDER;
     }
