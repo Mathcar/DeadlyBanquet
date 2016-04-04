@@ -325,13 +325,29 @@ public class Character implements Renderable{
 	public void unblock(){
 		this.blocked = false;
 	}
+
+	//Request a path to a door withing the current room which leads to targRoom
+	//OBS! This yields NOTHING if no door connects to the targRoom
+	public void reqPathToDoor(String targRoom){
+		actList.actionPerformed(new ActionEvent(this, EventEnum.REQUEST_PATH_TO_DOOR.ordinal(), targRoom));
+	}
+
+	//Requests a masterpath in between rooms
+	public void reqMasterPathToRoom(String targRoom){
+		actList.actionPerformed(new ActionEvent(this, EventEnum.REQUEST_PATH_TO_ROOM.ordinal(), targRoom));
+	}
+
+	//Requests a path to a specific person
+	public void reqPathToPerson(String personName){
+		actList.actionPerformed(new ActionEvent(this, EventEnum.REQUEST_PATH_TO_PERSON.ordinal(), personName));
+	}
 	
 	public void attemptRoomChange(){
-		this.actList.actionPerformed(new ActionEvent(this, 2, ""));
+		this.actList.actionPerformed(new ActionEvent(this, EventEnum.CHECK_DOOR.ordinal(), ""));
 	}
 	
 	public void tryTalk(){
-		this.actList.actionPerformed(new ActionEvent(this, 3, ""));
+		this.actList.actionPerformed(new ActionEvent(this, EventEnum.TALK_TO.ordinal(), ""));
 	}
 
 	public void enterDoor(String toRoom, String fromRoom){

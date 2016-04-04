@@ -94,6 +94,25 @@ public class Room implements TileBasedMap {
         //--------------------------------------------------------------------
     }
 
+    public Path createPathToDoor(Character c, String target){
+        for(Door d : doors){
+            if(d.getDestinationRoom().equals(target)){
+                return getPath((NPC)c, c.getPos(), d.getPos());
+            }
+        }
+        //No such door was found, or no path to it could be found
+        return null;
+    }
+
+    //Checks if the room has a door with connection to a specified room
+    public boolean hasConnectionTo(String room){
+        for(Door d : doors){
+            if(d.getDestinationRoom().equals(room))
+                return true;
+        }
+        return false;
+    }
+
     public String getName(){
         return name;
     }
@@ -107,6 +126,13 @@ public class Room implements TileBasedMap {
     		if(c.equals(searchChar)) return true; //.equals instead
     	}
     	return false;
+    }
+
+    public boolean hasCharacter(String searchName){
+        for(Character c: characters){
+            if(c.getName().equals(searchName)) return true; //.equals instead
+        }
+        return false;
     }
 
 
@@ -136,6 +162,15 @@ public class Room implements TileBasedMap {
         }
         return new RenderSet(map, ros);
 
+    }
+
+    public Path createPathToPerson(NPC mover, String targetName){
+        Position target = new Position(0,0);
+        for(Character c : characters){
+            if(c.getName().equals(targetName))
+                target = c.getPos();
+        }
+        return getPath(mover,mover.getPos(), target);
     }
 
     public Path getPath(Mover mover, Position origin, Position target){
@@ -178,6 +213,11 @@ public class Room implements TileBasedMap {
         return true;
     }
 
+    public void notifyRoomChange(String who, String origin, String destination){
+        //Need to somehow connect this to the memory of the AI belonging to the characters
+        //And then call:
+        //mem.observerRoomChange(who,origin,destination);
+    }
     ///Debug function, used to print out a list of all layers which are occupied on a tile
     public void debugTileOnPos(Position pos){
         System.out.println("Tile at " + pos.toString() + "  has something on layers: ");
@@ -249,6 +289,10 @@ public class Room implements TileBasedMap {
     	}
 		return false;
     	
+    }
+
+    public boolean equals(Room r){
+        return r.getName().equals(name);
     }
     /*
      * these should be in the same method chain to avoid multiple unececery searches in lists.

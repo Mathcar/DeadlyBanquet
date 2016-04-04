@@ -5,5 +5,10 @@ package deadlybanquet.model;
  */
 public enum EventEnum {
     MOVE,
-    CHANGE_ROOMS
+    CHANGE_ROOMS,
+    CHECK_DOOR,
+    TALK_TO,
+    REQUEST_PATH_TO_PERSON,
+    REQUEST_PATH_TO_DOOR,
+    REQUEST_PATH_TO_ROOM
 }

@@ -1,8 +1,10 @@
 package deadlybanquet.model;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import deadlybanquet.AI;
 import deadlybanquet.RenderSet;
@@ -12,14 +14,19 @@ import deadlybanquet.ai.AIControler;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.pathfinding.AStarPathFinder;
+import org.newdawn.slick.util.pathfinding.Path;
+import org.newdawn.slick.util.pathfinding.PathFindingContext;
+import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
 /**
  * Created by Hampus on 2016-03-04.
  */
-public class World implements ActionListener {
+public class World implements ActionListener, TileBasedMap {
     private static Time time;
     private Player player;
     private AIControler ai;
+    private AStarPathFinder masterPathfinder
     private ArrayList<AIControler> aiss;
 
     //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
@@ -63,6 +70,7 @@ public class World implements ActionListener {
         roomMap[2][2] = new Room("res/pictures/living_room2.tmx", "Living Room",this);
         roomMap[1][2] = new Room("res/pictures/bedroom.tmx", "Bedroom",this);
         roomMap[2][1] = new Room("res/pictures/kitchen.tmx", "Kitchen",this);
+        masterPathfinder = new AStarPathFinder(this, 10, false);
     }
 
     //World's update function, somewhat unsure  as to what parameters are supposed
@@ -176,8 +184,13 @@ public class World implements ActionListener {
                                 + " entering from " + ce.getEnterDirection().toString() );
             //-----------------------------------------------------------------------*/
 
-            if (!targetRoom.entranceIsBlocked(ce.getEnterDirection())) { //todo commented out by Tom	
-                originRoom.removeCharacter((Character)ce.getSource());
+            if (!targetRoom.entranceIsBlocked(ce.getEnterDirection())) {
+                Character c = (Character)ce.getSource();
+                originRoom.removeCharacter(c);
+                //Tell the affected rooms to notify all characters so that this can be added
+                //to memory
+                originRoom.notifyRoomChange(c.getName(), ce.getOriginRoom(), ce.getTargetRoom());
+                targetRoom.notifyRoomChange(c.getName(), ce.getOriginRoom(), ce.getTargetRoom());
                 targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
             }
             /*//----------------------------------DEBUG--------------------------------
@@ -187,7 +200,7 @@ public class World implements ActionListener {
             //-----------------------------------------------------------------------*/
         }
         
-        if(e.getID() == 2){
+        if(e.getID() == EventEnum.CHECK_DOOR.ordinal()){
         	Character characterTemp = (Character) e.getSource();
         	for (Room[] rm : roomMap) {
         		for (Room r : rm) {
@@ -197,7 +210,7 @@ public class World implements ActionListener {
                 }
         	}
         }
-        if(e.getID() == 3){
+        if(e.getID() == EventEnum.TALK_TO.ordinal()){
         	Character characterTemp = (Character) e.getSource();
         	for (Room[] rm : roomMap) {
                 for (Room r : rm) {
@@ -211,6 +224,78 @@ public class World implements ActionListener {
                 }
         	}
         }
+        if(e.getID() == EventEnum.REQUEST_PATH_TO_PERSON.ordinal()){
+            Room targetRoom= null;
+            Room originRoom = null;
+            for(Room[] rs : roomMap){
+                for(Room r : rs){
+                    if(r!=null){
+                        if(r.hasCharacter(e.getActionCommand()))
+                            targetRoom = r;
+                        else  if (r.hasCharacter((Character)e.getSource()))
+                            originRoom = r;
+                    }
+                }
+            }
+            if(originRoom.equals(targetRoom)){
+                Path p = originRoom.createPathToPerson((NPC)e.getSource(), e.getActionCommand());
+                sendPathToAI(((Character)e.getSource()).getName(), p);
+                //Send path to correct AIController
+            }else{
+                createMasterPathTo(originRoom.getName(), targetRoom.getName());
+            }
+        }
+        //The actioncommand in this event is presumed to contain the name of the room you wish to enter
+        if(e.getID() == EventEnum.REQUEST_PATH_TO_DOOR.ordinal()){
+            Path p;
+            for(Room[] rs : roomMap){
+                for(Room r : rs){
+                    if(r!=null && r.hasCharacter((Character)e.getSource()) && r.hasConnectionTo(e.getActionCommand())){
+                        p = r.createPathToDoor((Character)e.getSource(), e.getActionCommand());
+                    }
+                }
+            }
+            //send the path to the correct AI
+            sendPathToAI(((Character)e.getSource()).getName();
+        }
+        if(e.getID() == EventEnum.REQUEST_PATH_TO_ROOM.ordinal()){
+            Character c = (Character)e.getSource();
+            MasterPath mp = new MasterPath();
+            for(Room[] rs : roomMap){
+                for(Room r : rs){
+                    if(r != null && r.hasCharacter(c)){
+                        mp = createMasterPathTo(r.getName(), e.getActionCommand());
+                    }
+                }
+            }
+            //Send masterpath to correct AI
+            sendMasterPathToAI(c.getName(), mp);
+        }
+    }
+
+    public void sendPathToAI(String charName, Path p){
+        for(AIControler ai : aiss){
+            if(ai.getCharacterName().equals(charName))
+                ai.setPath(p);
+        }
+    }
+
+    public void sendMasterPathToAI(String charName, MasterPath mp){
+        for(AIControler ai : aiss){
+            if(ai.getCharacterName().equals(charName))
+                ai.setMasterPath(mp);
+        }
+    }
+
+    public MasterPath createMasterPathTo(String origin, String target){
+        Position org = getRoomPosition(origin);
+        Position targ = getRoomPosition(target);
+        Path p = masterPathfinder.findPath(null, org.getX(), org.getY(), targ.getX(), targ.getY());
+        MasterPath mp = new MasterPath();
+        for(int i = 0; i<p.getLength(); i++){
+            mp.addStep(roomMap[p.getX(i)][p.getY(i)].getName());
+        }
+        return mp;
     }
     
     public RenderSet getRenderSet(){
@@ -222,5 +307,33 @@ public class World implements ActionListener {
     		}
     	}
 		return null;
+    }
+
+    @Override
+    public int getWidthInTiles() {
+        return roomMap[0].length;
+    }
+
+    @Override
+    public int getHeightInTiles() {
+        return roomMap.length;
+    }
+
+    @Override
+    public void pathFinderVisited(int i, int i1) {
+
+    }
+
+    @Override
+    public boolean blocked(PathFindingContext pfc, int x, int y) {
+        if(roomMap[x][y] != null && roomMap[pfc.getSourceX()][pfc.getSourceY()].hasConnectionTo(roomMap[x][y].getName()))
+            return false;
+        else
+            return true;
+    }
+
+    @Override
+    public float getCost(PathFindingContext pathFindingContext, int i, int i1) {
+        return 1;
     }
 }

@@ -2,6 +2,7 @@ package deadlybanquet.ai;
 
 import java.awt.event.ActionListener;
 
+import deadlybanquet.model.MasterPath;
 import org.newdawn.slick.util.pathfinding.Path;
 
 import deadlybanquet.model.NPC;
@@ -12,11 +13,11 @@ public class AIControler {
 	
 	private final static int MOVEMNET_DELAY = 32;
 	private int movmentTimer = 0;
-	
+	private MasterPath masterPath;
 	private Path path;
 	
 	public AIControler(ActionListener al){
-		this.npc = new NPC(al, "Frådo", 3, 3);
+		this.npc = new NPC(al, "Frï¿½do", 3, 3);
 	}
 	
 	public AIControler(ActionListener al, deadlybanquet.model.Character c){
@@ -45,7 +46,19 @@ public class AIControler {
 			}
 		}
 	}
-	
+
+	public void setPath(Path p){
+		//Reset path counter?
+		path = p;
+	}
+
+	public void setMasterPath(MasterPath mp){
+		masterPath = mp;
+
+	}
+	public String getCharacterName(){
+		return npc.getName();
+	}
 	private boolean checkBlocked(){
 		if(npc.isBlocked()){
 			npc.unblock();
