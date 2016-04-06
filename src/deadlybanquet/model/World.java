@@ -256,7 +256,7 @@ public class World implements ActionListener, TileBasedMap {
                 }
             }
             //send the path to the correct AI
-            sendPathToAI(((Character)e.getSource()).getName();
+            //sendPathToAI(((Character)e.getSource()).getName();
         }
         if(e.getID() == EventEnum.REQUEST_PATH_TO_ROOM.ordinal()){
             Character c = (Character)e.getSource();
