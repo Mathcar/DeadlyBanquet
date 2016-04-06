@@ -35,7 +35,7 @@ public class Character implements Renderable{
 	private Position pos;
 	private Direction direction;
 	private int distance;
-	
+	private String room;
 	
 	private ActionListener actList;
 	
@@ -352,6 +352,14 @@ public class Character implements Renderable{
 
 	public void enterDoor(String toRoom, String fromRoom){
 		this.actList.actionPerformed(new ChangeRoomEvent(this, fromRoom, toRoom, this.direction));
+	}
+
+	public String getRoom() {
+		return room;
+	}
+
+	public void setRoom(String room) {
+		this.room = room;
 	}
 
 }

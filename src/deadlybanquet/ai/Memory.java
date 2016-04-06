@@ -8,12 +8,8 @@ package deadlybanquet.ai;
 import deadlybanquet.speech.SpeechAct;
 import java.util.*;
 public class Memory {
-    //This contains all information which the player has got, in random order.
-    //If performance becomes too bad, may have to invent better data structure.
-    public ArrayList<IThought> information = new ArrayList<>();
-    //Contains everything the person has done or seen done so far.
-    
-    public ArrayList<IThought> history = new ArrayList<>();
+    //This contains all information which the player has got, sorted in order of how sertenty of the thought.
+    public TreeSet<IThought> information = new TreeSet<>();
     
     public String currentRoom;
     public Memory(ArrayList<IThought> information, String room){
