@@ -9,15 +9,17 @@ import deadlybanquet.speech.SpeechAct;
 import java.util.*;
 public class Memory {
     //This contains all information which the player has got, sorted in order of how sertenty of the thought.
-    public TreeSet<IThought> information = new TreeSet<>();
+    public SortedSet<IThought> information = new TreeSet<>();
     
-    public String currentRoom;
-    public Memory(ArrayList<IThought> information, String room){
-        //if a null object is supplied, object will be initialized with empty list.
+    /**
+     * 
+     * @param information sorted set of initial information.
+     * @param room
+     */
+    public Memory(SortedSet<IThought> information){
+        //if a null object is supplied, object will be initialized with empty TreeSet.
         if (information!=null)
             this.information=information;
-        if(room==null) throw new IllegalArgumentException("No room supplied for Memory constructor");
-        currentRoom=room;
     }
     /**
      * 
@@ -26,10 +28,13 @@ public class Memory {
      * This function, and the contain functions, are probably full of bugs.
      * @return 
      */
-    public ArrayList<IThought> find (IThought what, ArrayList<IThought> where){
-        if(what==null) throw new NullPointerException();
-        ArrayList<IThought> results = new ArrayList<>();
-        for (IThought i: where){
+    public Set<IThought> find(IThought what){
+        if(what==null){
+//        	return new TreeSet<IThought>();
+        	throw new NullPointerException();
+        }
+        Set<IThought> results = new TreeSet<IThought>();
+        for (IThought i: this.information){
             if (i.contains(what)) results.add(i);
         }
         return results;
@@ -43,7 +48,7 @@ public class Memory {
     }
     
     //Called on every person in origin and destination rooms on room change.
-    public void observeRoomChange(String who, String origin, String destination){
+    public void observeRoomChange(String character, String origin, String destination){
         
     }
     
