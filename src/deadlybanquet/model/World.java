@@ -26,7 +26,7 @@ public class World implements ActionListener, TileBasedMap {
     private static Time time;
     private Player player;
     private AIControler ai;
-    private AStarPathFinder masterPathfinder
+    private AStarPathFinder masterPathfinder;
     private ArrayList<AIControler> aiss;
 
     //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
