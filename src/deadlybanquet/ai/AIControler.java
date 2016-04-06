@@ -17,11 +17,12 @@ public class AIControler {
 	private Path path;
 	
 	public AIControler(ActionListener al){
-		this.npc = new NPC(al, "Fr�do", 3, 3);
+		this.npc = new NPC(al, "Frido", 3, 3);
 	}
 	
 	public AIControler(ActionListener al, deadlybanquet.model.Character c){
 		this.npc = new NPC(al, c);
+		
 	}
 	
 	public void moveNPC(){
@@ -59,6 +60,11 @@ public class AIControler {
 	public String getCharacterName(){
 		return npc.getName();
 	}
+	
+	public int getCharacterId(){
+		return npc.getId();
+	}
+	
 	private boolean checkBlocked(){
 		if(npc.isBlocked()){
 			npc.unblock();
@@ -66,5 +72,9 @@ public class AIControler {
 		}else{
 			return false;
 		}
+	}
+	
+	public NPC getNpc(){
+		return this.npc;
 	}
 }

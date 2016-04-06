@@ -31,8 +31,8 @@ public class GameWindow extends BasicGameState {
 	private View view;
 	private World model;
 
-	public GameWindow() {
-		super();
+	public GameWindow(World world) {
+		model = world;
 	}
 
 	public void render(GameContainer container, StateBasedGame s,Graphics g) throws SlickException {
@@ -67,7 +67,7 @@ public class GameWindow extends BasicGameState {
         */
 
 
-		model = new World();
+		
 		view = new View(container.getHeight(), container.getWidth());
 		
 	}
