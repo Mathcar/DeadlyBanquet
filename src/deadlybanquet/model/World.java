@@ -4,12 +4,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import deadlybanquet.AI;
 import deadlybanquet.RenderSet;
 import deadlybanquet.View;
 import deadlybanquet.ai.AIControler;
+import deadlybanquet.ai.Brain;
 import deadlybanquet.states.States;
 
 import org.newdawn.slick.GameContainer;
@@ -24,9 +27,9 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
  * Created by Hampus on 2016-03-04.
  */
 public class World implements ActionListener, TileBasedMap {
+    private static HashMap<AIControler, Brain> controlerBrainMap;
     private static Time time;
     private Player player;
-    private AIControler ai;
     private AStarPathFinder masterPathfinder;
     private ArrayList<AIControler> aiss;
     private boolean talk;
@@ -58,10 +61,14 @@ public class World implements ActionListener, TileBasedMap {
     public void initAIs(){
         //Not really sure in which order these thing are supposed to be initialized, but regardless
         //it should be done in here
+        controlerBrainMap = new HashMap<AIControler, Brain>();
     	Character npc = new Character(this, "Fr�do", 9, 5);
-    	ai = new AIControler(this,npc);
+        AIControler	ai = new AIControler(this,npc);
+        Brain brain = new Brain();
     	aiss = new ArrayList<>();
     	aiss.add(ai);
+
+        controlerBrainMap.put()
     	roomMap[2][2].addCharacter(npc);
   
     }
