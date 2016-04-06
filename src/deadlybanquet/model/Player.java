@@ -47,7 +47,7 @@ public class Player {
 			}
 			if(in.isKeyPressed(Input.KEY_E)){
 				character.attemptRoomChange();
-//				character.tryTalk();
+				character.tryTalk();
 			}
 		}
 		movementTimer--;

@@ -33,7 +33,7 @@ public class Brain {
     private ArrayList<IThought> plan = new ArrayList<>();
     private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
-    //private ArrayList<Principle> principles = new ArrayList<>();
+    
     //this constructor replaces any bad values by defaults.
     public Brain(   ArrayList<IThought> information, 
                     PAD emotion, 

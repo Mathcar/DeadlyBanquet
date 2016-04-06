@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Created by Tom on 2016-03-11.
  */
 public class SpeechActHolder {
-    private static SpeechActHolder instance = null;
+    /*private static SpeechActHolder instance = null;
 
     //private HashMap<TextPropertyEnum,Pair<String,ArrayList<IThought>>> greetingsList;
     private ArrayList<SpeechAct> greetingsList;
@@ -50,7 +50,7 @@ public class SpeechActHolder {
 
         /*Pair test = greetingsList.get(TextPropertyEnum.PROPER);
         String text = (String)test.getKey();
-        System.err.println(text);*/
+        System.err.println(text);*//*
     }
 
     private ArrayList<SpeechAct> readFile(File file, SpeechAct act){
@@ -86,7 +86,7 @@ public class SpeechActHolder {
                          */
                         //NOTE: If you are looking for greetings, check out the new enum BeingPolite
                         //Karin
-                        iThought=new PlanElement(null, BeingPolite.valueOf(list.get(i)),null);
+                        /*iThought=new PlanElement(null, BeingPolite.valueOf(list.get(i)),null);
                         iThoughts.add(iThought);
                     }catch(Exception e){
                         System.err.println("Something is wrong: could not make string to Action enum[SpeechActHolder class]" +
@@ -99,7 +99,7 @@ public class SpeechActHolder {
                     tempList.add(new GreetingPhrase(list.get(0),textEnum,iThoughts));
                 }/*else if(act.getClass().equals(QuestionAboutSomethingFrase.class)){
                     tempList.add(new whatever(list.get(0),textEnum,iThoughts));
-                }*/
+                }
             }
         }catch (IOException e){
             System.err.println("IOException while reading file");
@@ -153,6 +153,6 @@ public class SpeechActHolder {
             }
         }
         System.err.println("NPC says: "+npcSay.getText());
-    }
+    }*/
 
 }
