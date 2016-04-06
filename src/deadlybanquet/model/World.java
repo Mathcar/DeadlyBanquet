@@ -10,6 +10,7 @@ import deadlybanquet.AI;
 import deadlybanquet.RenderSet;
 import deadlybanquet.View;
 import deadlybanquet.ai.AIControler;
+import deadlybanquet.states.States;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
@@ -28,6 +29,7 @@ public class World implements ActionListener, TileBasedMap {
     private AIControler ai;
     private AStarPathFinder masterPathfinder;
     private ArrayList<AIControler> aiss;
+    private boolean talk;
 
     //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
     //for the rooms to get their connections made
@@ -96,6 +98,12 @@ public class World implements ActionListener, TileBasedMap {
        // for(AI ai : ais){
          //   ai.update(container, s, deltaTime);
         //}
+        
+        if(talk){
+        	s.enterState(States.talk);
+        	talk = false;
+        }
+        
         player.update(container, s, deltaTime);
 
     }
@@ -218,6 +226,7 @@ public class World implements ActionListener, TileBasedMap {
                     	if(r.isCharacterOn(characterTemp.getFacedTilePos())){
                     		System.out.println(characterTemp.getName() + " talkes to " + 
                     				r.getCharacterOnPos(characterTemp.getFacedTilePos()).getName());
+                    		talk = true;
                     		//change to talk state between cahracterTemp and r.getCharacterOnPos(characterTemp.getFacedTilePos()
                     	}
                     }
@@ -256,7 +265,7 @@ public class World implements ActionListener, TileBasedMap {
                 }
             }
             //send the path to the correct AI
-            sendPathToAI(((Character)e.getSource()).getName();
+        //    sendPathToAI(((Character)e.getSource()).getName();
         }
         if(e.getID() == EventEnum.REQUEST_PATH_TO_ROOM.ordinal()){
             Character c = (Character)e.getSource();
