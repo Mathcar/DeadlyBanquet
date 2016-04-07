@@ -54,7 +54,11 @@ public class Character implements Renderable{
     private Map opinions = new HashMap<Integer, Opinion>();
 	
     public Character(ActionListener al, Character c){
-    	new Character(al, c.name, c.pos.getX(), c.pos.getY());
+    	this.id = c.getId();
+    	this.name = c.getName();
+    	this.pos = c.getPos();
+    	this.direction = c.getDirection();
+    		
     }
 	
 	public Character(ActionListener al, String name, int xPos, int yPos){
@@ -161,6 +165,10 @@ public class Character implements Renderable{
 	
 	public Position getPos() {
 		return new Position(this.pos);
+	}
+	
+	public Direction getDirection(){
+		return direction;
 	}
 	
 	public void moveE(){
@@ -314,6 +322,10 @@ public class Character implements Renderable{
 		//return new RenderObject(pos.getX(), pos.getY(), imageS, moving); //
 	}
 
+	public boolean equals(Character c){
+		return c.getName().equals(name);
+	}
+
 	public void notifyBlocked() {
 		this.blocked=true;
 	}
@@ -354,4 +366,7 @@ public class Character implements Renderable{
 		this.actList.actionPerformed(new ChangeRoomEvent(this, fromRoom, toRoom, this.direction));
 	}
 
+	public Image getDefaultImage(){
+		return imageS;
+	}
 }

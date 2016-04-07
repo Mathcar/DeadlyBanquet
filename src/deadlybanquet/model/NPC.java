@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
  */
 public class NPC extends Character implements Mover{
 
+	private Character c;
+	
 	public NPC(ActionListener al , String name, int xPos, int yPos) {
 		super(al, name, xPos, yPos);
 		
@@ -17,6 +19,7 @@ public class NPC extends Character implements Mover{
 	
 	public NPC(ActionListener al, Character c){
 		super(al, c);
+		this.c = c;
 	}
 
 	public void addPath(Path p){
@@ -24,5 +27,8 @@ public class NPC extends Character implements Mover{
 
 	}
 	
+	public Character getChar(){
+		return this.c; 
+	}
 	
 }

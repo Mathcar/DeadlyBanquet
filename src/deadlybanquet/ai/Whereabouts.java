@@ -15,11 +15,12 @@ public class Whereabouts implements IThought{
     public Time time;
     public Whereabouts previous;
     
-    public Whereabouts(String who, String where, PAD o, double h){
+    public Whereabouts(String who, String where, PAD o, double h, Time time){
         whoorwhat=who;
         this.where=where;
         opinion=o;
         howsure=h;
+        this.time=time;
     }
     
     @Override

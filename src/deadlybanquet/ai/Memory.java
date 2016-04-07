@@ -10,12 +10,12 @@ import java.util.*;
 public class Memory {
     //This contains all information which the player has got, in random order.
     //If performance becomes too bad, may have to invent better data structure.
-    ArrayList<IThought> information = new ArrayList<>();
+    public ArrayList<IThought> information = new ArrayList<>();
     //Contains everything the person has done or seen done so far.
     
-    ArrayList<IThought> history = new ArrayList<>();
+    public ArrayList<IThought> history = new ArrayList<>();
     
-    String currentRoom;
+    public String currentRoom;
     public Memory(ArrayList<IThought> information, String room){
         //if a null object is supplied, object will be initialized with empty list.
         if (information!=null)
@@ -65,6 +65,11 @@ public class Memory {
     
     //Called on every person in the room (apart from who) when somebody puts down an object.
     public void observePutDown(String who, String what){
+        
+    }
+    
+    //called on entering a room
+    public void seePeople (ArrayList<String> people){
         
     }
    

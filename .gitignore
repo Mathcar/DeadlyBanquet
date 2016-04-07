@@ -32,3 +32,4 @@ nb-configuration.xml
 *.ear
 *.jar
 /bin
+src/deadlybanquet/model/Pair.java
