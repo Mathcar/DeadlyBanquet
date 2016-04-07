@@ -51,6 +51,8 @@ public class Brain {
         if (plan!=null) this.plan = plan;
         me = name;
     }
+
+    public Brain(){}
     
     //This class evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.

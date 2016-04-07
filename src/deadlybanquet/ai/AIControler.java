@@ -1,7 +1,9 @@
 package deadlybanquet.ai;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import deadlybanquet.model.Character;
 import deadlybanquet.model.MasterPath;
 import org.newdawn.slick.util.pathfinding.Path;
 
@@ -46,6 +48,22 @@ public class AIControler {
 				}
 			}
 		}
+	}
+
+	//Called on every person in origin and destination rooms on room change.
+	public void observeRoomChange(String who, String origin, String destination){
+		//TODO IMPLEMENT
+	}
+
+	//called on entering a room
+	public void seePeople (ArrayList<String> people){
+
+		//TODO IMPLEMENT
+	}
+
+	public void observeInteraction(String who, String with){
+
+		//TODO IMPLEMENT
 	}
 
 	public void setPath(Path p){

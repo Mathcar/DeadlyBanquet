@@ -69,7 +69,7 @@ public class Memory {
     }
     
     //called on entering a room
-    public void seePeople (String[] people){
+    public void seePeople (ArrayList<String> people){
         
     }
    
