@@ -67,5 +67,10 @@ public class Memory {
     public void observePutDown(String who, String what){
         
     }
+    
+    //called on entering a room
+    public void seePeople (String[] people){
+        
+    }
    
 }
