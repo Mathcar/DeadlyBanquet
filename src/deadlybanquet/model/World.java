@@ -257,24 +257,16 @@ public class World implements ActionListener, TileBasedMap {
         	}
         }
         if(e.getID() == EventEnum.REQUEST_PATH_TO_PERSON.ordinal()){
-            Room targetRoom= null;
-            Room originRoom = null;
+            Path p;
             for(Room[] rs : roomMap){
                 for(Room r : rs){
                     if(r!=null){
-                        if(r.hasCharacter(e.getActionCommand()))
-                            targetRoom = r;
-                        else  if (r.hasCharacter((Character)e.getSource()))
-                            originRoom = r;
+                        if (r.hasCharacter((Character)e.getSource())) {
+                            p = r.createPathToPerson((NPC) e.getSource(), e.getActionCommand());
+                            sendPathToAI(((Character) e.getSource()).getName(), p);
+                        }
                     }
                 }
-            }
-            if(originRoom.equals(targetRoom)){
-                Path p = originRoom.createPathToPerson((NPC)e.getSource(), e.getActionCommand());
-                sendPathToAI(((Character)e.getSource()).getName(), p);
-                //Send path to correct AIController
-            }else{
-                createMasterPathTo(originRoom.getName(), targetRoom.getName());
             }
         }
         //The actioncommand in this event is presumed to contain the name of the room you wish to enter
