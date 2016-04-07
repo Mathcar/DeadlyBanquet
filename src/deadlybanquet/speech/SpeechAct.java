@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by Tom on 2016-02-25.
  */
 public interface SpeechAct {
-
+    //todo remake
     public String getText();
 
     public void setText(String text);
