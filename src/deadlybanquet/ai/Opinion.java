@@ -7,18 +7,18 @@ import deadlybanquet.model.Time;
  * This IThought expresses the fact that (implied person) has opinion pad about aboutPersonRoomObject
  */
 public class Opinion implements IThought{
-    public String aboutPersonRoomObject;
+    public String person;
     public PAD pad;
     //The time when this opinion first became current.
     public Time time;
     public Opinion previous;
     public Opinion(String about, PAD pad){
         this.pad = pad;
-        aboutPersonRoomObject = about;
+        person = about;
     }
     @Override
     public String toString(){
-        return "feeling " + pad + " about " + aboutPersonRoomObject;
+        return "feeling " + pad + " about " + person;
     }
 
     @Override
@@ -30,11 +30,15 @@ public class Opinion implements IThought{
         if(i==null) throw new NullPointerException();
         if(!this.getClass().equals(i.getClass())) return false;
         Opinion d = (Opinion) i;
-        return aboutPersonRoomObject==d.aboutPersonRoomObject;
+        return person==d.person;
     }
 
     @Override
     public void setPlaceHolderToNull() {
         if (pad.getP()<-1) pad=null;
+    }
+    
+    public PAD getPAD(){
+    	return this.pad;
     }
 }

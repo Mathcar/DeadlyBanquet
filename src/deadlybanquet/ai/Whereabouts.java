@@ -7,24 +7,24 @@ import deadlybanquet.model.Time;
  * @author omega
  */
 public class Whereabouts implements IThought{
-    public String where;
+    public String room;
     //TODO: If you find yourself copy-pasting this more than once, make an abstract superclass
-    public String whoorwhat;
+    public String character;
     public PAD opinion;
-    public double howsure;
+    public double cetainty;
     public Time time;
     public Whereabouts previous;
     
-    public Whereabouts(String who, String where, PAD o, double h){
-        whoorwhat=who;
-        this.where=where;
+    public Whereabouts(String character, String room, PAD o, double h){
+        this.character=character;
+        this.room=room;
         opinion=o;
-        howsure=h;
+        cetainty=h;
     }
     
     @Override
     public String toString(){
-        return whoorwhat + " is with " + howsure + "certainty " + "in the " + where + "of which circumstance current person thinks" + opinion;
+        return character + " is with " + cetainty + "certainty " + "in the " + room + "of which circumstance current person thinks" + opinion;
     }
     
     @Override
@@ -33,13 +33,13 @@ public class Whereabouts implements IThought{
         if(i==null) throw new NullPointerException();
         if(!this.getClass().equals(i.getClass())) return false;
         Whereabouts d = (Whereabouts) i;
-        if (d.where!=""&&d.where!=where) return false;
-        return !(d.whoorwhat!=""&&d.whoorwhat!=whoorwhat);
+        if (d.room!=""&&d.room!=room) return false;
+        return !(d.character!=""&&d.character!=character);
     }
 
     @Override
     public void setPlaceHolderToNull() {
-        if (where=="") where = null;
-        if (whoorwhat=="") whoorwhat=null;
+        if (room=="") room = null;
+        if (character=="") character=null;
     }
 }
