@@ -28,12 +28,12 @@ public class Memory {
      * This function, and the contain functions, are probably full of bugs.
      * @return 
      */
-    public Set<IThought> find(IThought what){
+    public SortedSet<IThought> find(IThought what){
         if(what==null){
 //        	return new TreeSet<IThought>();
         	throw new NullPointerException();
         }
-        Set<IThought> results = new TreeSet<IThought>();
+        SortedSet<IThought> results = new TreeSet<IThought>();
         for (IThought i: this.information){
             if (i.contains(what)) results.add(i);
         }

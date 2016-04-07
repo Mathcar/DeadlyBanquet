@@ -1,6 +1,7 @@
 package deadlybanquet.ai;
 
 import java.util.ArrayList;
+import java.util.SortedSet;
 
 /**
  *
@@ -18,7 +19,7 @@ public class BrainFactory {
      * @param name - character identifier
      * @return 
      */
-    public static Brain makeBrain(ArrayList<IThought> information, 
+    public static Brain makeBrain(SortedSet<IThought> information, 
                     PAD emotion, 
                     PAD temperament, 
                     ArrayList<Desire>desires,

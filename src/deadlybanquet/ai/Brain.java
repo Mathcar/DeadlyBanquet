@@ -35,7 +35,7 @@ public class Brain {
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
     
     //this constructor replaces any bad values by defaults.
-    public Brain(   ArrayList<IThought> information, 
+    public Brain(   SortedSet<IThought> information, 
                     PAD emotion, 
                     PAD temperament, 
                     ArrayList<Desire>desires,
@@ -43,7 +43,7 @@ public class Brain {
                     ArrayList<IThought>plan,
                     String currentRoom,
                     String name){
-        memory = new Memory (information, currentRoom);
+        memory = new Memory (information);
         if (emotion!=null) this.emotion=emotion;
         if (temperament!=null) this.temperament=temperament;
         if (desires !=null) this.desires = desires;
@@ -59,7 +59,7 @@ public class Brain {
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         String you = act.getSpeaker();
         for (IThought t : content){
-            ArrayList<IThought> foundData = new ArrayList<>(); 
+            SortedSet<IThought> foundData = new TreeSet<>(); 
             //A say object for responses
             Say c;
             switch(t.getClass().getSimpleName()){
@@ -69,7 +69,7 @@ public class Brain {
                                 //find a previous opinion the you held about this subject
                                 Opinion o = new Opinion(inOpinion.aboutPersonRoomObject, null);
                                 SomebodyElse previnfo = new SomebodyElse (o, you, null, 0.0);
-                                foundData = memory.find(previnfo, memory.information);
+                                foundData = memory.find(previnfo);
                                 acceptUncritically(you,inOpinion);
                                 if (foundData.isEmpty()){
                                     Opinion response = new Opinion (inOpinion.aboutPersonRoomObject, null);
@@ -79,7 +79,7 @@ public class Brain {
                                     }
                                     possibleAnswers.add(response);
                                 } else {
-                                    possibleAnswers.add(foundData.get(0));
+                                    possibleAnswers.add(foundData.first());
                                 }
                                 break;
                     
@@ -92,20 +92,20 @@ public class Brain {
                                     else {
                                         //TODO: what if person is saying x thinks that you...
                                         //Find your own matching info about this person, if any.
-                                        foundData = memory.find(inElse, memory.information);
+                                        foundData = memory.find(inElse);
                                         //If none is found, make polite response.
                                         if(foundData.isEmpty()){
                                             c= new Say(me, you, inElse, YESNO, null);
                                             possibleAnswers.add(c);
                                             break;
                                         }
-                                        possibleAnswers.add(foundData.get(0));
+                                        possibleAnswers.add(foundData.first());
                                     }
                                     break;
                     
                 case "BackStory": BackStory inBack = (BackStory) t;
                                   Say.How a;
-                                  if (memory.find(inBack, memory.information).isEmpty()) {
+                                  if (memory.find(inBack).isEmpty()) {
                                       a =YESNO;
                                       memory.information.add(t);
                                   }
@@ -124,12 +124,12 @@ public class Brain {
                                     }
                                     //Check if I have an idea that somebody else might know
                                     Whereabouts tofind = new Whereabouts(inWhere.whoorwhat,"",null,0.0);
-                                    if(foundData.isEmpty()) foundData=memory.find(tofind, memory.information);
+                                    if(foundData.isEmpty()) foundData=memory.find(tofind);
                                     //if I have no idea whatsoever about where the person is
                                     if(foundData.isEmpty()){
                                         foundData.add(new Say(me, you,inWhere, YESNO,null));
                                     }
-                                    possibleAnswers.add(foundData.get(0));
+                                    possibleAnswers.add(foundData.first());
                                     break;
                     
                 case "BeingPolite": c= new Say(me, you,t,AGREE,null);
@@ -145,12 +145,12 @@ public class Brain {
                                     case SAY:   //This must obviously be a question
                                                 //since if it were information you would 
                                                 //just give the info instead of saying I hereby inform you that...
-                                                foundData= memory.find(inSay.content, memory.information);
+                                                foundData= memory.find(inSay.content);
                                                 if (foundData.isEmpty()){
                                                     inSay.content.setPlaceHolderToNull();
                                                     possibleAnswers.add(inSay.content);
                                                 }
-                                                possibleAnswers.add(foundData.get(0));
+                                                possibleAnswers.add(foundData.first());
                                                 break;
                              
                                         
@@ -193,7 +193,7 @@ public class Brain {
                                                 }
                                                 break;
                                         
-                                    case YESNO: foundData = memory.find(inSay.content, memory.information);
+                                    case YESNO: foundData = memory.find(inSay.content);
                                                 //TODO need to check other relevant registers as well
                                                 if (foundData.isEmpty()){
                                                     //Say that this is the case
@@ -224,7 +224,7 @@ public class Brain {
                     
                 case "Do":  Do inDo = (Do) t;
                             //Check if I saw this happen
-                            foundData = memory.find (inDo, memory.history);
+                            foundData = memory.find (inDo);
                             if (!foundData.isEmpty()){
                                 //I did see this happen
                                 c = new Say (me, you, inDo, AGREE, null);
@@ -234,18 +234,18 @@ public class Brain {
                             
                             //Check if I have heard from somebody else 
                             //that this has happened
-                            foundData = memory.find (inDo, memory.information);
+                            foundData = memory.find (inDo);
                             if (foundData.isEmpty()){
                                 c= new Say(me, you, inDo, YESNO, null);
                                 possibleAnswers.add(c);
                                 break;
                             }
-                            possibleAnswers.add(foundData.get(0));
+                            possibleAnswers.add(foundData.first());
                             break;
                     
                 case "EmotionThought":  EmotionThought inEmotion = (EmotionThought) t;
                                         SomebodyElse s = new SomebodyElse (inEmotion, you, null, 1.0);
-                                        foundData = memory.find(s, memory.information);
+                                        foundData = memory.find(s);
                                         if (foundData.isEmpty()){
                                             //If no previous information is available, return
                                             //I am happy/sad for you.
@@ -258,7 +258,7 @@ public class Brain {
                                         }
                                         else {
                                             //If we already have information, return previous info.
-                                            SomebodyElse b = (SomebodyElse) foundData.get(0);
+                                            SomebodyElse b = (SomebodyElse) foundData.first();
                                             memory.information.remove(b);
                                             s.previous=b;
                                             memory.information.add(s);
@@ -303,10 +303,10 @@ public class Brain {
     public void acceptUncritically(String person, IThought stateofworld){
         SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, 1.0);
         previnfo.time=getTime();
-        ArrayList<IThought> foundData = memory.find (previnfo, memory.information);
+        SortedSet<IThought> foundData = memory.find(previnfo);
         if (!foundData.isEmpty()){
-            memory.information.remove(foundData.get(0));
-            previnfo.previous= (SomebodyElse) foundData.get(0);      
+            memory.information.remove(foundData.first());
+            previnfo.previous= (SomebodyElse) foundData.first();      
         }
         memory.information.add(previnfo);
     }
