@@ -322,7 +322,6 @@ public class World implements ActionListener, TileBasedMap {
             else
                 getRelatedControler(c).observeRoomChange(person.getName(), originRoom.getName(), targetRoom.getName());
         }
-
     }
 
     //Called on every person in the room when somebody strikes up a conversation with somebody
