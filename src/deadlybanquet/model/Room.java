@@ -213,11 +213,7 @@ public class Room implements TileBasedMap {
         return true;
     }
 
-    public void notifyRoomChange(String who, String origin, String destination){
-        //Need to somehow connect this to the memory of the AI belonging to the characters
-        //And then call:
-        //mem.observerRoomChange(who,origin,destination);
-    }
+
     ///Debug function, used to print out a list of all layers which are occupied on a tile
     public void debugTileOnPos(Position pos){
         System.out.println("Tile at " + pos.toString() + "  has something on layers: ");

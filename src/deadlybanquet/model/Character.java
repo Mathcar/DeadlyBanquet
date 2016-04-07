@@ -322,6 +322,10 @@ public class Character implements Renderable{
 		//return new RenderObject(pos.getX(), pos.getY(), imageS, moving); //
 	}
 
+	public boolean equals(Character c){
+		return c.getName().equals(name);
+	}
+
 	public void notifyBlocked() {
 		this.blocked=true;
 	}

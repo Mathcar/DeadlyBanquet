@@ -24,6 +24,10 @@ public class Main extends StateBasedGame{
 		//create a speechActHolder class,that reads all the texts files and has a lot of lists
 		//SpeechActHolder speechActHolder = SpeechActHolder.getInstance();
 		//speechActHolder.createListFromFiles();
+		/*
+		Reading the text files here, maybe these should be moved
+		 */
+		SpeechActHolder.getInstance().readAllFile();
 
 		AppGameContainer app;
 		try {

@@ -14,6 +14,7 @@ import deadlybanquet.RenderSet;
 import deadlybanquet.View;
 import deadlybanquet.ai.AIControler;
 import deadlybanquet.ai.Brain;
+import deadlybanquet.ai.BrainFactory;
 import deadlybanquet.states.States;
 
 import org.newdawn.slick.GameContainer;
@@ -71,13 +72,12 @@ public class World implements ActionListener, TileBasedMap {
     	
 
         controlerBrainMap = new HashMap<AIControler, Brain>();
-    	Character npc = new Character(this, "Fr�do", 9, 5);
         AIControler	ai = new AIControler(this,npc);
-        //Brain brain = new Brain();
+        Brain brain = BrainFactory.makeBrain("Living Room", npc.getName());
     	aiss = new ArrayList<>();
     	aiss.add(ai);
 
-       // controlerBrainMap.put(ai, brain);
+        controlerBrainMap.put(ai, brain);
 
     	roomMap[2][2].addCharacter(npc);
   
@@ -214,9 +214,11 @@ public class World implements ActionListener, TileBasedMap {
                 originRoom.removeCharacter(c);
                 //Tell the affected rooms to notify all characters so that this can be added
                 //to memory
+                targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
                 originRoom.notifyRoomChange(c.getName(), ce.getOriginRoom(), ce.getTargetRoom());
                 targetRoom.notifyRoomChange(c.getName(), ce.getOriginRoom(), ce.getTargetRoom());
-                targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
+
+
             }
             /*//----------------------------------DEBUG--------------------------------
             else{
@@ -257,24 +259,16 @@ public class World implements ActionListener, TileBasedMap {
         	}
         }
         if(e.getID() == EventEnum.REQUEST_PATH_TO_PERSON.ordinal()){
-            Room targetRoom= null;
-            Room originRoom = null;
+            Path p;
             for(Room[] rs : roomMap){
                 for(Room r : rs){
                     if(r!=null){
-                        if(r.hasCharacter(e.getActionCommand()))
-                            targetRoom = r;
-                        else  if (r.hasCharacter((Character)e.getSource()))
-                            originRoom = r;
+                        if (r.hasCharacter((Character)e.getSource())) {
+                            p = r.createPathToPerson((NPC) e.getSource(), e.getActionCommand());
+                            sendPathToAI(((Character) e.getSource()).getName(), p);
+                        }
                     }
                 }
-            }
-            if(originRoom.equals(targetRoom)){
-                Path p = originRoom.createPathToPerson((NPC)e.getSource(), e.getActionCommand());
-                sendPathToAI(((Character)e.getSource()).getName(), p);
-                //Send path to correct AIController
-            }else{
-                createMasterPathTo(originRoom.getName(), targetRoom.getName());
             }
         }
         //The actioncommand in this event is presumed to contain the name of the room you wish to enter
@@ -303,6 +297,56 @@ public class World implements ActionListener, TileBasedMap {
             //Send masterpath to correct AI
             sendMasterPathToAI(c.getName(), mp);
         }
+    }
+
+    private AIControler getRelatedControler(Character c){
+        for(AIControler aic : aiss){
+            if(aic.getCharacterName().equals(c.getName()))
+                return aic;
+        }
+        return null;
+
+    }
+
+    //Tells all affected AIcontrollers/player that a person has went into a room and left another
+    private void notifyRoomChange(Room originRoom, Room targetRoom, Character person){
+        for(Character c : originRoom.getCharactersInRoom()){
+            if(originRoom.hasCharacter(player.getCharacter()))
+                player.observeRoomChange(person.getName(), originRoom.getName(), targetRoom.getName());
+            else
+                getRelatedControler(c).observeRoomChange(person.getName(), originRoom.getName(), targetRoom.getName());
+        }
+        for(Character c : targetRoom.getCharactersInRoom()){
+            if(targetRoom.hasCharacter(player.getCharacter()))
+                player.observeRoomChange(person.getName(), originRoom.getName(), targetRoom.getName());
+            else
+                getRelatedControler(c).observeRoomChange(person.getName(), originRoom.getName(), targetRoom.getName());
+        }
+    }
+
+    //Called on every person in the room when somebody strikes up a conversation with somebody
+    //else or examines (but does not pick up) an object in the room. (Other than the person
+    //with whom the person is talking, obviously)
+    private void observeInteraction(Character who, Character with, Room room){
+        for(Character c : room.getCharactersInRoom()){
+            if(room.hasCharacter(player.getCharacter()))
+                player.observeInteraction(who.getName(), with.getName());
+            else
+                getRelatedControler(c).observeInteraction(who.getName(), with.getName());
+        }
+    }
+
+    //called on entering a room
+    private void seePeople (Character whoSees, Room whatRoom){
+        ArrayList<String> names = new ArrayList<>();
+        for(Character c : whatRoom.getCharactersInRoom()){
+            names.add(c.getName());
+        }
+        //Either notify the corresponding AIControler or the player
+        if(player.getCharacter().equals(whoSees))
+            player.seePeople(names);
+        else
+            getRelatedControler(whoSees).seePeople(names);
     }
 
     public void sendPathToAI(String charName, Path p){

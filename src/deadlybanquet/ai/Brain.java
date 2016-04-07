@@ -51,6 +51,8 @@ public class Brain {
         if (plan!=null) this.plan = plan;
         me = name;
     }
+
+    public Brain(){}
     
     //This class evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
@@ -85,9 +87,7 @@ public class Brain {
                     
                 case "SomebodyElse":SomebodyElse inElse = (SomebodyElse) t;
                                     if (inElse.aboutPerson==me){
-                                        //TODO
-                                        //find out what they are saying (new method)
-                                        //react
+                                        //IThought response = whatAboutMe(inElse.what);
                                     }
                                     else {
                                         //TODO: what if person is saying x thinks that you...
@@ -123,8 +123,8 @@ public class Brain {
                                                 foundData.add(b);
                                     }
                                     //Check if I have an idea that somebody else might know
-                                    Whereabouts tofind = new Whereabouts(inWhere.character,"",null,0.0);
-                                    if(foundData.isEmpty()) foundData=memory.find(tofind);
+                                    Whereabouts tofind = new Whereabouts(inWhere.character,"",null,0.0, null);
+									if(foundData.isEmpty()) foundData=memory.find(tofind);
                                     //if I have no idea whatsoever about where the person is
                                     if(foundData.isEmpty()){
                                         foundData.add(new Say(me, you,inWhere, YESNO,null));
@@ -147,7 +147,6 @@ public class Brain {
                                                 //just give the info instead of saying I hereby inform you that...
                                                 foundData= memory.find(inSay.content);
                                                 if (foundData.isEmpty()){
-                                                    inSay.content.setPlaceHolderToNull();
                                                     possibleAnswers.add(inSay.content);
                                                 }
                                                 possibleAnswers.add(foundData.first());
@@ -207,7 +206,7 @@ public class Brain {
                                         
                                     case REQUEST:   //this one is intimately connected
                                                     //with planning, so leave out until plans are constructed.
-                                                    //Therefore, NPC refuses to do anything for anyone right now.
+                                                    //Therefore, NPC refuses to do anything for anyone right aMomentAgo.
                                                     possibleAnswers.add(new Say(me, you, inSay, DISAGREE, null));
                                                     break;
                                     default: System.out.println(me + "says: Incoming Say object is making my mind boggle.");
@@ -357,8 +356,11 @@ public class Brain {
         makeSpeechAct(possibleResponses, me);
     }
     
-    public void observeRoomChange(String person, String origin, String destination){
-        
+    public void observeRoomChange(String person, String origin, String destination){    //move to memmory
+//        memory.history.add(new Whereabouts(person, destination, null, 1.0, getTime()));
+//        Time aMomentAgo = getTime();
+//        aMomentAgo.incrementTime(-2);
+//        memory.history.add(new Whereabouts(person, origin, null, 1.0, aMomentAgo));
     }
     
     public void observeInteraction(String who, String with){
@@ -379,6 +381,10 @@ public class Brain {
     }
     //this method creates plans for any goals and puts
     private void plan(){
+        
+    }
+    
+    public void seePeople (String[] people){
         
     }
     

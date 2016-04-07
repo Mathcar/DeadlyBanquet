@@ -80,5 +80,10 @@ public class Memory {
     public void observePutDown(String who, String what){
     	//It is not possible to put down things
     }
+    
+    //called on entering a room
+    public void seePeople (ArrayList<String> people){
+        
+    }
    
 }

@@ -1,6 +1,7 @@
 package deadlybanquet.model;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
@@ -51,6 +52,22 @@ public class Player {
 			}
 		}
 		movementTimer--;
+	}
+
+	//Called on every person in origin and destination rooms on room change.
+	public void observeRoomChange(String who, String origin, String destination){
+		//TODO IMPLEMENT
+	}
+
+	//called on entering a room
+	public void seePeople (ArrayList<String> people){
+
+		//TODO IMPLEMENT
+	}
+
+	public void observeInteraction(String who, String with){
+
+		//TODO IMPLEMENT
 	}
 	
 	public boolean isCharacter(Character c){
