@@ -18,4 +18,28 @@ public class SpeechInfo {
         this.speechType=st;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public TextPropertyEnum getTextProperty() {
+        return textProperty;
+    }
+
+    public void setTextProperty(TextPropertyEnum textProperty) {
+        this.textProperty = textProperty;
+    }
+
+    public SpeechType getSpeechType() {
+        return speechType;
+    }
+
+    public void setSpeechType(SpeechType speechType) {
+        this.speechType = speechType;
+    }
+
 }
