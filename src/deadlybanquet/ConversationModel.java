@@ -33,5 +33,12 @@ public class ConversationModel {
             }
         }*/
     }
+    
+    public Player getPlayer(){
+    	return player;
+    }
+    public NPC getnpc(){
+    	return npc;
+    }
 
 }

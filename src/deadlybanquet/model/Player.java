@@ -53,4 +53,12 @@ public class Player {
 		movementTimer--;
 	}
 	
+	public boolean isCharacter(Character c){
+		if(this.character.equals(c)){
+			return true;
+		}else{
+			return false;
+		}
+	}
+	
 }

@@ -4,12 +4,16 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import deadlybanquet.AI;
+import deadlybanquet.ConversationModel;
 import deadlybanquet.RenderSet;
 import deadlybanquet.View;
 import deadlybanquet.ai.AIControler;
+import deadlybanquet.ai.Brain;
 import deadlybanquet.states.States;
 
 import org.newdawn.slick.GameContainer;
@@ -24,12 +28,14 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
  * Created by Hampus on 2016-03-04.
  */
 public class World implements ActionListener, TileBasedMap {
+    private static HashMap<AIControler, Brain> controlerBrainMap;
     private static Time time;
     private Player player;
-    private AIControler ai;
     private AStarPathFinder masterPathfinder;
     private ArrayList<AIControler> aiss;
+    private AIControler ai;
     private boolean talk;
+    private ConversationModel playerConv;
 
     //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
     //for the rooms to get their connections made
@@ -58,10 +64,21 @@ public class World implements ActionListener, TileBasedMap {
     public void initAIs(){
         //Not really sure in which order these thing are supposed to be initialized, but regardless
         //it should be done in here
-    	Character npc = new Character(this, "Fr�do", 9, 5);
+    	Character npc = new Character(this, "Frido", 9, 5);
     	ai = new AIControler(this,npc);
     	aiss = new ArrayList<>();
     	aiss.add(ai);
+    	
+
+        controlerBrainMap = new HashMap<AIControler, Brain>();
+    	Character npc = new Character(this, "Fr�do", 9, 5);
+        AIControler	ai = new AIControler(this,npc);
+        //Brain brain = new Brain();
+    	aiss = new ArrayList<>();
+    	aiss.add(ai);
+
+       // controlerBrainMap.put(ai, brain);
+
     	roomMap[2][2].addCharacter(npc);
   
     }
@@ -224,12 +241,18 @@ public class World implements ActionListener, TileBasedMap {
                 for (Room r : rm) {
                     if(r !=null && r.hasCharacter(characterTemp)){
                     	if(r.isCharacterOn(characterTemp.getFacedTilePos())){
-                    		System.out.println(characterTemp.getName() + " talkes to " + 
-                    				r.getCharacterOnPos(characterTemp.getFacedTilePos()).getName());
-                    		talk = true;
+                    		if(player.isCharacter(characterTemp)){
+                    			
+	                    		for(AIControler a : aiss){
+	                    			if(a.getCharacterId() == (r.getCharacterOnPos(characterTemp.getFacedTilePos())).getId()){
+	                    				playerConv = new ConversationModel(player,a.getNpc());
+	                    				talk = true;
+	                    			}
+	                    		}	      
+                    		}
                     		//change to talk state between cahracterTemp and r.getCharacterOnPos(characterTemp.getFacedTilePos()
                     	}
-                    }
+                    }	
                 }
         	}
         }
@@ -345,4 +368,9 @@ public class World implements ActionListener, TileBasedMap {
     public float getCost(PathFindingContext pathFindingContext, int i, int i1) {
         return 1;
     }
+    
+    public ConversationModel getPlayerConv(){
+    	return playerConv;
+    }
+    
 }

@@ -1,5 +1,6 @@
 package deadlybanquet;
 
+import deadlybanquet.model.World;
 import deadlybanquet.speech.SpeechActHolder;
 import deadlybanquet.states.Menu;
 import deadlybanquet.states.Pause;
@@ -17,6 +18,7 @@ public class Main extends StateBasedGame{
 		super("Deadly Banquet");
 	}
 
+	World model;
 	public static void main(String[] args) {
 
 		//create a speechActHolder class,that reads all the texts files and has a lot of lists
@@ -35,6 +37,8 @@ public class Main extends StateBasedGame{
 			e.printStackTrace();
 			System.exit(0);
 		}
+		
+		
 
 	}
 
@@ -45,10 +49,12 @@ public class Main extends StateBasedGame{
 		gc.setVSync(true);
 		gc.setMaximumLogicUpdateInterval(60);
 		
+		model = new World();		
+		
 		this.addState(new Menu());
 		this.addState(new Pause());
-		this.addState(new Talk());
-		this.addState(new GameWindow());
+		this.addState(new Talk(model));
+		this.addState(new GameWindow(model));
 		
 
 		
