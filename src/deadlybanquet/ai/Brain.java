@@ -67,14 +67,14 @@ public class Brain {
                 //Otherwise, give your own opinion.
                 case "Opinion": Opinion inOpinion = (Opinion) t;
                                 //find a previous opinion the you held about this subject
-                                Opinion o = new Opinion(inOpinion.aboutPersonRoomObject, null);
+                                Opinion o = new Opinion(inOpinion.person, null);
                                 SomebodyElse previnfo = new SomebodyElse (o, you, null, 0.0);
                                 foundData = memory.find(previnfo);
                                 acceptUncritically(you,inOpinion);
                                 if (foundData.isEmpty()){
-                                    Opinion response = new Opinion (inOpinion.aboutPersonRoomObject, null);
+                                    Opinion response = new Opinion (inOpinion.person, null);
                                     for (Opinion i : opinions){
-                                        if (i.aboutPersonRoomObject==inOpinion.aboutPersonRoomObject)
+                                        if (i.person==inOpinion.person)
                                             response.pad=i.pad;
                                     }
                                     possibleAnswers.add(response);
@@ -119,11 +119,11 @@ public class Brain {
                 case "Whereabouts": Whereabouts inWhere = (Whereabouts) t;
                                     //Check if I have an idea about where the person is
                                     for (Whereabouts b:whereabouts){
-                                        if (b.whoorwhat==inWhere.whoorwhat)
+                                        if (b.character==inWhere.character)
                                                 foundData.add(b);
                                     }
                                     //Check if I have an idea that somebody else might know
-                                    Whereabouts tofind = new Whereabouts(inWhere.whoorwhat,"",null,0.0);
+                                    Whereabouts tofind = new Whereabouts(inWhere.character,"",null,0.0);
                                     if(foundData.isEmpty()) foundData=memory.find(tofind);
                                     //if I have no idea whatsoever about where the person is
                                     if(foundData.isEmpty()){
@@ -298,6 +298,42 @@ public class Brain {
             }
             selectResponse(possibleAnswers);
         }
+    }
+    
+    private void caseOpinion(){
+    	
+    }
+    
+    private void caseSomebodyElse(){
+    	
+    }
+
+    private void caseBackStory(){
+    	
+    }
+    
+    private void caseWhereabouts(){
+    	
+    }
+    
+    private void caseBeingPolite(){
+    	
+    }
+    
+    private void caseSay(){
+    	
+    }
+    
+    private void caseDo(){
+    	
+    }
+    
+    private void caseEmotionThought(){
+    	
+    }
+    
+    private void caseDesire(){
+    	
     }
     
     public void acceptUncritically(String person, IThought stateofworld){
