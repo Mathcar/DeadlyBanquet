@@ -17,9 +17,6 @@ public class HearExample {
     public HearExample() {
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
     @Test
     public void hello() {
         SpeechAct input = new GreetingPhrase();
@@ -28,6 +25,7 @@ public class HearExample {
         content.add(new Opinion("Bill", new PAD(1,1,1)));
         input.setContent(content);
         Brain npc = makeBrain(null,null,null, null, null, null, "Hell", "Jane");
+        npc.hear(input);
         npc.hear(input);
         content.clear();
         content.add(SNOWEDIN);
