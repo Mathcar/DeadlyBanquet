@@ -11,13 +11,13 @@ either a current feeling or personality (that is, "the emotions somebody
 usually feels" or an average of feelings over a long time period)
 The octants of the unit cube can be labelled as follows:
 (In brackets our own words)
-Exuberant (+P+A+D) 
-Bored (-P-A-D) 
-Dependent (+P+A-D) 
-Disdainful (-P-A+D) 
+Exuberant (i.e. cheerful) (+P+A+D) loves
+Bored (-P-A-D) does not care about
+Dependent (needy)(+P+A-D) i.e. tries to make them do something for him
+Disdainful (-P-A+D) dislikes, finds disagreeable
 Relaxed (+P-A+D) (is friends with, likes)
 Anxious (-P+A-D) (scared of)
-Docile (+P-A-D) 
+Docile (+P-A-D) looks up to/does as they are told
 Hostile (-P+A+D) (hates)
 Mehrabian suggests that Hostile temperament probably being more 
 descriptive of the violent antisocial personality type and 

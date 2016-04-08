@@ -3,11 +3,12 @@ package deadlybanquet.ai;
 /**
  *
  * @author omega
- * //This is the brain of an NPC. It contains information about the NPC which the AI needs
+ * This is the brain of an NPC. It contains information about the NPC which the AI needs
  * to operate on frequently in a more easily accessible form.
  * There should be nothing in this file which could not technically be expressed as a list
  * of IThought objects.
  */
+
 import static deadlybanquet.AI.speak;
 import static deadlybanquet.ai.BeingPolite.*;
 import static deadlybanquet.ai.PAD.placeholderPAD;
@@ -17,10 +18,12 @@ import static deadlybanquet.model.World.getTime;
 import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
-public class Brain {
+public class Brain implements IMemory{
     //Current emotion - may be changed by events.
+    public static double REALCLOSE = 0.5;
+    
     private String me;
-    private Memory memory;
+    private Information memory;
     private PAD emotion = new PAD(0,0,0);
     //Personality. May not change. Emotion object regresses
     //to this in the absence of new stimuli.
@@ -43,7 +46,7 @@ public class Brain {
                     ArrayList<IThought>plan,
                     String currentRoom,
                     String name){
-        memory = new Memory (information);
+        memory = new Information (information);
         if (emotion!=null) this.emotion=emotion;
         if (temperament!=null) this.temperament=temperament;
         if (desires !=null) this.desires = desires;
@@ -65,24 +68,7 @@ public class Brain {
             //A say object for responses
             Say c;
             switch(t.getClass().getSimpleName()){
-                //If you have said something else before, point that out.
-                //Otherwise, give your own opinion.
-                case "Opinion": Opinion inOpinion = (Opinion) t;
-                                //find a previous opinion the you held about this subject
-                                Opinion o = new Opinion(inOpinion.person, null);
-                                SomebodyElse previnfo = new SomebodyElse (o, you, null, 0.0);
-                                foundData = memory.find(previnfo);
-                                acceptUncritically(you,inOpinion);
-                                if (foundData.isEmpty()){
-                                    Opinion response = new Opinion (inOpinion.person, null);
-                                    for (Opinion i : opinions){
-                                        if (i.person==inOpinion.person)
-                                            response.pad=i.pad;
-                                    }
-                                    possibleAnswers.add(response);
-                                } else {
-                                    possibleAnswers.add(foundData.first());
-                                }
+                case "Opinion": possibleAnswers.add(processOpinion((Opinion) t, you));
                                 break;
                     
                 case "SomebodyElse":SomebodyElse inElse = (SomebodyElse) t;
@@ -299,43 +285,32 @@ public class Brain {
         }
     }
     
-    private void caseOpinion(){
-    	
+    private IThought processOpinion(Opinion inOpinion, String you){
+        //find a previous opinion the you held about this subject
+        Opinion old = new Opinion(inOpinion.person, null);
+        SortedSet<IThought> foundData;
+        SomebodyElse previnfo = new SomebodyElse (old, you, null, 0.0);
+        foundData = memory.find(previnfo);
+        acceptUncritically(you,inOpinion);
+        if (foundData.isEmpty()){
+            //the person has not previously mentioned anything about this.
+            Opinion response = new Opinion (inOpinion.person, null);
+            if (inOpinion.person==me){
+                
+            }
+            for (Opinion i : opinions){
+                if (i.person==inOpinion.person)
+                    response.pad=i.pad;
+            }
+            return response;
+        } else {
+            return foundData.first();
+        }
     }
     
-    private void caseSomebodyElse(){
-    	
-    }
-
-    private void caseBackStory(){
-    	
-    }
     
-    private void caseWhereabouts(){
-    	
-    }
     
-    private void caseBeingPolite(){
-    	
-    }
-    
-    private void caseSay(){
-    	
-    }
-    
-    private void caseDo(){
-    	
-    }
-    
-    private void caseEmotionThought(){
-    	
-    }
-    
-    private void caseDesire(){
-    	
-    }
-    
-    public void acceptUncritically(String person, IThought stateofworld){
+    private void acceptUncritically(String person, IThought stateofworld){
         SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, 1.0);
         previnfo.time=getTime();
         SortedSet<IThought> foundData = memory.find(previnfo);
@@ -356,11 +331,7 @@ public class Brain {
         makeSpeechAct(possibleResponses, me);
     }
     
-    public void observeRoomChange(String person, String origin, String destination){    //move to memmory
-//        memory.history.add(new Whereabouts(person, destination, null, 1.0, getTime()));
-//        Time aMomentAgo = getTime();
-//        aMomentAgo.incrementTime(-2);
-//        memory.history.add(new Whereabouts(person, origin, null, 1.0, aMomentAgo));
+    public void observeRoomChange(String person, String origin, String destination){
     }
     
     public void observeInteraction(String who, String with){
@@ -374,18 +345,20 @@ public class Brain {
     public void observePutDown(String who, String what){
         
     }
-    
+
     //Character does some thinking, cooling down, executing plan etc.
     public void update(){
         
     }
+
     //this method creates plans for any goals and puts
     private void plan(){
         
     }
     
-    public void seePeople (String[] people){
-        
+    @Override
+    public void seePeople(ArrayList<String> people) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
    
