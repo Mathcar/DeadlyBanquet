@@ -1,5 +1,6 @@
 package deadlybanquet.speech;
 
+import deadlybanquet.Talkable;
 import deadlybanquet.ai.Brain;
 import deadlybanquet.ai.IThought;
 import deadlybanquet.model.Player;
@@ -25,34 +26,24 @@ public class SpeechActFactory {
         return null;
     }
 
-    private String addWords(String line){
+
+    /*
+    Returns all the words/names/whatever, that needs to be changed or parsed.
+    If the list is empty, no words needs to be parsed and can be directly
+    transmitted to the screen.
+     */
+    private ArrayList<String> wordsToBeParsed(String line){
+        ArrayList<String> temp = new ArrayList<>();
         if(line.contains("#")){
-            String temp = line;
-            //ArrayList<String> list = new ArrayList<>();
-            String list[]=temp.split(" ");
-            for(int i =0;i<list.length;i++){
+            String[] list = line.split(" ");
+            for(int i=0;i<list.length;i++){
                 if(list[i].contains("#")){
-                    if(list[i].equals("#epitet")){
-
-                    }else if(list[i].equals("#person")){
-
-                    }else if(list[i].equals("#location")){
-
-                    }else{
-                        System.err.println("did not recognise the placeholder: "+list[i]);
-                    }
+                    temp.add(list[i]);
                 }
             }
-        String ret="";
-        for(int k = 0;k<list.length-1;k++){
-            ret=ret+list[k]+" ";
-        }
-        ret=ret+list[list.length-1];
-        return ret;
-
+            return temp;
         }else{
-            // the line is good to go.
-            return line;
+            return temp;
         }
     }
 
