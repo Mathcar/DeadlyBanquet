@@ -1,6 +1,11 @@
 package deadlybanquet.speech;
 
+
+import deadlybanquet.Talkable;
+import deadlybanquet.ai.NPCBrain;
 import deadlybanquet.ai.IThought;
+import deadlybanquet.model.Player;
+
 import java.util.ArrayList;
 
 /**
@@ -21,4 +26,27 @@ public class SpeechActFactory {
         }
         return null;
     }
+
+
+    /*
+    Returns all the words/names/whatever, that needs to be changed or parsed.
+    If the list is empty, no words needs to be parsed and can be directly
+    transmitted to the screen.
+     */
+    private ArrayList<String> wordsToBeParsed(String line){
+        ArrayList<String> temp = new ArrayList<>();
+        if(line.contains("#")){
+            String[] list = line.split(" ");
+            for(int i=0;i<list.length;i++){
+                if(list[i].contains("#")){
+                    temp.add(list[i]);
+                }
+            }
+            return temp;
+        }else{
+            return temp;
+        }
+    }
+
+
 }

@@ -19,7 +19,7 @@ public class BrainFactory {
      * @param name - character identifier
      * @return 
      */
-    public static Brain makeBrain(SortedSet<IThought> information, 
+    public static NPCBrain makeBrain(SortedSet<IThought> information, 
                     PAD emotion, 
                     PAD temperament, 
                     ArrayList<Desire>desires,
@@ -41,10 +41,10 @@ public class BrainFactory {
         }
         
        if(name==null) throw new NullPointerException("No name supplied for new NPC.");
-       return new Brain (information, emotion, temperament, desires, goals, plan, room, name);      
+       return new NPCBrain (information, emotion, temperament, desires, goals, plan, room, name);      
     }
 
-    public static Brain makeBrain(String room, String name){
+    public static NPCBrain makeBrain(String room, String name){
         return makeBrain(null,null,null,null,null,null,room,name);
     }
 }

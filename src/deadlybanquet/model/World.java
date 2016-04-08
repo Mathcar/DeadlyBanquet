@@ -13,7 +13,7 @@ import deadlybanquet.ConversationModel;
 import deadlybanquet.RenderSet;
 import deadlybanquet.View;
 import deadlybanquet.ai.AIControler;
-import deadlybanquet.ai.Brain;
+import deadlybanquet.ai.NPCBrain;
 import deadlybanquet.ai.BrainFactory;
 import deadlybanquet.states.States;
 
@@ -29,7 +29,7 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
  * Created by Hampus on 2016-03-04.
  */
 public class World implements ActionListener, TileBasedMap {
-    private static HashMap<AIControler, Brain> controlerBrainMap;
+    private static HashMap<AIControler, NPCBrain> controlerBrainMap;
     private static Time time;
     private Player player;
     private AStarPathFinder masterPathfinder;
@@ -71,9 +71,9 @@ public class World implements ActionListener, TileBasedMap {
     	aiss.add(ai);
     	
 
-        controlerBrainMap = new HashMap<AIControler, Brain>();
+        controlerBrainMap = new HashMap<AIControler, NPCBrain>();
         AIControler	ai = new AIControler(this,npc);
-        Brain brain = BrainFactory.makeBrain("Living Room", npc.getName());
+        NPCBrain brain = BrainFactory.makeBrain("Living Room", npc.getName());
     	aiss = new ArrayList<>();
     	aiss.add(ai);
 

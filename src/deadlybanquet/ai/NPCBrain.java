@@ -3,22 +3,28 @@ package deadlybanquet.ai;
 /**
  *
  * @author omega
- * //This is the brain of an NPC. It contains information about the NPC which the AI needs
+ * This is the brain of an NPC. It contains information about the NPC which the AI needs
  * to operate on frequently in a more easily accessible form.
  * There should be nothing in this file which could not technically be expressed as a list
  * of IThought objects.
  */
+
 import static deadlybanquet.AI.speak;
 import static deadlybanquet.ai.BeingPolite.*;
 import static deadlybanquet.ai.PAD.placeholderPAD;
 import static deadlybanquet.ai.Say.How.*;
+
+import deadlybanquet.Talkable;
 import deadlybanquet.model.Time;
 import static deadlybanquet.model.World.getTime;
 import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
-public class Brain {
+
+public class NPCBrain implements IPerceiver, Talkable {
     //Current emotion - may be changed by events.
+    public static double REALCLOSE = 0.5;
+    
     private String me;
     private Memory memory;
     private PAD emotion = new PAD(0,0,0);
@@ -35,7 +41,7 @@ public class Brain {
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
     
     //this constructor replaces any bad values by defaults.
-    public Brain(   SortedSet<IThought> information, 
+    public NPCBrain(   SortedSet<IThought> information, 
                     PAD emotion, 
                     PAD temperament, 
                     ArrayList<Desire>desires,
@@ -52,10 +58,13 @@ public class Brain {
         me = name;
     }
 
-    public Brain(){}
+    public NPCBrain(){}
     
     //This class evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
+    //THIS METHOD AND ALL PRIVATE METHODS CALLED BY THIS
+    //ARE WRITTEN AND MAINTAINED BY KARIN.
+    //DO NOT MAKE CHANGES WITHOUT EXPRESS PERMISSION.
     public void hear(SpeechAct act){
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
@@ -65,10 +74,9 @@ public class Brain {
             //A say object for responses
             Say c;
             switch(t.getClass().getSimpleName()){
-                //If you have said something else before, point that out.
-                //Otherwise, give your own opinion.
+
                 case "Opinion":
-                	caseOpinion((Opinion)t, you, foundData, possibleAnswers);
+                	possibleAnswers.add(processOpinion((Opinion) t, you));
                     break;
                     
                 case "SomebodyElse":
@@ -169,21 +177,26 @@ public class Brain {
         }
     }
     
-    private void caseOpinion(Opinion inOpinion, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+    private IThought processOpinion(Opinion inOpinion, String you){
         //find a previous opinion the you held about this subject
-        Opinion o = new Opinion(inOpinion.person, null);
-        SomebodyElse previnfo = new SomebodyElse (o, speaker, null, 0.0);
+        Opinion old = new Opinion(inOpinion.person, null);
+        SortedSet<IThought> foundData;
+        SomebodyElse previnfo = new SomebodyElse (old, you, null, 0.0);
         foundData = memory.find(previnfo);
-        acceptUncritically(speaker, inOpinion);
+        acceptUncritically(you,inOpinion);
         if (foundData.isEmpty()){
+            //the person has not previously mentioned anything about this.
             Opinion response = new Opinion (inOpinion.person, null);
+            if (inOpinion.person==me){
+                
+            }
             for (Opinion i : opinions){
                 if (i.person==inOpinion.person)
                     response.pad=i.pad;
             }
-            possibleAnswers.add(response);
+            return response;
         } else {
-            possibleAnswers.add(foundData.first());
+            return foundData.first();
         }
     }
     
@@ -324,19 +337,9 @@ public class Brain {
         }
     }
     
-    private void caseDo(){
-    	
-    }
     
-    private void caseEmotionThought(){
-    	
-    }
     
-    private void caseDesire(){
-    	
-    }
-    
-    public void acceptUncritically(String person, IThought stateofworld){
+    private void acceptUncritically(String person, IThought stateofworld){
         SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, 1.0);
         previnfo.time=getTime();
         SortedSet<IThought> foundData = memory.find(previnfo);
@@ -357,11 +360,7 @@ public class Brain {
         makeSpeechAct(possibleResponses, me);
     }
     
-    public void observeRoomChange(String person, String origin, String destination){    //move to memmory
-//        memory.history.add(new Whereabouts(person, destination, null, 1.0, getTime()));
-//        Time aMomentAgo = getTime();
-//        aMomentAgo.incrementTime(-2);
-//        memory.history.add(new Whereabouts(person, origin, null, 1.0, aMomentAgo));
+    public void observeRoomChange(String person, String origin, String destination){
     }
     
     public void observeInteraction(String who, String with){
@@ -375,18 +374,24 @@ public class Brain {
     public void observePutDown(String who, String what){
         
     }
-    
+
     //Character does some thinking, cooling down, executing plan etc.
     public void update(){
         
     }
+
     //this method creates plans for any goals and puts
     private void plan(){
         
     }
     
-    public void seePeople (String[] people){
-        
+    @Override
+    public void seePeople(ArrayList<String> people) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getName(){
+        return this.me;
     }
     
    
