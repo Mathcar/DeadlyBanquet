@@ -62,6 +62,9 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     //This class evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
+    //THIS METHOD AND ALL PRIVATE METHODS CALLED BY THIS
+    //ARE WRITTEN AND MAINTAINED BY KARIN.
+    //DO NOT MAKE CHANGES WITHOUT EXPRESS PERMISSION.
     public void hear(SpeechAct act){
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
