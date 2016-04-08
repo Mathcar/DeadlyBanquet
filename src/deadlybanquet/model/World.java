@@ -215,8 +215,7 @@ public class World implements ActionListener, TileBasedMap {
                 //Tell the affected rooms to notify all characters so that this can be added
                 //to memory
                 targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
-                originRoom.notifyRoomChange(c.getName(), ce.getOriginRoom(), ce.getTargetRoom());
-                targetRoom.notifyRoomChange(c.getName(), ce.getOriginRoom(), ce.getTargetRoom());
+                notifyRoomChange(originRoom,targetRoom,(Character)e.getSource());
 
 
             }
