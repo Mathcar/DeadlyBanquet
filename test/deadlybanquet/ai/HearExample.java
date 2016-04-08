@@ -24,7 +24,7 @@ public class HearExample {
         ArrayList<IThought> content = new ArrayList<>();
         content.add(new Opinion("Bill", new PAD(1,1,1)));
         input.setContent(content);
-        Brain npc = makeBrain(null,null,null, null, null, null, "Hell", "Jane");
+        NPCBrain npc = makeBrain(null,null,null, null, null, null, "Hell", "Jane");
         npc.hear(input);
         npc.hear(input);
         content.clear();

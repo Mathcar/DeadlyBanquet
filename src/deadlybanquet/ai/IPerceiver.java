@@ -7,7 +7,7 @@ import java.util.ArrayList;
  *
  * @author omega
  */
-public interface IMemory {
+public interface IPerceiver {
 
     //this method accepts a speech act and adds the information to its memory.
     //This method should not evaluate memory as that is the (human) player's or brains job.

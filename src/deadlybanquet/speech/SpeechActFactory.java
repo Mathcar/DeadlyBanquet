@@ -1,6 +1,6 @@
 package deadlybanquet.speech;
 
-import deadlybanquet.ai.Brain;
+import deadlybanquet.ai.NPCBrain;
 import deadlybanquet.ai.IThought;
 import deadlybanquet.model.Player;
 

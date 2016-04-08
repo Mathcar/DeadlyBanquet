@@ -21,12 +21,12 @@ import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
 
-public class Brain implements IMemory, Talkable {
+public class NPCBrain implements IPerceiver, Talkable {
     //Current emotion - may be changed by events.
     public static double REALCLOSE = 0.5;
     
     private String me;
-    private Information memory;
+    private Memory memory;
     private PAD emotion = new PAD(0,0,0);
     //Personality. May not change. Emotion object regresses
     //to this in the absence of new stimuli.
@@ -41,7 +41,7 @@ public class Brain implements IMemory, Talkable {
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
     
     //this constructor replaces any bad values by defaults.
-    public Brain(   SortedSet<IThought> information, 
+    public NPCBrain(   SortedSet<IThought> information, 
                     PAD emotion, 
                     PAD temperament, 
                     ArrayList<Desire>desires,
@@ -49,7 +49,7 @@ public class Brain implements IMemory, Talkable {
                     ArrayList<IThought>plan,
                     String currentRoom,
                     String name){
-        memory = new Information (information);
+        memory = new Memory (information);
         if (emotion!=null) this.emotion=emotion;
         if (temperament!=null) this.temperament=temperament;
         if (desires !=null) this.desires = desires;
@@ -58,7 +58,7 @@ public class Brain implements IMemory, Talkable {
         me = name;
     }
 
-    public Brain(){}
+    public NPCBrain(){}
     
     //This class evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
