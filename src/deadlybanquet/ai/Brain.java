@@ -12,12 +12,14 @@ import static deadlybanquet.AI.speak;
 import static deadlybanquet.ai.BeingPolite.*;
 import static deadlybanquet.ai.PAD.placeholderPAD;
 import static deadlybanquet.ai.Say.How.*;
+
+import deadlybanquet.Talkable;
 import deadlybanquet.model.Time;
 import static deadlybanquet.model.World.getTime;
 import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
-public class Brain {
+public class Brain implements Talkable{
     //Current emotion - may be changed by events.
     private String me;
     private Memory memory;
