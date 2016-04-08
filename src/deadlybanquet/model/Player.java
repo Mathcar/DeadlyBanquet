@@ -3,13 +3,15 @@ package deadlybanquet.model;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import deadlybanquet.Talkable;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
 import deadlybanquet.states.States;
 
-public class Player {
+public class Player implements Talkable {
+
 	
 	private Character character;
 	
@@ -76,6 +78,10 @@ public class Player {
 		}else{
 			return false;
 		}
+	}
+
+	public String getName(){
+		return character.getName();
 	}
 	
 }
