@@ -11,6 +11,8 @@ public class SomebodyElse implements IThought{
     public IThought what;
     //TODO: If you find yourself copy-pasting this more than once, make an abstract superclass
     public String aboutPerson;
+    //Remember that opinion is the opinion of whoever owns the IThought, not that of aboutPerson!
+    //AboutPerson's own opinion can be found inside the what.
     public PAD opinion;
     //TODO restrict to smaller range
     public double howsure;
