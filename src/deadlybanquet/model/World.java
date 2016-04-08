@@ -65,10 +65,10 @@ public class World implements ActionListener, TileBasedMap {
     public void initAIs(){
         //Not really sure in which order these thing are supposed to be initialized, but regardless
         //it should be done in here
-//    	Character npc = new Character(this, "Frido", 9, 5);
-//    	ai = new AIControler(this,npc);
-//    	aiss = new ArrayList<>();
-//    	aiss.add(ai);
+    	Character npc = new Character(this, "Frido", 9, 5);
+    	ai = new AIControler(this,npc);
+    	aiss = new ArrayList<>();
+    	aiss.add(ai);
     	
 
         controlerBrainMap = new HashMap<AIControler, Brain>();

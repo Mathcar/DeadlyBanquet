@@ -67,159 +67,29 @@ public class Brain {
             switch(t.getClass().getSimpleName()){
                 //If you have said something else before, point that out.
                 //Otherwise, give your own opinion.
-                case "Opinion": Opinion inOpinion = (Opinion) t;
-                                //find a previous opinion the you held about this subject
-                                Opinion o = new Opinion(inOpinion.person, null);
-                                SomebodyElse previnfo = new SomebodyElse (o, you, null, 0.0);
-                                foundData = memory.find(previnfo);
-                                acceptUncritically(you,inOpinion);
-                                if (foundData.isEmpty()){
-                                    Opinion response = new Opinion (inOpinion.person, null);
-                                    for (Opinion i : opinions){
-                                        if (i.person==inOpinion.person)
-                                            response.pad=i.pad;
-                                    }
-                                    possibleAnswers.add(response);
-                                } else {
-                                    possibleAnswers.add(foundData.first());
-                                }
-                                break;
+                case "Opinion":
+                	caseOpinion((Opinion)t, you, foundData, possibleAnswers);
+                    break;
                     
-                case "SomebodyElse":SomebodyElse inElse = (SomebodyElse) t;
-                                    if (inElse.aboutPerson==me){
-                                        //IThought response = whatAboutMe(inElse.what);
-                                    }
-                                    else {
-                                        //TODO: what if person is saying x thinks that you...
-                                        //Find your own matching info about this person, if any.
-                                        foundData = memory.find(inElse);
-                                        //If none is found, make polite response.
-                                        if(foundData.isEmpty()){
-                                            c= new Say(me, you, inElse, YESNO, null);
-                                            possibleAnswers.add(c);
-                                            break;
-                                        }
-                                        possibleAnswers.add(foundData.first());
-                                    }
-                                    break;
+                case "SomebodyElse":
+                	caseSomebodyElse((SomebodyElse)t,you, foundData, possibleAnswers);
+                    break;
                     
-                case "BackStory": BackStory inBack = (BackStory) t;
-                                  Say.How a;
-                                  if (memory.find(inBack).isEmpty()) {
-                                      a =YESNO;
-                                      memory.information.add(t);
-                                  }
-                                  else {
-                                      a=AGREE;
-                                  }
-                                  c = new Say(me, you, inBack, a, null);
-                                  possibleAnswers.add(c);
-                                  break;
+                case "BackStory": 
+                	caseBackStory((BackStory)t, you, foundData, possibleAnswers);
+                	break;
                     
-                case "Whereabouts": Whereabouts inWhere = (Whereabouts) t;
-                                    //Check if I have an idea about where the person is
-                                    for (Whereabouts b:whereabouts){
-                                        if (b.character==inWhere.character)
-                                                foundData.add(b);
-                                    }
-                                    //Check if I have an idea that somebody else might know
-                                    Whereabouts tofind = new Whereabouts(inWhere.character,"",null,0.0, null);
-									if(foundData.isEmpty()) foundData=memory.find(tofind);
-                                    //if I have no idea whatsoever about where the person is
-                                    if(foundData.isEmpty()){
-                                        foundData.add(new Say(me, you,inWhere, YESNO,null));
-                                    }
-                                    possibleAnswers.add(foundData.first());
-                                    break;
+                case "Whereabouts":
+                	caseWhereabouts((Whereabouts)t, you, foundData, possibleAnswers);
+                    break;
                     
-                case "BeingPolite": c= new Say(me, you,t,AGREE,null);
-                                    possibleAnswers.add(c);
-                                    break;
+                case "BeingPolite": 
+                	caseBeingPolite(t, you, possibleAnswers);
+                    break;
                 
-                case "Say": Say inSay = (Say) t;
-                            if (inSay.when==null){
-                                //This means that speaker is performing speech act
-                                //by saying it. Can therefore assume that me is recipient
-                                //and speaker is current speaker.
-                                switch (inSay.type){
-                                    case SAY:   //This must obviously be a question
-                                                //since if it were information you would 
-                                                //just give the info instead of saying I hereby inform you that...
-                                                foundData= memory.find(inSay.content);
-                                                if (foundData.isEmpty()){
-                                                    possibleAnswers.add(inSay.content);
-                                                }
-                                                possibleAnswers.add(foundData.first());
-                                                break;
-                             
-                                        
-                                    case AGREE: if(inSay.content instanceof Say){
-                                                    Say h = (Say) inSay.content;
-                                                    //Speaker has acceded to a request we made
-                                                    if (h.type==REQUEST){
-                                                        //content of a request should be either a do or a say object.
-                                                        Time time = getTime();
-                                                        time.incrementTime(60);
-                                                        //TODO maybe add another interface to avoid such code?
-                                                        if(h.content instanceof Say){
-                                                            Say z = (Say) h.content;
-                                                            z.when=time;
-                                                            memory.information.add(z);
-                                                        }
-                                                        if (h.content instanceof Do){
-                                                            Do z = (Do) h.content;
-                                                            z.when=time;
-                                                            memory.information.add(z);
-                                                        }
-                                                    }
-                                                    possibleAnswers.add(THANKS);
-                                                }
-                                                else {
-                                                    acceptUncritically(you, inSay.content);
-                                                }
-                                                break;
-                                        
-                                    case DISAGREE:  if(inSay.content instanceof Say){
-                                                    Say h = (Say) inSay.content;
-                                                    //Speaker has refused to accomodate a request we made
-                                                    if (h.type==REQUEST){
-                                                        //TODO get angry
-                                                    }
-                                                    possibleAnswers.add(THANKSANYWAY);
-                                                }
-                                                else {
-                                                    acceptUncritically(you, inSay.content);
-                                                }
-                                                break;
-                                        
-                                    case YESNO: foundData = memory.find(inSay.content);
-                                                //TODO need to check other relevant registers as well
-                                                if (foundData.isEmpty()){
-                                                    //Say that this is the case
-                                                    possibleAnswers.add(new Say(me, you, inSay.content, DISAGREE, null));
-                                                }
-                                                else {
-                                                    //Say that this is not the case
-                                                    possibleAnswers.add(new Say(me, you, inSay.content, AGREE, null));
-                                                }
-                                                break;
-                                        
-                                    case REQUEST:   //this one is intimately connected
-                                                    //with planning, so leave out until plans are constructed.
-                                                    //Therefore, NPC refuses to do anything for anyone right aMomentAgo.
-                                                    possibleAnswers.add(new Say(me, you, inSay, DISAGREE, null));
-                                                    break;
-                                    default: System.out.println(me + "says: Incoming Say object is making my mind boggle.");
-                                }
-                            }
-                            else {
-                                //In this case, the person is informing me
-                                //that somebody else said something yet another person.
-                                //TODO: Look for relevant information,
-                                //first in history, then in information
-                                possibleAnswers.add(new Say(me, you, inSay, YESNO, null));
-                            }
-                            break;
+                case "Say": 
+                	caseSay((Say)t, you, foundData, possibleAnswers);
+                    break;
                     
                 case "Do":  Do inDo = (Do) t;
                             //Check if I saw this happen
@@ -299,28 +169,159 @@ public class Brain {
         }
     }
     
-    private void caseOpinion(){
-    	
+    private void caseOpinion(Opinion inOpinion, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+        //find a previous opinion the you held about this subject
+        Opinion o = new Opinion(inOpinion.person, null);
+        SomebodyElse previnfo = new SomebodyElse (o, speaker, null, 0.0);
+        foundData = memory.find(previnfo);
+        acceptUncritically(speaker, inOpinion);
+        if (foundData.isEmpty()){
+            Opinion response = new Opinion (inOpinion.person, null);
+            for (Opinion i : opinions){
+                if (i.person==inOpinion.person)
+                    response.pad=i.pad;
+            }
+            possibleAnswers.add(response);
+        } else {
+            possibleAnswers.add(foundData.first());
+        }
     }
     
-    private void caseSomebodyElse(){
-    	
+    private void caseSomebodyElse(SomebodyElse inElse, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+        if (inElse.aboutPerson==me){
+            //IThought response = whatAboutMe(inElse.what);
+        }
+        else {
+            //TODO: what if person is saying x thinks that you...
+            //Find your own matching info about this person, if any.
+            foundData = memory.find(inElse);
+            //If none is found, make polite response.
+            if(foundData.isEmpty()){
+                Say c= new Say(me, speaker, inElse, YESNO, null);
+                possibleAnswers.add(c);
+                return;
+            }
+            possibleAnswers.add(foundData.first());
+        }
     }
 
-    private void caseBackStory(){
-    	
+    private void caseBackStory(BackStory inBack, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+        Say.How a;
+        if (memory.find(inBack).isEmpty()) {
+            a =YESNO;
+            memory.information.add(inBack);
+        }
+        else {
+            a=AGREE;
+        }
+        Say c = new Say(me, speaker, inBack, a, null);
+        possibleAnswers.add(c);
     }
     
-    private void caseWhereabouts(){
-    	
+    private void caseWhereabouts(Whereabouts inWhere, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+        //Check if I have an idea about where the person is
+        for (Whereabouts b:whereabouts){
+            if (b.character==inWhere.character)
+                    foundData.add(b);
+        }
+        //Check if I have an idea that somebody else might know
+        Whereabouts tofind = new Whereabouts(inWhere.character, "",null, 0.0, null);
+		if(foundData.isEmpty()) foundData=memory.find(tofind);
+        //if I have no idea whatsoever about where the person is
+        if(foundData.isEmpty()){
+            foundData.add(new Say(me, speaker, inWhere, YESNO, null));
+        }
+        possibleAnswers.add(foundData.first());
     }
     
-    private void caseBeingPolite(){
-    	
+    private void caseBeingPolite(IThought t, String speaker, ArrayList<IThought> possibleAnswers){
+    	Say c= new Say(me, speaker, t, AGREE, null);
+        possibleAnswers.add(c);
     }
     
-    private void caseSay(){
-    	
+    private void caseSay(Say inSay, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+        if (inSay.when==null){
+            //This means that speaker is performing speech act
+            //by saying it. Can therefore assume that me is recipient
+            //and speaker is current speaker.
+            switch (inSay.type){
+                case SAY:   //This must obviously be a question
+                            //since if it were information you would 
+                            //just give the info instead of saying I hereby inform you that...
+                            foundData= memory.find(inSay.content);
+                            if (foundData.isEmpty()){
+                                possibleAnswers.add(inSay.content);
+                            }
+                            possibleAnswers.add(foundData.first());
+                            break;
+         
+                    
+                case AGREE: if(inSay.content instanceof Say){
+                                Say h = (Say) inSay.content;
+                                //Speaker has acceded to a request we made
+                                if (h.type==REQUEST){
+                                    //content of a request should be either a do or a say object.
+                                    Time time = getTime();
+                                    time.incrementTime(60);
+                                    //TODO maybe add another interface to avoid such code?
+                                    if(h.content instanceof Say){
+                                        Say z = (Say) h.content;
+                                        z.when=time;
+                                        memory.information.add(z);
+                                    }
+                                    if (h.content instanceof Do){
+                                        Do z = (Do) h.content;
+                                        z.when=time;
+                                        memory.information.add(z);
+                                    }
+                                }
+                                possibleAnswers.add(THANKS);
+                            }
+                            else {
+                                acceptUncritically(speaker, inSay.content);
+                            }
+                            break;
+                    
+                case DISAGREE:  if(inSay.content instanceof Say){
+                                Say h = (Say) inSay.content;
+                                //Speaker has refused to accomodate a request we made
+                                if (h.type==REQUEST){
+                                    //TODO get angry
+                                }
+                                possibleAnswers.add(THANKSANYWAY);
+                            }
+                            else {
+                                acceptUncritically(speaker, inSay.content);
+                            }
+                            break;
+                    
+                case YESNO: foundData = memory.find(inSay.content);
+                            //TODO need to check other relevant registers as well
+                            if (foundData.isEmpty()){
+                                //Say that this is the case
+                                possibleAnswers.add(new Say(me, speaker, inSay.content, DISAGREE, null));
+                            }
+                            else {
+                                //Say that this is not the case
+                                possibleAnswers.add(new Say(me, speaker, inSay.content, AGREE, null));
+                            }
+                            break;
+                    
+                case REQUEST:   //this one is intimately connected
+                                //with planning, so leave out until plans are constructed.
+                                //Therefore, NPC refuses to do anything for anyone right aMomentAgo.
+                                possibleAnswers.add(new Say(me, speaker, inSay, DISAGREE, null));
+                                break;
+                default: System.out.println(me + "says: Incoming Say object is making my mind boggle.");
+            }
+        }
+        else {
+            //In this case, the person is informing me
+            //that somebody else said something yet another person.
+            //TODO: Look for relevant information,
+            //first in history, then in information
+            possibleAnswers.add(new Say(me, speaker, inSay, YESNO, null));
+        }
     }
     
     private void caseDo(){
