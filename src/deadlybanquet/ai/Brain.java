@@ -388,6 +388,10 @@ public class Brain {
     public void seePeople (String[] people){
         
     }
+
+    public String getName(){
+        return this.me;
+    }
     
    
 }
