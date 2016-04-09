@@ -1,5 +1,8 @@
 package deadlybanquet.speech;
 
+
+import deadlybanquet.Talkable;
+import deadlybanquet.ai.IPerceiver;
 import deadlybanquet.ai.NPCBrain;
 import deadlybanquet.ai.IThought;
 import deadlybanquet.model.Player;
@@ -25,34 +28,78 @@ public class SpeechActFactory {
         return null;
     }
 
-    private String addWords(String line){
+    IPerceiver A;
+    IPerceiver B;
+
+    SpeechAct lastThingSaid;
+
+    IPerceiver talkingRightNow;
+
+    public SpeechActFactory(IPerceiver A, IPerceiver B){
+        this.A=A;
+        this.B=B;
+    }
+
+    public SpeechAct2 generateSpeechAct(IPerceiver talker, ArrayList<IThought> listOfIThought){
+        this.talkingRightNow=talker;
+        SpeechAct2 temp;
+        //blabla generate a speechAct her
+        temp = new SpeechAct2("hello there #name");
+        //now parse the SpeechAct
+        String line=temp.getLine();
+        if(wordsToBeParsed(line)!=null){
+            line=lineParser(line,wordsToBeParsed(line));
+        }
+        temp.setLine(line);
+        return temp;
+    }
+
+
+    private String lineParser(String line,String word){
+        String temp="ERROR VALUE";
+        switch(word){
+            case "#name":   temp=caseName(line);
+                            break;
+            case "#person": temp=casePerson(line);
+                            break;
+            case "#location":temp=caseLocation(line);
+                            break;
+            default:        System.err.println("Error in SpeechActFactory, could not recognize the placeholder String");
+                            break;
+        }
+        return temp;
+    }
+
+    private String caseName(String line){
+        //talkingRightNow
+        return "NameNotImplemented";
+    }
+
+    private String caseLocation(String line){
+        return "LocationNotImplemented";
+    }
+
+    private String casePerson(String line){
+        return "PersonNameNotImplemented";
+    }
+
+
+    /*
+    Returns the word that are needed to be parsed, it there is no word that are needed
+    return NULL OBS!!! probably change this later.
+     */
+    private String wordsToBeParsed(String line){
+        String temp = "";
         if(line.contains("#")){
-            String temp = line;
-            //ArrayList<String> list = new ArrayList<>();
-            String list[]=temp.split(" ");
-            for(int i =0;i<list.length;i++){
+            String[] list = line.split(" ");
+            for(int i=0;i<list.length;i++){
                 if(list[i].contains("#")){
-                    if(list[i].equals("#epitet")){
-
-                    }else if(list[i].equals("#person")){
-
-                    }else if(list[i].equals("#location")){
-
-                    }else{
-                        System.err.println("did not recognise the placeholder: "+list[i]);
-                    }
+                    temp=list[i];
                 }
             }
-        String ret="";
-        for(int k = 0;k<list.length-1;k++){
-            ret=ret+list[k]+" ";
-        }
-        ret=ret+list[list.length-1];
-        return ret;
-
+            return temp;
         }else{
-            // the line is good to go.
-            return line;
+            return null;
         }
     }
 

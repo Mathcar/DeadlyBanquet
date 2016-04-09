@@ -28,5 +28,9 @@ public interface IPerceiver {
 
     //called on entering a room
     void seePeople(ArrayList<String> people);
+
+    //Memory getMemory(); //todo please add this.
+
+    //String getName(); //todo please add this.
     
 }
