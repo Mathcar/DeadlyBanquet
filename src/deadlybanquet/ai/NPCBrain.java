@@ -37,6 +37,9 @@ public class NPCBrain implements IPerceiver, Talkable {
     private ArrayList<Desire> goals = new ArrayList<>();
     //This uses plan elements rather than actions in order to facilitate reevaluation of the plan.
     private ArrayList<IThought> plan = new ArrayList<>();
+    //Program should guarantee that anybody who has been met or heard about is in
+    //this list of opinions.
+    //TODO this should include an opinion about oneself
     private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
     
@@ -178,6 +181,17 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     private IThought processOpinion(Opinion inOpinion, String you){
+        //I.e if this is the question "What do you think about X?"
+        if (inOpinion.pad.isPlaceholder()){
+            PAD ansPAD=null;
+            for (Opinion o : opinions){
+                if (o.person==inOpinion.person)
+                    ansPAD = o.getPAD();
+            }
+            //if ansPad==null, then this means that I have not heard of this person.
+            //I.e. who is inOpinion.person?
+            return new Opinion(inOpinion.person, ansPAD);
+        }
         //find a previous opinion the you held about this subject
         Opinion old = new Opinion(inOpinion.person, null);
         SortedSet<IThought> foundData;
@@ -187,8 +201,9 @@ public class NPCBrain implements IPerceiver, Talkable {
         if (foundData.isEmpty()){
             //the person has not previously mentioned anything about this.
             Opinion response = new Opinion (inOpinion.person, null);
+            
             if (inOpinion.person==me){
-                
+                //Change mood and my opinion of speaker, possibly.
             }
             for (Opinion i : opinions){
                 if (i.person==inOpinion.person)

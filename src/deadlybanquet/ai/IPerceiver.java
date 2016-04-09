@@ -9,8 +9,7 @@ import java.util.ArrayList;
  */
 public interface IPerceiver {
 
-    //this method accepts a speech act and adds the information to its memory.
-    //This method should not evaluate memory as that is the (human) player's or brains job.
+    //This method responds to a speech act, returning an appropriate reply.
     void hear(SpeechAct act);
 
     //Called on every person in the room when somebody strikes up a conversation with somebody

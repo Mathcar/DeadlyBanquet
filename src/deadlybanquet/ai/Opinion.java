@@ -8,6 +8,7 @@ import deadlybanquet.model.Time;
  */
 public class Opinion implements IThought{
     public String person;
+    //With a placeholder pad, this becomes the question: What do you think about person?
     public PAD pad;
     //The time when this opinion first became current.
     public Time time;
