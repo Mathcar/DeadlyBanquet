@@ -8,6 +8,11 @@ import deadlybanquet.model.Time;
  */
 public class Desire implements IThought{
 
+    @Override
+    public double getCertainty() {
+        return strength;
+    }
+
     public enum dg {
         DESIRE, GOAL, DGPLACEHOLDER;
     }

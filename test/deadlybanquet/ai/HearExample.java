@@ -7,27 +7,36 @@ import deadlybanquet.speech.SpeechAct;
 import java.util.ArrayList;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 
 /**
  *
  * @author omega
  */
 public class HearExample {
-    
+    SpeechAct input;
+    ArrayList<IThought> content;
+    NPCBrain npc;
     public HearExample() {
     }
 
-    @Test
-    public void hello() {
-        SpeechAct input = new GreetingPhrase();
-        
-        ArrayList<IThought> content = new ArrayList<>();
-        content.add(new Opinion("Bill", new PAD(1,1,1)));
+    @Before
+    public void setUp(){
+        input = new GreetingPhrase();
+        content = new ArrayList<>();
         input.setContent(content);
-        NPCBrain npc = makeBrain(null,null,null, null, null, null, "Hell", "Jane");
+        input.setSpeaker("Bill");
+        npc = makeBrain("Hell", "Jane");
+    }
+    @Test
+    public void testOpinion() {
+        content.add(new Opinion("Charley", new PAD(1,1,1)));
         npc.hear(input);
         npc.hear(input);
-        content.clear();
+    }
+    
+    @Test
+    public void testBackStory(){
         content.add(SNOWEDIN);
         npc.hear(input);
         npc.hear(input);

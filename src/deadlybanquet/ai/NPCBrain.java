@@ -24,6 +24,7 @@ import java.util.*;
 public class NPCBrain implements IPerceiver, Talkable {
     //Current emotion - may be changed by events.
     public static double REALCLOSE = 0.5;
+    public static double NORMALMODIFIER = 0.3;
     
     private String me;
     private Memory memory;
@@ -61,7 +62,26 @@ public class NPCBrain implements IPerceiver, Talkable {
         me = name;
     }
 
-    public NPCBrain(){}
+    public Opinion getOpinionAbout(String who){
+        Opinion result=null;
+        for (Opinion i: opinions){
+            if (i.person==who)
+                result=i;
+        }
+        return result;
+    }
+    
+    //If this does not find an opinion about person,
+    //creates a neutral one.
+    public void makeEmptyOpinion(String about){
+        PAD pad = null;
+        for (Opinion i:opinions){
+            if(i.person==about)
+                pad=i.getPAD();
+        }
+        if (pad==null)
+            opinions.add(new Opinion(about, new PAD(0,0,0)));
+    }
     
     //This class evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
@@ -72,6 +92,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         String you = act.getSpeaker();
+        makeEmptyOpinion(you);
         for (IThought t : content){
             SortedSet<IThought> foundData = new TreeSet<>(); 
             //A say object for responses
@@ -79,10 +100,11 @@ public class NPCBrain implements IPerceiver, Talkable {
             switch(t.getClass().getSimpleName()){
 
                 case "Opinion":
-                	possibleAnswers.add(processOpinion((Opinion) t, you));
+                	processOpinion((Opinion) t, you, possibleAnswers);
                     break;
                     
                 case "SomebodyElse":
+                    //TODO
                 	caseSomebodyElse((SomebodyElse)t,you, foundData, possibleAnswers);
                     break;
                     
@@ -180,7 +202,11 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
     }
     
-    private IThought processOpinion(Opinion inOpinion, String you){
+    private void processOpinion(Opinion inOpinion, String you, ArrayList<IThought> ans){
+        //Now we have heard of this person
+        if(getOpinionAbout(inOpinion.person)==null){
+            opinions.add(new Opinion (inOpinion.person, new PAD(0,0,0)));
+        }
         //I.e if this is the question "What do you think about X?"
         if (inOpinion.pad.isPlaceholder()){
             PAD ansPAD=null;
@@ -188,9 +214,8 @@ public class NPCBrain implements IPerceiver, Talkable {
                 if (o.person==inOpinion.person)
                     ansPAD = o.getPAD();
             }
-            //if ansPad==null, then this means that I have not heard of this person.
-            //I.e. who is inOpinion.person?
-            return new Opinion(inOpinion.person, ansPAD);
+            ans.add(new Opinion(inOpinion.person, ansPAD));
+            return;
         }
         //find a previous opinion the you held about this subject
         Opinion old = new Opinion(inOpinion.person, null);
@@ -198,20 +223,46 @@ public class NPCBrain implements IPerceiver, Talkable {
         SomebodyElse previnfo = new SomebodyElse (old, you, null, 0.0);
         foundData = memory.find(previnfo);
         acceptUncritically(you,inOpinion);
+        PAD inPad=inOpinion.getPAD();
+        if (inOpinion.person==me){
+           opinionAboutMe(inOpinion.getPAD(), you, 1.0);
+           Opinion opyou = getOpinionAbout(you);
+           //If opinion is negative and you are dependent on that person and what they say makes
+           //you unhappy, then say so.
+           if (inPad.getP()<0&&
+                   opyou.pad.getP()>0&&
+                   opyou.pad.getA()>0&&
+                   opyou.pad.getD()<0&&
+                   emotion.getP()<0)
+                ans.add(new EmotionThought(EmotionThought.et.EMOTION, 
+                                       new PAD(emotion.getP(), emotion.getA(), emotion.getD())));
+           else ans.add(THANKS);
+           return;
+        }
         if (foundData.isEmpty()){
-            //the person has not previously mentioned anything about this.
-            Opinion response = new Opinion (inOpinion.person, null);
-            
-            if (inOpinion.person==me){
-                //Change mood and my opinion of speaker, possibly.
-            }
-            for (Opinion i : opinions){
-                if (i.person==inOpinion.person)
-                    response.pad=i.pad;
-            }
-            return response;
+            Opinion mine = getOpinionAbout(inOpinion.person);
+            ans.add(new Opinion(mine.person, mine.pad));
         } else {
-            return foundData.first();
+            ans.add(foundData.first());
+        }
+    }
+    
+    //Completely unscientific and mostly random reaction to somebody having an opinion about you.
+    private void opinionAboutMe(PAD opinion, String you, double howimportant){
+        double d= opinion.getD();
+        double p = opinion.getP();
+        if (d<0){
+            //If speaker is feeling not dominant towards you, you feel more dominant.
+            getOpinionAbout(me).pad.translateD(howimportant*NORMALMODIFIER*-d);
+            getOpinionAbout(you).pad.translateD(howimportant*NORMALMODIFIER*-d);
+            emotion.translateD(howimportant*NORMALMODIFIER*-d);
+        }
+        else{
+            //+P+D signifies liking or love, so dominance rises.
+            //-P+D means dislike or hostility, so dominance goes down.
+            getOpinionAbout(me).pad.translateD(howimportant*NORMALMODIFIER*p);
+            getOpinionAbout(you).pad.translateD(howimportant*NORMALMODIFIER*p);
+            emotion.translateD(howimportant*NORMALMODIFIER*p);
         }
     }
     

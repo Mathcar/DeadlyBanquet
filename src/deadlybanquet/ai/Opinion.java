@@ -42,4 +42,9 @@ public class Opinion implements IThought{
     public PAD getPAD(){
     	return this.pad;
     }
+
+    @Override
+    public double getCertainty() {
+        return 1;
+    }
 }

@@ -19,6 +19,11 @@ public class Do implements IThought{
         if (withWhat=="") withWhat=null;
         if (when.getDay()<0) when=null;
     }
+
+    @Override
+    public double getCertainty() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public enum What{
         MOVETO,

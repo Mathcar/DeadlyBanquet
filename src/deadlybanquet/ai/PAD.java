@@ -14,7 +14,7 @@ import static java.lang.Math.*;
  * (+P+A+D)	Exuberant		 	loves			cheerful
  * (-P-A-D) 	Bored				not interested in	bored
  * (+P+A-D) 	Dependent (needy)		relies on		wants somebody to rely on
- * (-P-A+D) 	Disdainful 			finds below notice	scornful	
+ * (-P-A+D) 	Disdainful 			dislikes        	scornful	
  * (+P-A+D) 	Relaxed 			likes			relaxed
  * (-P+A-D) 	Anxious 			scared of		anxious
  * (+P-A-D) 	Docile 				wants to obey		cooperative
@@ -112,5 +112,23 @@ public class PAD {
     @Override
     public String toString(){
         return "P=" + P + ", A="+ A + ", D=" + D;
+    }
+    
+    public void translateP(double howmuch){
+        P+=howmuch;
+        if(P>1) P = 1;
+        if(P<1) P = -1;
+    }
+    
+    public void translateA(double howmuch){
+        A+=howmuch;
+        if(A>1) A = 1;
+        if(A<1) A = -1;
+    }
+    
+    public void translateD(double howmuch){
+        D+=howmuch;
+        if(D>1) D = 1;
+        if(D<1) D = -1;
     }
 }

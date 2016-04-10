@@ -17,9 +17,18 @@ public class EmotionThought implements IThought{
         return (d.emotionortemperament==et.ETPLACEHOLDER||d.emotionortemperament==emotionortemperament);
     }
 
+    public EmotionThought(et e, PAD p){
+        emotionortemperament=e;
+        pad=p;
+    }
     @Override
     public void setPlaceHolderToNull() {
         if (pad.getP()<-1) pad=null;
+    }
+
+    @Override
+    public double getCertainty() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     public enum et {
         EMOTION, TEMPERAMENT, ETPLACEHOLDER;

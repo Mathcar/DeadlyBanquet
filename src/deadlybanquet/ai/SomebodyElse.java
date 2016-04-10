@@ -7,7 +7,7 @@ import deadlybanquet.model.Time;
  * Opinion is my opinion, not that of aboutPerson
  * @author omega
  */
-public class SomebodyElse implements IThought{
+public class SomebodyElse implements IThought, Comparable<IThought>{
     public IThought what;
     //TODO: If you find yourself copy-pasting this more than once, make an abstract superclass
     public String aboutPerson;
@@ -46,5 +46,14 @@ public class SomebodyElse implements IThought{
         what.setPlaceHolderToNull();
         if (aboutPerson=="") aboutPerson=null;
         if (opinion.isPlaceholder()) opinion=null;
+    }
+
+    @Override
+    public double getCertainty() {
+        return howsure;
+    }
+    
+    public int compareTo(IThought i){
+        return 1;
     }
 }

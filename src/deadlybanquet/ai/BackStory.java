@@ -23,4 +23,9 @@ public enum BackStory implements IThought{
     public void setPlaceHolderToNull() {
         //No placeholders here
     }
+
+    @Override
+    public double getCertainty() {
+        return 1;
+    }
 }

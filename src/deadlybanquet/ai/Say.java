@@ -15,6 +15,11 @@ public class Say implements IThought{
         content.setPlaceHolderToNull();
         if (when.getDay()<0) when=null;
     }
+
+    @Override
+    public double getCertainty() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     public enum How {
         SAY, //with placeholder:ask
         AGREE, //information being agreed with gets sent along
