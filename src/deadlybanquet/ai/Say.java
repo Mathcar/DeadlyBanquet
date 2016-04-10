@@ -20,6 +20,11 @@ public class Say implements IThought{
     public double getCertainty() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public boolean isQuestion() {
+        return speaker=="" || hearer=="" || content.isQuestion() || when.isPlaceHolder();
+    }
     public enum How {
         SAY, //with placeholder:ask
         AGREE, //information being agreed with gets sent along

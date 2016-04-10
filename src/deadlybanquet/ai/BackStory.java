@@ -28,4 +28,9 @@ public enum BackStory implements IThought{
     public double getCertainty() {
         return 1;
     }
+
+    @Override
+    public boolean isQuestion() {
+        return false;
+    }
 }

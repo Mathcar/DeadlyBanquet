@@ -36,7 +36,7 @@ public class Opinion implements IThought{
 
     @Override
     public void setPlaceHolderToNull() {
-        if (pad.getP()<-1) pad=null;
+        if (pad.isPlaceholder()) pad=null;
     }
     
     public PAD getPAD(){
@@ -46,5 +46,10 @@ public class Opinion implements IThought{
     @Override
     public double getCertainty() {
         return 1;
+    }
+
+    @Override
+    public boolean isQuestion() {
+        return pad.isPlaceholder();
     }
 }

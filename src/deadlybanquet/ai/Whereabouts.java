@@ -49,4 +49,9 @@ public class Whereabouts implements IThought{
     public double getCertainty() {
         return certainty;
     }
+
+    @Override
+    public boolean isQuestion() {
+        return room=="" || character=="";
+    }
 }

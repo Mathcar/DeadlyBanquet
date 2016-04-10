@@ -24,6 +24,11 @@ public class Do implements IThought{
     public double getCertainty() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public boolean isQuestion() {
+        return doer=="" || withWhat=="" || when.getDay()<0;
+    }
     
     public enum What{
         MOVETO,

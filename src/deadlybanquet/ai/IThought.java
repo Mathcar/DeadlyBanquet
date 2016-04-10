@@ -26,4 +26,6 @@ public interface IThought{
     public void setPlaceHolderToNull();
     
     public double getCertainty();
+    
+    public boolean isQuestion();
 }

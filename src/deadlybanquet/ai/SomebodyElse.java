@@ -56,4 +56,9 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
     public int compareTo(IThought i){
         return 1;
     }
+
+    @Override
+    public boolean isQuestion() {
+        return what.isQuestion() || aboutPerson=="" || opinion.isPlaceholder();
+    }
 }

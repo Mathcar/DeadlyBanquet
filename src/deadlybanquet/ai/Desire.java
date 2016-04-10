@@ -13,6 +13,11 @@ public class Desire implements IThought{
         return strength;
     }
 
+    @Override
+    public boolean isQuestion() {
+        return desireorgoal==dg.DGPLACEHOLDER || what.isQuestion();
+    }
+
     public enum dg {
         DESIRE, GOAL, DGPLACEHOLDER;
     }

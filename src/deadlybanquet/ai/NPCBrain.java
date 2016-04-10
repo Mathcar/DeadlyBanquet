@@ -109,11 +109,11 @@ public class NPCBrain implements IPerceiver, Talkable {
                     break;
                     
                 case "BackStory": 
-                	caseBackStory((BackStory)t, you, foundData, possibleAnswers);
+                	caseBackStory((BackStory)t, you, possibleAnswers);
                 	break;
                     
                 case "Whereabouts":
-                	caseWhereabouts((Whereabouts)t, you, foundData, possibleAnswers);
+                	caseWhereabouts((Whereabouts)t, you, possibleAnswers);
                     break;
                     
                 case "BeingPolite": 
@@ -284,7 +284,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
     }
 
-    private void caseBackStory(BackStory inBack, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+    private void caseBackStory(BackStory inBack, String speaker, ArrayList<IThought> possibleAnswers){
         Say.How a;
         if (memory.find(inBack).isEmpty()) {
             a =YESNO;
@@ -297,8 +297,9 @@ public class NPCBrain implements IPerceiver, Talkable {
         possibleAnswers.add(c);
     }
     
-    private void caseWhereabouts(Whereabouts inWhere, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+    private void caseWhereabouts(Whereabouts inWhere, String speaker, ArrayList<IThought> possibleAnswers){
         //Check if I have an idea about where the person is
+        SortedSet<IThought> foundData = new TreeSet<>();
         for (Whereabouts b:whereabouts){
             if (b.character==inWhere.character)
                     foundData.add(b);
