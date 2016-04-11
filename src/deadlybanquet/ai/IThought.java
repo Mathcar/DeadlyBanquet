@@ -9,7 +9,7 @@ package deadlybanquet.ai;
  * possible to express using an IThought.
  * @author omega
  */
-public interface IThought{
+public interface IThought extends Comparable<IThought> {
     /**
      * 
      * @param i - IThought with the information to match on. Contains placeholder in places

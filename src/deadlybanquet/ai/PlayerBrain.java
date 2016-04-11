@@ -10,7 +10,7 @@ import java.util.*;
 public class PlayerBrain implements IPerceiver {
     Memory information;
     
-    public PlayerBrain(SortedSet<IThought> s){
+    public PlayerBrain(SortedList<IThought> s){
         information = new Memory(s);
     }
     
@@ -20,7 +20,7 @@ public class PlayerBrain implements IPerceiver {
     public void hear(SpeechAct act){
     	for(IThought i: act.getContent()){
     		Opinion compOpinion = new Opinion(act.getSpeaker(), new PAD(0,0,0));
-    		SortedSet<IThought> tempSet = information.find(compOpinion);
+    		SortedList<IThought> tempSet = information.find(compOpinion);
     		
     		if(tempSet.size()==0){//if the characters hven't met before
     			information.add(compOpinion);

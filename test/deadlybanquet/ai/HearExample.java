@@ -41,4 +41,11 @@ public class HearExample {
         npc.hear(input);
         npc.hear(input);
     }
+    
+    @Test
+    public void testWhereabouts(){
+        content.add(new Whereabouts("Jane", ""));
+        npc.hear(input);
+        npc.hear(input);
+    }
 }
