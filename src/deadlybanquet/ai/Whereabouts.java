@@ -18,9 +18,7 @@ public class Whereabouts implements IThought{
     public Whereabouts (String character, String room){
         this(character,room,null,1.0,null);
     }
-    
-    
-    
+      
     public Whereabouts(String character, String room, PAD o, double cert,  Time time){
         this.character=character;
         this.room=room;
@@ -36,12 +34,11 @@ public class Whereabouts implements IThought{
     
     @Override
     public boolean contains(IThought i) {
-        //Wrong type of information
-        if(i==null) throw new NullPointerException();
+        if(i==null) return true;
         if(!this.getClass().equals(i.getClass())) return false;
         Whereabouts d = (Whereabouts) i;
         if (d.room!=""&&d.room!=room) return false;
-        return !(d.character!=""&&d.character!=character);
+        return (d.character==""||d.character==character);
     }
 
     @Override

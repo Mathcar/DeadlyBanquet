@@ -11,10 +11,10 @@ package deadlybanquet.ai;
  */
 public enum BackStory implements IThought{
     SNOWEDIN, NOMOBILESIGNAL;
-    //NOTE: DOTDOTDOT is gone; it just struck me that a SpeechAct with an empty content 
-    //list will do exactly the same thing.
+    
     @Override
     public boolean contains(IThought i) {
+        if(i==null) return true;
         if(!this.getClass().equals(i.getClass())) return false;
         return this==i;
     }
@@ -35,7 +35,9 @@ public enum BackStory implements IThought{
     }
 
     @Override
-    public int compareTo(IThought i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int compareTo(IThought o) {
+        if (getCertainty()<o.getCertainty()) return -1;
+        else if (getCertainty()==o.getCertainty()) return 0;
+        return 1;
     }
 }

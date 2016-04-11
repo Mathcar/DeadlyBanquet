@@ -7,33 +7,6 @@ import deadlybanquet.model.Time;
  * @author omega
  */
 public class Do implements IThought{
-
-    @Override
-    public boolean contains(IThought i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void setPlaceHolderToNull() {
-        if (doer=="") doer=null;
-        if (withWhat=="") withWhat=null;
-        if (when.getDay()<0) when=null;
-    }
-
-    @Override
-    public double getCertainty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean isQuestion() {
-        return doer=="" || withWhat=="" || when.getDay()<0;
-    }
-
-    @Override
-    public int compareTo(IThought i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
     public enum What{
         MOVETO,
@@ -54,5 +27,39 @@ public class Do implements IThought{
         this.doer=doer;
         this.when=time;
         this.withWhat=to;
+    }
+    
+    @Override
+    public boolean contains(IThought i) {
+        if(i==null) return true;
+        if(!this.getClass().equals(i.getClass())) return false;
+        Do d = (Do) i;
+        if (d.doer!="" && d.doer!=this.doer) return false;
+        if (d.withWhat!="" && d.withWhat!=this.withWhat) return false;
+        return true;
+    }
+
+    @Override
+    public void setPlaceHolderToNull() {
+        if (doer=="") doer=null;
+        if (withWhat=="") withWhat=null;
+        if (when.isPlaceHolder()) when=null;
+    }
+
+    @Override
+    public double getCertainty() {
+        return 1;
+    }
+
+    @Override
+    public boolean isQuestion() {
+        return doer=="" || withWhat=="" || when.getDay()<0;
+    }
+
+    @Override
+    public int compareTo(IThought o) {
+        if (getCertainty()<o.getCertainty()) return -1;
+        else if (getCertainty()==o.getCertainty()) return 0;
+        return 1;
     }
 }

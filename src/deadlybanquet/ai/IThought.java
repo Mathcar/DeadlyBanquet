@@ -16,6 +16,7 @@ public interface IThought{
      * where one is looking for any value. Null values are matched exactly. The exception are things
      * of type IThought where the placeholder is currently null. It is not possible to match on
      * values of type double, since there would be no particular point to this.
+     * This also implies that it is not possible to search for particular PADs.
      * @return whether the IThought contains the desired information
      */
     public boolean contains(IThought i);
@@ -29,5 +30,12 @@ public interface IThought{
     
     public boolean isQuestion();
     
+    /**
+     * 
+     * Compares this object with the specified object for order. 
+     * @Return a negative integer, zero, or a positive integer as this object is less than, 
+     * equal to, or greater than the specified object.
+     * Note that this implementation has no relationship with the equals method.
+     */
     public int compareTo(IThought i);
 }

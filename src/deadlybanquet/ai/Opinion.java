@@ -27,8 +27,7 @@ public class Opinion implements IThought{
      * It is not possible to find opinions with a particular emotional value.
      */
     public boolean contains(IThought i) {
-        //Wrong type of information
-        if(i==null) throw new NullPointerException();
+        if(i==null) return true;
         if(!this.getClass().equals(i.getClass())) return false;
         Opinion d = (Opinion) i;
         return person==d.person;
@@ -54,7 +53,9 @@ public class Opinion implements IThought{
     }
 
     @Override
-    public int compareTo(IThought i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int compareTo(IThought o) {
+        if (getCertainty()<o.getCertainty()) return -1;
+        else if (getCertainty()==o.getCertainty()) return 0;
+        return 1;
     }
 }

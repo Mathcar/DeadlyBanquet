@@ -1,5 +1,6 @@
 package deadlybanquet.ai;
 
+import static deadlybanquet.ai.BackStory.SNOWEDIN;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.junit.Test;
@@ -24,6 +25,11 @@ public class IThoughtTest {
         tree.add(new Whereabouts("April", "Kitchen", null, 0.5, null));
         for (IThought i:tree)
             System.out.println(i);
+    }
+    
+    @Test
+    public void nonsenseTest(){
+        SNOWEDIN.contains(null);
     }
     
 }

@@ -8,21 +8,6 @@ import deadlybanquet.model.Time;
  */
 public class Desire implements IThought{
 
-    @Override
-    public double getCertainty() {
-        return strength;
-    }
-
-    @Override
-    public boolean isQuestion() {
-        return desireorgoal==dg.DGPLACEHOLDER || what.isQuestion();
-    }
-
-    @Override
-    public int compareTo(IThought i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public enum dg {
         DESIRE, GOAL, DGPLACEHOLDER;
     }
@@ -52,8 +37,8 @@ public class Desire implements IThought{
     @Override
     //It is not possible to get a match on strength.
     public boolean contains(IThought i) {
-        //Wrong type of information
-        if(i==null) throw new NullPointerException();
+        if(i==null) return true;
+        //The following line already throws a NullPointerException; no need to throw one explicitly.
         if(!this.getClass().equals(i.getClass())) return false;
         Desire d = (Desire) i;
         //Desire-goal mismatch
@@ -71,10 +56,25 @@ public class Desire implements IThought{
         if (desireorgoal==dg.DGPLACEHOLDER) desireorgoal=null;
     }
     
-    
-    
     @Override
     public String toString(){
         return desireorgoal + ": " + what + " with strength " + strength;
+    }
+    
+    @Override
+    public double getCertainty() {
+        return strength;
+    }
+
+    @Override
+    public boolean isQuestion() {
+        return desireorgoal==dg.DGPLACEHOLDER || what.isQuestion();
+    }
+
+    @Override
+    public int compareTo(IThought o) {
+        if (getCertainty()<o.getCertainty()) return -1;
+        else if (getCertainty()==o.getCertainty()) return 0;
+        return 1;
     }
 }

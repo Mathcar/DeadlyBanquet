@@ -7,11 +7,25 @@ import deadlybanquet.model.Time;
  * @author omega
  */
 public class EmotionThought implements IThought{
-
+    
+    public enum et {
+        EMOTION, TEMPERAMENT, ETPLACEHOLDER;
+    }
+    public et emotionortemperament;
+    
+    public PAD pad;
+    
+    public Time time;
+    public EmotionThought previous;
+    
+    @Override
+    public String toString(){
+        return emotionortemperament + " with value " + pad;
+    }
+    
     @Override
     public boolean contains(IThought i) {
-        //Wrong type of information
-        if(i==null) throw new NullPointerException();
+        if(i==null) return true;
         if(!this.getClass().equals(i.getClass())) return false;
         EmotionThought d = (EmotionThought) i;
         return (d.emotionortemperament==et.ETPLACEHOLDER||d.emotionortemperament==emotionortemperament);
@@ -28,7 +42,7 @@ public class EmotionThought implements IThought{
 
     @Override
     public double getCertainty() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 1;
     }
 
     @Override
@@ -37,21 +51,9 @@ public class EmotionThought implements IThought{
     }
 
     @Override
-    public int compareTo(IThought i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    public enum et {
-        EMOTION, TEMPERAMENT, ETPLACEHOLDER;
-    }
-    public et emotionortemperament;
-    
-    public PAD pad;
-    
-    public Time time;
-    public EmotionThought previous;
-    
-    @Override
-    public String toString(){
-        return emotionortemperament + " with value " + pad;
+    public int compareTo(IThought o) {
+        if (getCertainty()<o.getCertainty()) return -1;
+        else if (getCertainty()==o.getCertainty()) return 0;
+        return 1;
     }
 }

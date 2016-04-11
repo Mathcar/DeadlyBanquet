@@ -18,6 +18,7 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
     public double howsure;
     public Time time;
     public SomebodyElse previous;
+    
     public SomebodyElse(IThought w, String a, PAD o, double h){
         what=w;
         aboutPerson =a;
@@ -33,11 +34,11 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
     
     @Override
     public boolean contains(IThought i) {
-        //Wrong type of information
-        if(i==null) throw new NullPointerException();
+        if(i==null) return true;
         if(!this.getClass().equals(i.getClass())) return false;
         SomebodyElse d = (SomebodyElse) i;
         if (d.aboutPerson!=""&&d.aboutPerson!=aboutPerson) return false;
+        if(what==null) return true;
         return what.contains(d.what);
     }
 
@@ -53,7 +54,15 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
         return howsure;
     }
     
-    public int compareTo(IThought i){
+    //Calculates a certainty for X in A said that B said that C said that X
+    public double getModifiedCertainty(){
+        return howsure*what.getCertainty();
+    }
+    
+    @Override
+    public int compareTo(IThought o) {
+        if (getModifiedCertainty()<o.getCertainty()) return -1;
+        else if (getModifiedCertainty()==o.getCertainty()) return 0;
         return 1;
     }
 
