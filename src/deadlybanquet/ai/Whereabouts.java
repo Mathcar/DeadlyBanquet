@@ -60,9 +60,10 @@ public class Whereabouts implements IThought{
         return room=="" || character=="";
     }
 
+    @Override
     public int compareTo(IThought o) {
-        if (getCertainty()<o.getCertainty()) return 1;
+        if (getCertainty()<o.getCertainty()) return -1;
         else if (getCertainty()==o.getCertainty()) return 0;
-        return -1;
+        return 1;
     }
 }

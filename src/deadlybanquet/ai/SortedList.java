@@ -1,6 +1,5 @@
 package deadlybanquet.ai;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -14,7 +13,7 @@ public class SortedList implements Iterable<IThought>{
     
     public void add(IThought t){
         list.add(t);
-        list.sort((a, b) -> a.compareTo(b));
+        list.sort((a, b) -> b.compareTo(a));
     }
     
     public Iterator<IThought> iterator(){

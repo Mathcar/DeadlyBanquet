@@ -1,6 +1,5 @@
 package deadlybanquet.ai;
 
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
@@ -9,14 +8,14 @@ import java.util.TreeSet;
  */
 public class Memory {
     //This contains all information which the player has got, sorted in order of how sertenty of the thought.
-    public SortedSet<IThought> information = new TreeSet<>();
+    public SortedList information = new SortedList();
     
     /**
      * 
      * @param information sorted set of initial information.
      * @param room
      */
-    public Memory(SortedSet<IThought> information){
+    public Memory(SortedList information){
         //if a null object is supplied, object will be initialized with empty TreeSet.
         if (information!=null)
             this.information=information;
@@ -28,12 +27,12 @@ public class Memory {
      * This function, and the contain functions, are probably full of bugs.
      * @return 
      */
-    public SortedSet<IThought> find(IThought thought){
+    public SortedList find(IThought thought){
         if(thought==null){
 //        	return new TreeSet<IThought>();
         	throw new NullPointerException();
         }
-        SortedSet<IThought> results = new TreeSet<IThought>();
+        SortedList results = new SortedList();
         for (IThought i: this.information){
             if (i.contains(thought)) results.add(i);
         }

@@ -45,7 +45,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
     
     //this constructor replaces any bad values by defaults.
-    public NPCBrain(   SortedSet<IThought> information, 
+    public NPCBrain(   SortedList information, 
                     PAD emotion, 
                     PAD temperament, 
                     ArrayList<Desire>desires,
@@ -94,7 +94,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         String you = act.getSpeaker();
         makeEmptyOpinion(you);
         for (IThought t : content){
-            SortedSet<IThought> foundData = new TreeSet<>(); 
+            SortedList foundData = new SortedList(); 
             //A say object for responses
             Say c;
             switch(t.getClass().getSimpleName()){
@@ -219,7 +219,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
         //find a previous opinion the you held about this subject
         Opinion old = new Opinion(inOpinion.person, null);
-        SortedSet<IThought> foundData;
+        SortedList foundData;
         SomebodyElse previnfo = new SomebodyElse (old, you, null, 0.0);
         foundData = memory.find(previnfo);
         acceptUncritically(you,inOpinion);
@@ -266,7 +266,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
     }
     
-    private void caseSomebodyElse(SomebodyElse inElse, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+    private void caseSomebodyElse(SomebodyElse inElse, String speaker, SortedList foundData, ArrayList<IThought> possibleAnswers){
         if (inElse.aboutPerson==me){
             //IThought response = whatAboutMe(inElse.what);
         }
@@ -299,7 +299,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     private void caseWhereabouts(Whereabouts inWhere, String speaker, ArrayList<IThought> possibleAnswers){
         //Check if I have an idea about where the person is
-        SortedSet<IThought> foundData = new TreeSet<>();
+        SortedList foundData = new SortedList();
         for (Whereabouts b:whereabouts){
             if (b.character==inWhere.character)
                     foundData.add(b);
@@ -325,7 +325,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         possibleAnswers.add(c);
     }
     
-    private void caseSay(Say inSay, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+    private void caseSay(Say inSay, String speaker, SortedList foundData, ArrayList<IThought> possibleAnswers){
         if (inSay.when==null){
             //This means that speaker is performing speech act
             //by saying it. Can therefore assume that me is recipient
@@ -415,7 +415,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     private void acceptUncritically(String person, IThought stateofworld){
         SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, 1.0);
         previnfo.time=getTime();
-        SortedSet<IThought> foundData = memory.find(previnfo);
+        SortedList foundData = memory.find(previnfo);
         if (!foundData.isEmpty()){
             memory.information.remove(foundData.first());
             previnfo.previous= (SomebodyElse) foundData.first();      

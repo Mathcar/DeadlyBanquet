@@ -19,7 +19,7 @@ public class BrainFactory {
      * @param name - character identifier
      * @return 
      */
-    public static NPCBrain makeBrain(SortedSet<IThought> information, 
+    public static NPCBrain makeBrain(SortedList information, 
                     PAD emotion, 
                     PAD temperament, 
                     ArrayList<Desire>desires,
