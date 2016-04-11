@@ -44,6 +44,8 @@ public class NPCBrain implements IPerceiver, Talkable {
     private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
     
+    public ArrayList<IThought> debugInfo;
+    
     //this constructor replaces any bad values by defaults.
     public NPCBrain(   SortedList information, 
                     PAD emotion, 
@@ -411,6 +413,10 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     
+    public void plantFalseMemory(IThought i){
+        memory.add(i);
+    }
+    
     
     private void acceptUncritically(String person, IThought stateofworld){
         SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, 1.0);
@@ -431,6 +437,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         //This is the real thing
         //speak(makeSpeechAct(possibleResponses, me));
         makeSpeechAct(possibleResponses, me);
+        debugInfo=possibleResponses;
     }
     
     public void observeRoomChange(String person, String origin, String destination){

@@ -21,7 +21,9 @@ public class SpeechActFactory {
      * using multiple sentences where necessary. If content could not be conveyed, return error.
      */
     public static SpeechAct makeSpeechAct(ArrayList<IThought> intendedcontent, String speaker){
-        System.out.println(speaker + " says:");
+        
+        if(intendedcontent.isEmpty()) return null;
+        System.out.print(speaker + " says: ");
         for (IThought i: intendedcontent){
             System.out.println(i);
         }
