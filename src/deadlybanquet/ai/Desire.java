@@ -18,6 +18,11 @@ public class Desire implements IThought{
         return desireorgoal==dg.DGPLACEHOLDER || what.isQuestion();
     }
 
+    @Override
+    public int compareTo(IThought i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     public enum dg {
         DESIRE, GOAL, DGPLACEHOLDER;
     }

@@ -9,14 +9,15 @@ import java.util.LinkedList;
  * @author omega
  * 
  */
-public class SortedList<T extends Comparable<T>> implements Iterable<T>{
-    private LinkedList<T> list= new LinkedList<>();
-    public void add(T t){
+public class SortedList implements Iterable<IThought>{
+    private LinkedList<IThought> list= new LinkedList<>();
+    
+    public void add(IThought t){
         list.add(t);
-        Collections.sort(list);
+        list.sort((a, b) -> a.compareTo(b));
     }
     
-    public Iterator<T> iterator(){
+    public Iterator<IThought> iterator(){
         return list.iterator();
     }
     
@@ -24,7 +25,7 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T>{
         return list.size();
     }
     
-    public T first(){
+    public IThought first(){
         return list.get(0);
     }
     
@@ -32,7 +33,7 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T>{
         return list.isEmpty();
     }
     
-    public boolean remove(T t){
+    public boolean remove(IThought t){
         return list.remove(t);
     }
 }

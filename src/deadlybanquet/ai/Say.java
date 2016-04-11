@@ -25,6 +25,11 @@ public class Say implements IThought{
     public boolean isQuestion() {
         return speaker=="" || hearer=="" || content.isQuestion() || when.isPlaceHolder();
     }
+
+    @Override
+    public int compareTo(IThought i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     public enum How {
         SAY, //with placeholder:ask
         AGREE, //information being agreed with gets sent along

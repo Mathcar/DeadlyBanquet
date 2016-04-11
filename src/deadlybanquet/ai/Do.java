@@ -29,6 +29,11 @@ public class Do implements IThought{
     public boolean isQuestion() {
         return doer=="" || withWhat=="" || when.getDay()<0;
     }
+
+    @Override
+    public int compareTo(IThought i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public enum What{
         MOVETO,

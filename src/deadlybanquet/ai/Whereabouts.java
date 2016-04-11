@@ -6,7 +6,7 @@ import deadlybanquet.model.Time;
  * Represents that somebody or something is/was somewhere (in a room)
  * @author omega
  */
-public class Whereabouts implements IThought, Comparable<IThought>{
+public class Whereabouts implements IThought{
     public String room;
     //TODO: If you find yourself copy-pasting this more than once, make an abstract superclass
     public String character;
@@ -60,7 +60,6 @@ public class Whereabouts implements IThought, Comparable<IThought>{
         return room=="" || character=="";
     }
 
-    @Override
     public int compareTo(IThought o) {
         if (getCertainty()<o.getCertainty()) return 1;
         else if (getCertainty()==o.getCertainty()) return 0;

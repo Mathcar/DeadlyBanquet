@@ -17,7 +17,7 @@ public class IThoughtTest {
     @Test
     //Really just a usage example.
     public void testCompareTo() {
-        SortedList<IThought> tree = new SortedList<>();
+        SortedList tree = new SortedList();
         tree.add(new Whereabouts("Bill", "Kitchen", null, 1.0, null));
         tree.add(new Whereabouts("Jane", "Kitchen", null, 0.0, null));
         tree.add(new Whereabouts("Oscar", "Kitchen", null, 0.5, null));

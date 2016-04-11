@@ -27,4 +27,9 @@ public enum BeingPolite implements IThought{
     public boolean isQuestion() {
         return false;
     }
+
+    @Override
+    public int compareTo(IThought i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

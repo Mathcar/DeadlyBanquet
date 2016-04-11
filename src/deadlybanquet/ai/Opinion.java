@@ -52,4 +52,9 @@ public class Opinion implements IThought{
     public boolean isQuestion() {
         return pad.isPlaceholder();
     }
+
+    @Override
+    public int compareTo(IThought i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

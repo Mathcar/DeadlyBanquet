@@ -9,7 +9,7 @@ package deadlybanquet.ai;
  * possible to express using an IThought.
  * @author omega
  */
-public interface IThought {
+public interface IThought{
     /**
      * 
      * @param i - IThought with the information to match on. Contains placeholder in places
@@ -28,4 +28,6 @@ public interface IThought {
     public double getCertainty();
     
     public boolean isQuestion();
+    
+    public int compareTo(IThought i);
 }
