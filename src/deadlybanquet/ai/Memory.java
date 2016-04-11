@@ -9,14 +9,14 @@ import java.util.TreeSet;
  */
 public class Memory {
     //This contains all information which the player has got, sorted in order of how sertenty of the thought.
-    public SortedList<IThought> information = new SortedList<>();
+    public SortedSet<IThought> information = new TreeSet<>();
     
     /**
      * 
      * @param information sorted set of initial information.
      * @param room
      */
-    public Memory(SortedList<IThought> information){
+    public Memory(SortedSet<IThought> information){
         //if a null object is supplied, object will be initialized with empty TreeSet.
         if (information!=null)
             this.information=information;
@@ -28,12 +28,12 @@ public class Memory {
      * This function, and the contain functions, are probably full of bugs.
      * @return 
      */
-    public SortedList<IThought> find(IThought thought){
+    public SortedSet<IThought> find(IThought thought){
         if(thought==null){
 //        	return new TreeSet<IThought>();
         	throw new NullPointerException();
         }
-        SortedList<IThought> results = new SortedList<IThought>();
+        SortedSet<IThought> results = new TreeSet<IThought>();
         for (IThought i: this.information){
             if (i.contains(thought)) results.add(i);
         }
