@@ -1,5 +1,7 @@
 package deadlybanquet.speech;
 
+import javafx.scene.layout.BorderPane;
+
 /**
  * Created by Tom on 2016-04-08.
  */
@@ -10,12 +12,21 @@ public class SpeechAct2 {
     private SpeechType speechType;
     private TextPropertyEnum property;
 
+    private Boolean dead = false; // just for easier programing
+
     public SpeechAct2(String line,String talker,String listener,SpeechType st,TextPropertyEnum tpe){
         this.line=line;
         this.talker=talker;
         this.listener=listener;
         this.speechType=st;
         this.property=tpe;
+    }
+    public SpeechAct2(){
+        dead=true;
+    }
+
+    public boolean isDead(){
+        return dead;
     }
 
     public SpeechAct2(String line){ // this is for test

@@ -2,6 +2,7 @@ package deadlybanquet.speech;
 
 
 import deadlybanquet.Talkable;
+import deadlybanquet.ai.BeingPolite;
 import deadlybanquet.ai.IPerceiver;
 import deadlybanquet.ai.NPCBrain;
 import deadlybanquet.ai.IThought;
@@ -35,15 +36,30 @@ public class SpeechActFactory {
 
     SpeechAct lastThingSaid;
 
-    IPerceiver talkingRightNow;
-
+    IPerceiver talker;
     public SpeechActFactory(IPerceiver A, IPerceiver B){
         this.A=A;
         this.B=B;
     }
 
+    private void changeTalker(){
+        if(talker.equals(A)){
+            talker=B;
+        }else{
+            talker=A;
+        }
+    }
+
+    private IPerceiver getListener(){
+        if(talker.equals(A)){
+            return B;
+        }else{
+            return A;
+        }
+    }
+
     public SpeechAct2 generateSpeechAct(IPerceiver talker, ArrayList<IThought> listOfIThought){
-        this.talkingRightNow=talker;
+        this.talker=talker;
         SpeechAct2 temp;
         //blabla generate a speechAct her
         temp = new SpeechAct2("hello there #name");
@@ -103,6 +119,40 @@ public class SpeechActFactory {
         }else{
             return null;
         }
+    }
+
+    public SpeechAct2 convertIThoughtToSpeechAct(IThought i, TextPropertyEnum prop){
+        SpeechAct2 temp = new SpeechAct2();
+        SpeechActHolder holder = SpeechActHolder.getInstance();
+        if(i instanceof BeingPolite){
+            if(i.equals(BeingPolite.GREET)){
+                ArrayList<SpeechInfo> list = holder.getGreetingFrase();
+                String text = i.toString(); // In case something dose not exist, give it the toString value
+                for(int k=0;k<list.size();k++){
+                    if(list.get(k).getTextProperty().equals(prop)&&list.get(k).getSpeechType().equals(SpeechType.GREET)){
+                        text=list.get(k).getText();
+                    }
+                }
+                temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.GREET,prop);
+            }
+            if(i.equals(BeingPolite.GOODBYE)) {
+                ArrayList<SpeechInfo> list = holder.getGreetingFrase();
+                String text = i.toString(); // In case something dose not exist, give it the toString value
+                for (int k = 0; k < list.size(); k++) {
+                    if (list.get(k).getTextProperty().equals(prop) && list.get(k).getSpeechType().equals(SpeechType.GOODBYE)) {
+                        text = list.get(k).getText();
+                    }
+                }
+                temp = new SpeechAct2(text, talker.getName(), getListener().getName(), SpeechType.GOODBYE, prop);
+            }
+        }
+        if(temp.isDead()){
+            //Something terrible has happend.
+            System.err.println("Could not create SpeeechAct from IThought [SpeechActFactory]");
+            System.exit(0);
+        }
+        return temp;
+
     }
 
 

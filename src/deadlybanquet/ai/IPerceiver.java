@@ -31,6 +31,6 @@ public interface IPerceiver {
 
     //Memory getMemory(); //todo please add this.
 
-    //String getName(); //todo please add this.
+    String getName(); //todo please add this.
     
 }
