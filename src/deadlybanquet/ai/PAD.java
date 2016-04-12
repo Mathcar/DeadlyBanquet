@@ -5,26 +5,27 @@ import static java.lang.Math.*;
  * The placeholder must have nonsense in all three fields; it is therefore
  * enough to check just one value.
  * @author omega
- */
-/*The PAD model describes a cube where points can describe 
-either a current feeling or personality (that is, "the emotions somebody
-usually feels" or an average of feelings over a long time period)
-The octants of the unit cube can be labelled as follows:
-(In brackets our own words)
-Exuberant (i.e. cheerful) (+P+A+D) loves
-Bored (-P-A-D) does not care about
-Dependent (needy)(+P+A-D) i.e. tries to make them do something for him
-Disdainful (-P-A+D) dislikes, finds disagreeable
-Relaxed (+P-A+D) (is friends with, likes)
-Anxious (-P+A-D) (scared of)
-Docile (+P-A-D) looks up to/does as they are told
-Hostile (-P+A+D) (hates)
-Mehrabian suggests that Hostile temperament probably being more 
-descriptive of the violent antisocial personality type and 
-Disdainful temperament being descriptive of 
-the nonviolent white-collar criminal.
-Therefore, a feeling that is very hostile might be used
-as what we have so far called the "murder trait".
+ * The PAD model describes a cube where points can describe 
+ * either a current feeling or personality (that is, "the emotions somebody
+ * usually feels" or an average of feelings over a long time period)
+ * The octants of the unit cube can be labelled as follows:
+ * NEW: Definitive guide to the PAD
+ * PAD		Temperament			Opinion                 Emotion
+ * (+P+A+D)	Exuberant		 	loves			cheerful
+ * (-P-A-D) 	Bored				not interested in	bored
+ * (+P+A-D) 	Dependent (needy)		relies on		wants somebody to rely on
+ * (-P-A+D) 	Disdainful 			dislikes        	scornful	
+ * (+P-A+D) 	Relaxed 			likes			relaxed
+ * (-P+A-D) 	Anxious 			scared of		anxious
+ * (+P-A-D) 	Docile 				wants to obey		cooperative
+ * (-P+A+D) 	Hostile 			hates			angry
+ * 
+ * Mehrabian suggests that Hostile temperament probably being more 
+ * descriptive of the violent antisocial personality type and 
+ * Disdainful temperament being descriptive of 
+ * the nonviolent white-collar criminal.
+ * Therefore, a feeling that is very hostile might be used
+ * as what we have so far called the "murder trait".
 */
 
 public class PAD {
@@ -111,5 +112,23 @@ public class PAD {
     @Override
     public String toString(){
         return "P=" + P + ", A="+ A + ", D=" + D;
+    }
+    
+    public void translateP(double howmuch){
+        P+=howmuch;
+        if(P>1) P = 1;
+        if(P<1) P = -1;
+    }
+    
+    public void translateA(double howmuch){
+        A+=howmuch;
+        if(A>1) A = 1;
+        if(A<1) A = -1;
+    }
+    
+    public void translateD(double howmuch){
+        D+=howmuch;
+        if(D>1) D = 1;
+        if(D<1) D = -1;
     }
 }

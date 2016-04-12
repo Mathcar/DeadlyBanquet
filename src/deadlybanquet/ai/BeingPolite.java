@@ -10,11 +10,30 @@ public enum BeingPolite implements IThought{
 
     @Override
     public boolean contains(IThought i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(i==null) return true;
+        if(!this.getClass().equals(i.getClass())) return false;
+        return this==i;
     }
 
     @Override
     public void setPlaceHolderToNull() {
         //No placeholders here
+    }
+
+    @Override
+    public double getCertainty() {
+        return 1;
+    }
+
+    @Override
+    public boolean isQuestion() {
+        return false;
+    }
+
+    @Override
+    public int compareTo(IThought o) {
+        if (getCertainty()<o.getCertainty()) return -1;
+        else if (getCertainty()==o.getCertainty()) return 0;
+        return 1;
     }
 }

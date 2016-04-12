@@ -51,6 +51,10 @@ public class Time {
     public int getDay(){
         return day;
     }
+    
+    public boolean isPlaceHolder(){
+        return day<0;
+    }
 
 
 }

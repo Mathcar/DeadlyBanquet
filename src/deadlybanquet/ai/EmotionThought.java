@@ -7,20 +7,7 @@ import deadlybanquet.model.Time;
  * @author omega
  */
 public class EmotionThought implements IThought{
-
-    @Override
-    public boolean contains(IThought i) {
-        //Wrong type of information
-        if(i==null) throw new NullPointerException();
-        if(!this.getClass().equals(i.getClass())) return false;
-        EmotionThought d = (EmotionThought) i;
-        return (d.emotionortemperament==et.ETPLACEHOLDER||d.emotionortemperament==emotionortemperament);
-    }
-
-    @Override
-    public void setPlaceHolderToNull() {
-        if (pad.getP()<-1) pad=null;
-    }
+    
     public enum et {
         EMOTION, TEMPERAMENT, ETPLACEHOLDER;
     }
@@ -34,5 +21,39 @@ public class EmotionThought implements IThought{
     @Override
     public String toString(){
         return emotionortemperament + " with value " + pad;
+    }
+    
+    @Override
+    public boolean contains(IThought i) {
+        if(i==null) return true;
+        if(!this.getClass().equals(i.getClass())) return false;
+        EmotionThought d = (EmotionThought) i;
+        return (d.emotionortemperament==et.ETPLACEHOLDER||d.emotionortemperament==emotionortemperament);
+    }
+
+    public EmotionThought(et e, PAD p){
+        emotionortemperament=e;
+        pad=p;
+    }
+    @Override
+    public void setPlaceHolderToNull() {
+        if (pad.getP()<-1) pad=null;
+    }
+
+    @Override
+    public double getCertainty() {
+        return 1;
+    }
+
+    @Override
+    public boolean isQuestion() {
+        return emotionortemperament==et.ETPLACEHOLDER || pad.isPlaceholder() || time.isPlaceHolder();
+    }
+
+    @Override
+    public int compareTo(IThought o) {
+        if (getCertainty()<o.getCertainty()) return -1;
+        else if (getCertainty()==o.getCertainty()) return 0;
+        return 1;
     }
 }

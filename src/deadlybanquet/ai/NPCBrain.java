@@ -24,6 +24,7 @@ import java.util.*;
 public class NPCBrain implements IPerceiver, Talkable {
     //Current emotion - may be changed by events.
     public static double REALCLOSE = 0.5;
+    public static double NORMALMODIFIER = 0.3;
     
     private String me;
     private Memory memory;
@@ -37,11 +38,16 @@ public class NPCBrain implements IPerceiver, Talkable {
     private ArrayList<Desire> goals = new ArrayList<>();
     //This uses plan elements rather than actions in order to facilitate reevaluation of the plan.
     private ArrayList<IThought> plan = new ArrayList<>();
+    //Program should guarantee that anybody who has been met or heard about is in
+    //this list of opinions.
+    //TODO this should include an opinion about oneself
     private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
     
+    public ArrayList<IThought> debugInfo;
+    
     //this constructor replaces any bad values by defaults.
-    public NPCBrain(   SortedSet<IThought> information, 
+    public NPCBrain(   SortedList information, 
                     PAD emotion, 
                     PAD temperament, 
                     ArrayList<Desire>desires,
@@ -58,7 +64,26 @@ public class NPCBrain implements IPerceiver, Talkable {
         me = name;
     }
 
-    public NPCBrain(){}
+    public Opinion getOpinionAbout(String who){
+        Opinion result=null;
+        for (Opinion i: opinions){
+            if (i.person==who)
+                result=i;
+        }
+        return result;
+    }
+    
+    //If this does not find an opinion about person,
+    //creates a neutral one.
+    public void makeEmptyOpinion(String about){
+        PAD pad = null;
+        for (Opinion i:opinions){
+            if(i.person==about)
+                pad=i.getPAD();
+        }
+        if (pad==null)
+            opinions.add(new Opinion(about, new PAD(0,0,0)));
+    }
     
     //This class evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
@@ -69,26 +94,28 @@ public class NPCBrain implements IPerceiver, Talkable {
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         String you = act.getSpeaker();
+        makeEmptyOpinion(you);
         for (IThought t : content){
-            SortedSet<IThought> foundData = new TreeSet<>(); 
+            SortedList foundData = new SortedList(); 
             //A say object for responses
             Say c;
             switch(t.getClass().getSimpleName()){
 
                 case "Opinion":
-                	possibleAnswers.add(processOpinion((Opinion) t, you));
+                	processOpinion((Opinion) t, you, possibleAnswers);
                     break;
                     
                 case "SomebodyElse":
+                    //TODO
                 	caseSomebodyElse((SomebodyElse)t,you, foundData, possibleAnswers);
                     break;
                     
                 case "BackStory": 
-                	caseBackStory((BackStory)t, you, foundData, possibleAnswers);
+                	caseBackStory((BackStory)t, you, possibleAnswers);
                 	break;
                     
                 case "Whereabouts":
-                	caseWhereabouts((Whereabouts)t, you, foundData, possibleAnswers);
+                	caseWhereabouts((Whereabouts)t, you, possibleAnswers);
                     break;
                     
                 case "BeingPolite": 
@@ -177,30 +204,71 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
     }
     
-    private IThought processOpinion(Opinion inOpinion, String you){
+    private void processOpinion(Opinion inOpinion, String you, ArrayList<IThought> ans){
+        //Now we have heard of this person
+        if(getOpinionAbout(inOpinion.person)==null){
+            opinions.add(new Opinion (inOpinion.person, new PAD(0,0,0)));
+        }
+        //I.e if this is the question "What do you think about X?"
+        if (inOpinion.pad.isPlaceholder()){
+            PAD ansPAD=null;
+            for (Opinion o : opinions){
+                if (o.person==inOpinion.person)
+                    ansPAD = o.getPAD();
+            }
+            ans.add(new Opinion(inOpinion.person, ansPAD));
+            return;
+        }
         //find a previous opinion the you held about this subject
         Opinion old = new Opinion(inOpinion.person, null);
-        SortedSet<IThought> foundData;
+        SortedList foundData;
         SomebodyElse previnfo = new SomebodyElse (old, you, null, 0.0);
         foundData = memory.find(previnfo);
         acceptUncritically(you,inOpinion);
+        PAD inPad=inOpinion.getPAD();
+        if (inOpinion.person==me){
+           opinionAboutMe(inOpinion.getPAD(), you, 1.0);
+           Opinion opyou = getOpinionAbout(you);
+           //If opinion is negative and you are dependent on that person and what they say makes
+           //you unhappy, then say so.
+           if (inPad.getP()<0&&
+                   opyou.pad.getP()>0&&
+                   opyou.pad.getA()>0&&
+                   opyou.pad.getD()<0&&
+                   emotion.getP()<0)
+                ans.add(new EmotionThought(EmotionThought.et.EMOTION, 
+                                       new PAD(emotion.getP(), emotion.getA(), emotion.getD())));
+           else ans.add(THANKS);
+           return;
+        }
         if (foundData.isEmpty()){
-            //the person has not previously mentioned anything about this.
-            Opinion response = new Opinion (inOpinion.person, null);
-            if (inOpinion.person==me){
-                
-            }
-            for (Opinion i : opinions){
-                if (i.person==inOpinion.person)
-                    response.pad=i.pad;
-            }
-            return response;
+            Opinion mine = getOpinionAbout(inOpinion.person);
+            ans.add(new Opinion(mine.person, mine.pad));
         } else {
-            return foundData.first();
+            ans.add(foundData.first());
         }
     }
     
-    private void caseSomebodyElse(SomebodyElse inElse, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+    //Completely unscientific and mostly random reaction to somebody having an opinion about you.
+    private void opinionAboutMe(PAD opinion, String you, double howimportant){
+        double d= opinion.getD();
+        double p = opinion.getP();
+        if (d<0){
+            //If speaker is feeling not dominant towards you, you feel more dominant.
+            getOpinionAbout(me).pad.translateD(howimportant*NORMALMODIFIER*-d);
+            getOpinionAbout(you).pad.translateD(howimportant*NORMALMODIFIER*-d);
+            emotion.translateD(howimportant*NORMALMODIFIER*-d);
+        }
+        else{
+            //+P+D signifies liking or love, so dominance rises.
+            //-P+D means dislike or hostility, so dominance goes down.
+            getOpinionAbout(me).pad.translateD(howimportant*NORMALMODIFIER*p);
+            getOpinionAbout(you).pad.translateD(howimportant*NORMALMODIFIER*p);
+            emotion.translateD(howimportant*NORMALMODIFIER*p);
+        }
+    }
+    
+    private void caseSomebodyElse(SomebodyElse inElse, String speaker, SortedList foundData, ArrayList<IThought> possibleAnswers){
         if (inElse.aboutPerson==me){
             //IThought response = whatAboutMe(inElse.what);
         }
@@ -218,7 +286,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
     }
 
-    private void caseBackStory(BackStory inBack, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+    private void caseBackStory(BackStory inBack, String speaker, ArrayList<IThought> possibleAnswers){
         Say.How a;
         if (memory.find(inBack).isEmpty()) {
             a =YESNO;
@@ -231,8 +299,9 @@ public class NPCBrain implements IPerceiver, Talkable {
         possibleAnswers.add(c);
     }
     
-    private void caseWhereabouts(Whereabouts inWhere, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+    private void caseWhereabouts(Whereabouts inWhere, String speaker, ArrayList<IThought> possibleAnswers){
         //Check if I have an idea about where the person is
+        SortedList foundData = new SortedList();
         for (Whereabouts b:whereabouts){
             if (b.character==inWhere.character)
                     foundData.add(b);
@@ -242,7 +311,13 @@ public class NPCBrain implements IPerceiver, Talkable {
 		if(foundData.isEmpty()) foundData=memory.find(tofind);
         //if I have no idea whatsoever about where the person is
         if(foundData.isEmpty()){
-            foundData.add(new Say(me, speaker, inWhere, YESNO, null));
+            //if this is a question
+            if (inWhere.isQuestion()){
+                inWhere.setPlaceHolderToNull();
+                foundData.add(inWhere);
+            }
+            else
+                foundData.add(new Say(me, speaker, inWhere, YESNO, null));
         }
         possibleAnswers.add(foundData.first());
     }
@@ -252,7 +327,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         possibleAnswers.add(c);
     }
     
-    private void caseSay(Say inSay, String speaker, SortedSet<IThought> foundData, ArrayList<IThought> possibleAnswers){
+    private void caseSay(Say inSay, String speaker, SortedList foundData, ArrayList<IThought> possibleAnswers){
         if (inSay.when==null){
             //This means that speaker is performing speech act
             //by saying it. Can therefore assume that me is recipient
@@ -338,11 +413,15 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     
+    public void plantFalseMemory(IThought i){
+        memory.add(i);
+    }
+    
     
     private void acceptUncritically(String person, IThought stateofworld){
         SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, 1.0);
         previnfo.time=getTime();
-        SortedSet<IThought> foundData = memory.find(previnfo);
+        SortedList foundData = memory.find(previnfo);
         if (!foundData.isEmpty()){
             memory.information.remove(foundData.first());
             previnfo.previous= (SomebodyElse) foundData.first();      
@@ -358,6 +437,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         //This is the real thing
         //speak(makeSpeechAct(possibleResponses, me));
         makeSpeechAct(possibleResponses, me);
+        debugInfo=possibleResponses;
     }
     
     public void observeRoomChange(String person, String origin, String destination){

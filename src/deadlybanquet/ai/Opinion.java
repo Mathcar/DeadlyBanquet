@@ -8,6 +8,7 @@ import deadlybanquet.model.Time;
  */
 public class Opinion implements IThought{
     public String person;
+    //With a placeholder pad, this becomes the question: What do you think about person?
     public PAD pad;
     //The time when this opinion first became current.
     public Time time;
@@ -26,8 +27,7 @@ public class Opinion implements IThought{
      * It is not possible to find opinions with a particular emotional value.
      */
     public boolean contains(IThought i) {
-        //Wrong type of information
-        if(i==null) throw new NullPointerException();
+        if(i==null) return true;
         if(!this.getClass().equals(i.getClass())) return false;
         Opinion d = (Opinion) i;
         return person==d.person;
@@ -35,10 +35,27 @@ public class Opinion implements IThought{
 
     @Override
     public void setPlaceHolderToNull() {
-        if (pad.getP()<-1) pad=null;
+        if (pad.isPlaceholder()) pad=null;
     }
     
     public PAD getPAD(){
     	return this.pad;
+    }
+
+    @Override
+    public double getCertainty() {
+        return 1;
+    }
+
+    @Override
+    public boolean isQuestion() {
+        return pad.isPlaceholder();
+    }
+
+    @Override
+    public int compareTo(IThought o) {
+        if (getCertainty()<o.getCertainty()) return -1;
+        else if (getCertainty()==o.getCertainty()) return 0;
+        return 1;
     }
 }

@@ -7,14 +7,7 @@ import deadlybanquet.model.Time;
  * @author omega
  */
 public class Say implements IThought{
-
-    @Override
-    public void setPlaceHolderToNull() {
-        if (speaker=="") speaker=null;
-        if (hearer =="") hearer = null;
-        content.setPlaceHolderToNull();
-        if (when.getDay()<0) when=null;
-    }
+    
     public enum How {
         SAY, //with placeholder:ask
         AGREE, //information being agreed with gets sent along
@@ -48,7 +41,38 @@ public class Say implements IThought{
     }
     @Override
     public boolean contains(IThought i) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(i==null) return true;
+        if(!this.getClass().equals(i.getClass())) return false;
+        Say s = (Say) i;
+        if(this.speaker!="" && this.speaker!=s.speaker) return false;
+        if(this.hearer!="" && this.hearer!=s.hearer) return false;
+        if (this.content==null) return true;
+        return content.contains(s.content);
+    }
+    
+    @Override
+    public void setPlaceHolderToNull() {
+        if (speaker=="") speaker=null;
+        if (hearer =="") hearer = null;
+        content.setPlaceHolderToNull();
+        if (when.getDay()<0) when=null;
+    }
+
+    @Override
+    public double getCertainty() {
+        return 1;
+    }
+
+    @Override
+    public boolean isQuestion() {
+        return speaker=="" || hearer=="" || content.isQuestion() || when.isPlaceHolder();
+    }
+
+    @Override
+    public int compareTo(IThought o) {
+        if (getCertainty()<o.getCertainty()) return -1;
+        else if (getCertainty()==o.getCertainty()) return 0;
+        return 1;
     }
     
 }
