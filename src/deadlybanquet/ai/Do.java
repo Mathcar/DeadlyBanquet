@@ -62,4 +62,9 @@ public class Do implements IThought{
         else if (getCertainty()==o.getCertainty()) return 0;
         return 1;
     }
+    
+    @Override
+    public String toString(){
+        return doer + " " + what + " " + withWhat + " at " + when;
+    }
 }

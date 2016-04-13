@@ -2,6 +2,8 @@ package deadlybanquet.ai;
 
 import static deadlybanquet.ai.BackStory.*;
 import static deadlybanquet.ai.BrainFactory.makeBrain;
+import static deadlybanquet.ai.Do.What.MURDER;
+import static deadlybanquet.model.World.getTime;
 import deadlybanquet.speech.GreetingPhrase;
 import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
@@ -54,11 +56,24 @@ public class HearExample {
     
     @Test
     public void testConversation(){
-        IThought starter = new Whereabouts("Jane", "");
+        IThought starter;
+        starter = new Whereabouts("Jane", "");
+        starter = new Whereabouts("Alice", "Kitchen");
+        //starter = new Opinion("Alice", new PAD (1,1,1));
+        //starter = new Opinion ("Alice", PAD.placeholderPAD());
+        //starter = NOMOBILESIGNAL;
+        starter=new Do(MURDER,"Alice", "Bob", getTime());
+        starter = new SomebodyElse(
+                    new SomebodyElse(
+                            new Do(MURDER,"Alice", "James", null), 
+                            "Jane", null, 1.0), 
+                    "Derek", null, 1.0);
         //We are maniplating Bill into saying this
         content.add(starter);
         makeSpeechAct(content, "Bill");
+        //Bill.plantFalseOpinion((Opinion)starter);
         Bill.plantFalseMemory(starter);
+        //Jane.plantFalseMemory(starter);
         while (true){
             //Jane hears and puts her response into debugInfo.
             Jane.hear(input);
