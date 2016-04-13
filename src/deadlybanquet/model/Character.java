@@ -63,7 +63,7 @@ public class Character implements Renderable{
 	
 	public Character(ActionListener al, String name, int xPos, int yPos){
         //set ID
-        idCounter++;
+        
         this.id=idCounter;
         //done with ID set
 		this.name = name;
@@ -74,21 +74,30 @@ public class Character implements Renderable{
 		this.actList = al;
 		
 		try {
-			imageS = new Image("res/pictures/lookingdown.png");
-			imageN = new Image("res/pictures/lookingup.png");
-			imageW = new Image("res/pictures/lookingleft.png");
-			imageE = new Image("res/pictures/lookingright.png");
-			aniS = new Animation(new SpriteSheet("res/pictures/downanimation.png",32,32), 300);
-			aniN = new Animation(new SpriteSheet("res/pictures/upanimation.png",32,32), 300);
-			aniW = new Animation(new SpriteSheet("res/pictures/leftanimation.png",32,32), 300);
-			aniE = new Animation(new SpriteSheet("res/pictures/rightanimation.png",32,32), 300);
-
+			if(id == 0){
+				imageS = new Image("res/pictures/lookingdown.png");
+				imageN = new Image("res/pictures/lookingup.png");
+				imageW = new Image("res/pictures/lookingleft.png");
+				imageE = new Image("res/pictures/lookingright.png");
+				aniS = new Animation(new SpriteSheet("res/pictures/downanimation.png",32,32), 300);
+				aniN = new Animation(new SpriteSheet("res/pictures/upanimation.png",32,32), 300);
+				aniW = new Animation(new SpriteSheet("res/pictures/leftanimation.png",32,32), 300);
+				aniE = new Animation(new SpriteSheet("res/pictures/rightanimation.png",32,32), 300);
+			}else{
+				imageS = new Image("res/pictures/npc_"+id+"_down.png");
+				imageN = new Image("res/pictures/npc_"+id+"_up.png");
+				imageW = new Image("res/pictures/npc_"+id+"_left.png");
+				imageE = new Image("res/pictures/npc_"+id+"_right.png");
+				aniS = new Animation(new SpriteSheet("res/pictures/npc_"+id+"_downAnimation.png",32,32), 300);
+				aniN = new Animation(new SpriteSheet("res/pictures/npc_"+id+"_upAnimation.png",32,32), 300);
+				aniW = new Animation(new SpriteSheet("res/pictures/npc_"+id+"_leftAnimation.png",32,32), 300);
+				aniE = new Animation(new SpriteSheet("res/pictures/npc_"+id+"_rightAnimation.png",32,32), 300);
+			}
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-
 		traits = new LinkedList<Trait>();
-		
+		idCounter++;
 		this.blocked=false;
 	}
 

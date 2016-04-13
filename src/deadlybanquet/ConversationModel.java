@@ -37,7 +37,7 @@ public class ConversationModel {
     public Player getPlayer(){
     	return player;
     }
-    public NPC getnpc(){
+    public NPC getNpc(){
     	return npc;
     }
 

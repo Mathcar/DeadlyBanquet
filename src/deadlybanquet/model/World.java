@@ -48,10 +48,13 @@ public class World implements ActionListener, TileBasedMap {
         //This must be done after all rooms that are intended to be there
         //are created and added to the roomMap!
         createDoorConnectionsInRooms();
-        //Initialized all AI/NPC and their Characters
-        initAIs();
+        
         //Initialize all player related data
         initPlayer();
+        //Initialized all AI/NPC and their Characters
+        initAIs();
+        
+        
         //Create the time object (it's initialization is done in it's constructor)
         time = new Time();
     }
