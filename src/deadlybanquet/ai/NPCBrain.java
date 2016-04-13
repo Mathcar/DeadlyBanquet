@@ -265,11 +265,11 @@ public class NPCBrain implements IPerceiver, Talkable {
         //Check if I have an idea about where the person is
         SortedList foundData = new SortedList();
         for (Whereabouts b:whereabouts){
-            if (b.character==inWhere.character)
+            if (b.getCharacter()==inWhere.getCharacter())
                     foundData.add(b);
         }
         //Check if I have an idea that somebody else might know
-        Whereabouts tofind = new Whereabouts(inWhere.character, "",null, 0.0, null);
+        Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "",null, 0.0, null);
 		if(foundData.isEmpty()) foundData=memory.find(tofind);
         //if I have no idea whatsoever about where the person is
         if(foundData.isEmpty()){
