@@ -58,7 +58,10 @@ public class Talk extends BasicGameState {
 		text1.setBorderColor(Color.black);
 		text2.setBorderColor(Color.black);	
 		text1.setTextColor(Color.blue);
-
+		
+		g.drawString(model.getPlayerConv().getPlayer().getCharacter().getName(), 555, 430 );
+		g.drawString(model.getPlayerConv().getNpc().getChar().getName(), 25, 150 );
+		
 		if(answer == 1){
 
 			text1.setText("\n I'm great, but I'm late for a meeting.");
