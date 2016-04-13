@@ -64,5 +64,11 @@ public class PlayerBrain implements IPerceiver {
     public void seePeople (ArrayList<String> people){
         
     }
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
    
 }
