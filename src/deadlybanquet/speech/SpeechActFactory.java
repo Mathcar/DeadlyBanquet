@@ -2,10 +2,7 @@ package deadlybanquet.speech;
 
 
 import deadlybanquet.Talkable;
-import deadlybanquet.ai.BeingPolite;
-import deadlybanquet.ai.IPerceiver;
-import deadlybanquet.ai.NPCBrain;
-import deadlybanquet.ai.IThought;
+import deadlybanquet.ai.*;
 import deadlybanquet.model.Player;
 
 import java.util.ArrayList;
@@ -135,7 +132,7 @@ public class SpeechActFactory {
                 }
                 temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.GREET,prop);
             }
-            if(i.equals(BeingPolite.GOODBYE)) {
+            else if(i.equals(BeingPolite.GOODBYE)) {
                 ArrayList<SpeechInfo> list = holder.getGreetingFrase();
                 String text = i.toString(); // In case something dose not exist, give it the toString value
                 for (int k = 0; k < list.size(); k++) {
@@ -145,7 +142,32 @@ public class SpeechActFactory {
                 }
                 temp = new SpeechAct2(text, talker.getName(), getListener().getName(), SpeechType.GOODBYE, prop);
             }
+            else{
+                System.err.println("SpeechActFactory: What i want to say is not yet implemented");
+            }
+        }else if(i instanceof Whereabouts){
+            temp = new SpeechAct2();
+            if(i.isQuestion()){
+                ArrayList<SpeechInfo> list = holder.getQuestionFrase();
+                String text = i.toString();
+                if(((Whereabouts) i).getCharacter().equals("")){
+                    ;// who is in getRoom()
+                }else if(((Whereabouts) i).getRoom().equals("")){
+                    // where is getCharacter()
+                    for(int k=0;k<list.size();k++){
+                        SpeechInfo si = list.get(k);
+                        if(si.getSpeechType().equals(SpeechType.WHERE)&&si.getTextProperty().equals(SpeechType.WHERE)){
+                            text=si.getText();
+                        }
+                    }
+                    temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.WHERE,prop);
+                }
+            }else{ // not a question!
+
+            }
         }
+
+
         if(temp.isDead()){
             //Something terrible has happend.
             System.err.println("Could not create SpeeechAct from IThought [SpeechActFactory]");

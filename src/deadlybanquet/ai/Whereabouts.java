@@ -7,13 +7,15 @@ import deadlybanquet.model.Time;
  * @author omega
  */
 public class Whereabouts implements IThought{
-    public String room;
+    private String room;
     //TODO: If you find yourself copy-pasting this more than once, make an abstract superclass
-    public String character;
-    public PAD opinion;
-    public double certainty;
-    public Time time;
-    public Whereabouts previous;
+    private String character;
+    private PAD opinion;
+    private double certainty;
+    private Time time;
+
+
+    private Whereabouts previous;
     
     public Whereabouts (String character, String room){
         this(character,room,null,1.0,null);
@@ -62,5 +64,25 @@ public class Whereabouts implements IThought{
         if (getCertainty()<o.getCertainty()) return -1;
         else if (getCertainty()==o.getCertainty()) return 0;
         return 1;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public Whereabouts getPrevious() {
+        return previous;
+    }
+
+    public PAD getOpinion() {
+        return opinion;
+    }
+
+    public String getCharacter() {
+        return character;
+    }
+
+    public String getRoom() {
+        return room;
     }
 }
