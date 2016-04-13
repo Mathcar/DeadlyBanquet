@@ -34,6 +34,13 @@ public class Desire implements IThought{
      */
     public dg desireorgoal;
     
+    public Desire(Desire.dg dg, IThought w, Time t, double s){
+        desireorgoal=dg;
+        what=w;
+        time=t;
+        strength=s;
+    }
+    
     @Override
     //It is not possible to get a match on strength.
     public boolean contains(IThought i) {
