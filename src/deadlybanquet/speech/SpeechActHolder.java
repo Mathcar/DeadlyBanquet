@@ -29,8 +29,8 @@ public class SpeechActHolder {
     }
 
     public void readAllFile(){
-        try{
-            Files.walk(Paths.get("res/speech/")).forEach(filePath ->{
+        //try{
+            /*Files.walk(Paths.get("res/speech/")).forEach(filePath ->{
                 if(Files.isRegularFile(filePath)){
                     String fileName = filePath.getFileName().toString();
                     if(fileName.equals("greetingFrase")){
@@ -47,7 +47,7 @@ public class SpeechActHolder {
             System.err.println("ERROR, could not find the speech map");
             e.printStackTrace();
             System.exit(0);
-        }
+        }*/
     }
 
     private ArrayList<SpeechInfo> readFile(File file) {
