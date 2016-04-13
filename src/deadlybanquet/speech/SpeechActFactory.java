@@ -37,6 +37,7 @@ public class SpeechActFactory {
     public SpeechActFactory(IPerceiver A, IPerceiver B){
         this.A=A;
         this.B=B;
+        talker=this.A;
     }
 
     private void changeTalker(){
@@ -151,19 +152,28 @@ public class SpeechActFactory {
                 ArrayList<SpeechInfo> list = holder.getQuestionFrase();
                 String text = i.toString();
                 if(((Whereabouts) i).getCharacter().equals("")){
-                    ;// who is in getRoom()
+                    // who is in getRoom()
+                    for(int k=0;k<list.size();k++){
+                        SpeechInfo si=list.get(k);
+                        if(si.getSpeechType().equals(SpeechType.WHERE_LOCATION)&&si.getTextProperty().equals(prop)){
+                            text=si.getText();
+                            break;
+                        }
+                    }
+                    temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.WHERE_LOCATION,prop);
                 }else if(((Whereabouts) i).getRoom().equals("")){
                     // where is getCharacter()
                     for(int k=0;k<list.size();k++){
                         SpeechInfo si = list.get(k);
-                        if(si.getSpeechType().equals(SpeechType.WHERE)&&si.getTextProperty().equals(SpeechType.WHERE)){
+                        if(si.getSpeechType().equals(SpeechType.WHERE_PERSON)&&si.getTextProperty().equals(prop)){
                             text=si.getText();
+                            break;
                         }
                     }
-                    temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.WHERE,prop);
+                    temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.WHERE_PERSON,prop);
                 }
             }else{ // not a question!
-
+                //Some statement about the location of someone
             }
         }
 

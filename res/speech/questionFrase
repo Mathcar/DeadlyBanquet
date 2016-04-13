@@ -1,4 +1,4 @@
-Where is #person;NEUTRAL;WHERE;
-Do you happen to know the location of #person;PROPER;WHERE;
-Where is #person hanging;COLLOQUIAL;WHERE;
-Who is in the #location;NEUTRAL;WHERE;
+Where is #person;NEUTRAL;WHERE_PERSON;
+Do you happen to know the location of #person;PROPER;WHERE_PERSON;
+Where is #person hanging;COLLOQUIAL;WHERE_PERSON;
+Who is in the #location;NEUTRAL;WHERE_LOCATION;

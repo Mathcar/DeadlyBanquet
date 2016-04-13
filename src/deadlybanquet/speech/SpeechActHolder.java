@@ -29,8 +29,8 @@ public class SpeechActHolder {
     }
 
     public void readAllFile(){
-        //try{
-            /*Files.walk(Paths.get("res/speech/")).forEach(filePath ->{
+        /*try{
+            Files.walk(Paths.get("res/speech/")).forEach(filePath ->{
                 if(Files.isRegularFile(filePath)){
                     String fileName = filePath.getFileName().toString();
                     if(fileName.equals("greetingFrase")){
