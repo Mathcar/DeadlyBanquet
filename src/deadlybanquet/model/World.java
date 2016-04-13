@@ -15,6 +15,7 @@ import deadlybanquet.View;
 import deadlybanquet.ai.AIControler;
 import deadlybanquet.ai.NPCBrain;
 import deadlybanquet.ai.BrainFactory;
+import deadlybanquet.ai.PlayerBrain;
 import deadlybanquet.states.States;
 
 import org.newdawn.slick.GameContainer;
@@ -61,7 +62,8 @@ public class World implements ActionListener, TileBasedMap {
 
     public void initPlayer(){
         Character playerCharacter = new Character(this, "Gandalf", 9, 13);
-        player = new Player(playerCharacter);
+        PlayerBrain playerBrain = new PlayerBrain();
+        player = new Player(playerCharacter, playerBrain);
         roomMap[2][2].addCharacter(playerCharacter);
     }
 
@@ -217,8 +219,9 @@ public class World implements ActionListener, TileBasedMap {
                 originRoom.removeCharacter(c);
                 //Tell the affected rooms to notify all characters so that this can be added
                 //to memory
-                targetRoom.addCharacterToRoom((Character)e.getSource(),ce.getEnterDirection());
-                notifyRoomChange(originRoom,targetRoom,(Character)e.getSource());
+                targetRoom.addCharacterToRoom(c,ce.getEnterDirection());
+                notifyRoomChange(originRoom,targetRoom,c);
+                seePeople(c, targetRoom);
 
 
             }
@@ -306,6 +309,7 @@ public class World implements ActionListener, TileBasedMap {
             if(aic.getCharacterName().equals(c.getName()))
                 return aic;
         }
+
         return null;
 
     }
@@ -319,7 +323,7 @@ public class World implements ActionListener, TileBasedMap {
                 getRelatedControler(c).observeRoomChange(person.getName(), originRoom.getName(), targetRoom.getName());
         }
         for(Character c : targetRoom.getCharactersInRoom()){
-            if(targetRoom.hasCharacter(player.getCharacter()))
+            if(player.isCharacter(c) )
                 player.observeRoomChange(person.getName(), originRoom.getName(), targetRoom.getName());
             else
                 getRelatedControler(c).observeRoomChange(person.getName(), originRoom.getName(), targetRoom.getName());
@@ -345,7 +349,7 @@ public class World implements ActionListener, TileBasedMap {
             names.add(c.getName());
         }
         //Either notify the corresponding AIControler or the player
-        if(player.getCharacter().equals(whoSees))
+        if(player.isCharacter(whoSees))
             player.seePeople(names);
         else
             getRelatedControler(whoSees).seePeople(names);
@@ -417,6 +421,10 @@ public class World implements ActionListener, TileBasedMap {
     
     public ConversationModel getPlayerConv(){
     	return playerConv;
+    }
+
+    public static NPCBrain getControlerBrain(AIControler aic){
+        return controlerBrainMap.get(aic);
     }
     
 }
