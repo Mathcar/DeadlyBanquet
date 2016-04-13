@@ -175,6 +175,8 @@ public class SpeechActFactory {
             }else{ // not a question!
                 //Some statement about the location of someone
             }
+        }else if(i instanceof Opinion){
+            // HOW TO DO THIS??
         }
 
 
