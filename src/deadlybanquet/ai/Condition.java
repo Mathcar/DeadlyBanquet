@@ -1,6 +1,6 @@
 package deadlybanquet.ai;
 
-public class condition {
+public class Condition {
 	
 	public enum ConditionState{
 		INTERUPTED,
