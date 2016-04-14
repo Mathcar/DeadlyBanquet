@@ -24,12 +24,16 @@ import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
 
 public class NPCBrain implements IPerceiver, Talkable {
-    //Current emotion - may be changed by events.
+    
+    //--------------------------------------------------------------------------
+    //SECTION: DATA & CONSTRUCTORS
+    //--------------------------------------------------------------------------
     public static double REALCLOSE = 0.5;
     public static double NORMALMODIFIER = 0.3;
     
     private String me;
     private Memory memory;
+    //Current emotion - may be changed by events.
     private PAD emotion = new PAD(0,0,0);
     //Personality. May not change. Emotion object regresses
     //to this in the absence of new stimuli.
@@ -46,7 +50,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
     
-    public ArrayList<IThought> debugInfo;
+    
     
     //this constructor replaces any bad values by defaults.
     public NPCBrain(   SortedList information, 
@@ -66,32 +70,19 @@ public class NPCBrain implements IPerceiver, Talkable {
         me = name;
     }
 
-    public Opinion getOpinionAbout(String who){
-        Opinion result=null;
-        for (Opinion i: opinions){
-            if (i.person==who)
-                result=i;
-        }
-        return result;
-    }
     
-    //If this does not find an opinion about person,
-    //creates a neutral one.
-    public void makeEmptyOpinion(String about){
-        PAD pad = null;
-        for (Opinion i:opinions){
-            if(i.person==about)
-                pad=i.getPAD();
-        }
-        if (pad==null)
-            opinions.add(new Opinion(about, new PAD(0,0,0)));
-    }
     
-    //This class evaluates the content, changing both opinions and information
+    
+    
+    
+    //--------------------------------------------------------------------------
+    //SECTION: HEAR FUNCTION WITH SUBFUNCTIONS
+    //This section is written and maintained by Karin. Please
+    //do not make changes to this section without express permission,
+    //so as to avoid merge conflicts and wasted time trying to find things.
+    //--------------------------------------------------------------------------
+    //This method evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
-    //THIS METHOD AND ALL PRIVATE METHODS CALLED BY THIS
-    //ARE WRITTEN AND MAINTAINED BY KARIN.
-    //DO NOT MAKE CHANGES WITHOUT EXPRESS PERMISSION.
     public void hear(SpeechAct act){
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
@@ -424,15 +415,6 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
     }
     
-    public void plantFalseMemory(IThought i){
-        memory.add(i);
-    }
-    
-    public void plantFalseOpinion (Opinion o){
-        opinions.add(o);
-    }
-    
-    
     private void acceptUncritically(String person, IThought stateofworld){
         SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, 1.0);
         previnfo.time=getTime();
@@ -444,6 +426,18 @@ public class NPCBrain implements IPerceiver, Talkable {
         memory.information.add(previnfo);
     }
     
+    //If this does not find an opinion about person,
+    //creates a neutral one.
+    private void makeEmptyOpinion(String about){
+        PAD pad = null;
+        for (Opinion i:opinions){
+            if(i.person==about)
+                pad=i.getPAD();
+        }
+        if (pad==null)
+            opinions.add(new Opinion(about, new PAD(0,0,0)));
+    }
+    
     //selects which statement to respond to in the case that an inOpinion speech act
     //contains several pieces of information
     //responsible for sending the response and updating one's own opinion of the
@@ -453,6 +447,35 @@ public class NPCBrain implements IPerceiver, Talkable {
         //speak(makeSpeechAct(possibleResponses, me));
         makeSpeechAct(possibleResponses, me);
         debugInfo=possibleResponses;
+    }
+    //--------------------------------------------------------------------------
+    //SECTION: Debugging stuff
+    //--------------------------------------------------------------------------
+    
+    public void plantFalseMemory(IThought i){
+        memory.add(i);
+    }
+    
+    public void plantFalseOpinion (Opinion o){
+        opinions.add(o);
+    }
+    
+    public ArrayList<IThought> debugInfo;
+    
+    
+    //--------------------------------------------------------------------------
+    //SECTION: Everything else
+    //Random helper functions, stuff that should be called from outside,
+    //and things that have not been handled yet.
+    //--------------------------------------------------------------------------
+    
+    public Opinion getOpinionAbout(String who){
+        Opinion result=null;
+        for (Opinion i: opinions){
+            if (i.person==who)
+                result=i;
+        }
+        return result;
     }
     
     public void observeRoomChange(String person, String origin, String destination){
