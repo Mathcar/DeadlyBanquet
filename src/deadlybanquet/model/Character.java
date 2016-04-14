@@ -180,6 +180,10 @@ public class Character implements Renderable{
 		return direction;
 	}
 	
+	public void setDirection(Direction dir){
+		direction = dir;
+	}
+	
 	public void moveE(){
 		this.direction = Direction.EAST;
 		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));

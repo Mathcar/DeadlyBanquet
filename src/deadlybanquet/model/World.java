@@ -250,9 +250,10 @@ public class World implements ActionListener, TileBasedMap {
                     if(r !=null && r.hasCharacter(characterTemp)){
                     	if(r.isCharacterOn(characterTemp.getFacedTilePos())){
                     		if(player.isCharacter(characterTemp)){
-                    			
+                    			Character c = r.getCharacterOnPos(characterTemp.getFacedTilePos());
 	                    		for(AIControler a : aiss){
-	                    			if(a.getCharacterId() == (r.getCharacterOnPos(characterTemp.getFacedTilePos())).getId()){
+	                    			if(a.getCharacterId() == c.getId()){
+	                    				c.setDirection(Direction.getOppositeDirection(characterTemp.getDirection()));
 	                    				playerConv = new ConversationModel(player,a.getNpc());
 	                    				talk = true;
 	                    			}
