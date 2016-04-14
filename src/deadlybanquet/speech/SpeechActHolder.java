@@ -48,7 +48,32 @@ public class SpeechActHolder {
             e.printStackTrace();
             System.exit(0);
         }*/
+        final File folder = new File("res/speech/");
+        for(final File files : folder.listFiles()){
+            //asuming there is no folders in this folder
+            String fileName = files.getName();
+            if(fileName.equals("greetingFrase")){
+                greetingFrase=readFile(files);
+            }else if(fileName.equals("questionFrase")){
+                questionFrase=readFile(files);
+            }else{
+                System.err.println(fileName+" Should not exist, if it should it has " +
+                        "to be added in [readAllFile in SpeechActHolder]");
+            }
+
+        }
     }
+
+    public void listFilesForFolder(final File folder) {
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                listFilesForFolder(fileEntry);
+            } else {
+                System.out.println(fileEntry.getName());
+            }
+        }
+    }
+
 
     private ArrayList<SpeechInfo> readFile(File file) {
         BufferedReader br = null;

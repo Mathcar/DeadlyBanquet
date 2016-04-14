@@ -15,6 +15,7 @@ import static deadlybanquet.ai.PAD.placeholderPAD;
 import static deadlybanquet.ai.Say.How.*;
 
 import deadlybanquet.Talkable;
+import static deadlybanquet.ai.Desire.dg.GOAL;
 import deadlybanquet.ai.Say.How;
 import deadlybanquet.model.Time;
 import static deadlybanquet.model.World.getTime;
@@ -124,7 +125,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                 
                 case "Say": 
                     //TODO
-                	processSay((Say)t, you, foundData, possibleAnswers);
+                	processSay((Say)t, you, possibleAnswers);
                     break;
                     
                 case "Do":  
@@ -290,7 +291,7 @@ public class NPCBrain implements IPerceiver, Talkable {
             possibleAnswers.add(c);
     }
     
-    private void processSay(Say inSay, String speaker, SortedList foundData, ArrayList<IThought> possibleAnswers){
+    private void processSay(Say inSay, String you, ArrayList<IThought> possibleAnswers){
         if (inSay.when==null){
             //This means that speaker is performing speech act
             //by saying it. Can therefore assume that me is recipient
@@ -303,55 +304,49 @@ public class NPCBrain implements IPerceiver, Talkable {
                                 if (h.type==REQUEST){
                                     //content of a request should be either a do or a say object.
                                     Time time = getTime();
-                                    time.incrementTime(60);
+                                    Desire desire = new Desire(GOAL,h.content, time, 1.0);
                                     //TODO maybe add another interface to avoid such code?
-                                    if(h.content instanceof Say){
-                                        Say z = (Say) h.content;
-                                        z.when=time;
-                                        memory.information.add(z);
-                                    }
-                                    if (h.content instanceof Do){
-                                        Do z = (Do) h.content;
-                                        z.when=time;
-                                        memory.information.add(z);
-                                    }
+                                    SomebodyElse newinfo = new SomebodyElse(desire,you, new PAD(1,0,0),1.0);
+                                    memory.information.add(newinfo);
+                                    possibleAnswers.add(THANKS);
+                                    Opinion myOpinion = getOpinionAbout(you);
+                                    myOpinion.pad.translateP(NORMALMODIFIER);
+                                    return;
                                 }
-                                possibleAnswers.add(THANKS);
                             }
-                            else {
-                                acceptUncritically(speaker, inSay.content);
-                            }
+                            acceptUncritically(you, inSay.content);
                             break;
                     
                 case DISAGREE:  if(inSay.content instanceof Say){
                                 Say h = (Say) inSay.content;
-                                //Speaker has refused to accomodate a request we made
+                                //Speaker has acceded to a request we made
                                 if (h.type==REQUEST){
-                                    //TODO get angry
+                                    possibleAnswers.add(THANKSANYWAY);
+                                    Opinion myOpinion = getOpinionAbout(you);
+                                    myOpinion.pad.translateP(-NORMALMODIFIER);
+                                    return;
                                 }
-                                possibleAnswers.add(THANKSANYWAY);
                             }
-                            else {
-                                acceptUncritically(speaker, inSay.content);
-                            }
+                            acceptUncritically(you, inSay.content);
                             break;
                     
-                case YESNO: foundData = memory.find(inSay.content);
-                            //TODO need to check other relevant registers as well
+                case YESNO: SortedList foundData = memory.find(inSay.content);
                             if (foundData.isEmpty()){
                                 //Say that this is the case
-                                possibleAnswers.add(new Say(me, speaker, inSay.content, DISAGREE, null));
+                                //might want to copy content, then modify certainty
+                                //Difficulty: Can't introduce placeholder.
+                                possibleAnswers.add(new Say(me, you, inSay.content, DISAGREE, null));
                             }
                             else {
-                                //Say that this is not the case
-                                possibleAnswers.add(new Say(me, speaker, inSay.content, AGREE, null));
+                                //Say that this is the case
+                                possibleAnswers.add(new Say(me, you, foundData.first(), AGREE, null));
                             }
                             break;
                     
                 case REQUEST:   //this one is intimately connected
                                 //with planning, so leave out until plans are constructed.
                                 //Therefore, NPC refuses to do anything for anyone right now.
-                                possibleAnswers.add(new Say(me, speaker, inSay, DISAGREE, null));
+                                possibleAnswers.add(new Say(me, you, inSay, DISAGREE, null));
                                 break;
                 default: System.out.println(me + "says: Incoming Say object is making my mind boggle.");
             }
@@ -361,7 +356,7 @@ public class NPCBrain implements IPerceiver, Talkable {
             //that somebody else said something yet another person.
             //TODO: Look for relevant information,
             //first in history, then in information
-            possibleAnswers.add(new Say(me, speaker, inSay, YESNO, null));
+            possibleAnswers.add(new Say(me, you, inSay, YESNO, null));
         }
     }
     
