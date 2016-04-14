@@ -4,7 +4,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import deadlybanquet.model.Character;
+import deadlybanquet.model.Direction;
 import deadlybanquet.model.MasterPath;
+
 import org.newdawn.slick.util.pathfinding.Path;
 
 import deadlybanquet.model.NPC;
@@ -95,4 +97,13 @@ public class AIControler {
 	public NPC getNpc(){
 		return this.npc;
 	}
+	
+	public void turn(Direction dir){
+		npc.setDirection(dir);
+	}
+	
+	public Direction getCharacterDirection(){
+		return npc.getDirection();
+	}
+	
 }
