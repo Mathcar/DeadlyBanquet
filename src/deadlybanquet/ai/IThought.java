@@ -30,6 +30,8 @@ public interface IThought{
     
     public boolean isQuestion();
     
+    public IThought copy();
+    
     /**
      * 
      * Compares this object with the specified object for order. 

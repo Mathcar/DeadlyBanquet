@@ -36,4 +36,9 @@ public enum BeingPolite implements IThought{
         else if (getCertainty()==o.getCertainty()) return 0;
         return 1;
     }
+    
+    @Override
+    public BeingPolite copy(){
+        return this;
+    }
 }

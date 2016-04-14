@@ -1,6 +1,7 @@
 package deadlybanquet.ai;
 
 import static deadlybanquet.ai.BackStory.SNOWEDIN;
+import static deadlybanquet.ai.BeingPolite.THANKS;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.junit.Test;
@@ -30,6 +31,5 @@ public class IThoughtTest {
     @Test
     public void nonsenseTest(){
         SNOWEDIN.contains(null);
-    }
-    
+    } 
 }

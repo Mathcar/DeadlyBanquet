@@ -84,4 +84,13 @@ public class Desire implements IThought{
         else if (getCertainty()==o.getCertainty()) return 0;
         return 1;
     }
+    
+    @Override
+    public Desire copy(){
+        Time t=time;
+        if(t!=null)
+            t=t.copy();
+        
+        return new Desire(desireorgoal, what.copy(), t, strength);
+    }
 }

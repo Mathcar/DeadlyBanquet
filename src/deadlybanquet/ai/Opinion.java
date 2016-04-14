@@ -13,10 +13,18 @@ public class Opinion implements IThought{
     //The time when this opinion first became current.
     public Time time;
     public Opinion previous;
+    
     public Opinion(String about, PAD pad){
-        this.pad = pad;
-        person = about;
+        this(about,pad,null,null);
     }
+    
+    public Opinion(String about, PAD opinion, Time t, Opinion p){
+        person=about;
+        pad=opinion;
+        time=t;
+        previous=p;
+    }
+    
     @Override
     public String toString(){
         return "feeling " + pad + " about " + person;
@@ -57,5 +65,16 @@ public class Opinion implements IThought{
         if (getCertainty()<o.getCertainty()) return -1;
         else if (getCertainty()==o.getCertainty()) return 0;
         return 1;
+    }
+    
+    @Override
+    public Opinion copy(){
+        Time t=time;
+        if(t!=null)
+            t=t.copy();
+        PAD p =pad;
+        if(p!=null)
+            p=p.copy();
+        return new Opinion(person,p, t, previous.copy());
     }
 }

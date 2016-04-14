@@ -67,4 +67,12 @@ public class Do implements IThought{
     public String toString(){
         return doer + " " + what + " " + withWhat + " at " + when;
     }
+    
+    @Override
+    public Do copy(){
+        Time t=when;
+        if(t!=null)
+            t=t.copy();
+        return new Do(what,doer,withWhat, t);
+    }
 }

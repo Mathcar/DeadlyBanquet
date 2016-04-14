@@ -81,4 +81,12 @@ public class Say implements IThought{
         return 1;
     }
     
+    @Override
+    public Say copy(){
+        Time t=when;
+        if(t!=null)
+            t=t.copy();
+        return new Say(speaker,hearer,content,type, t);
+    }
+    
 }

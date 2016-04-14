@@ -17,23 +17,16 @@ public class EmotionThought implements IThought{
     
     public Time time;
     public EmotionThought previous;
-    
-    @Override
-    public String toString(){
-        return emotionortemperament + " with value " + pad;
-    }
-    
-    @Override
-    public boolean contains(IThought i) {
-        if(i==null) return true;
-        if(!this.getClass().equals(i.getClass())) return false;
-        EmotionThought d = (EmotionThought) i;
-        return (d.emotionortemperament==et.ETPLACEHOLDER||d.emotionortemperament==emotionortemperament);
-    }
 
     public EmotionThought(et e, PAD p){
+        this(e,p,null,null);
+    }
+    
+    public EmotionThought(et e, PAD p, Time t, EmotionThought em){
         emotionortemperament=e;
         pad=p;
+        time=t;
+        previous=em;
     }
     @Override
     public void setPlaceHolderToNull() {
@@ -55,5 +48,29 @@ public class EmotionThought implements IThought{
         if (getCertainty()<o.getCertainty()) return -1;
         else if (getCertainty()==o.getCertainty()) return 0;
         return 1;
+    }
+    
+    @Override
+    public String toString(){
+        return emotionortemperament + " with value " + pad;
+    }
+    
+    @Override
+    public boolean contains(IThought i) {
+        if(i==null) return true;
+        if(!this.getClass().equals(i.getClass())) return false;
+        EmotionThought d = (EmotionThought) i;
+        return (d.emotionortemperament==et.ETPLACEHOLDER||d.emotionortemperament==emotionortemperament);
+    }
+    
+    @Override
+    public EmotionThought copy(){
+        Time t=time;
+        if(t!=null)
+            t=t.copy();
+        PAD p =pad;
+        if(p!=null)
+            p=p.copy();
+        return new EmotionThought (emotionortemperament,p,t,previous);
     }
 }

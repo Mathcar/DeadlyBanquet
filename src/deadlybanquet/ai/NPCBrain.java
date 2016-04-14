@@ -353,9 +353,9 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
         else {
             //In this case, the person is informing me
-            //that somebody else said something yet another person.
-            //TODO: Look for relevant information,
-            //first in history, then in information
+            //that somebody else said something to yet another person.
+            //TODO
+            SortedList list = memory.find(inSay);
             possibleAnswers.add(new Say(me, you, inSay, YESNO, null));
         }
     }

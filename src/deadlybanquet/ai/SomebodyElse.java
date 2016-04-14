@@ -19,11 +19,17 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
     public Time time;
     public SomebodyElse previous;
     
-    public SomebodyElse(IThought w, String a, PAD o, double h){
+    public SomebodyElse(IThought w, String a, PAD o, double h, Time t, SomebodyElse p){
         what=w;
         aboutPerson =a;
         opinion = o;
         howsure=h;
+        time=t;
+        previous=p;
+    }
+    
+    public SomebodyElse(IThought w, String a, PAD o, double h){
+        this(w,a,o,h,null,null);
     }
     
     
@@ -69,5 +75,19 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
     @Override
     public boolean isQuestion() {
         return what.isQuestion() || aboutPerson=="" || opinion.isPlaceholder();
+    }
+    
+    @Override
+    public SomebodyElse copy(){
+        Time t=time;
+        if(t!=null)
+            t=t.copy();
+        PAD p =opinion;
+        if(p!=null)
+            p=p.copy();
+        SomebodyElse s = previous;
+        if(s!=null)
+            s=s.copy();
+        return new SomebodyElse(what, aboutPerson, p, howsure, t, s);
     }
 }

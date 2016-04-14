@@ -15,6 +15,12 @@ public class Time {
         minutes = 0;
     }
     
+    public Time(int d, int h, float m){
+        day=d;
+        hour=h;
+        minutes=m;
+    }
+    
     public Time placeholderTime(){
         Time t = new Time();
         t.forceSetTime(-1, 0, 0);
@@ -54,6 +60,10 @@ public class Time {
     
     public boolean isPlaceHolder(){
         return day<0;
+    }
+    
+    public Time copy(){
+        return new Time(day,hour,minutes);
     }
 
 

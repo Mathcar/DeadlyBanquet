@@ -8,7 +8,6 @@ import deadlybanquet.model.Time;
  */
 public class Whereabouts implements IThought{
     private String room;
-    //TODO: If you find yourself copy-pasting this more than once, make an abstract superclass
     private String character;
     private PAD opinion;
     private double certainty;
@@ -85,4 +84,17 @@ public class Whereabouts implements IThought{
     public String getRoom() {
         return room;
     }
+    
+    @Override
+    public Whereabouts copy(){
+        Time t=time;
+        if(t!=null)
+            t=t.copy();
+        PAD p =opinion;
+        if(p!=null)
+            p=p.copy();
+        return new Whereabouts(room, character, p, certainty, t);
+    }
+    
+    
 }

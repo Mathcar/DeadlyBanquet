@@ -131,4 +131,8 @@ public class PAD {
         if(D>1) D = 1;
         if(D<1) D = -1;
     }
+    
+    public PAD copy(){
+        return new PAD(P,A,D);
+    }
 }

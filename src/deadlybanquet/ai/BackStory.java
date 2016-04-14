@@ -40,4 +40,9 @@ public enum BackStory implements IThought{
         else if (getCertainty()==o.getCertainty()) return 0;
         return 1;
     }
+    
+    @Override
+    public BackStory copy(){
+        return this;
+    }
 }
