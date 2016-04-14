@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import deadlybanquet.ai.condition.ConditionState;
+import deadlybanquet.ai.Condition.ConditionState;
 import deadlybanquet.model.Direction;
 
 public class StateBasedAI {

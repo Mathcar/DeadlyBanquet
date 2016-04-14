@@ -390,8 +390,4 @@ public class Character implements Renderable{
 	public Image getDefaultImage(){
 		return imageS;
 	}
-	
-	public void setDirection(Direction dir){
-		this.direction = dir;
-	}
 }

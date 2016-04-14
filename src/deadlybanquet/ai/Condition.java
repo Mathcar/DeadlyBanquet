@@ -13,12 +13,12 @@ public class Condition {
 	private ConditionState condition;
 	private String characterName;
 	
-	public condition(ConditionState condition, String characterName){
+	public Condition(ConditionState condition, String characterName){
 		this.condition = condition;
 		this.characterName = characterName;
 	}
 	
-	public condition(ConditionState condition){
+	public Condition(ConditionState condition){
 		this.condition = condition;
 		this.characterName = "";
 	}
