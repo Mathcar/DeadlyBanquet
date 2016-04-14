@@ -383,8 +383,11 @@ public class Character implements Renderable{
 		this.room = room;
 	}
 
-
 	public Image getDefaultImage(){
 		return imageS;
+	}
+	
+	public void setDirection(Direction dir){
+		this.direction = dir;
 	}
 }
