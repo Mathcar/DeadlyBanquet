@@ -10,22 +10,20 @@ import deadlybanquet.model.Direction;
 
 public class StateBasedAI {
 	
-<<<<<<< HEAD
+
 	private Queue<Task> schedule;
-=======
+
 	private enum AIState{
 		IDLE_STATE,
 		TALKING_STATE,
 		MOVEING_STATE
 	}
-	
-	private Queue<Task> schedual;
->>>>>>> origin/master
+
 	
 	private AIState state;
 	
 	public StateBasedAI(){
-		schedual = new LinkedList<Task>();
+		schedule = new LinkedList<Task>();
 		state = AIState.IDLE_STATE;
 	}
 	
@@ -39,15 +37,9 @@ public class StateBasedAI {
 		
 		selectState();
 		
-<<<<<<< HEAD
 		if(conditions.contains(ConditionState.INTERUPTED) || schedule.isEmpty()){
-			schedule = new LinkedList<Task>();
+			schedule.clear();
 			schedule.add(new TaskTurn(Direction.EAST));//only turn the character east at the moment
-=======
-		if(conditions.contains(ConditionState.INTERUPTED) || schedual.isEmpty()){
-			schedual.clear();
-			schedual.add(new TaskTurn(Direction.EAST));//only turn the character east at the moment
->>>>>>> origin/master
 		}
 		
 		schedule.peek().execute(new AIControler(null));//should send the AIControler of the character that should execute the task.
