@@ -9,12 +9,14 @@ import deadlybanquet.model.Time;
 public class Say implements IThought{
     
     public enum How {
-        SAY, //with placeholder:ask
+        //SAY, this was supposed to convey A said to B that... but we'll give this a miss
+        //unless we get really bored at some point.
         AGREE, //information being agreed with gets sent along
         DISAGREE, //one's own opinion gets sent along
         YESNO, //this is really just for polite responses: Oh, is it?
         REQUEST, // With Do or Say object
-        REASON; //With placeholder: why. Without placeholder: because.
+       // REASON; //With placeholder: why. Without placeholder: because.
+        //We are leaving out reason as well unless we get really bored.
     }
     String speaker;
     String hearer;
@@ -27,6 +29,9 @@ public class Say implements IThought{
     //has been said (or will be said).
     Time when;
     
+    public Say(String s, String h, IThought c, How t){
+        this(s,h,c,t,null);
+    }
     public Say (String s, String h, IThought c, How t, Time time){
         speaker=s;
         hearer=h;
@@ -34,6 +39,7 @@ public class Say implements IThought{
         type=t;
         this.when = time;
     }
+    
     
     @Override
     public String toString(){

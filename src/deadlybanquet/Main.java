@@ -1,7 +1,10 @@
 package deadlybanquet;
 
+import deadlybanquet.ai.BeingPolite;
+import deadlybanquet.ai.NPCBrain;
+import deadlybanquet.ai.Whereabouts;
 import deadlybanquet.model.World;
-import deadlybanquet.speech.SpeechActHolder;
+import deadlybanquet.speech.*;
 import deadlybanquet.states.Menu;
 import deadlybanquet.states.Pause;
 import deadlybanquet.states.Talk;
@@ -64,24 +67,13 @@ public class Main extends StateBasedGame{
 		
 	}
 
-	/*
-	This main is for tests of characters and opinion,
-	Just leave this commented if you dont want to use it.
-	 */
-	/*
-	public static void main(String[] args){
-		Character c1=new Character("C1");
-		Character c2=new Character("C2");
-		System.out.println("C1 and c2 meet...");
-		c1.meetNewCharacter(c2);
-		c2.meetNewCharacter(c1);
-		System.out.println("Both have \"love\" set to 30 as default.");
-		System.out.println("c1 about c2: "+c1.getOpinion(c2).getLove());
-		System.out.println("c2 says something rude to c1...");
-		c1.getOpinion(c2).changeLove(-10);
-		System.out.println("c1 about c2: "+c1.getOpinion(c2).getLove());
-	}
-	*/
+	/*//test
+		NPCBrain a = new NPCBrain(null,null,null,null,null,null,"Kitchen","A");
+		NPCBrain b = new NPCBrain(null,null,null,null,null,null,"Kitchen","B");
+		SpeechActFactory factory = new SpeechActFactory(a,b);
+		SpeechAct2 s =factory.convertIThoughtToSpeechAct(new Whereabouts("","Bedroom"), TextPropertyEnum.NEUTRAL);
+		System.out.println("line: "+s.getLine());
+		//*/
 
 
 }

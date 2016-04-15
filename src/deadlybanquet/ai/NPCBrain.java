@@ -15,6 +15,8 @@ import static deadlybanquet.ai.PAD.placeholderPAD;
 import static deadlybanquet.ai.Say.How.*;
 
 import deadlybanquet.Talkable;
+import static deadlybanquet.ai.Desire.dg.GOAL;
+import deadlybanquet.ai.Say.How;
 import deadlybanquet.model.Time;
 import static deadlybanquet.model.World.getTime;
 import deadlybanquet.speech.SpeechAct;
@@ -96,9 +98,8 @@ public class NPCBrain implements IPerceiver, Talkable {
         String you = act.getSpeaker();
         makeEmptyOpinion(you);
         for (IThought t : content){
+            acceptUncritically(you, t);
             SortedList foundData = new SortedList(); 
-            //A say object for responses
-            Say c;
             switch(t.getClass().getSimpleName()){
 
                 case "Opinion":
@@ -107,96 +108,37 @@ public class NPCBrain implements IPerceiver, Talkable {
                     
                 case "SomebodyElse":
                     //TODO
-                	caseSomebodyElse((SomebodyElse)t,you, foundData, possibleAnswers);
+                	processSomebodyElse((SomebodyElse)t,you, possibleAnswers);
                     break;
                     
                 case "BackStory": 
-                	caseBackStory((BackStory)t, you, possibleAnswers);
+                	processBackStory((BackStory)t, you, possibleAnswers);
                 	break;
                     
                 case "Whereabouts":
-                	caseWhereabouts((Whereabouts)t, you, possibleAnswers);
+                	processWhereabouts((Whereabouts)t, you, possibleAnswers);
                     break;
                     
                 case "BeingPolite": 
-                	caseBeingPolite(t, you, possibleAnswers);
+                	processBeingPolite((BeingPolite)t, you, possibleAnswers);
                     break;
                 
                 case "Say": 
-                	caseSay((Say)t, you, foundData, possibleAnswers);
+                    //TODO
+                	processSay((Say)t, you, possibleAnswers);
                     break;
                     
-                case "Do":  Do inDo = (Do) t;
-                            //Check if I saw this happen
-                            foundData = memory.find (inDo);
-                            if (!foundData.isEmpty()){
-                                //I did see this happen
-                                c = new Say (me, you, inDo, AGREE, null);
-                                possibleAnswers.add(c);
-                                break;
-                            }
-                            
-                            //Check if I have heard from somebody else 
-                            //that this has happened
-                            foundData = memory.find (inDo);
-                            if (foundData.isEmpty()){
-                                c= new Say(me, you, inDo, YESNO, null);
-                                possibleAnswers.add(c);
-                                break;
-                            }
-                            possibleAnswers.add(foundData.first());
-                            break;
+                case "Do":  
+                        processDo((Do)t, you, possibleAnswers);
+                    break;
                     
-                case "EmotionThought":  EmotionThought inEmotion = (EmotionThought) t;
-                                        SomebodyElse s = new SomebodyElse (inEmotion, you, null, 1.0);
-                                        foundData = memory.find(s);
-                                        if (foundData.isEmpty()){
-                                            //If no previous information is available, return
-                                            //I am happy/sad for you.
-                                            s.time=getTime();
-                                            memory.information.add(s);
-                                            PAD opinion = new PAD(inEmotion.pad.getP(), 0, 0);
-                                            s.opinion = opinion;
-                                            possibleAnswers.add(s);
-                                            memory.information.add(s);
-                                        }
-                                        else {
-                                            //If we already have information, return previous info.
-                                            SomebodyElse b = (SomebodyElse) foundData.first();
-                                            memory.information.remove(b);
-                                            s.previous=b;
-                                            memory.information.add(s);
-                                            possibleAnswers.add(b);
-                                        }
-                                        break;
+                case "EmotionThought":  
+                        processEmotionThought((EmotionThought) t, you, possibleAnswers);
+                    break;
                     
-                case "Desire":  Desire inDesire = (Desire) t;
-                                Desire ownd = null;
-                                //Find any goal
-                                for (Desire i : goals){
-                                    if(inDesire.what.contains(i.what))
-                                        ownd=i;
-                                }
-                                //If this is a goal of yours, say so.
-                                if (ownd!=null){
-                                    possibleAnswers.add(ownd);
-                                    break;
-                                }
-                                //Find any own desire
-                                for (Desire i : desires){
-                                    if(inDesire.what.contains(i.what))
-                                        ownd=i;
-                                }
-                                //If I do not have a desire, or if my desire
-                                //is positive when opponent's is positive (or the reverse)
-                                if (ownd==null || ownd.strength*inDesire.strength>=0){
-                                    SomebodyElse offer = new SomebodyElse(inDesire.what, me, placeholderPAD(),1.0);
-                                    possibleAnswers.add(new Say(me, you, offer, SAY, null));
-                                }
-                                else {
-                                    possibleAnswers.add(ownd);
-                                }
-                                break;
+                case "Desire":  
+                        processDesire((Desire) t, you, possibleAnswers);
+                    break;
                                 
                 default: System.out.println(me + " says: I didn't understand a word of that.");
             }
@@ -243,7 +185,9 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
         if (foundData.isEmpty()){
             Opinion mine = getOpinionAbout(inOpinion.person);
-            ans.add(new Opinion(mine.person, mine.pad));
+            if(mine.pad.distanceTo(inPad)<REALCLOSE)
+                ans.add(new Say(me, you, mine, How.AGREE));
+            else ans.add(new Say(me, you, mine, How.DISAGREE));
         } else {
             ans.add(foundData.first());
         }
@@ -268,25 +212,44 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
     }
     
-    private void caseSomebodyElse(SomebodyElse inElse, String speaker, SortedList foundData, ArrayList<IThought> possibleAnswers){
-        if (inElse.aboutPerson==me){
-            //IThought response = whatAboutMe(inElse.what);
-        }
-        else {
-            //TODO: what if person is saying x thinks that you...
-            //Find your own matching info about this person, if any.
-            foundData = memory.find(inElse);
-            //If none is found, make polite response.
-            if(foundData.isEmpty()){
-                Say c= new Say(me, speaker, inElse, YESNO, null);
+    private void processSomebodyElse(SomebodyElse inElse, String you, ArrayList<IThought> possibleAnswers){
+        IThought currentLevel = inElse;
+        SortedList foundData;
+        while (currentLevel.getClass()==inElse.getClass()){
+            SomebodyElse current = (SomebodyElse) currentLevel;
+            if(current.aboutPerson.equals(me) || current.aboutPerson==you){
+                foundData = memory.find(currentLevel);
+                if(foundData.isEmpty()){
+                    Say c;
+                    if (current.aboutPerson.equals(me)){
+                        c = new Say(me, you, currentLevel, DISAGREE, null);
+                    }
+                    else {
+                        c= new Say(me, you, currentLevel, YESNO, null);
+                    }
+                    possibleAnswers.add(c);
+                    return;
+                }
+                SomebodyElse c = (SomebodyElse) foundData.first();
+                c.opinion = inElse.opinion;
                 possibleAnswers.add(c);
                 return;
             }
-            possibleAnswers.add(foundData.first());
+            currentLevel = current.what;           
         }
+        //At this point, we have arrived at the lowest level, which contains the actual 
+        //content
+        foundData = memory.find(currentLevel);
+        //If none is found, make polite response.
+        if(foundData.isEmpty()){
+            Say c= new Say(me, you, inElse, YESNO, null);
+            possibleAnswers.add(c);
+            return;
+        }
+        possibleAnswers.add(foundData.first());
     }
 
-    private void caseBackStory(BackStory inBack, String speaker, ArrayList<IThought> possibleAnswers){
+    private void processBackStory(BackStory inBack, String speaker, ArrayList<IThought> possibleAnswers){
         Say.How a;
         if (memory.find(inBack).isEmpty()) {
             a =YESNO;
@@ -295,19 +258,19 @@ public class NPCBrain implements IPerceiver, Talkable {
         else {
             a=AGREE;
         }
-        Say c = new Say(me, speaker, inBack, a, null);
+        Say c = new Say(me, speaker, inBack, a);
         possibleAnswers.add(c);
     }
     
-    private void caseWhereabouts(Whereabouts inWhere, String speaker, ArrayList<IThought> possibleAnswers){
+    private void processWhereabouts(Whereabouts inWhere, String speaker, ArrayList<IThought> possibleAnswers){
         //Check if I have an idea about where the person is
         SortedList foundData = new SortedList();
         for (Whereabouts b:whereabouts){
-            if (b.character==inWhere.character)
+            if (b.getCharacter()==inWhere.getCharacter())
                     foundData.add(b);
         }
         //Check if I have an idea that somebody else might know
-        Whereabouts tofind = new Whereabouts(inWhere.character, "",null, 0.0, null);
+        Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "",null, 0.0, null);
 		if(foundData.isEmpty()) foundData=memory.find(tofind);
         //if I have no idea whatsoever about where the person is
         if(foundData.isEmpty()){
@@ -317,32 +280,23 @@ public class NPCBrain implements IPerceiver, Talkable {
                 foundData.add(inWhere);
             }
             else
-                foundData.add(new Say(me, speaker, inWhere, YESNO, null));
+                foundData.add(new Say(me, speaker, inWhere, YESNO));
         }
         possibleAnswers.add(foundData.first());
     }
     
-    private void caseBeingPolite(IThought t, String speaker, ArrayList<IThought> possibleAnswers){
-    	Say c= new Say(me, speaker, t, AGREE, null);
-        possibleAnswers.add(c);
+    private void processBeingPolite(BeingPolite t, String speaker, ArrayList<IThought> possibleAnswers){
+    	Say c= new Say(me, speaker, t, AGREE);
+        if(t!=THANKSANYWAY)
+            possibleAnswers.add(c);
     }
     
-    private void caseSay(Say inSay, String speaker, SortedList foundData, ArrayList<IThought> possibleAnswers){
+    private void processSay(Say inSay, String you, ArrayList<IThought> possibleAnswers){
         if (inSay.when==null){
             //This means that speaker is performing speech act
             //by saying it. Can therefore assume that me is recipient
             //and speaker is current speaker.
             switch (inSay.type){
-                case SAY:   //This must obviously be a question
-                            //since if it were information you would 
-                            //just give the info instead of saying I hereby inform you that...
-                            foundData= memory.find(inSay.content);
-                            if (foundData.isEmpty()){
-                                possibleAnswers.add(inSay.content);
-                            }
-                            possibleAnswers.add(foundData.first());
-                            break;
-         
                     
                 case AGREE: if(inSay.content instanceof Say){
                                 Say h = (Say) inSay.content;
@@ -350,55 +304,49 @@ public class NPCBrain implements IPerceiver, Talkable {
                                 if (h.type==REQUEST){
                                     //content of a request should be either a do or a say object.
                                     Time time = getTime();
-                                    time.incrementTime(60);
+                                    Desire desire = new Desire(GOAL,h.content, time, 1.0);
                                     //TODO maybe add another interface to avoid such code?
-                                    if(h.content instanceof Say){
-                                        Say z = (Say) h.content;
-                                        z.when=time;
-                                        memory.information.add(z);
-                                    }
-                                    if (h.content instanceof Do){
-                                        Do z = (Do) h.content;
-                                        z.when=time;
-                                        memory.information.add(z);
-                                    }
+                                    SomebodyElse newinfo = new SomebodyElse(desire,you, new PAD(1,0,0),1.0);
+                                    memory.information.add(newinfo);
+                                    possibleAnswers.add(THANKS);
+                                    Opinion myOpinion = getOpinionAbout(you);
+                                    myOpinion.pad.translateP(NORMALMODIFIER);
+                                    return;
                                 }
-                                possibleAnswers.add(THANKS);
                             }
-                            else {
-                                acceptUncritically(speaker, inSay.content);
-                            }
+                            acceptUncritically(you, inSay.content);
                             break;
                     
                 case DISAGREE:  if(inSay.content instanceof Say){
                                 Say h = (Say) inSay.content;
-                                //Speaker has refused to accomodate a request we made
+                                //Speaker has acceded to a request we made
                                 if (h.type==REQUEST){
-                                    //TODO get angry
+                                    possibleAnswers.add(THANKSANYWAY);
+                                    Opinion myOpinion = getOpinionAbout(you);
+                                    myOpinion.pad.translateP(-NORMALMODIFIER);
+                                    return;
                                 }
-                                possibleAnswers.add(THANKSANYWAY);
                             }
-                            else {
-                                acceptUncritically(speaker, inSay.content);
-                            }
+                            acceptUncritically(you, inSay.content);
                             break;
                     
-                case YESNO: foundData = memory.find(inSay.content);
-                            //TODO need to check other relevant registers as well
+                case YESNO: SortedList foundData = memory.find(inSay.content);
                             if (foundData.isEmpty()){
                                 //Say that this is the case
-                                possibleAnswers.add(new Say(me, speaker, inSay.content, DISAGREE, null));
+                                //might want to copy content, then modify certainty
+                                //Difficulty: Can't introduce placeholder.
+                                possibleAnswers.add(new Say(me, you, inSay.content, DISAGREE, null));
                             }
                             else {
-                                //Say that this is not the case
-                                possibleAnswers.add(new Say(me, speaker, inSay.content, AGREE, null));
+                                //Say that this is the case
+                                possibleAnswers.add(new Say(me, you, foundData.first(), AGREE, null));
                             }
                             break;
                     
                 case REQUEST:   //this one is intimately connected
                                 //with planning, so leave out until plans are constructed.
-                                //Therefore, NPC refuses to do anything for anyone right aMomentAgo.
-                                possibleAnswers.add(new Say(me, speaker, inSay, DISAGREE, null));
+                                //Therefore, NPC refuses to do anything for anyone right now.
+                                possibleAnswers.add(new Say(me, you, inSay, DISAGREE, null));
                                 break;
                 default: System.out.println(me + "says: Incoming Say object is making my mind boggle.");
             }
@@ -408,13 +356,80 @@ public class NPCBrain implements IPerceiver, Talkable {
             //that somebody else said something yet another person.
             //TODO: Look for relevant information,
             //first in history, then in information
-            possibleAnswers.add(new Say(me, speaker, inSay, YESNO, null));
+            possibleAnswers.add(new Say(me, you, inSay, YESNO, null));
         }
     }
     
+    private void processDo(Do inDo, String you, ArrayList<IThought> possibleAnswers){
+        SortedList foundData = new SortedList();
+        foundData = memory.find (inDo);
+        Say c;
+        if (!foundData.isEmpty()){
+            c = new Say (me, you, foundData.first(), AGREE);
+            possibleAnswers.add(c);
+            return;
+        }
+        c = new Say(me, you, inDo, YESNO);
+        possibleAnswers.add(c);
+    }
+    
+    private void processEmotionThought(EmotionThought inEmotion, String you, ArrayList<IThought> possibleAnswers){
+        SomebodyElse s = new SomebodyElse (inEmotion, you, null, 1.0);
+        SortedList foundData = memory.find(s);
+        if (foundData.isEmpty()){
+            //If no previous information is available, return
+            //I am happy/sad for you.
+            s.time=getTime();
+            memory.information.add(s);
+            PAD opinion = new PAD(inEmotion.pad.getP(), 0, 0);
+            s.opinion = opinion;
+            possibleAnswers.add(s);
+        }
+        else {
+            //If we already have information, return previous info.
+            SomebodyElse b = (SomebodyElse) foundData.first();
+            memory.information.remove(b);
+            s.previous=b;
+            memory.information.add(s);
+            possibleAnswers.add(b);
+        }
+    }
+    
+    private void processDesire(Desire inDesire, String you, ArrayList<IThought>possibleAnswers){
+        Desire ownd = null;
+        //Find any goal
+        for (Desire i : goals){
+            if(inDesire.what.contains(i.what))
+                ownd=i;
+        }
+        //If this is a goal of yours, say so.
+        if (ownd!=null){
+            possibleAnswers.add(ownd);
+            return;
+        }
+        //Find any own desire
+        for (Desire i : desires){
+            if(inDesire.what.contains(i.what))
+                ownd=i;
+        }
+        //If I do not have a desire, or if my desire
+        //is positive when opponent's is positive (or the reverse),
+        //that is, I want the opposite of what you want
+        if (ownd==null || ownd.strength*inDesire.strength>=0){
+            SomebodyElse offer = new SomebodyElse(inDesire.what, me, placeholderPAD(),1.0);
+            possibleAnswers.add(offer);
+        }
+        else {
+            possibleAnswers.add(ownd);
+        }
+    }
     
     public void plantFalseMemory(IThought i){
         memory.add(i);
+    }
+    
+    public void plantFalseOpinion (Opinion o){
+        opinions.add(o);
     }
     
     
@@ -470,8 +485,14 @@ public class NPCBrain implements IPerceiver, Talkable {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
     public String getName(){
         return this.me;
+    }
+    
+    //@Override
+    public Memory getMemory(){
+        return memory;
     }
     
    

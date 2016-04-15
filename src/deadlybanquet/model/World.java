@@ -70,22 +70,26 @@ public class World implements ActionListener, TileBasedMap {
     public void initAIs(){
         //Not really sure in which order these thing are supposed to be initialized, but regardless
         //it should be done in here
-    	Character npc = new Character(this, "Frido", 9, 5);
-    	ai = new AIControler(this,npc);
     	aiss = new ArrayList<>();
+    	controlerBrainMap = new HashMap<AIControler, NPCBrain>();
+    	createNpc(new Position(9,5), "Frido", "Living Room" );
+    	createNpc(new Position(13,9), "Candy", "Living Room" );
+    	createNpc(new Position(2,2), "Bankimoon", "Living Room" );
+    	createNpc(new Position(7,12), "Cindy", "Kitchen" );
+    	createNpc(new Position(9,7), "Aragorn", "Kitchen" );
+    	createNpc(new Position(9,3), "Daisy", "Bedroom" );
+    }
+    //always use when creating an npc 
+    public void createNpc (Position pos, String name, String room){
+    	Character npc = new Character(this, name, pos.getX(), pos.getY());
+    	AIControler	ai = new AIControler(this,npc);
+        NPCBrain brain = BrainFactory.makeBrain(room, npc.getName());
     	aiss.add(ai);
-    	
-
-        controlerBrainMap = new HashMap<AIControler, NPCBrain>();
-        AIControler	ai = new AIControler(this,npc);
-        NPCBrain brain = BrainFactory.makeBrain("Living Room", npc.getName());
-    	aiss = new ArrayList<>();
-    	aiss.add(ai);
-
+    	System.out.println(room);
         controlerBrainMap.put(ai, brain);
-
-    	roomMap[2][2].addCharacter(npc);
-  
+    	System.out.println(room);
+        Position p = getRoomPosition(room);
+    	roomMap[p.getX()][p.getY()].addCharacter(npc);
     }
 
     public void initRoomMap(){
@@ -171,7 +175,7 @@ public class World implements ActionListener, TileBasedMap {
     public Position  getRoomPosition(String name){
         for(int i=0; i<roomMap.length;i++){
             for(int j = 0; j<roomMap[i].length;j++){
-                if(roomMap != null && roomMap[i][j].getName().equals(name)){
+                if(roomMap[i][j] != null && roomMap[i][j].getName().equals(name)){
                     return new Position(i,j);
                 }
             }
@@ -249,9 +253,10 @@ public class World implements ActionListener, TileBasedMap {
                     if(r !=null && r.hasCharacter(characterTemp)){
                     	if(r.isCharacterOn(characterTemp.getFacedTilePos())){
                     		if(player.isCharacter(characterTemp)){
-                    			
+                    			Character c = r.getCharacterOnPos(characterTemp.getFacedTilePos());
 	                    		for(AIControler a : aiss){
-	                    			if(a.getCharacterId() == (r.getCharacterOnPos(characterTemp.getFacedTilePos())).getId()){
+	                    			if(a.getCharacterId() == c.getId()){
+	                    				c.setDirection(Direction.getOppositeDirection(characterTemp.getDirection()));
 	                    				playerConv = new ConversationModel(player,a.getNpc());
 	                    				talk = true;
 	                    			}
