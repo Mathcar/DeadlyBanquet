@@ -194,6 +194,34 @@ public class World implements ActionListener, TileBasedMap {
         }
         return null;
     }
+    
+    public boolean attemptChangeRooms(Character ce) {
+    	Room targetRoom = getRoomRef(getRoomOfCharacter(ce).getFacedDoor(ce.getFacedTilePos()).getDestinationRoom());
+        Room originRoom = getRoomRef(getRoomOfCharacter(ce).getFacedDoor(ce.getFacedTilePos()).getOriginRoom());
+        /*//----------------------------------DEBUG--------------------------------
+        System.out.println(originRoom.getName() + "   to   " + targetRoom.getName()
+                            + " entering from " + ce.getEnterDirection().toString() );
+        //-----------------------------------------------------------------------*/
+
+        if (!targetRoom.entranceIsBlocked(ce.getDirection())) {
+            originRoom.removeCharacter(ce);
+            //Tell the affected rooms to notify all characters so that this can be added
+            //to memory
+            targetRoom.addCharacterToRoom(ce,ce.getDirection());
+            notifyRoomChange(originRoom,targetRoom,ce);
+            seePeople(ce, targetRoom);
+
+
+        }
+        /*//----------------------------------DEBUG--------------------------------
+        else{
+            System.out.println(ce.getTargetRoom() + " Was blocked from " + ce.getEnterDirection().toString());
+        }
+        //-----------------------------------------------------------------------*/
+    
+
+    	return true;
+    }
 
 
     public boolean attemptMove(Character c){

@@ -184,6 +184,14 @@ public class Room implements TileBasedMap {
         return pos.getY()<getHeightInTiles() && pos.getX()<getWidthInTiles() &&
                 pos.getX() >=0 && pos.getY() >=0;
     }
+    public Door getFacedDoor(Position p){
+    	for(Door d : doors){
+    		if(d.getX() == p.getX() && d.getY() == p.getY()){
+    			return d;
+    		}
+    	} 
+    	return null;
+    }
 
     //Attempt to move passed character in their current facing.
     //Returns TRUE on succesfull move, otherwise FALSE.
