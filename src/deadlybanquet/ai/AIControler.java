@@ -118,4 +118,10 @@ public class AIControler {
 		return npc.getDirection();
 	}
 	
+	//ugly test code
+	public void update(){
+		Task t = new TaskTurn(Direction.EAST);
+		t.execute(this);
+	}
+	//end
 }

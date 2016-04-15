@@ -133,7 +133,7 @@ public class World implements ActionListener, TileBasedMap {
         player.update(container, s, deltaTime);
         
         //Task test
-//        aiss.get(0).uppdate();
+        aiss.get(0).update();
         //end
     }
 
