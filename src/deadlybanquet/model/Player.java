@@ -35,25 +35,25 @@ public class Player implements Talkable {
 	}
 
 	//Changed parameters so that ALL update methods are of the same structure
-	public void update(GameContainer container, StateBasedGame s, int dt){
+	public void update(World world, GameContainer container, StateBasedGame s, int dt){
 		Input in = container.getInput();
 		if(this.movementTimer < 1){
 			if(in.isKeyDown(Input.KEY_UP) || in.isKeyDown(Input.KEY_W)){
-				character.moveN();
+				world.attemptMove(character, Direction.NORTH);
 				movementTimer = MOVEMENT_DELAY;
 			}else if(in.isKeyDown(Input.KEY_DOWN) || in.isKeyDown(Input.KEY_S)){
-				character.moveS();
+				world.attemptMove(character, Direction.SOUTH);
 				movementTimer = MOVEMENT_DELAY;
 			}else if(in.isKeyDown(Input.KEY_LEFT) || in.isKeyDown(Input.KEY_A)){
-				character.moveW();
+				world.attemptMove(character, Direction.WEST);
 				movementTimer = MOVEMENT_DELAY;
 			}else if(in.isKeyDown(Input.KEY_RIGHT) || in.isKeyDown(Input.KEY_D)){
-				character.moveE();
+				world.attemptMove(character, Direction.EAST);
 				movementTimer = MOVEMENT_DELAY;
 			}
 			if(in.isKeyPressed(Input.KEY_E)){
-				character.attemptRoomChange();
-				character.tryTalk();
+				//character.attemptRoomChange();
+				//character.tryTalk();
 			}
 		}
 		movementTimer--;

@@ -32,29 +32,6 @@ public class AIControler {
 	}
 	
 	public void moveNPC(){
-		if(this.checkBlocked()){
-			//notify AI to make a decision
-			//and discard path
-		}else{
-            npc.attemptMove(new Position(path.getX(0), path.getY(0)));
-            /* FUNCTIONALITY MOVED TO CHARACTER BY HAMPUS
-			int xMovement = npc.getPos().getX()-path.getX(0);
-			int yMovement = npc.getPos().getY()-path.getY(0);
-			if(xMovement==0){
-				if(yMovement<0){
-					npc.moveN();
-				}else if(yMovement>0){
-					npc.moveS();
-				}
-			}else{
-				if(xMovement<0){
-					npc.moveW();
-				}else if(xMovement>0){
-					npc.moveE();
-				}
-			}
-			*/
-		}
 	}
 
 	//Called on every person in origin and destination rooms on room change.
@@ -89,7 +66,6 @@ public class AIControler {
 				requestPath();
 			}
 		}else{
-            npc.attemptMove(new Position(path.getX(currentPathStep), path.getY(currentPathStep)));
         }
 	}
 
@@ -114,7 +90,8 @@ public class AIControler {
 	public int getCharacterId(){
 		return npc.getId();
 	}
-	
+
+    /*OBOLETE, blocked status is no longer in character but instead flagged
 	private boolean checkBlocked(){
 		if(npc.isBlocked()){
 			npc.unblock();
@@ -123,6 +100,7 @@ public class AIControler {
 			return false;
 		}
 	}
+	*/
 	
 	public Character getNpc(){
 		return this.npc;
