@@ -11,6 +11,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.util.pathfinding.Mover;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Character implements Renderable{
+public class Character implements Renderable, Mover{
 
     /*
     Counter to set specific ID for each character.
@@ -292,7 +293,6 @@ public class Character implements Renderable{
 				}
 			case EAST:
 				if(moving){
-					
 					if(distance == 1){
 						moving = false;
 						distance = 32;

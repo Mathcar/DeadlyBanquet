@@ -12,10 +12,10 @@ import deadlybanquet.model.World;
 
 import org.newdawn.slick.util.pathfinding.Path;
 
-import deadlybanquet.model.NPC;
+import deadlybanquet.model.Character;
 
 public class AIControler {
-	private NPC npc;
+	private Character npc;
 	
 	
 	private final static int MOVEMNET_DELAY = 32;
@@ -24,11 +24,11 @@ public class AIControler {
 	private Path path;
 	
 	public AIControler(ActionListener al){
-		this.npc = new NPC(al, "Frido", 3, 3);
+		this.npc = new Character(al, "Frido", 3, 3);
 	}
 	
-	public AIControler(ActionListener al, deadlybanquet.model.Character c){
-		this.npc = new NPC(al, c);
+	public AIControler(ActionListener al, Character c){
+		this.npc = c;
 		
 	}
 	
@@ -106,7 +106,7 @@ public class AIControler {
 		}
 	}
 	
-	public NPC getNpc(){
+	public Character getNpc(){
 		return this.npc;
 	}
 	
@@ -119,7 +119,7 @@ public class AIControler {
 	}
 	
 	//ugly test code
-	public void update(){
+	public void update(World world, int deltaTime){
 		Task t = new TaskTurn(Direction.EAST);
 		t.execute(this);
 	}

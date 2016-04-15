@@ -1,6 +1,7 @@
 package deadlybanquet;
 
 import deadlybanquet.ai.BeingPolite;
+import deadlybanquet.model.Character;
 import deadlybanquet.model.NPC;
 import deadlybanquet.model.Player;
 import deadlybanquet.speech.SpeechAct;
@@ -12,8 +13,8 @@ public class ConversationModel {
 
     // for now only works with players and NPC
     Player player;
-    NPC npc;
-    public ConversationModel(Player player, NPC npc){
+    Character npc;
+    public ConversationModel(Player player, Character npc){
         this.player=player;
         this.npc=npc;
     }
@@ -37,7 +38,7 @@ public class ConversationModel {
     public Player getPlayer(){
     	return player;
     }
-    public NPC getNpc(){
+    public Character getNpc(){
     	return npc;
     }
 

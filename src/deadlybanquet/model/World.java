@@ -121,9 +121,10 @@ public class World implements ActionListener, TileBasedMap {
 
             }
         }
-       // for(AI ai : ais){
-         //   ai.update(container, s, deltaTime);
-        //}
+        /*
+        for(AIControler ai : aiss){
+            ai.update(this, deltaTime);
+        }*/
         
         if(talk){
         	s.enterState(States.talk);
@@ -133,7 +134,7 @@ public class World implements ActionListener, TileBasedMap {
         player.update(container, s, deltaTime);
         
         //Task test
-        aiss.get(0).update();
+        aiss.get(0).update(this, deltaTime);
         //end
     }
 
