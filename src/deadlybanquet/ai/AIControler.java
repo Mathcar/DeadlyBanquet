@@ -120,6 +120,14 @@ public class AIControler {
 		return npc.getDirection();
 	}
 	
+	public boolean isTalking() {
+		return npc.isTalking();
+	}
+
+	public void setTalking(boolean talking) {
+		npc.setTalking(talking);
+	}
+	
 	//ugly test code
 	public void update(World world, int deltaTime){
 		/*Task t = new TaskTurn(Direction.EAST);

@@ -37,6 +37,7 @@ public class Character implements Renderable, Mover{
 	private Direction direction;
 	private int distance;
 	private String room;
+	private boolean talking;
 	
 	private ActionListener actList;
 	
@@ -59,6 +60,7 @@ public class Character implements Renderable, Mover{
     	this.name = c.getName();
     	this.pos = c.getPos();
     	this.direction = c.getDirection();
+    	this.talking = false;
     		
     }
 	
@@ -71,6 +73,8 @@ public class Character implements Renderable, Mover{
 		this.pos = new Position(xPos, yPos);
 		this.direction = Direction.SOUTH;
 		distance = 32;
+		
+		this.talking = false;
 		
 		this.actList = al;
 		
@@ -389,5 +393,13 @@ public class Character implements Renderable, Mover{
 
 	public Image getDefaultImage(){
 		return imageS;
+	}
+
+	public boolean isTalking() {
+		return talking;
+	}
+
+	public void setTalking(boolean talking) {
+		this.talking = talking;
 	}
 }
