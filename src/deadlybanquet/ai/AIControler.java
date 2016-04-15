@@ -106,4 +106,13 @@ public class AIControler {
 		return npc.getDirection();
 	}
 	
+	//Task test 
+	public void uppdate(){
+		Task t = new TaskTurn(Direction.EAST);
+		t.execute(this);
+		System.out.println(npc.getName() + " turn " + npc.getDirection());
+		
+	}
+	//end
+	
 }
