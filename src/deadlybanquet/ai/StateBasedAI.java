@@ -9,9 +9,6 @@ import deadlybanquet.ai.Condition.ConditionState;
 import deadlybanquet.model.Direction;
 
 public class StateBasedAI {
-	
-
-	private Queue<Task> schedule;
 
 	private enum AIState{
 		IDLE_STATE,
@@ -22,35 +19,71 @@ public class StateBasedAI {
 	
 	private AIState state;
 	
+	List<Condition> conditions;
+	
+	private Queue<Task> schedule;
+	
 	public StateBasedAI(){
 		schedule = new LinkedList<Task>();
 		state = AIState.IDLE_STATE;
+		conditions = new ArrayList<Condition>();
 	}
 	
 	public void think(AIControler aic){ //method is not runnable
 		
 		List<String> characters = null;//= getCharactersInRoom()
-		//This should maybe be as a parameter to the function?
 		
-		List conditions = genConditions(characters);
-		//Brainstorming: Combination of a parameter and condition generated from memory?  
+		genConditions(aic); 
 		
 		selectState();
 		
-		if(schedule.isEmpty()){
-			schedule.clear();
-			schedule.add(new TaskTurn(Direction.EAST));//only turn the character east at the moment
-		}
+		generateSchedule();
 		
-		schedule.peek().execute(aic);//should send the AIControler of the character that should execute the task.
+		runSchedule(aic);
+		
 	}
 	
-	private List genConditions(List<String> characters){
-		return new ArrayList();
+	private void generateSchedule() {
+		if(schedule.isEmpty()){
+			schedule.clear();
+			switch(state){
+				case IDLE_STATE:
+					schedule.add(new TaskTurn(Direction.EAST));//only turn the character east at the moment
+					break;
+				case TALKING_STATE:
+					schedule.add(new TaskIdle());
+					break;
+				case MOVEING_STATE:
+					schedule.add(new TaskIdle());
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	private void genConditions(AIControler aic){
+		conditions.clear();
+		if(aic.isTalking()){
+			conditions.add(new Condition(ConditionState.TALKING));
+		}
+		//if talking: add Talking-condition
+		
+		//add more conditions
 	}
 	
 	private void selectState(){
-		
+		for(Condition c: conditions){
+			if(c.getCondition()==ConditionState.TALKING){
+				state=AIState.TALKING_STATE;
+			}
+		}
+	}
+	
+	private void runSchedule(AIControler aic){
+		if(schedule.peek().execute(aic)){
+			schedule.poll();
+		}
 	}
 	
 }
