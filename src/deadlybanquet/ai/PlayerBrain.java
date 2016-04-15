@@ -9,7 +9,8 @@ import deadlybanquet.speech.SpeechAct;
 import java.util.*;
 public class PlayerBrain implements IPerceiver {
     Memory information;
-    
+    //TODO CONSTRUCTOR ONLY TEMPORARILY ADDED, NOT SURE IF EMPTY MEMORY IS SUPPPOSED TO BE MADE
+    public PlayerBrain(){information = new Memory(new SortedList());}
     public PlayerBrain(SortedList s){
         information = new Memory(s);
     }

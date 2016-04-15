@@ -1,12 +1,17 @@
 package deadlybanquet.ai;
 
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import deadlybanquet.model.Character;
 import deadlybanquet.model.Direction;
 import deadlybanquet.model.MasterPath;
+<<<<<<< HEAD
+import deadlybanquet.model.World;
+=======
 
+>>>>>>> origin/master
 import org.newdawn.slick.util.pathfinding.Path;
 
 import deadlybanquet.model.NPC;
@@ -54,17 +59,26 @@ public class AIControler {
 
 	//Called on every person in origin and destination rooms on room change.
 	public void observeRoomChange(String who, String origin, String destination){
-		//TODO IMPLEMENT
+		//DEBUG
+		System.out.println(getCharacterName() + " has seen " + who + " enter " + destination + " from " + origin);
+        //
+		NPCBrain myBrain = World.getControlerBrain(this);
+		myBrain.observeRoomChange(who,origin,destination);
 	}
 
 	//called on entering a room
 	public void seePeople (ArrayList<String> people){
-
-		//TODO IMPLEMENT
+        NPCBrain myBrain = World.getControlerBrain(this);
+        myBrain.seePeople(people);
+        System.out.println(getCharacterName() + " sees these people upon entering the room: ");
+        for(String s : people){
+            System.out.println(s);
+        }
 	}
 
 	public void observeInteraction(String who, String with){
-
+        NPCBrain myBrain = World.getControlerBrain(this);
+        myBrain.observeInteraction(who, with);
 		//TODO IMPLEMENT
 	}
 
