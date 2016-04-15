@@ -4,11 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import deadlybanquet.model.Character;
-import deadlybanquet.model.Direction;
-import deadlybanquet.model.MasterPath;
-
-import deadlybanquet.model.World;
+import deadlybanquet.model.*;
 
 import org.newdawn.slick.util.pathfinding.Path;
 
@@ -17,7 +13,7 @@ import deadlybanquet.model.Character;
 public class AIControler {
 	private Character npc;
 	private StateBasedAI statebasedAI;
-	
+	private int currentPathStep;
 	private final static int MOVEMNET_DELAY = 32;
 	private int movmentTimer = 0;
 	private MasterPath masterPath;
@@ -26,12 +22,13 @@ public class AIControler {
 	public AIControler(ActionListener al){
 		this.npc = new Character(al, "Frido", 3, 3);
 		statebasedAI = new StateBasedAI();
+        currentPathStep = 0;
 	}
 	
 	public AIControler(ActionListener al, Character c){
 		this.npc = c;
 		statebasedAI = new StateBasedAI();
-		
+		currentPathStep = 0;
 	}
 	
 	public void moveNPC(){
@@ -39,6 +36,8 @@ public class AIControler {
 			//notify AI to make a decision
 			//and discard path
 		}else{
+            npc.attemptMove(new Position(path.getX(0), path.getY(0)));
+            /* FUNCTIONALITY MOVED TO CHARACTER BY HAMPUS
 			int xMovement = npc.getPos().getX()-path.getX(0);
 			int yMovement = npc.getPos().getY()-path.getY(0);
 			if(xMovement==0){
@@ -54,6 +53,7 @@ public class AIControler {
 					npc.moveE();
 				}
 			}
+			*/
 		}
 	}
 
@@ -82,8 +82,24 @@ public class AIControler {
 		//TODO IMPLEMENT
 	}
 
+	public void stepPath(){
+		if(path==null){
+			if(masterPath != null){
+				//Last path ended but masterpath still has steps to go
+				requestPath();
+			}
+		}else{
+            npc.attemptMove(new Position(path.getX(currentPathStep), path.getY(currentPathStep)));
+        }
+	}
+
+    public MasterPath requestMasterPath(){return new MasterPath();}
+
+	public Path requestPath(){return new Path();}
+
 	public void setPath(Path p){
 		//Reset path counter?
+        currentPathStep  = 0;
 		path = p;
 	}
 
