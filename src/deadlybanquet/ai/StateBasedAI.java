@@ -10,17 +10,33 @@ import deadlybanquet.model.Direction;
 
 public class StateBasedAI {
 	
+	private enum AIState{
+		IDLE_STATE,
+		TALKING_STATE,
+		MOVEING_STATE
+	}
+	
 	private Queue<Task> schedual;
 	
+	private AIState state;
+	
+	public StateBasedAI(){
+		schedual = new LinkedList<Task>();
+		state = AIState.IDLE_STATE;
+	}
+	
 	public void think(){ //method is not runnable
+		
 		List<String> characters = null;//= getCharactersInRoom()
+		//This should maybe be as a parameter to the function?
 		
 		List conditions = genConditions(characters);
+		//Brainstorming: Combination of a parameter and condition generated from memory?  
 		
 		selectState();
 		
 		if(conditions.contains(ConditionState.INTERUPTED) || schedual.isEmpty()){
-			schedual = new LinkedList<Task>();
+			schedual.clear();
 			schedual.add(new TaskTurn(Direction.EAST));//only turn the character east at the moment
 		}
 		

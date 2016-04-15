@@ -131,7 +131,10 @@ public class World implements ActionListener, TileBasedMap {
         }
         
         player.update(container, s, deltaTime);
-
+        
+        //Task test
+        aiss.get(0).uppdate();
+        //end
     }
 
     //return time in hours, DO NOT USE THIS TO SET THE TIME
