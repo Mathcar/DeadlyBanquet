@@ -27,7 +27,7 @@ public class StateBasedAI {
 		state = AIState.IDLE_STATE;
 	}
 	
-	public void think(){ //method is not runnable
+	public void think(AIControler aic){ //method is not runnable
 		
 		List<String> characters = null;//= getCharactersInRoom()
 		//This should maybe be as a parameter to the function?
@@ -37,12 +37,12 @@ public class StateBasedAI {
 		
 		selectState();
 		
-		if(conditions.contains(ConditionState.INTERUPTED) || schedule.isEmpty()){
+		if(schedule.isEmpty()){
 			schedule.clear();
 			schedule.add(new TaskTurn(Direction.EAST));//only turn the character east at the moment
 		}
 		
-		schedule.peek().execute(new AIControler(null));//should send the AIControler of the character that should execute the task.
+		schedule.peek().execute(aic);//should send the AIControler of the character that should execute the task.
 	}
 	
 	private List genConditions(List<String> characters){

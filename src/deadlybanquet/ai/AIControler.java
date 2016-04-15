@@ -16,7 +16,7 @@ import deadlybanquet.model.Character;
 
 public class AIControler {
 	private Character npc;
-	
+	private StateBasedAI statebasedAI;
 	
 	private final static int MOVEMNET_DELAY = 32;
 	private int movmentTimer = 0;
@@ -25,10 +25,12 @@ public class AIControler {
 	
 	public AIControler(ActionListener al){
 		this.npc = new Character(al, "Frido", 3, 3);
+		statebasedAI = new StateBasedAI();
 	}
 	
 	public AIControler(ActionListener al, Character c){
 		this.npc = c;
+		statebasedAI = new StateBasedAI();
 		
 	}
 	
@@ -120,8 +122,10 @@ public class AIControler {
 	
 	//ugly test code
 	public void update(World world, int deltaTime){
-		Task t = new TaskTurn(Direction.EAST);
-		t.execute(this);
+		/*Task t = new TaskTurn(Direction.EAST);
+		t.execute(this);'
+		*/
+		statebasedAI.think(this);
 	}
 	//end
 }
