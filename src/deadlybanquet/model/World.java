@@ -131,7 +131,8 @@ public class World implements ActionListener, TileBasedMap {
         	talk = false;
         }
         
-        player.update(container, s, this ,deltaTime);
+        player.update(this, container, s, deltaTime);
+
     }
 
     //return time in hours, DO NOT USE THIS TO SET THE TIME
@@ -243,7 +244,8 @@ public class World implements ActionListener, TileBasedMap {
     }
 
 
-    public boolean attemptMove(Character c){
+    public boolean attemptMove(Character c, Direction dir){
+        c.setDirection(dir);
         return getRoomOfCharacter(c).attemptMove(c);
     }
 
@@ -331,7 +333,7 @@ public class World implements ActionListener, TileBasedMap {
             }
             //-----------------------------------------------------------------------*/
         }
-        
+        /*      OBSOLETE
         if(e.getID() == EventEnum.CHECK_DOOR.ordinal()){
         	Character characterTemp = (Character) e.getSource();
         	for (Room[] rm : roomMap) {
@@ -364,7 +366,7 @@ public class World implements ActionListener, TileBasedMap {
                     }	
                 }
         	}
-        }
+        }*/
         /*---------------------OBSOLETE, REPLACED BY attemptCreatePathTo... methods found above---------
         if(e.getID() == EventEnum.REQUEST_PATH_TO_PERSON.ordinal()){
             Path p;

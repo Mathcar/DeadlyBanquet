@@ -205,7 +205,7 @@ public class Room implements TileBasedMap {
             return true;
         }
     }
-
+/*               OBSOLETE
     //Checks if a character can move to its desired destination.
     //tells the character to conduct its move if it can, otherwise notifies
     //the character through "notifyBlocked()"
@@ -222,7 +222,7 @@ public class Room implements TileBasedMap {
             }
         }
     }
-
+*/
     public boolean entranceIsBlocked(Direction origin){
         for(Door d : doors) {
             if(d.getDirection()==Direction.getOppositeDirection(origin)){
@@ -288,6 +288,7 @@ public class Room implements TileBasedMap {
             }
         }
     }
+    /*              OBOSOLETE
     public void checkDoor(ActionEvent e){
     	Position p = ((Character) e.getSource()).getFacedTilePos();
     	for(Door d : doors){
@@ -295,7 +296,7 @@ public class Room implements TileBasedMap {
     			((Character) e.getSource()).enterDoor(d.getDestinationRoom(), d.getOriginRoom());
     		}
     	}
-    }
+    }*/
 
     public boolean isCharacterOn(Position p){
     	for(Character c: characters){
