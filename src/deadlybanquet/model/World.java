@@ -74,7 +74,7 @@ public class World implements ActionListener, TileBasedMap {
     	controlerBrainMap = new HashMap<AIControler, NPCBrain>();
     	createNpc(new Position(9,5), "Frido", "Living Room" );
     	createNpc(new Position(13,9), "Candy", "Living Room" );
-    	createNpc(new Position(2,2), "Bankimoon", "Living Room" );
+    	createNpc(new Position(2,2), "BURT", "Living Room" );
     	createNpc(new Position(7,12), "Cindy", "Kitchen" );
     	createNpc(new Position(9,7), "Aragorn", "Kitchen" );
     	createNpc(new Position(9,3), "Daisy", "Bedroom" );
