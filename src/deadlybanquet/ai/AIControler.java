@@ -10,7 +10,6 @@ import deadlybanquet.model.MasterPath;
 
 import deadlybanquet.model.World;
 
-
 import org.newdawn.slick.util.pathfinding.Path;
 
 import deadlybanquet.model.NPC;

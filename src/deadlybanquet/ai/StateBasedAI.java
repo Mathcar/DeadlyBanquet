@@ -10,6 +10,9 @@ import deadlybanquet.model.Direction;
 
 public class StateBasedAI {
 	
+
+	private Queue<Task> schedule;
+
 	private enum AIState{
 		IDLE_STATE,
 		TALKING_STATE,
@@ -17,6 +20,7 @@ public class StateBasedAI {
 	}
 	
 	private Queue<Task> schedual;
+
 	
 	private AIState state;
 	
@@ -35,12 +39,14 @@ public class StateBasedAI {
 		
 		selectState();
 		
+
 		if(conditions.contains(ConditionState.INTERUPTED) || schedual.isEmpty()){
 			schedual.clear();
 			schedual.add(new TaskTurn(Direction.EAST));//only turn the character east at the moment
+
 		}
 		
-		schedual.peek().execute(new AIControler(null));//should send the AIControler of the character that should execute the task.
+		schedule.peek().execute(new AIControler(null));//should send the AIControler of the character that should execute the task.
 	}
 	
 	private List genConditions(List<String> characters){
