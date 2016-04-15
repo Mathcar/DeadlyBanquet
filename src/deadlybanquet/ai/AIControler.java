@@ -4,11 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import deadlybanquet.model.Character;
-import deadlybanquet.model.Direction;
-import deadlybanquet.model.MasterPath;
-
-import deadlybanquet.model.World;
+import deadlybanquet.model.*;
 
 import org.newdawn.slick.util.pathfinding.Path;
 
@@ -17,7 +13,7 @@ import deadlybanquet.model.Character;
 public class AIControler {
 	private Character npc;
 	private StateBasedAI statebasedAI;
-	
+	private int currentPathStep;
 	private final static int MOVEMNET_DELAY = 32;
 	private int movmentTimer = 0;
 	private MasterPath masterPath;
@@ -26,35 +22,16 @@ public class AIControler {
 	public AIControler(ActionListener al){
 		this.npc = new Character(al, "Frido", 3, 3);
 		statebasedAI = new StateBasedAI();
+        currentPathStep = 0;
 	}
 	
 	public AIControler(ActionListener al, Character c){
 		this.npc = c;
 		statebasedAI = new StateBasedAI();
-		
+		currentPathStep = 0;
 	}
 	
 	public void moveNPC(){
-		if(this.checkBlocked()){
-			//notify AI to make a decision
-			//and discard path
-		}else{
-			int xMovement = npc.getPos().getX()-path.getX(0);
-			int yMovement = npc.getPos().getY()-path.getY(0);
-			if(xMovement==0){
-				if(yMovement<0){
-					npc.moveN();
-				}else if(yMovement>0){
-					npc.moveS();
-				}
-			}else{
-				if(xMovement<0){
-					npc.moveW();
-				}else if(xMovement>0){
-					npc.moveE();
-				}
-			}
-		}
 	}
 
 	//Called on every person in origin and destination rooms on room change.
@@ -82,8 +59,23 @@ public class AIControler {
 		//TODO IMPLEMENT
 	}
 
+	public void stepPath(){
+		if(path==null){
+			if(masterPath != null){
+				//Last path ended but masterpath still has steps to go
+				requestPath();
+			}
+		}else{
+        }
+	}
+
+    public MasterPath requestMasterPath(){return new MasterPath();}
+
+	public Path requestPath(){return new Path();}
+
 	public void setPath(Path p){
 		//Reset path counter?
+        currentPathStep  = 0;
 		path = p;
 	}
 
@@ -98,7 +90,8 @@ public class AIControler {
 	public int getCharacterId(){
 		return npc.getId();
 	}
-	
+
+    /*OBOLETE, blocked status is no longer in character but instead flagged
 	private boolean checkBlocked(){
 		if(npc.isBlocked()){
 			npc.unblock();
@@ -107,6 +100,7 @@ public class AIControler {
 			return false;
 		}
 	}
+	*/
 	
 	public Character getNpc(){
 		return this.npc;

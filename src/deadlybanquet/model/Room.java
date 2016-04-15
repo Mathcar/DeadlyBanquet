@@ -164,7 +164,7 @@ public class Room implements TileBasedMap {
 
     }
 
-    public Path createPathToPerson(NPC mover, String targetName){
+    public Path createPathToPerson(Character mover, String targetName){
         Position target = new Position(0,0);
         for(Character c : characters){
             if(c.getName().equals(targetName))
@@ -184,24 +184,45 @@ public class Room implements TileBasedMap {
         return pos.getY()<getHeightInTiles() && pos.getX()<getWidthInTiles() &&
                 pos.getX() >=0 && pos.getY() >=0;
     }
+    public Door getFacedDoor(Position p){
+    	for(Door d : doors){
+    		if(d.getX() == p.getX() && d.getY() == p.getY()){
+    			return d;
+    		}
+    	} 
+    	return null;
+    }
 
+    //Attempt to move passed character in their current facing.
+    //Returns TRUE on succesfull move, otherwise FALSE.
+    public boolean attemptMove(Character c){
+        Position newPos = c.getFacedTilePos();
+        if(!isInBoundaries(newPos) || isBlocked(newPos.getX(), newPos.getY())){
+            //tile is blocked, send notification to related ai/character?
+            return false;
+        }else{
+            c.executeMove(); //character can move
+            return true;
+        }
+    }
+/*               OBSOLETE
     //Checks if a character can move to its desired destination.
     //tells the character to conduct its move if it can, otherwise notifies
     //the character through "notifyBlocked()"
     public void moveWithCollision(ActionEvent e){
         Character c = (Character)e.getSource();
         if(hasCharacter(c)){
-        	Position newPos = c.getFacedTilePos();
-        	if(!isInBoundaries(newPos) || isBlocked(newPos.getX(), newPos.getY())){
-        		//tile is blocked, send notification to related ai/character?
-        		c.notifyBlocked();
+            Position newPos = c.getFacedTilePos();
+            if(!isInBoundaries(newPos) || isBlocked(newPos.getX(), newPos.getY())){
+                //tile is blocked, send notification to related ai/character?
+                c.notifyBlocked();
 
-        	}else{
-        		c.move(); //character can move
-        	}
+            }else{
+                c.executeMove(); //character can move
+            }
         }
     }
-
+*/
     public boolean entranceIsBlocked(Direction origin){
         for(Door d : doors) {
             if(d.getDirection()==Direction.getOppositeDirection(origin)){
@@ -267,6 +288,7 @@ public class Room implements TileBasedMap {
             }
         }
     }
+    /*              OBOSOLETE
     public void checkDoor(ActionEvent e){
     	Position p = ((Character) e.getSource()).getFacedTilePos();
     	for(Door d : doors){
@@ -274,7 +296,7 @@ public class Room implements TileBasedMap {
     			((Character) e.getSource()).enterDoor(d.getDestinationRoom(), d.getOriginRoom());
     		}
     	}
-    }
+    }*/
 
     public boolean isCharacterOn(Position p){
     	for(Character c: characters){
@@ -284,7 +306,6 @@ public class Room implements TileBasedMap {
     			
     	}
 		return false;
-    	
     }
 
     public boolean equals(Room r){

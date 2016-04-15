@@ -28,7 +28,7 @@ public class Character implements Renderable, Mover{
      */
     private static int idCounter =0;
     
-    private boolean blocked;
+//    private boolean blocked;		NOW OBSOLETE
 
     private int id;
 //	private int xPos;
@@ -103,7 +103,7 @@ public class Character implements Renderable, Mover{
 		}
 		traits = new LinkedList<Trait>();
 		idCounter++;
-		this.blocked=false;
+		//this.blocked=false;		OBOLETE
 	}
 
     public void meetNewCharacter(Character person){
@@ -188,7 +188,8 @@ public class Character implements Renderable, Mover{
 	public void setDirection(Direction dir){
 		direction = dir;
 	}
-	
+
+	/* ---------------OBSOLETE, ACTIONEVENTS ARE NO LONGER USED!-------------
 	public void moveE(){
 		this.direction = Direction.EAST;
 		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
@@ -208,8 +209,9 @@ public class Character implements Renderable, Mover{
 		this.direction = Direction.SOUTH;
 		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
 	}
+	----------------------------------------------------------------*/
 	
-	public void move(){
+	public void executeMove(){
         Position newPos = getFacedTilePos();
         moving = true;
         setPos(newPos);
@@ -343,6 +345,7 @@ public class Character implements Renderable, Mover{
 		return c.getName().equals(name);
 	}
 
+	/*-------------OBSOLETE, BLOCKED STATUS IS IN AIC INSTEAD----------
 	public void notifyBlocked() {
 		this.blocked=true;
 	}
@@ -354,7 +357,9 @@ public class Character implements Renderable, Mover{
 	public void unblock(){
 		this.blocked = false;
 	}
+	--------------------------------------------------------------------*/
 
+	/*------------------OBSOLETE, ACTIONEVENTS ARE NO LONGER USED!---------------------
 	//Request a path to a door withing the current room which leads to targRoom
 	//OBS! This yields NOTHING if no door connects to the targRoom
 	public void reqPathToDoor(String targRoom){
@@ -381,7 +386,7 @@ public class Character implements Renderable, Mover{
 
 	public void enterDoor(String toRoom, String fromRoom){
 		this.actList.actionPerformed(new ChangeRoomEvent(this, fromRoom, toRoom, this.direction));
-	}
+	}*/
 
 	public String getRoom() {
 		return room;
