@@ -7,11 +7,8 @@ import java.util.ArrayList;
 import deadlybanquet.model.Character;
 import deadlybanquet.model.Direction;
 import deadlybanquet.model.MasterPath;
-<<<<<<< HEAD
 import deadlybanquet.model.World;
-=======
 
->>>>>>> origin/master
 import org.newdawn.slick.util.pathfinding.Path;
 
 import deadlybanquet.model.NPC;
