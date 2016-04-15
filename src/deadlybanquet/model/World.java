@@ -195,9 +195,56 @@ public class World implements ActionListener, TileBasedMap {
         return null;
     }
 
+
+    public boolean attemptMove(Character c){
+        return getRoomOfCharacter(c).attemptMove(c);
+    }
+
+    //Attempt to create a path to a person within the same room
+    public boolean attemptCreatePathToPerson(AIControler aic, String targetPerson){
+        Character c = aic.getNpc();
+        Path p;
+        Room r = getRoomOfCharacter(c);
+        p = r.createPathToPerson(c, targetPerson);
+        if(p != null){
+            //Send the path to the AIControler requesting it
+            aic.setPath(p);
+            return true;    //Path successfully created
+        }
+        return false; //Something failed along the way and no path was made and sent
+    }
+
+    //Attempt to create a path to a door leading to the specified room.
+    //Door must be in the same room, meaning targetRoom must be adjacent to current room
+    public boolean attemptCreatePathToDoor(AIControler aic, String targetRoom){
+        Character c = aic.getNpc();
+        Path p;
+        Room r = getRoomOfCharacter(c);
+        if(r.hasConnectionTo(targetRoom)){
+            p = r.createPathToDoor(c, targetRoom);
+            aic.setPath(p);     //Send path to correct AIControler
+            return true;        //Path was successfully made
+        }
+        return false;       //Something went wrong and no path was created and sent
+    }
+
+    //Attempt to create a MasterPath from current room to any specified room
+    public boolean attemptCreateMasterPath(AIControler aic, String targetRoom){
+        Character c = aic.getNpc();
+        MasterPath mp = new MasterPath();
+        Room r = getRoomOfCharacter(c);
+        mp = createMasterPathTo(r.getName(), targetRoom);
+        if(mp!=null){               //Was a masterPath actually made?
+            aic.setMasterPath(mp);  //Send created MasterPath to AI
+            return true;        //MasterPath successfully created and sent
+        }
+        return false;   //Something went wrong and no MasterPath was created
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         //ActionEvent fired when a character wished to move
+        /*      OBSOLETE, use attempMove() instead!
         if(e.getID() == EventEnum.MOVE.ordinal()) {
             for (Room[] rm : roomMap) {
                 for (Room r : rm) {
@@ -206,6 +253,7 @@ public class World implements ActionListener, TileBasedMap {
                 }
             }
         }
+        */
        
         //ActionEvent fired when a character wants to change room/walk through a door
         if(e.getID() == EventEnum.CHANGE_ROOMS.ordinal()) {
@@ -268,6 +316,7 @@ public class World implements ActionListener, TileBasedMap {
                 }
         	}
         }
+        /*---------------------OBSOLETE, REPLACED BY attemptCreatePathTo... methods found above---------
         if(e.getID() == EventEnum.REQUEST_PATH_TO_PERSON.ordinal()){
             Path p;
             for(Room[] rs : roomMap){
@@ -307,6 +356,7 @@ public class World implements ActionListener, TileBasedMap {
             //Send masterpath to correct AI
             sendMasterPathToAI(c.getName(), mp);
         }
+        */
     }
 
     private AIControler getRelatedControler(Character c){
@@ -317,6 +367,19 @@ public class World implements ActionListener, TileBasedMap {
 
         return null;
 
+    }
+
+    private Room getRoomOfCharacter(Character c){
+        for(Room[] rs :  roomMap){
+            for(Room r : rs){
+                if(r!=null){
+                    if(r.hasCharacter(c))
+                        return r;
+                }
+            }
+        }
+        System.out.println("Character of AIC doesnt exist in any room... error...");
+        return null; //THIS SHOULD NEVER HAPPEN
     }
 
     //Tells all affected AIcontrollers/player that a person has went into a room and left another
@@ -358,20 +421,6 @@ public class World implements ActionListener, TileBasedMap {
             player.seePeople(names);
         else
             getRelatedControler(whoSees).seePeople(names);
-    }
-
-    public void sendPathToAI(String charName, Path p){
-        for(AIControler ai : aiss){
-            if(ai.getCharacterName().equals(charName))
-                ai.setPath(p);
-        }
-    }
-
-    public void sendMasterPathToAI(String charName, MasterPath mp){
-        for(AIControler ai : aiss){
-            if(ai.getCharacterName().equals(charName))
-                ai.setMasterPath(mp);
-        }
     }
 
     public MasterPath createMasterPathTo(String origin, String target){

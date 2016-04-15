@@ -184,6 +184,24 @@ public class Character implements Renderable, Mover{
 	public void setDirection(Direction dir){
 		direction = dir;
 	}
+
+	public void attemptMove(Position newPos){
+		int xMovement = newPos.getX()- getPos().getX();
+		int yMovement = newPos.getY()-getPos().getY();
+		if(xMovement==0){
+			if(yMovement<0){
+				moveN();
+			}else if(yMovement>0){
+				moveS();
+			}
+		}else{
+			if(xMovement<0){
+				moveW();
+			}else if(xMovement>0){
+				moveE();
+			}
+		}
+	}
 	
 	public void moveE(){
 		this.direction = Direction.EAST;
@@ -205,7 +223,7 @@ public class Character implements Renderable, Mover{
 		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
 	}
 	
-	public void move(){
+	public void executeMove(){
         Position newPos = getFacedTilePos();
         moving = true;
         setPos(newPos);
