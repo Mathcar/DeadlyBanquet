@@ -35,7 +35,7 @@ public class Player implements Talkable {
 	}
 
 	//Changed parameters so that ALL update methods are of the same structure
-	public void update(GameContainer container, StateBasedGame s, int dt){
+	public void update(GameContainer container, StateBasedGame s, World world, int dt){
 		Input in = container.getInput();
 		if(this.movementTimer < 1){
 			if(in.isKeyDown(Input.KEY_UP) || in.isKeyDown(Input.KEY_W)){
@@ -53,7 +53,7 @@ public class Player implements Talkable {
 			}
 			if(in.isKeyPressed(Input.KEY_E)){
 				character.attemptRoomChange();
-				character.tryTalk();
+				world.attemptTalk(this.getCharacter());
 			}
 		}
 		movementTimer--;

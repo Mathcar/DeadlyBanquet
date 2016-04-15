@@ -131,7 +131,7 @@ public class World implements ActionListener, TileBasedMap {
         	talk = false;
         }
         
-        player.update(container, s, deltaTime);
+        player.update(container, s, this ,deltaTime);
     }
 
     //return time in hours, DO NOT USE THIS TO SET THE TIME
@@ -194,6 +194,24 @@ public class World implements ActionListener, TileBasedMap {
         }
         return null;
     }
+    
+    public boolean attemptTalk(Character chr){
+    	if(Room.getRoomOfCharacter(chr).isCharacterOn(chr.getFacedTilePos())){
+    		if(player.isCharacter(chr)){
+    			Character c = Room.getRoomOfCharacter(chr).getCharacterOnPos(chr.getFacedTilePos());
+        		for(AIControler a : aiss){
+        			if(a.getCharacterId() == c.getId()){
+        				c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
+        				playerConv = new ConversationModel(player,a.getNpc());
+        				talk = true;
+        				return true;
+        			}
+        		}	      
+    		}
+              
+    	}
+    	return false;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -246,6 +264,7 @@ public class World implements ActionListener, TileBasedMap {
                 }
         	}
         }
+        
         if(e.getID() == EventEnum.TALK_TO.ordinal()){
         	Character characterTemp = (Character) e.getSource();
         	for (Room[] rm : roomMap) {

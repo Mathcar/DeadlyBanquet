@@ -284,7 +284,6 @@ public class Room implements TileBasedMap {
     			
     	}
 		return false;
-    	
     }
 
     public boolean equals(Room r){
