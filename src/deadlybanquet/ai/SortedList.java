@@ -13,7 +13,7 @@ public class SortedList implements Iterable<IThought>{
     
     public void add(IThought t){
         list.add(t);
-        list.sort((a, b) -> b.compareTo(a));
+        //list.sort((a, b) -> b.compareTo(a));
     }
     
     public Iterator<IThought> iterator(){

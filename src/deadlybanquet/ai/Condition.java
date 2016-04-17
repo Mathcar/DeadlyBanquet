@@ -7,7 +7,8 @@ public class Condition {
 		SLEAPING,
 		WHANT_TO_TALK_TO,
 		STANDING_NEXT_TO,
-		DONT_WHANT_TO_SE
+		DONT_WHANT_TO_SE,
+		TALKING
 	}
 	
 	private ConditionState condition;
@@ -21,6 +22,14 @@ public class Condition {
 	public Condition(ConditionState condition){
 		this.condition = condition;
 		this.characterName = "";
+	}
+	
+	public ConditionState getCondition() {
+		return condition;
+	}
+
+	public String getCharacterName() {
+		return characterName;
 	}
 	
 }

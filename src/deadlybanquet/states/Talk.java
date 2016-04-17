@@ -49,7 +49,7 @@ public class Talk extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame s, Graphics g) throws SlickException {
 		
 		model.getPlayerConv().getPlayer().getCharacter().getDefaultImage().draw(540,330,3);
-		model.getPlayerConv().getNpc().getChar().getDefaultImage().draw(0,50,3);
+		model.getPlayerConv().getNpc().getDefaultImage().draw(0,50,3);
 		g.setBackground(Color.white);
 		g.setColor(Color.black);
 		
@@ -60,7 +60,7 @@ public class Talk extends BasicGameState {
 		text1.setTextColor(Color.blue);
 		
 		g.drawString(model.getPlayerConv().getPlayer().getCharacter().getName(), 555, 430 );
-		g.drawString(model.getPlayerConv().getNpc().getChar().getName(), 25, 150 );
+		g.drawString(model.getPlayerConv().getNpc().getName(), 25, 150 );
 		
 		if(answer == 1){
 

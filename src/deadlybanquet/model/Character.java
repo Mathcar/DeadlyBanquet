@@ -11,6 +11,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.util.pathfinding.Mover;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,14 +21,14 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Character implements Renderable{
+public class Character implements Renderable, Mover{
 
     /*
     Counter to set specific ID for each character.
      */
     private static int idCounter =0;
     
-    private boolean blocked;
+//    private boolean blocked;		NOW OBSOLETE
 
     private int id;
 //	private int xPos;
@@ -36,6 +37,7 @@ public class Character implements Renderable{
 	private Direction direction;
 	private int distance;
 	private String room;
+	private boolean talking;
 	
 	private ActionListener actList;
 	
@@ -58,6 +60,7 @@ public class Character implements Renderable{
     	this.name = c.getName();
     	this.pos = c.getPos();
     	this.direction = c.getDirection();
+    	this.talking = false;
     		
     }
 	
@@ -70,6 +73,8 @@ public class Character implements Renderable{
 		this.pos = new Position(xPos, yPos);
 		this.direction = Direction.SOUTH;
 		distance = 32;
+		
+		this.talking = false;
 		
 		this.actList = al;
 		
@@ -98,7 +103,7 @@ public class Character implements Renderable{
 		}
 		traits = new LinkedList<Trait>();
 		idCounter++;
-		this.blocked=false;
+		//this.blocked=false;		OBOLETE
 	}
 
     public void meetNewCharacter(Character person){
@@ -183,7 +188,8 @@ public class Character implements Renderable{
 	public void setDirection(Direction dir){
 		direction = dir;
 	}
-	
+
+	/* ---------------OBSOLETE, ACTIONEVENTS ARE NO LONGER USED!-------------
 	public void moveE(){
 		this.direction = Direction.EAST;
 		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
@@ -203,8 +209,9 @@ public class Character implements Renderable{
 		this.direction = Direction.SOUTH;
 		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
 	}
+	----------------------------------------------------------------*/
 	
-	public void move(){
+	public void executeMove(){
         Position newPos = getFacedTilePos();
         moving = true;
         setPos(newPos);
@@ -292,7 +299,6 @@ public class Character implements Renderable{
 				}
 			case EAST:
 				if(moving){
-					
 					if(distance == 1){
 						moving = false;
 						distance = 32;
@@ -339,6 +345,7 @@ public class Character implements Renderable{
 		return c.getName().equals(name);
 	}
 
+	/*-------------OBSOLETE, BLOCKED STATUS IS IN AIC INSTEAD----------
 	public void notifyBlocked() {
 		this.blocked=true;
 	}
@@ -350,7 +357,9 @@ public class Character implements Renderable{
 	public void unblock(){
 		this.blocked = false;
 	}
+	--------------------------------------------------------------------*/
 
+	/*------------------OBSOLETE, ACTIONEVENTS ARE NO LONGER USED!---------------------
 	//Request a path to a door withing the current room which leads to targRoom
 	//OBS! This yields NOTHING if no door connects to the targRoom
 	public void reqPathToDoor(String targRoom){
@@ -377,7 +386,7 @@ public class Character implements Renderable{
 
 	public void enterDoor(String toRoom, String fromRoom){
 		this.actList.actionPerformed(new ChangeRoomEvent(this, fromRoom, toRoom, this.direction));
-	}
+	}*/
 
 	public String getRoom() {
 		return room;
@@ -389,5 +398,13 @@ public class Character implements Renderable{
 
 	public Image getDefaultImage(){
 		return imageS;
+	}
+
+	public boolean isTalking() {
+		return talking;
+	}
+
+	public void setTalking(boolean talking) {
+		this.talking = talking;
 	}
 }
