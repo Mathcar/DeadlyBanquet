@@ -17,9 +17,6 @@ public class ConversationModel {
     public ConversationModel(Player player, Character npc){
         this.player=player;
         this.npc=npc;
-        
-        player.getCharacter().setTalking(true);
-        npc.setTalking(true);
     }
 
     private void conversation(){

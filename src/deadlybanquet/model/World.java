@@ -205,7 +205,11 @@ public class World implements ActionListener, TileBasedMap {
         			if(a.getCharacterId() == c.getId()){
         				c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
         				playerConv = new ConversationModel(player,a.getNpc());
-        				talk = true;
+        		        
+        				player.getCharacter().setTalking(true);
+        		        a.getNpc().setTalking(true);
+        				
+        		        talk = true;
         				return true;
         			}
         		}	      
@@ -251,7 +255,12 @@ public class World implements ActionListener, TileBasedMap {
 
     public boolean attemptMove(Character c, Direction dir){
         c.setDirection(dir);
-        return getRoomOfCharacter(c).attemptMove(c);
+        if(getRoomOfCharacter(c).attemptMove(c)){
+        	c.setBlocked(true);
+        	return true; 
+        }else{
+        	return false;
+        }
     }
 
     //Attempt to create a path to a person within the same room
