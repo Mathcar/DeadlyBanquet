@@ -176,8 +176,19 @@ public class SpeechActFactory {
                 //Some statement about the location of someone
             }
         }else if(i instanceof Opinion){
+            String text=i.toString();
             if(i.isQuestion()){
-                ;
+                ArrayList<SpeechInfo> list =holder.getQuestionFrase();
+                for(int k=0;k<list.size();k++){
+                    SpeechInfo si = list.get(k);
+                    if(si.getSpeechType().equals(SpeechType.OPINION_QUESTION)&&si.getTextProperty().equals(prop)){
+                        text=si.getText();
+                        break;
+                    }
+                }
+                temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.OPINION_QUESTION,prop);
+            }else{
+                //info on opinion on someone.
             }
         }
 
