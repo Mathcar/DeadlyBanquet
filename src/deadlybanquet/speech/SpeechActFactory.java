@@ -176,7 +176,9 @@ public class SpeechActFactory {
                 //Some statement about the location of someone
             }
         }else if(i instanceof Opinion){
-            // HOW TO DO THIS??
+            if(i.isQuestion()){
+                ;
+            }
         }
 
 

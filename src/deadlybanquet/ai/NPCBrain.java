@@ -131,35 +131,35 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     private void processOpinion(Opinion inOpinion, String you, ArrayList<IThought> ans){
         //Now we have heard of this person
-        if(getOpinionAbout(inOpinion.person)==null){
-            opinions.add(new Opinion (inOpinion.person, new PAD(0,0,0)));
+        if(getOpinionAbout(inOpinion.getPerson())==null){
+            opinions.add(new Opinion (inOpinion.getPerson(), new PAD(0,0,0)));
         }
         //I.e if this is the question "What do you think about X?"
-        if (inOpinion.pad.isPlaceholder()){
+        if (inOpinion.getPAD().isPlaceholder()){
             PAD ansPAD=null;
             for (Opinion o : opinions){
-                if (o.person==inOpinion.person)
+                if (o.getPerson()==inOpinion.getPerson())
                     ansPAD = o.getPAD();
             }
-            ans.add(new Opinion(inOpinion.person, ansPAD));
+            ans.add(new Opinion(inOpinion.getPerson(), ansPAD));
             return;
         }
         //find a previous opinion the you held about this subject
-        Opinion old = new Opinion(inOpinion.person, null);
+        Opinion old = new Opinion(inOpinion.getPerson(), null);
         SortedList foundData;
         SomebodyElse previnfo = new SomebodyElse (old, you, null, 0.0);
         foundData = memory.find(previnfo);
         acceptUncritically(you,inOpinion);
         PAD inPad=inOpinion.getPAD();
-        if (inOpinion.person==me){
+        if (inOpinion.getPerson()==me){
            opinionAboutMe(inOpinion.getPAD(), you, 1.0);
            Opinion opyou = getOpinionAbout(you);
            //If opinion is negative and you are dependent on that person and what they say makes
            //you unhappy, then say so.
            if (inPad.getP()<0&&
-                   opyou.pad.getP()>0&&
-                   opyou.pad.getA()>0&&
-                   opyou.pad.getD()<0&&
+                   opyou.getPAD().getP()>0&&
+                   opyou.getPAD().getA()>0&&
+                   opyou.getPAD().getD()<0&&
                    emotion.getP()<0)
                 ans.add(new EmotionThought(EmotionThought.et.EMOTION, 
                                        new PAD(emotion.getP(), emotion.getA(), emotion.getD())));
@@ -167,8 +167,8 @@ public class NPCBrain implements IPerceiver, Talkable {
            return;
         }
         if (foundData.isEmpty()){
-            Opinion mine = getOpinionAbout(inOpinion.person);
-            if(mine.pad.distanceTo(inPad)<REALCLOSE)
+            Opinion mine = getOpinionAbout(inOpinion.getPerson());
+            if(mine.getPAD().distanceTo(inPad)<REALCLOSE)
                 ans.add(new Say(me, you, mine, How.AGREE));
             else ans.add(new Say(me, you, mine, How.DISAGREE));
         } else {
@@ -182,15 +182,15 @@ public class NPCBrain implements IPerceiver, Talkable {
         double p = opinion.getP();
         if (d<0){
             //If speaker is feeling not dominant towards you, you feel more dominant.
-            getOpinionAbout(me).pad.translateD(howimportant*NORMALMODIFIER*-d);
-            getOpinionAbout(you).pad.translateD(howimportant*NORMALMODIFIER*-d);
+            getOpinionAbout(me).getPAD().translateD(howimportant*NORMALMODIFIER*-d);
+            getOpinionAbout(you).getPAD().translateD(howimportant*NORMALMODIFIER*-d);
             emotion.translateD(howimportant*NORMALMODIFIER*-d);
         }
         else{
             //+P+D signifies liking or love, so dominance rises.
             //-P+D means dislike or hostility, so dominance goes down.
-            getOpinionAbout(me).pad.translateD(howimportant*NORMALMODIFIER*p);
-            getOpinionAbout(you).pad.translateD(howimportant*NORMALMODIFIER*p);
+            getOpinionAbout(me).getPAD().translateD(howimportant*NORMALMODIFIER*p);
+            getOpinionAbout(you).getPAD().translateD(howimportant*NORMALMODIFIER*p);
             emotion.translateD(howimportant*NORMALMODIFIER*p);
         }
     }
@@ -295,7 +295,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                                     memory.information.add(newinfo);
                                     possibleAnswers.add(THANKS);
                                     Opinion myOpinion = getOpinionAbout(you);
-                                    myOpinion.pad.translateP(NORMALMODIFIER);
+                                    myOpinion.getPAD().translateP(NORMALMODIFIER);
                                     return;
                                 }
                             }
@@ -308,7 +308,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                                 if (h.type==REQUEST){
                                     possibleAnswers.add(THANKSANYWAY);
                                     Opinion myOpinion = getOpinionAbout(you);
-                                    myOpinion.pad.translateP(-NORMALMODIFIER);
+                                    myOpinion.getPAD().translateP(-NORMALMODIFIER);
                                     return;
                                 }
                             }
@@ -441,7 +441,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     private void makeEmptyOpinion(String about){
         PAD pad = null;
         for (Opinion i:opinions){
-            if(i.person==about)
+            if(i.getPerson()==about)
                 pad=i.getPAD();
         }
         if (pad==null)
@@ -484,7 +484,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     public Opinion getOpinionAbout(String who){
         Opinion result=null;
         for (Opinion i: opinions){
-            if (i.person==who)
+            if (i.getPerson()==who)
                 result=i;
         }
         return result;
@@ -494,7 +494,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         if(i instanceof Opinion){
             Opinion o = (Opinion) i;
             SortedList ans = new SortedList();
-            ans.add(getOpinionAbout(o.person));
+            ans.add(getOpinionAbout(o.getPerson()));
             return ans;
         }
         return memory.find(i);

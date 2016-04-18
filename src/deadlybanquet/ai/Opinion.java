@@ -7,12 +7,12 @@ import deadlybanquet.model.Time;
  * This IThought expresses the fact that (implied person) has opinion pad about aboutPersonRoomObject
  */
 public class Opinion implements IThought{
-    public String person;
+    private String person;
     //With a placeholder pad, this becomes the question: What do you think about person?
-    public PAD pad;
+    private PAD pad;
     //The time when this opinion first became current.
-    public Time time;
-    public Opinion previous;
+    private Time time;
+    private Opinion previous;
     
     public Opinion(String about, PAD pad){
         this(about,pad,null,null);
@@ -81,5 +81,21 @@ public class Opinion implements IThought{
     @Override
     public void setCertainty(double i){
         
+    }
+
+    public String getPerson() {
+        return person;
+    }
+
+    public PAD getPad() {
+        return pad;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public Opinion getPrevious() {
+        return previous;
     }
 }
