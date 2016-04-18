@@ -96,5 +96,10 @@ public class Whereabouts implements IThought{
         return new Whereabouts(room, character, p, certainty, t);
     }
     
+    @Override
+    public void setCertainty(double i){
+        certainty=i;
+    }
+    
     
 }

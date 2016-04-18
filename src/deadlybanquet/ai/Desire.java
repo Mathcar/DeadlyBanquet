@@ -93,4 +93,9 @@ public class Desire implements IThought{
         
         return new Desire(desireorgoal, what.copy(), t, strength);
     }
+    
+    @Override
+    public void setCertainty(double i){
+        strength=i;
+    }
 }

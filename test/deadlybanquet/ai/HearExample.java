@@ -56,18 +56,18 @@ public class HearExample {
     
     @Test
     public void testConversation(){
-        IThought starter;
-        starter = new Whereabouts("Jane", "");
-        starter = new Whereabouts("Alice", "Kitchen");
-        //starter = new Opinion("Alice", new PAD (1,1,1));
+        Opinion starter;
+        //starter = new Whereabouts("Jane", "");
+        //starter = new Whereabouts("Alice", "Kitchen");
+        starter = new Opinion("Alice", new PAD (1,1,1));
         //starter = new Opinion ("Alice", PAD.placeholderPAD());
         //starter = NOMOBILESIGNAL;
-        starter=new Do(MURDER,"Alice", "Bob", getTime());
-        starter = new SomebodyElse(
+        //starter=new Do(MURDER,"Alice", "Bob", getTime());
+        /*starter = new SomebodyElse(
                     new SomebodyElse(
                             new Do(MURDER,"Alice", "James", null), 
                             "Jane", null, 1.0), 
-                    "Derek", null, 1.0);
+                    "Derek", null, 1.0);*/
         //We are maniplating Bill into saying this
         content.add(starter);
         makeSpeechAct(content, "Bill");

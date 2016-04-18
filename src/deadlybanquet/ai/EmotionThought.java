@@ -73,4 +73,9 @@ public class EmotionThought implements IThought{
             p=p.copy();
         return new EmotionThought (emotionortemperament,p,t,previous);
     }
+    
+    @Override
+    public void setCertainty(double i){
+        
+    }
 }

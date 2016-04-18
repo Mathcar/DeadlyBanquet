@@ -45,4 +45,9 @@ public enum BackStory implements IThought{
     public BackStory copy(){
         return this;
     }
+    
+    @Override
+    public void setCertainty(double i){
+        
+    }
 }

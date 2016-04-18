@@ -41,4 +41,9 @@ public enum BeingPolite implements IThought{
     public BeingPolite copy(){
         return this;
     }
+    
+    @Override
+    public void setCertainty(double i){
+        
+    }
 }

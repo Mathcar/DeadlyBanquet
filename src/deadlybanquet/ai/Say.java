@@ -1,5 +1,6 @@
 package deadlybanquet.ai;
 
+import static deadlybanquet.ai.Say.How.*;
 import deadlybanquet.model.Time;
 
 /**
@@ -43,7 +44,19 @@ public class Say implements IThought{
     
     @Override
     public String toString(){
-        return speaker + " " + type + " " + hearer + " " + content;
+        String y = "Yes, ";
+        String e = "";
+        if (type==DISAGREE)
+            y="No, ";
+        if (type==YESNO){
+            y= "Is ";
+            e = "?";
+        }
+        if(type==REQUEST){
+            y="Please";
+        }
+            
+        return y + content + e;
     }
     @Override
     public boolean contains(IThought i) {
@@ -87,6 +100,11 @@ public class Say implements IThought{
         if(t!=null)
             t=t.copy();
         return new Say(speaker,hearer,content,type, t);
+    }
+    
+    @Override
+    public void setCertainty(double i){
+        
     }
     
 }

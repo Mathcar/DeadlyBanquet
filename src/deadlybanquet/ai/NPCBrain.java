@@ -70,11 +70,6 @@ public class NPCBrain implements IPerceiver, Talkable {
         me = name;
     }
 
-    
-    
-    
-    
-    
     //--------------------------------------------------------------------------
     //SECTION: HEAR FUNCTION WITH SUBFUNCTIONS
     //This section is written and maintained by Karin. Please
@@ -90,15 +85,12 @@ public class NPCBrain implements IPerceiver, Talkable {
         makeEmptyOpinion(you);
         for (IThought t : content){
             acceptUncritically(you, t);
-            SortedList foundData = new SortedList(); 
             switch(t.getClass().getSimpleName()){
-
                 case "Opinion":
                 	processOpinion((Opinion) t, you, possibleAnswers);
                     break;
                     
                 case "SomebodyElse":
-                    //TODO
                 	processSomebodyElse((SomebodyElse)t,you, possibleAnswers);
                     break;
                     
@@ -204,7 +196,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     private void processSomebodyElse(SomebodyElse inElse, String you, ArrayList<IThought> possibleAnswers){
-        IThought currentLevel = inElse;
+        IThought currentLevel = inElse.what;
         SortedList foundData;
         while (currentLevel.getClass()==inElse.getClass()){
             SomebodyElse current = (SomebodyElse) currentLevel;
@@ -213,7 +205,9 @@ public class NPCBrain implements IPerceiver, Talkable {
                 if(foundData.isEmpty()){
                     Say c;
                     if (current.aboutPerson.equals(me)){
-                        c = new Say(me, you, currentLevel, DISAGREE, null);
+                        IThought ans = currentLevel.copy();
+                        ans.setCertainty(-ans.getCertainty());
+                        c = new Say(me, you, ans, DISAGREE, null);
                     }
                     else {
                         c= new Say(me, you, currentLevel, YESNO, null);
@@ -321,12 +315,19 @@ public class NPCBrain implements IPerceiver, Talkable {
                             acceptUncritically(you, inSay.content);
                             break;
                     
-                case YESNO: SortedList foundData = memory.find(inSay.content);
+                case YESNO: SortedList foundData = findAnywhere(inSay.content);
+                            if(inSay.content instanceof SomebodyElse){
+                                SomebodyElse content = (SomebodyElse) inSay.content;
+                                if (content.aboutPerson==me)
+                                    foundData = findAnywhere(content.what);
+                            }
                             if (foundData.isEmpty()){
                                 //Say that this is the case
                                 //might want to copy content, then modify certainty
                                 //Difficulty: Can't introduce placeholder.
-                                possibleAnswers.add(new Say(me, you, inSay.content, DISAGREE, null));
+                                IThought content = inSay.content.copy();
+                                content.setCertainty(-content.getCertainty());
+                                possibleAnswers.add(new Say(me, you, content, DISAGREE, null));
                             }
                             else {
                                 //Say that this is the case
@@ -337,7 +338,9 @@ public class NPCBrain implements IPerceiver, Talkable {
                 case REQUEST:   //this one is intimately connected
                                 //with planning, so leave out until plans are constructed.
                                 //Therefore, NPC refuses to do anything for anyone right now.
-                                possibleAnswers.add(new Say(me, you, inSay, DISAGREE, null));
+                                IThought content = inSay.content.copy();
+                                content.setCertainty(-content.getCertainty());
+                                possibleAnswers.add(new Say(me, you, content, DISAGREE, null));
                                 break;
                 default: System.out.println(me + "says: Incoming Say object is making my mind boggle.");
             }
@@ -415,15 +418,22 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
     }
     
-    private void acceptUncritically(String person, IThought stateofworld){
-        SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, 1.0);
+    private void acceptWithCertainty(String person, IThought stateofworld, double certainty){
+        SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, certainty);
         previnfo.time=getTime();
+        //Find any previous information on the subject
         SortedList foundData = memory.find(previnfo);
         if (!foundData.isEmpty()){
+            //If found, remove it and replace it with the new information.
             memory.information.remove(foundData.first());
             previnfo.previous= (SomebodyElse) foundData.first();      
         }
+        //Otherwise, just add the information.
         memory.information.add(previnfo);
+    }
+    
+    private void acceptUncritically(String person, IThought stateofworld){
+        acceptWithCertainty(person,stateofworld,1.0);
     }
     
     //If this does not find an opinion about person,
@@ -454,10 +464,12 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     public void plantFalseMemory(IThought i){
         memory.add(i);
+        System.out.println("Planting IThought");
     }
     
-    public void plantFalseOpinion (Opinion o){
+    public void plantFalseMemory (Opinion o){
         opinions.add(o);
+        System.out.println("Planting opinion");
     }
     
     public ArrayList<IThought> debugInfo;
@@ -476,6 +488,16 @@ public class NPCBrain implements IPerceiver, Talkable {
                 result=i;
         }
         return result;
+    }
+    
+    public SortedList findAnywhere(IThought i){
+        if(i instanceof Opinion){
+            Opinion o = (Opinion) i;
+            SortedList ans = new SortedList();
+            ans.add(getOpinionAbout(o.person));
+            return ans;
+        }
+        return memory.find(i);
     }
     
     public void observeRoomChange(String person, String origin, String destination){

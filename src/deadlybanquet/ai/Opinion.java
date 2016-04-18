@@ -77,4 +77,9 @@ public class Opinion implements IThought{
             p=p.copy();
         return new Opinion(person,p, t, previous.copy());
     }
+    
+    @Override
+    public void setCertainty(double i){
+        
+    }
 }

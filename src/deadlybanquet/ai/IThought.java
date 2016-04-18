@@ -28,6 +28,8 @@ public interface IThought{
     
     public double getCertainty();
     
+    public void setCertainty(double i);
+    
     public boolean isQuestion();
     
     public IThought copy();

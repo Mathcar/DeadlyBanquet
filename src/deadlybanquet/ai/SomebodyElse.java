@@ -90,4 +90,9 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
             s=s.copy();
         return new SomebodyElse(what, aboutPerson, p, howsure, t, s);
     }
+    
+    @Override
+    public void setCertainty(double i){
+        howsure=i;
+    }
 }

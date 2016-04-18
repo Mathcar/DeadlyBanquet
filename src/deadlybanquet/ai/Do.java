@@ -65,7 +65,10 @@ public class Do implements IThought{
     
     @Override
     public String toString(){
-        return doer + " " + what + " " + withWhat + " at " + when;
+        String t = "";
+        if (when!=null)
+            t=when.toString();
+        return doer + " " + what + " " + withWhat + " at " + t;
     }
     
     @Override
@@ -74,5 +77,10 @@ public class Do implements IThought{
         if(t!=null)
             t=t.copy();
         return new Do(what,doer,withWhat, t);
+    }
+    
+    @Override
+    public void setCertainty(double i){
+        
     }
 }
