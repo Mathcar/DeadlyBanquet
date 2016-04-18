@@ -44,11 +44,14 @@ public class StateBasedAI {
 	}
 	
 	private void generateSchedule() {
-		if(schedule.isEmpty()){
+		if(schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))){
 			schedule.clear();
 			switch(state){
 				case IDLE_STATE:
-					schedule.add(new TaskTurn(Direction.EAST));//only turn the character east at the moment
+					schedule.add(new TaskTurn(Direction.EAST));//only spins the character at the moment
+					schedule.add(new TaskTurn(Direction.SOUTH));
+					schedule.add(new TaskTurn(Direction.WEST));
+					schedule.add(new TaskTurn(Direction.NORTH));
 					break;
 				case TALKING_STATE:
 					schedule.add(new TaskIdle());
@@ -67,7 +70,10 @@ public class StateBasedAI {
 		if(aic.isTalking()){
 			conditions.add(new Condition(ConditionState.TALKING));
 		}
-		//if talking: add Talking-condition
+		if(aic.isBlocked()){
+			aic.setBlocked(false);
+			conditions.add(new Condition(ConditionState.INTERUPTED));
+		}
 		
 		//add more conditions
 	}
@@ -81,7 +87,7 @@ public class StateBasedAI {
 	}
 	
 	private void runSchedule(AIControler aic){
-		if(schedule.peek().execute(aic)){
+		if(!schedule.isEmpty() && schedule.peek().execute(aic)){
 			schedule.poll();
 		}
 	}
