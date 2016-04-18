@@ -1,3 +1,3 @@
-Where is #person;NEUTRAL;WHERE_PERSON;
-Do you happen to know the location of #person;PROPER;WHERE_PERSON;
-Where is #person hanging;COLLOQUIAL;WHERE_PERSON;
+#person is in the #location;NEUTRAL;INFO_P_LOCATION;
+#person is currently in the #location ;PROPER;INFO_P_LOCATION;
+#person is chilling in the #location;COLLOQUIAL;INFO_P_LOCATION;

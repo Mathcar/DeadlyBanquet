@@ -15,6 +15,7 @@ import java.util.ArrayList;
 public class SpeechActHolder {
     private ArrayList<SpeechInfo> greetingFrase;
     private ArrayList<SpeechInfo> questionFrase;
+    private ArrayList<SpeechInfo> infoFrase;
 
 
     private static SpeechActHolder instance = null;
@@ -56,6 +57,8 @@ public class SpeechActHolder {
                 greetingFrase=readFile(files);
             }else if(fileName.equals("questionFrase")){
                 questionFrase=readFile(files);
+            }else if(fileName.equals("infoFrase")){
+                infoFrase=readFile(files);
             }else{
                 System.err.println(fileName+" Should not exist, if it should it has " +
                         "to be added in [readAllFile in SpeechActHolder]");
@@ -108,15 +111,12 @@ public class SpeechActHolder {
         return questionFrase;
     }
 
-    public void setQuestionFrase(ArrayList<SpeechInfo> questionFrase) {
-        this.questionFrase = questionFrase;
+    public ArrayList<SpeechInfo> getInfoFrase(){
+        return this.infoFrase;
     }
 
     public ArrayList<SpeechInfo> getGreetingFrase() {
         return greetingFrase;
     }
 
-    public void setGreetingFrase(ArrayList<SpeechInfo> greetingFrase) {
-        this.greetingFrase = greetingFrase;
-    }
 }
