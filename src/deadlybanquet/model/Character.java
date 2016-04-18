@@ -38,6 +38,7 @@ public class Character implements Renderable, Mover{
 	private int distance;
 	private String room;
 	private boolean talking;
+	private boolean blocked;
 	
 	private ActionListener actList;
 	
@@ -406,5 +407,13 @@ public class Character implements Renderable, Mover{
 
 	public void setTalking(boolean talking) {
 		this.talking = talking;
+	}
+	
+	public void setBlocked(boolean blocked){
+		this.blocked=blocked;
+	}
+	
+	public boolean isBlocked(){
+		return blocked;
 	}
 }

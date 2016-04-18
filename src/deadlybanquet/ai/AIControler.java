@@ -130,4 +130,12 @@ public class AIControler {
 		statebasedAI.think(this);
 	}
 	//end
+
+	public void setBlocked(boolean blocked) {
+		npc.setBlocked(blocked);
+	}
+	
+	public boolean isBlocked() {
+		return npc.isBlocked();
+	}
 }
