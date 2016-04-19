@@ -13,13 +13,13 @@ public class SpeechAct2 {
 
     private Boolean dead = false; // just for easier programing
 
-    public SpeechAct2(String line,String talker,String listener,SpeechType st,TextPropertyEnum tpe){
+    public SpeechAct2(String line,String talker,String listener,SpeechType st,TextPropertyEnum tpe){ //todo add IThought
         this.line=line;
         this.talker=talker;
         this.listener=listener;
         this.speechType=st;
         this.property=tpe;
-    }
+    }//todo add someway to seee that it is a goodbye speechAct or leave speechAct.
     public SpeechAct2(){
         dead=true;
     }

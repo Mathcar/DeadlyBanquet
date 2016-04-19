@@ -205,7 +205,11 @@ public class World implements ActionListener, TileBasedMap {
         			if(a.getCharacterId() == c.getId()){
         				c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
         				playerConv = new ConversationModel(player,a.getNpc());
-        				talk = true;
+        		        
+        				player.getCharacter().setTalking(true);
+        		        a.getNpc().setTalking(true);
+        				
+        		        talk = true;
         				return true;
         			}
         		}	      
@@ -218,8 +222,8 @@ public class World implements ActionListener, TileBasedMap {
     public boolean attemptChangeRooms(Character ce) {
     	Door d = getRoomOfCharacter(ce).getFacedDoor(ce.getFacedTilePos());
     	if(d != null){
-	    	Room targetRoom = getRoomRef(getRoomOfCharacter(ce).getFacedDoor(ce.getFacedTilePos()).getDestinationRoom());
-	        Room originRoom = getRoomRef(getRoomOfCharacter(ce).getFacedDoor(ce.getFacedTilePos()).getOriginRoom());
+	    	Room targetRoom = getRoomRef(d.getDestinationRoom());
+	        Room originRoom = getRoomRef(d.getOriginRoom());
 	        /*//----------------------------------DEBUG--------------------------------
 	        System.out.println(originRoom.getName() + "   to   " + targetRoom.getName()
 	                            + " entering from " + ce.getEnterDirection().toString() );
@@ -251,7 +255,12 @@ public class World implements ActionListener, TileBasedMap {
 
     public boolean attemptMove(Character c, Direction dir){
         c.setDirection(dir);
-        return getRoomOfCharacter(c).attemptMove(c);
+        if(getRoomOfCharacter(c).attemptMove(c)){
+        	c.setBlocked(true);
+        	return true; 
+        }else{
+        	return false;
+        }
     }
 
     //Attempt to create a path to a person within the same room

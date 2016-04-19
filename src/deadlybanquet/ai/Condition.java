@@ -32,4 +32,13 @@ public class Condition {
 		return characterName;
 	}
 	
+	@Override
+	public boolean equals(Object rhs ){
+		if(rhs != null && rhs instanceof Condition){
+			Condition tmp = (Condition)rhs;
+			if(this.condition == tmp.condition && this.characterName == tmp.characterName) return true;
+		}
+		return false;
+	}
+	
 }

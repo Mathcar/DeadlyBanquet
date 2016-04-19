@@ -173,11 +173,31 @@ public class SpeechActFactory {
                     temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.WHERE_PERSON,prop);
                 }
             }else{ // not a question!
-                //Some statement about the location of someone
+                String text = i.toString();
+                ArrayList<SpeechInfo> list = holder.getInfoFrase();
+                for(int k = 0;k<list.size();k++){
+                    SpeechInfo si = list.get(k);
+                    if(si.getSpeechType().equals(SpeechType.INFO_P_LOCATION)&&si.getTextProperty().equals(prop)){
+                        text=si.getText();
+                        break;
+                    }
+                }
+                temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.INFO_P_LOCATION,prop);
             }
         }else if(i instanceof Opinion){
+            String text=i.toString();
             if(i.isQuestion()){
-                ;
+                ArrayList<SpeechInfo> list =holder.getQuestionFrase();
+                for(int k=0;k<list.size();k++){
+                    SpeechInfo si = list.get(k);
+                    if(si.getSpeechType().equals(SpeechType.OPINION_QUESTION)&&si.getTextProperty().equals(prop)){
+                        text=si.getText();
+                        break;
+                    }
+                }
+                temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.OPINION_QUESTION,prop);
+            }else{
+                //info on opinion on someone.
             }
         }
 
@@ -191,5 +211,14 @@ public class SpeechActFactory {
 
     }
 
+
+    public ArrayList<SpeechAct2> getDialogueOptions(TextPropertyEnum prop){
+        ArrayList<SpeechAct2> temp = new ArrayList<>();
+
+        //add first thing
+        //Whereabouts w = new Whereabouts(talker.getM)
+
+        return temp;
+    }
 
 }
