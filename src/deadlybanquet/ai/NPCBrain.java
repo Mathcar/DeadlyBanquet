@@ -35,6 +35,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     private String me;
     private Memory memory;
+    private AIControler aic;
     //Current emotion - may be changed by events.
     private PAD emotion = new PAD(0,0,0);
     //Personality. May not change. Emotion object regresses
@@ -62,7 +63,8 @@ public class NPCBrain implements IPerceiver, Talkable {
                     ArrayList<Desire>goals,
                     ArrayList<IThought>plan,
                     String currentRoom,
-                    String name){
+                    String name,
+                    AIControler aic){
         memory = new Memory (information);
         if (emotion!=null) this.emotion=emotion;
         if (temperament!=null) this.temperament=temperament;
@@ -70,6 +72,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         if (goals!=null) this.goals = goals;
         if (plan!=null) this.plan = plan;
         me = name;
+        this.aic= aic;
     }
 
     //--------------------------------------------------------------------------
@@ -525,6 +528,14 @@ public class NPCBrain implements IPerceiver, Talkable {
             return ans;
         }
         return memory.find(i);
+    }
+
+    public SpeechAct selectPhrase(ArrayList<SpeechAct> acts){
+        return aic.selectPhrase(acts);
+    }
+
+    public AIControler getAIControler(){
+        return aic;
     }
 
     //Returns the TextProperty that should be used in conversation with person

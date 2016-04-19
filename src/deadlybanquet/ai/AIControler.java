@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import deadlybanquet.model.*;
 
+import deadlybanquet.speech.SpeechAct;
 import org.newdawn.slick.util.pathfinding.Path;
 
 import deadlybanquet.model.Character;
@@ -83,6 +84,12 @@ public class AIControler {
 		masterPath = mp;
 
 	}
+
+	public SpeechAct selectPhrase(ArrayList<SpeechAct> acts){
+		return statebasedAI.selectPhrase(acts);
+	}
+
+
 	public String getCharacterName(){
 		return npc.getName();
 	}

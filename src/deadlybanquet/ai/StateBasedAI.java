@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import deadlybanquet.ai.Condition.ConditionState;
 import deadlybanquet.model.Direction;
+import deadlybanquet.speech.SpeechAct;
 
 public class StateBasedAI {
 
@@ -41,6 +42,14 @@ public class StateBasedAI {
 		
 		runSchedule(aic);
 		
+	}
+
+	//Should optimally utilize the schedule created in think() to
+	//select an appropriate phrase for the conversation
+	public SpeechAct selectPhrase(ArrayList<SpeechAct> acts){
+		int index = (int)(Math.random()*4 + 0.5);
+		SpeechAct choice = acts.get(index);
+		return choice;
 	}
 	
 	private void generateSchedule() {
