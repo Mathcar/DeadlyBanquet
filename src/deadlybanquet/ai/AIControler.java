@@ -35,13 +35,13 @@ public class AIControler {
 	public void moveNPC(){
 		if(path!=null) {
         	if(pathStep != 0){
-        		this.getNpc().getPrevPos().setX( path.getStep(pathStep-1).getX());
-        		this.getNpc().getPrevPos().setY(path.getStep(pathStep-1).getY());
+        		this.getCharacter().getPrevPos().setX( path.getStep(pathStep-1).getX());
+        		this.getCharacter().getPrevPos().setY(path.getStep(pathStep-1).getY());
         	}
             int targetX = path.getStep(pathStep).getX()*32;
             int targetY = path.getStep(pathStep).getY()*32;
-            int x = getNpc().getPos().getX();
-            int y = getNpc().getPos().getY();
+            int x = getCharacter().getPos().getX();
+            int y = getCharacter().getPos().getY();
             if (targetX != x) {
                 x += (targetX - x) / Math.abs(targetX - x); //Move one pixel per update in the correct x direction
             } else if (targetY != y) {
