@@ -33,7 +33,7 @@ public class Character implements Renderable, Mover{
     private int id;
 //	private int xPos;
 //	private int yPos;
-	private Position pos;
+	private Position pos, prevPos;
 	private Direction direction;
 	private int distance;
 	private String room;
@@ -180,6 +180,10 @@ public class Character implements Renderable, Mover{
 	
 	public Position getPos() {
 		return new Position(this.pos);
+	}
+	
+	public Position getPrevPos(){
+		return prevPos;
 	}
 	
 	public Direction getDirection(){
