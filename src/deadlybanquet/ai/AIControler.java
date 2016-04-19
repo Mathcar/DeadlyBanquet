@@ -14,7 +14,7 @@ import deadlybanquet.model.Character;
 public class AIControler {
 	private Character character;
 	private StateBasedAI statebasedAI;
-	private int currentPathStep;
+	private int pathStep;
 	private final static int MOVEMNET_DELAY = 32;
 	private int movmentTimer = 0;
 	private MasterPath masterPath;
@@ -23,16 +23,35 @@ public class AIControler {
 	public AIControler(ActionListener al){
 		this.character = new Character(al, "Frido", 3, 3);
 		statebasedAI = new StateBasedAI();
-        currentPathStep = 0;
+        pathStep = 0;
 	}
 	
 	public AIControler(ActionListener al, Character c){
 		this.character = c;
 		statebasedAI = new StateBasedAI();
-		currentPathStep = 0;
+		pathStep = 0;
 	}
 	
 	public void moveNPC(){
+		if(path!=null) {
+        	if(pathStep != 0){
+        		this.getNpc().getPrevPos().setX( path.getStep(pathStep-1).getX());
+        		this.getNpc().getPrevPos().setY(path.getStep(pathStep-1).getY());
+        	}
+            int targetX = path.getStep(pathStep).getX()*32;
+            int targetY = path.getStep(pathStep).getY()*32;
+            int x = getNpc().getPos().getX();
+            int y = getNpc().getPos().getY();
+            if (targetX != x) {
+                x += (targetX - x) / Math.abs(targetX - x); //Move one pixel per update in the correct x direction
+            } else if (targetY != y) {
+                y += (targetY - y) / Math.abs(targetY - y); //Move one pixel per update in the correct x direction
+            } else if (path.getLength() > pathStep+1) {
+                pathStep++;  //If a grid has been reached, increment the path so the next grid will be the target
+            } else{
+                path = null; //Remove current path if destination has been reached
+            }
+        }
 	}
 
 	//Called on every person in origin and destination rooms on room change.
@@ -76,7 +95,7 @@ public class AIControler {
 
 	public void setPath(Path p){
 		//Reset path counter?
-        currentPathStep  = 0;
+        pathStep  = 0;
 		path = p;
 	}
 
