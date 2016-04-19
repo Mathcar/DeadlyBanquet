@@ -20,6 +20,8 @@ import deadlybanquet.ai.Say.How;
 import deadlybanquet.model.Time;
 import static deadlybanquet.model.World.getTime;
 import deadlybanquet.speech.SpeechAct;
+import deadlybanquet.speech.TextPropertyEnum;
+
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
 
@@ -523,6 +525,12 @@ public class NPCBrain implements IPerceiver, Talkable {
             return ans;
         }
         return memory.find(i);
+    }
+
+    //Returns the TextProperty that should be used in conversation with person
+    public TextPropertyEnum chooseProperty(String person){
+        //TODO EVALUATE MEMORIES/OPINIONS OF PERSON
+        return TextPropertyEnum.COLLOQUIAL;
     }
     
     public void observeRoomChange(String person, String origin, String destination){

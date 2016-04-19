@@ -4,10 +4,10 @@ public class Condition {
 	
 	public enum ConditionState{
 		INTERUPTED,
-		SLEAPING,
-		WHANT_TO_TALK_TO,
+		SLEEPING,
+		WANT_TO_TALK_TO,
 		STANDING_NEXT_TO,
-		DONT_WHANT_TO_SE,
+		DONT_WANT_TO_SE,
 		TALKING
 	}
 	
