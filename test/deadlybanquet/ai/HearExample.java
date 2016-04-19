@@ -90,5 +90,52 @@ public class HearExample {
             //And now we are in the same state as we were before the loop starts for the first time.
             
         }
+        
+    }
+    
+    @Test
+    public void testLongConversation(){
+        ArrayList<IThought> input = new ArrayList<>();
+        input.add(SNOWEDIN);
+        input.add(NOMOBILESIGNAL);
+        input.add(new Opinion("Alice", new PAD (1,1,1)));
+        runConversation(Bill, Jane, input);
+    }
+    
+    private void runConversation(NPCBrain first, NPCBrain second, ArrayList<IThought> ideas){
+        content.add(ideas.get(0));
+        makeSpeechAct(content, "Bill");
+        Bill.plantFalseMemory(ideas.get(0));
+        ideas.remove(0);
+        while (true){
+            //Jane hears and puts her response into debugInfo.
+            Jane.hear(input);
+            content.clear();
+            content.addAll(Jane.debugInfo);
+            if (content.isEmpty()) {
+                if (ideas.isEmpty())
+                    return;
+                Jane.plantFalseMemory(ideas.get(0));
+                content.add(ideas.get(0));
+                ideas.remove(0);
+                makeSpeechAct(content, "Jane");
+            }
+            //It is now Jane's turn to speak
+            input.setSpeaker("Jane");
+            Bill.hear(input);
+            content.clear();
+            content.addAll(Bill.debugInfo);
+            if (content.isEmpty()) {
+                if (ideas.isEmpty())
+                    return;
+                Bill.plantFalseMemory(ideas.get(0));
+                content.add(ideas.get(0));
+                ideas.remove(0);
+                makeSpeechAct(content, "Bill");
+            }
+            input.setSpeaker("Bill");
+            //And now we are in the same state as we were before the loop starts for the first time.
+            
+        }
     }
 }
