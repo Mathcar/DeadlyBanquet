@@ -205,9 +205,11 @@ public class World implements ActionListener, TileBasedMap {
         		for(AIControler a : aiss){
         			if(a.getCharacterId() == c.getId()){
         				c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
-        				playerConv = new ConversationModel(player,a.getNpc());
+        				playerConv = new ConversationModel(player,a.getCharacter());
+        		        
         				player.getCharacter().setTalking(true);
-        		        a.getNpc().setTalking(true);
+        		        a.getCharacter().setTalking(true);
+        				
         		        talk = true;
         				return true;
         			}
@@ -264,7 +266,7 @@ public class World implements ActionListener, TileBasedMap {
 
     //Attempt to create a path to a person within the same room
     public boolean attemptCreatePathToPerson(AIControler aic, String targetPerson){
-        Character c = aic.getNpc();
+        Character c = aic.getCharacter();
         Path p;
         Room r = getRoomOfCharacter(c);
         p = r.createPathToPerson(c, targetPerson);
@@ -279,7 +281,7 @@ public class World implements ActionListener, TileBasedMap {
     //Attempt to create a path to a door leading to the specified room.
     //Door must be in the same room, meaning targetRoom must be adjacent to current room
     public boolean attemptCreatePathToDoor(AIControler aic, String targetRoom){
-        Character c = aic.getNpc();
+        Character c = aic.getCharacter();
         Path p;
         Room r = getRoomOfCharacter(c);
         if(r.hasConnectionTo(targetRoom)){
@@ -292,7 +294,7 @@ public class World implements ActionListener, TileBasedMap {
 
     //Attempt to create a MasterPath from current room to any specified room
     public boolean attemptCreateMasterPath(AIControler aic, String targetRoom){
-        Character c = aic.getNpc();
+        Character c = aic.getCharacter();
         MasterPath mp = new MasterPath();
         Room r = getRoomOfCharacter(c);
         mp = createMasterPathTo(r.getName(), targetRoom);
@@ -433,7 +435,7 @@ public class World implements ActionListener, TileBasedMap {
 
     }
 
-    private Room getRoomOfCharacter(Character c){
+    public Room getRoomOfCharacter(Character c){
         for(Room[] rs :  roomMap){
             for(Room r : rs){
                 if(r!=null){

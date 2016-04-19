@@ -1,30 +1,85 @@
 package deadlybanquet.speech;
 
-import java.util.List;
-import java.util.Map;
+
 import deadlybanquet.ai.IThought;
+
 import java.util.ArrayList;
 
 /**
- * Created by Tom on 2016-02-25.
+ * Created by Tom on 2016-04-08.
  */
-public interface SpeechAct {
-    //todo remake
-    public String getText();
+public class SpeechAct {
+    private String line;
+    private String speaker;
+    private String listener;
+    private SpeechType speechType;
+    private TextPropertyEnum property;
+    private ArrayList<IThought> content;
 
-    public void setText(String text);
+    private Boolean dead = false; // just for easier programing
 
-    //gets the information content of the speech act.
-    public ArrayList<IThought> getContent(); // return the info
+    public SpeechAct(String line, String talker, String listener, SpeechType st,
+                     TextPropertyEnum tpe,ArrayList<IThought> con){ //todo add IThought
+        this.line=line;
+        this.speaker=talker;
+        this.listener=listener;
+        this.speechType=st;
+        this.property=tpe;
+        this.content=con;
+    }//todo add someway to seee that it is a goodbye speechAct or leave speechAct.
+    public SpeechAct(){
+        dead=true;
+    }
 
-    public void setContent(ArrayList<IThought> thoughts);
+    public boolean isDead(){
+        return dead;
+    }
 
-    public void setTextProperty(TextPropertyEnum property);
+    public SpeechAct(String line){ // this is for test
+        this.line=line;
+    }
 
-    public TextPropertyEnum getTextProperty();
-    
-    //Gets the identifier of the speaker.
-    public String getSpeaker();
+    public String getLine() {
+        return line;
+    }
 
-    public void setSpeaker(String name);
+    public void setLine(String line) {
+        this.line = line;
+    }
+
+    public String getSpeaker() {
+        return speaker;
+    }
+
+    public void setSpesker(String talker) {
+        this.speaker = talker;
+    }
+
+    public String getListener() {
+        return listener;
+    }
+
+    public void setListener(String listener) {
+        this.listener = listener;
+    }
+
+    public SpeechType getSpeechType() {
+        return speechType;
+    }
+
+    public void setSpeechType(SpeechType speechType) {
+        this.speechType = speechType;
+    }
+
+    public TextPropertyEnum getProperty() {
+        return property;
+    }
+
+    public void setProperty(TextPropertyEnum property) {
+        this.property = property;
+    }
+
+    public ArrayList<IThought> getContent(){
+        return this.content;
+    }
 }
