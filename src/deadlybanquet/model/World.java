@@ -198,9 +198,10 @@ public class World implements ActionListener, TileBasedMap {
     
 
     public boolean attemptTalk(Character chr){
-    	if(getRoomOfCharacter(chr).isCharacterOn(chr.getFacedTilePos())){
+        Room temp = getRoomOfCharacter(chr);
+    	if(temp.isCharacterOn(chr.getFacedTilePos())){
     		if(player.isCharacter(chr)){
-    			Character c = getRoomOfCharacter(chr).getCharacterOnPos(chr.getFacedTilePos());
+    			Character c = temp.getCharacterOnPos(chr.getFacedTilePos());
         		for(AIControler a : aiss){
         			if(a.getCharacterId() == c.getId()){
         				c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
