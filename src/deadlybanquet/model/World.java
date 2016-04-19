@@ -38,6 +38,7 @@ public class World implements ActionListener, TileBasedMap {
     private AIControler ai;
     private boolean talk;
     private ConversationModel playerConv;
+    private static PlayerBrain playerBrain;
 
     //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
     //for the rooms to get their connections made
@@ -62,7 +63,7 @@ public class World implements ActionListener, TileBasedMap {
 
     public void initPlayer(){
         Character playerCharacter = new Character(this, "Gandalf", 9, 13);
-        PlayerBrain playerBrain = new PlayerBrain();
+        playerBrain = new PlayerBrain();
         player = new Player(playerCharacter, playerBrain);
         roomMap[2][2].addCharacter(playerCharacter);
     }
@@ -204,7 +205,8 @@ public class World implements ActionListener, TileBasedMap {
         		for(AIControler a : aiss){
         			if(a.getCharacterId() == c.getId()){
         				c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
-        				playerConv = new ConversationModel(player,a.getNpc());
+        				playerConv = new ConversationModel(playerBrain,controlerBrainMap.get(a), player.getCharacter().getDefaultImage(),
+        						a.getNpc().getDefaultImage());
         		        
         				player.getCharacter().setTalking(true);
         		        a.getNpc().setTalking(true);

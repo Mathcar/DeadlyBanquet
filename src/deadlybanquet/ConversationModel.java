@@ -1,6 +1,9 @@
 package deadlybanquet;
 
+import org.newdawn.slick.Image;
+
 import deadlybanquet.ai.BeingPolite;
+import deadlybanquet.ai.IPerceiver;
 import deadlybanquet.model.Character;
 import deadlybanquet.model.NPC;
 import deadlybanquet.model.Player;
@@ -12,11 +15,17 @@ import deadlybanquet.speech.SpeechAct;
 public class ConversationModel {
 
     // for now only works with players and NPC
-    Player player;
-    Character npc;
-    public ConversationModel(Player player, Character npc){
-        this.player=player;
-        this.npc=npc;
+    IPerceiver p1, p2;
+    Image p,n;
+    public ConversationModel(IPerceiver player, IPerceiver npc, Image playerImage, Image npcImage){
+        this.p1=player;
+        this.p2=npc;
+        this.p=playerImage;
+        this.n=npcImage;
+    }
+    public ConversationModel(IPerceiver player, IPerceiver npc){
+        this.p1=player;
+        this.p2=npc;
     }
 
     private void conversation(){
@@ -35,11 +44,17 @@ public class ConversationModel {
         }*/
     }
     
-    public Player getPlayer(){
-    	return player;
+    public Image getPlayerImage(){
+    	return p;
     }
-    public Character getNpc(){
-    	return npc;
+    public Image getNpcImage(){
+    	return n;
+    }
+    public IPerceiver getIPerceiverPlayer(){
+    	return p1;
+    }
+    public IPerceiver getIperceiverNpc(){
+    	return p2;
     }
 
 }
