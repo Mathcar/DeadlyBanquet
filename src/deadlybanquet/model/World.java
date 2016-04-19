@@ -222,8 +222,8 @@ public class World implements ActionListener, TileBasedMap {
     public boolean attemptChangeRooms(Character ce) {
     	Door d = getRoomOfCharacter(ce).getFacedDoor(ce.getFacedTilePos());
     	if(d != null){
-	    	Room targetRoom = getRoomRef(getRoomOfCharacter(ce).getFacedDoor(ce.getFacedTilePos()).getDestinationRoom());
-	        Room originRoom = getRoomRef(getRoomOfCharacter(ce).getFacedDoor(ce.getFacedTilePos()).getOriginRoom());
+	    	Room targetRoom = getRoomRef(d.getDestinationRoom());
+	        Room originRoom = getRoomRef(d.getOriginRoom());
 	        /*//----------------------------------DEBUG--------------------------------
 	        System.out.println(originRoom.getName() + "   to   " + targetRoom.getName()
 	                            + " entering from " + ce.getEnterDirection().toString() );
