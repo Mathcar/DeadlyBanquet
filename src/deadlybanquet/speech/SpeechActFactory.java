@@ -1,9 +1,7 @@
 package deadlybanquet.speech;
 
 
-import deadlybanquet.Talkable;
 import deadlybanquet.ai.*;
-import deadlybanquet.model.Player;
 
 import java.util.ArrayList;
 
@@ -56,11 +54,11 @@ public class SpeechActFactory {
         }
     }
 
-    public SpeechAct2 generateSpeechAct(IPerceiver talker, ArrayList<IThought> listOfIThought){
+    public SpeechAct generateSpeechAct(IPerceiver talker, ArrayList<IThought> listOfIThought){
         this.talker=talker;
-        SpeechAct2 temp;
+        SpeechAct temp;
         //blabla generate a speechAct her
-        temp = new SpeechAct2("hello there #name");
+        temp = new SpeechAct("hello there #name");
         //now parse the SpeechAct
         String line=temp.getLine();
         if(wordsToBeParsed(line)!=null){
@@ -119,8 +117,10 @@ public class SpeechActFactory {
         }
     }
 
-    public SpeechAct2 convertIThoughtToSpeechAct(IThought i, TextPropertyEnum prop){
-        SpeechAct2 temp = new SpeechAct2();
+    public SpeechAct convertIThoughtToSpeechAct(IThought i, TextPropertyEnum prop){
+        ArrayList<IThought> IThoughtList = new ArrayList<>();
+        IThoughtList.add(i);
+        SpeechAct temp = new SpeechAct();
         SpeechActHolder holder = SpeechActHolder.getInstance();
         if(i instanceof BeingPolite){
             if(i.equals(BeingPolite.GREET)){
@@ -131,7 +131,7 @@ public class SpeechActFactory {
                         text=list.get(k).getText();
                     }
                 }
-                temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.GREET,prop);
+                temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.GREET,prop,IThoughtList);
             }
             else if(i.equals(BeingPolite.GOODBYE)) {
                 ArrayList<SpeechInfo> list = holder.getGreetingFrase();
@@ -141,13 +141,13 @@ public class SpeechActFactory {
                         text = list.get(k).getText();
                     }
                 }
-                temp = new SpeechAct2(text, talker.getName(), getListener().getName(), SpeechType.GOODBYE, prop);
+                temp = new SpeechAct(text, talker.getName(), getListener().getName(), SpeechType.GOODBYE, prop,IThoughtList);
             }
             else{
                 System.err.println("SpeechActFactory: What i want to say is not yet implemented");
             }
         }else if(i instanceof Whereabouts){
-            temp = new SpeechAct2();
+            temp = new SpeechAct();
             if(i.isQuestion()){
                 ArrayList<SpeechInfo> list = holder.getQuestionFrase();
                 String text = i.toString();
@@ -160,7 +160,7 @@ public class SpeechActFactory {
                             break;
                         }
                     }
-                    temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.WHERE_LOCATION,prop);
+                    temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.WHERE_LOCATION,prop,IThoughtList);
                 }else if(((Whereabouts) i).getRoom().equals("")){
                     // where is getCharacter()
                     for(int k=0;k<list.size();k++){
@@ -170,7 +170,7 @@ public class SpeechActFactory {
                             break;
                         }
                     }
-                    temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.WHERE_PERSON,prop);
+                    temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.WHERE_PERSON,prop,IThoughtList);
                 }
             }else{ // not a question!
                 String text = i.toString();
@@ -182,7 +182,7 @@ public class SpeechActFactory {
                         break;
                     }
                 }
-                temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.INFO_P_LOCATION,prop);
+                temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.INFO_P_LOCATION,prop,IThoughtList);
             }
         }else if(i instanceof Opinion){
             String text=i.toString();
@@ -195,7 +195,7 @@ public class SpeechActFactory {
                         break;
                     }
                 }
-                temp = new SpeechAct2(text,talker.getName(),getListener().getName(),SpeechType.OPINION_QUESTION,prop);
+                temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.OPINION_QUESTION,prop,IThoughtList);
             }else{
                 //info on opinion on someone.
             }
@@ -216,8 +216,8 @@ public class SpeechActFactory {
     NOT DONE!
     todo: Check ConversationModel Diagram.
      */
-    public ArrayList<SpeechAct2> getDialogueOptions(TextPropertyEnum prop){
-        ArrayList<SpeechAct2> temp = new ArrayList<>();
+    public ArrayList<SpeechAct> getDialogueOptions(TextPropertyEnum prop){
+        ArrayList<SpeechAct> temp = new ArrayList<>();
 
         //add first thing
         IThought i = talker.getMemory().information.first();

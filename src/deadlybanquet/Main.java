@@ -35,9 +35,9 @@ public class Main extends StateBasedGame{
 		/*NPCBrain a = new NPCBrain(null,null,null,null,null,null,"Kitchen","A");
 		NPCBrain b = new NPCBrain(null,null,null,null,null,null,"Kitchen","B");
 		SpeechActFactory factory = new SpeechActFactory(a,b);
-		//SpeechAct2 s =factory.convertIThoughtToSpeechAct(new Whereabouts("Tom","Kitchen"), TextPropertyEnum.NEUTRAL);
-		//SpeechAct2 s =factory.convertIThoughtToSpeechAct(new Opinion("Tom",new PAD(10.0,10.0,10.0),new Time(),new Opinion("Tom",new PAD(20,20,20))), TextPropertyEnum.PROPER);
-		SpeechAct2 s =factory.convertIThoughtToSpeechAct(new Whereabouts("Tom","Kitchen"), TextPropertyEnum.COLLOQUIAL);
+		//SpeechAct s =factory.convertIThoughtToSpeechAct(new Whereabouts("Tom","Kitchen"), TextPropertyEnum.NEUTRAL);
+		//SpeechAct s =factory.convertIThoughtToSpeechAct(new Opinion("Tom",new PAD(10.0,10.0,10.0),new Time(),new Opinion("Tom",new PAD(20,20,20))), TextPropertyEnum.PROPER);
+		SpeechAct s =factory.convertIThoughtToSpeechAct(new Whereabouts("Tom","Kitchen"), TextPropertyEnum.COLLOQUIAL);
 		System.out.println("line: "+s.getLine());*/
 
 
