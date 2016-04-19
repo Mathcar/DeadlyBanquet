@@ -3,6 +3,7 @@ package deadlybanquet.model;
 import deadlybanquet.AI;
 import deadlybanquet.RenderObject;
 import deadlybanquet.RenderSet;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -12,6 +13,7 @@ import org.newdawn.slick.util.pathfinding.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Hampus on 2016-03-04.
@@ -323,6 +325,10 @@ public class Room implements TileBasedMap {
     			
     	}
 		return null;
+    }
+    
+    public ArrayList<Character> getAllCharacters(){
+    	return this.characters;
     }
 
 }

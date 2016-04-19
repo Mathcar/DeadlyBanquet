@@ -58,7 +58,7 @@ public class Opinion implements IThought{
     @Override
     public boolean isQuestion() {
         return pad.isPlaceholder();
-    }
+    }//todo this always return TRUE why?
 
     @Override
     public int compareTo(IThought o) {
@@ -75,7 +75,10 @@ public class Opinion implements IThought{
         PAD p =pad;
         if(p!=null)
             p=p.copy();
-        return new Opinion(person,p, t, previous.copy());
+        Opinion pr = previous;
+        if(pr!=null)
+           pr.copy();
+        return new Opinion(person,p, t, pr);
     }
     
     @Override

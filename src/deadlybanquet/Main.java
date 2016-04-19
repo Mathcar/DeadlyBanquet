@@ -1,8 +1,7 @@
 package deadlybanquet;
 
-import deadlybanquet.ai.BeingPolite;
-import deadlybanquet.ai.NPCBrain;
-import deadlybanquet.ai.Whereabouts;
+import deadlybanquet.ai.*;
+import deadlybanquet.model.Time;
 import deadlybanquet.model.World;
 import deadlybanquet.speech.*;
 import deadlybanquet.states.Menu;
@@ -31,6 +30,18 @@ public class Main extends StateBasedGame{
 		Reading the text files here, maybe these should be moved
 		 */
 		SpeechActHolder.getInstance().readAllFile();
+		/*
+		// TOMS TEST BELOW
+		NPCBrain a = new NPCBrain(null,null,null,null,null,null,"Kitchen","A");
+		NPCBrain b = new NPCBrain(null,null,null,null,null,null,"Kitchen","B");
+		SpeechActFactory factory = new SpeechActFactory(a,b);
+		//SpeechAct s =factory.convertIThoughtToSpeechAct(new Whereabouts("Hampus",""), TextPropertyEnum.NEUTRAL);
+		//SpeechAct s =factory.convertIThoughtToSpeechAct(new Opinion("Tom",new PAD(10.0,10.0,10.0),new Time(),new Opinion("Tom",new PAD(20,20,20))), TextPropertyEnum.PROPER);
+		//SpeechAct s =factory.convertIThoughtToSpeechAct(new Whereabouts("Tom","Kitchen"), TextPropertyEnum.COLLOQUIAL);
+		SpeechAct s = factory.convertIThoughtToSpeechAct(BeingPolite.GREET,TextPropertyEnum.PROPER);
+		System.out.println("line: "+s.getLine());
+		*/
+
 
 		AppGameContainer app;
 		try {
@@ -44,7 +55,8 @@ public class Main extends StateBasedGame{
 			e.printStackTrace();
 			System.exit(0);
 		}
-		
+
+
 		
 
 	}
@@ -66,14 +78,6 @@ public class Main extends StateBasedGame{
 
 		
 	}
-
-	/*//test
-		NPCBrain a = new NPCBrain(null,null,null,null,null,null,"Kitchen","A");
-		NPCBrain b = new NPCBrain(null,null,null,null,null,null,"Kitchen","B");
-		SpeechActFactory factory = new SpeechActFactory(a,b);
-		SpeechAct2 s =factory.convertIThoughtToSpeechAct(new Whereabouts("","Bedroom"), TextPropertyEnum.NEUTRAL);
-		System.out.println("line: "+s.getLine());
-		//*/
 
 
 }

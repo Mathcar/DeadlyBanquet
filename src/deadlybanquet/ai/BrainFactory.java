@@ -41,7 +41,7 @@ public class BrainFactory {
         }
         
        if(name==null) throw new NullPointerException("No name supplied for new NPC.");
-       return new NPCBrain (information, emotion, temperament, desires, goals, plan, room, name);      
+       return new NPCBrain (information, emotion, temperament, desires, goals, plan, room, name, null); //needs AIController      
     }
 
     public static NPCBrain makeBrain(String room, String name){

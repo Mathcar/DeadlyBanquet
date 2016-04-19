@@ -35,4 +35,8 @@ public class SortedList implements Iterable<IThought>{
     public boolean remove(IThought t){
         return list.remove(t);
     }
+    
+    public String toString(){
+        return list.toString();
+    }
 }

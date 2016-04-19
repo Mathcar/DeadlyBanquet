@@ -6,12 +6,13 @@ import java.util.ArrayList;
 
 import deadlybanquet.model.*;
 
+import deadlybanquet.speech.SpeechAct;
 import org.newdawn.slick.util.pathfinding.Path;
 
 import deadlybanquet.model.Character;
 
 public class AIControler {
-	private Character npc;
+	private Character character;
 	private StateBasedAI statebasedAI;
 	private int currentPathStep;
 	private final static int MOVEMNET_DELAY = 32;
@@ -20,13 +21,13 @@ public class AIControler {
 	private Path path;
 	
 	public AIControler(ActionListener al){
-		this.npc = new Character(al, "Frido", 3, 3);
+		this.character = new Character(al, "Frido", 3, 3);
 		statebasedAI = new StateBasedAI();
         currentPathStep = 0;
 	}
 	
 	public AIControler(ActionListener al, Character c){
-		this.npc = c;
+		this.character = c;
 		statebasedAI = new StateBasedAI();
 		currentPathStep = 0;
 	}
@@ -83,12 +84,18 @@ public class AIControler {
 		masterPath = mp;
 
 	}
+
+	public SpeechAct selectPhrase(ArrayList<SpeechAct> acts){
+		return statebasedAI.selectPhrase(acts);
+	}
+
+
 	public String getCharacterName(){
-		return npc.getName();
+		return character.getName();
 	}
 	
 	public int getCharacterId(){
-		return npc.getId();
+		return character.getId();
 	}
 
     /*OBOLETE, blocked status is no longer in character but instead flagged
@@ -102,24 +109,24 @@ public class AIControler {
 	}
 	*/
 	
-	public Character getNpc(){
-		return this.npc;
+	public Character getCharacter(){
+		return this.character;
 	}
 	
 	public void turn(Direction dir){
-		npc.setDirection(dir);
+		character.setDirection(dir);
 	}
 	
 	public Direction getCharacterDirection(){
-		return npc.getDirection();
+		return character.getDirection();
 	}
 	
 	public boolean isTalking() {
-		return npc.isTalking();
+		return character.isTalking();
 	}
 
 	public void setTalking(boolean talking) {
-		npc.setTalking(talking);
+		character.setTalking(talking);
 	}
 	
 	//ugly test code
@@ -127,15 +134,15 @@ public class AIControler {
 		/*Task t = new TaskTurn(Direction.EAST);
 		t.execute(this);'
 		*/
-		statebasedAI.think(this);
+		statebasedAI.think(this, world);
 	}
 	//end
 
 	public void setBlocked(boolean blocked) {
-		npc.setBlocked(blocked);
+		character.setBlocked(blocked);
 	}
 	
 	public boolean isBlocked() {
-		return npc.isBlocked();
+		return character.isBlocked();
 	}
 }

@@ -76,5 +76,15 @@ public class PlayerBrain implements IPerceiver {
 		// TODO Auto-generated method stub
 		return null;
 	}
+    
+    @Override
+    public Memory getMemory(){
+        return this.information;
+    }
+	@Override
+	public SpeechAct selectPhrase(ArrayList<SpeechAct> acts) {
+		// TODO Auto-generated method stub
+		return null;
+	}
    
 }

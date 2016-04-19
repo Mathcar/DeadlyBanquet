@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Queue;
 
 import deadlybanquet.ai.Condition.ConditionState;
+import deadlybanquet.model.Character;
 import deadlybanquet.model.Direction;
+import deadlybanquet.speech.SpeechAct;
+import deadlybanquet.model.World;
+
 
 public class StateBasedAI {
 
@@ -23,26 +27,45 @@ public class StateBasedAI {
 	
 	private Queue<Task> schedule;
 	
+	List<Character> characters;
+	
 	public StateBasedAI(){
 		schedule = new LinkedList<Task>();
 		state = AIState.IDLE_STATE;
 		conditions = new ArrayList<Condition>();
+		characters = new ArrayList<Character>();
 	}
 	
-	public void think(AIControler aic){ //method is not runnable
+	public void think(AIControler aic, World world){ //method is not runnable
 		
-		List<String> characters = null;//= getCharactersInRoom()
+		getCharactersInRoom(aic, world);
 		
 		genConditions(aic); 
 		
 		selectState();
 		
 		generateSchedule();
-		
+
+		conditions.clear();
+
 		runSchedule(aic);
+
 		
 	}
+
+	//Should optimally utilize the schedule created in think() to
+	//select an appropriate phrase for the conversation
+	public SpeechAct selectPhrase(ArrayList<SpeechAct> acts){
+		int index = (int)(Math.random()*4 + 0.5);
+		SpeechAct choice = acts.get(index);
+		return choice;
+	}
 	
+	private void getCharactersInRoom(AIControler aic, World world) {
+		characters.clear();
+		characters.addAll(world.getRoomOfCharacter(aic.getCharacter()).getAllCharacters());
+	}
+
 	private void generateSchedule() {
 		if(schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))){
 			schedule.clear();
@@ -66,7 +89,6 @@ public class StateBasedAI {
 	}
 
 	private void genConditions(AIControler aic){
-		conditions.clear();
 		if(aic.isTalking()){
 			conditions.add(new Condition(ConditionState.TALKING));
 		}
@@ -79,11 +101,13 @@ public class StateBasedAI {
 	}
 	
 	private void selectState(){
-		for(Condition c: conditions){
-			if(c.getCondition()==ConditionState.TALKING){
+//		for(Condition c: conditions){
+//			if(c.getCondition()==ConditionState.TALKING){
+			if(conditions.contains(new Condition(ConditionState.TALKING))){
+				conditions.add(new Condition(ConditionState.INTERUPTED));
 				state=AIState.TALKING_STATE;
 			}
-		}
+//		}
 	}
 	
 	private void runSchedule(AIControler aic){

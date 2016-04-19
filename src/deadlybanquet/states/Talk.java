@@ -43,7 +43,6 @@ public class Talk extends BasicGameState {
 		text2 = new TextField(gc, gc.getDefaultFont(), 30, 310 ,510,140);
 		text1.setAcceptingInput(false);
 		text2.setAcceptingInput(false);
-
 	}
 
 	public void render(GameContainer gc, StateBasedGame s, Graphics g) throws SlickException {
