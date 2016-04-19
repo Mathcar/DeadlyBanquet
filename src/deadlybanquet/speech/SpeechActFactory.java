@@ -16,8 +16,8 @@ public class SpeechActFactory {
      * @return a speech act which conveys as much as possible of the intended content,
      * using multiple sentences where necessary. If content could not be conveyed, return error.
      */
+    // I WANT TO REMOVE THIS, IS THAT OK??
     public static SpeechAct makeSpeechAct(ArrayList<IThought> intendedcontent, String speaker){
-        
         if(intendedcontent.isEmpty()) return null;
         System.out.print(speaker + " says: ");
         for (IThought i: intendedcontent){
@@ -96,6 +96,9 @@ public class SpeechActFactory {
         SpeechAct temp = new SpeechAct();
         SpeechActHolder holder = SpeechActHolder.getInstance();
         if(i instanceof BeingPolite){
+            /*
+            BEINGPOLTE
+             */
             if(i.equals(BeingPolite.GREET)){
                 ArrayList<SpeechInfo> list = holder.getGreetingFrase();
                 String text = i.toString(); // In case something dose not exist, give it the toString value
@@ -122,6 +125,9 @@ public class SpeechActFactory {
                 System.err.println("SpeechActFactory: What i want to say is not yet implemented");
             }
         }else if(i instanceof Whereabouts){
+            /*
+            WHEREABOUTS
+             */
             temp = new SpeechAct();
             if(i.isQuestion()){
                 ArrayList<SpeechInfo> list = holder.getQuestionFrase();
@@ -168,6 +174,9 @@ public class SpeechActFactory {
                 temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.INFO_P_LOCATION,prop,IThoughtList);
             }
         }else if(i instanceof Opinion){
+            /*
+            OPINION
+             */
             String text=i.toString();
             if(i.isQuestion()){
                 ArrayList<SpeechInfo> list =holder.getQuestionFrase();
