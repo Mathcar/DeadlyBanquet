@@ -212,11 +212,23 @@ public class SpeechActFactory {
     }
 
 
+    /*
+    NOT DONE!
+    todo: Check ConversationModel Diagram.
+     */
     public ArrayList<SpeechAct2> getDialogueOptions(TextPropertyEnum prop){
         ArrayList<SpeechAct2> temp = new ArrayList<>();
 
         //add first thing
-        //Whereabouts w = new Whereabouts(talker.getM)
+        IThought i = talker.getMemory().information.first();
+        Whereabouts w = new Whereabouts("Tom","hell");
+        Opinion o = new Opinion("Tom",new PAD(0.0,0.0,0.0));
+
+        temp.add(convertIThoughtToSpeechAct(i,prop));
+        temp.add(convertIThoughtToSpeechAct(w,prop));
+        temp.add(convertIThoughtToSpeechAct(o,prop));
+        temp.add(convertIThoughtToSpeechAct(BeingPolite.GREET,prop));
+        temp.add(convertIThoughtToSpeechAct(BeingPolite.GOODBYE,prop));
 
         return temp;
     }
