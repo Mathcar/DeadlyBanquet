@@ -79,11 +79,13 @@ public class StateBasedAI {
 	}
 	
 	private void selectState(){
-		for(Condition c: conditions){
-			if(c.getCondition()==ConditionState.TALKING){
+//		for(Condition c: conditions){
+//			if(c.getCondition()==ConditionState.TALKING){
+			if(conditions.contains(new Condition(ConditionState.TALKING))){
+				conditions.add(new Condition(ConditionState.INTERUPTED));
 				state=AIState.TALKING_STATE;
 			}
-		}
+//		}
 	}
 	
 	private void runSchedule(AIControler aic){
