@@ -39,8 +39,11 @@ public class StateBasedAI {
 		selectState();
 		
 		generateSchedule();
-		
+
+		conditions.clear();
+
 		runSchedule(aic);
+
 		
 	}
 
@@ -75,7 +78,6 @@ public class StateBasedAI {
 	}
 
 	private void genConditions(AIControler aic){
-		conditions.clear();
 		if(aic.isTalking()){
 			conditions.add(new Condition(ConditionState.TALKING));
 		}
