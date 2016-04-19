@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import deadlybanquet.model.Character;
 
 import deadlybanquet.ai.Condition.ConditionState;
 import deadlybanquet.model.Direction;
-import deadlybanquet.model.World;
 
 public class StateBasedAI {
 
@@ -25,35 +23,27 @@ public class StateBasedAI {
 	
 	private Queue<Task> schedule;
 	
-	List<Character> characters;
-	
 	public StateBasedAI(){
 		schedule = new LinkedList<Task>();
 		state = AIState.IDLE_STATE;
 		conditions = new ArrayList<Condition>();
-		characters = new ArrayList<Character>();
 	}
 	
-	public void think(AIControler aic, World world){ //method is not runnable
+	public void think(AIControler aic){ //method is not runnable
 		
-		getCharactersInRoom(aic, world);
+		List<String> characters = null;//= getCharactersInRoom()
 		
 		genConditions(aic); 
 		
 		selectState();
 		
-		generateSchedule(aic);
+		generateSchedule();
 		
 		runSchedule(aic);
 		
 	}
 	
-	private void getCharactersInRoom(AIControler aic, World world) {
-		characters.clear();
-		characters.addAll(world.getRoomOfCharacter(aic.getCharacter()).getAllCharacters());
-	}
-
-	private void generateSchedule(AIControler aic) {
+	private void generateSchedule() {
 		if(schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))){
 			schedule.clear();
 			switch(state){
@@ -62,7 +52,6 @@ public class StateBasedAI {
 					schedule.add(new TaskTurn(Direction.SOUTH));
 					schedule.add(new TaskTurn(Direction.WEST));
 					schedule.add(new TaskTurn(Direction.NORTH));
-
 					break;
 				case TALKING_STATE:
 					schedule.add(new TaskIdle());
