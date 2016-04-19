@@ -212,4 +212,13 @@ public class SpeechActFactory {
     }
 
 
+    public ArrayList<SpeechAct2> getDialogueOptions(TextPropertyEnum prop){
+        ArrayList<SpeechAct2> temp = new ArrayList<>();
+
+        //add first thing
+        //Whereabouts w = new Whereabouts(talker.getM)
+
+        return temp;
+    }
+
 }
