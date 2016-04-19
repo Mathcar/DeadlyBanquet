@@ -154,7 +154,12 @@ public class SpeechActFactory {
                 ArrayList<SpeechInfo> list = holder.getInfoFrase();
                 for(int k = 0;k<list.size();k++){
                     SpeechInfo si = list.get(k);
-                    if(si.getSpeechType().equals(SpeechType.INFO_P_LOCATION)&&si.getTextProperty().equals(prop)){
+                    if(i.getCertainty()<0.5){
+                        if(si.getSpeechType().equals(SpeechType.DONT_KNOW)&&si.getTextProperty().equals(prop)){
+                            text=si.getText();
+                        }
+                    }
+                    else if(si.getSpeechType().equals(SpeechType.INFO_P_LOCATION)&&si.getTextProperty().equals(prop)){
                         text=si.getText();
                         break;
                     }
