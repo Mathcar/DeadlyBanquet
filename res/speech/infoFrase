@@ -1,3 +1,6 @@
-#person is in the #location;NEUTRAL;INFO_P_LOCATION;
-#person is currently in the #location ;PROPER;INFO_P_LOCATION;
-#person is chilling in the #location;COLLOQUIAL;INFO_P_LOCATION;
+I think #person is in the #location;NEUTRAL;INFO_P_LOCATION;
+I would say #person is currently in the #location ;PROPER;INFO_P_LOCATION;
+Ay man, #person is probably chilling in the #location;COLLOQUIAL;INFO_P_LOCATION;
+I don't know;NEUTRAL;DONT_KNOW;
+I do not have a clue;PROPER;DONT_KNOW;
+Sorry, no idea man;COLLOQUIAL;DONT_KNOW

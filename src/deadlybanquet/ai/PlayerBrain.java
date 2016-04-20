@@ -1,5 +1,6 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.World;
 /**
  * This class is the memory of the NPC or player. 
  * Contains everything which the NPC and player have in common.
@@ -7,12 +8,16 @@ package deadlybanquet.ai;
  */
 import deadlybanquet.speech.SpeechAct;
 import java.util.*;
+
+import org.newdawn.slick.Image;
 public class PlayerBrain implements IPerceiver {
     Memory information;
+    World world;
     //TODO CONSTRUCTOR ONLY TEMPORARILY ADDED, NOT SURE IF EMPTY MEMORY IS SUPPPOSED TO BE MADE
     public PlayerBrain(){information = new Memory(new SortedList());}
-    public PlayerBrain(SortedList s){
+    public PlayerBrain(SortedList s, World world){
         information = new Memory(s);
+        this.world = world;
     }
     
     //this method accepts a speech act and adds the information to its memory.
@@ -76,5 +81,10 @@ public class PlayerBrain implements IPerceiver {
     public Memory getMemory(){
         return this.information;
     }
+	@Override
+	public SpeechAct selectPhrase(ArrayList<SpeechAct> acts) {
+		// TODO Auto-generated method stub
+		return null;
+	}
    
 }

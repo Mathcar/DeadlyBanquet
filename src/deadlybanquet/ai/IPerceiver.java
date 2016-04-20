@@ -3,6 +3,8 @@ package deadlybanquet.ai;
 import deadlybanquet.speech.SpeechAct;
 import java.util.ArrayList;
 
+import org.newdawn.slick.Image;
+
 /**
  *
  * @author omega
@@ -11,6 +13,10 @@ public interface IPerceiver {
 
     //This method responds to a speech act, returning an appropriate reply.
     void hear(SpeechAct act);
+
+    //Selects a phrase out of a list of possible ones. Used instead of hear when the perciever
+    //has the initiative in the conversation
+    SpeechAct selectPhrase(ArrayList<SpeechAct> acts);
 
     //Called on every person in the room when somebody strikes up a conversation with somebody
     //else or examines (but does not pick up) an object in the room. (Other than the person
@@ -28,7 +34,7 @@ public interface IPerceiver {
 
     //called on entering a room
     void seePeople(ArrayList<String> people);
-
+    
     Memory getMemory(); //todo please add this.
 
     String getName(); //todo please add this.
