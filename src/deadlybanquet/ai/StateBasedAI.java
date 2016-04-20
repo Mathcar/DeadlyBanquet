@@ -42,7 +42,7 @@ public class StateBasedAI {
 		
 		selectState();
 		
-		generateSchedule();
+		generateSchedule(aic);
 		
 		runSchedule(aic);
 		
@@ -53,15 +53,17 @@ public class StateBasedAI {
 		characters.addAll(world.getRoomOfCharacter(aic.getCharacter()).getAllCharacters());
 	}
 
-	private void generateSchedule() {
+	private void generateSchedule(AIControler aic) {
 		if(schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))){
 			schedule.clear();
 			switch(state){
 				case IDLE_STATE:
-					schedule.add(new TaskTurn(Direction.EAST));//only spins the character at the moment
-					schedule.add(new TaskTurn(Direction.SOUTH));
-					schedule.add(new TaskTurn(Direction.WEST));
-					schedule.add(new TaskTurn(Direction.NORTH));
+//					schedule.add(new TaskTurn(Direction.EAST));//only spins the character at the moment
+//					schedule.add(new TaskTurn(Direction.SOUTH));
+//					schedule.add(new TaskTurn(Direction.WEST));
+//					schedule.add(new TaskTurn(Direction.NORTH));
+					
+//					schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
 					break;
 				case TALKING_STATE:
 					schedule.add(new TaskIdle());
@@ -103,5 +105,43 @@ public class StateBasedAI {
 			schedule.poll();
 		}
 	}
+	
+//	private Direction getDirectionToClosestCharacter(AIControler aic){
+//		Character closest = getClosestCharacter(aic);
+//		if(closest == null){
+//			return Direction.SOUTH; 
+//		}
+//		if(aic.getCharacter().getPos().getX()-closest.getPos().getX()<=aic.getCharacter().getPos().getY()-closest.getPos().getY()){
+//			if(aic.getCharacter().getPos().getX()>closest.getPos().getX()){
+//				return Direction.WEST;
+//			}else{
+//				return Direction.EAST;
+//			}
+//		}else{
+//			if(aic.getCharacter().getPos().getY()>closest.getPos().getY()){
+//				return Direction.NORTH;
+//			}else{
+//				return Direction.SOUTH;
+//			}
+//		}
+//	}
+//	
+//	private Character getClosestCharacter(AIControler aic){
+//		Character tmp=null;
+//		for(Character c: characters){
+//			if(tmp==null || (getDistance(tmp,aic.getCharacter())>getDistance(c, aic.getCharacter()))){
+//				if(!c.equals(aic.getCharacter())){
+//					tmp=c;
+//				}
+//			}
+//		}
+//		
+//		return tmp;
+//	}
+//	
+//	private int getDistance(Character c1, Character c2){
+////		return Math.min(Math.abs(c1.getPos().getX()-c2.getPos().getX()),Math.abs(c1.getPos().getY()-c2.getPos().getY()));
+//		return Math.abs(c1.getPos().getX()-c2.getPos().getX()) + Math.abs(c1.getPos().getY()-c2.getPos().getY());
+//	}
 	
 }
