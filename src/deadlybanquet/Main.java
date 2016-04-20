@@ -38,7 +38,8 @@ public class Main extends StateBasedGame{
 		//SpeechAct s =factory.convertIThoughtToSpeechAct(new Whereabouts("Hampus",""), TextPropertyEnum.NEUTRAL);
 		//Opinion o = new Opinion("Tom",PAD.placeholderPAD());
 		Opinion o = new Opinion("Tom",new PAD(0.0,1.0,-1.0));
-		SpeechAct s =factory.convertIThoughtToSpeechAct(o, TextPropertyEnum.PROPER);
+
+		SpeechAct s =factory.convertIThoughtToSpeechAct(new Do(Do.What.MURDER,"Tom","Mathias",new Time()), TextPropertyEnum.PROPER);
 		//SpeechAct s =factory.convertIThoughtToSpeechAct(new Whereabouts("Tom","Kitchen",null,1.0,null), TextPropertyEnum.COLLOQUIAL);
 		//SpeechAct s = factory.convertIThoughtToSpeechAct(BeingPolite.GREET,TextPropertyEnum.PROPER);
 		System.out.println("line: "+s.getLine());
@@ -57,7 +58,6 @@ public class Main extends StateBasedGame{
 			e.printStackTrace();
 			System.exit(0);
 		}
-		
 		
 
 	}

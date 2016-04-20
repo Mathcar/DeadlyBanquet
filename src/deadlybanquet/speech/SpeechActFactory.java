@@ -210,8 +210,9 @@ public class SpeechActFactory {
 
         if(temp.isDead()){
             //Something terrible has happend.
-            System.err.println("Could not create SpeeechAct from IThought [SpeechActFactory]");
-            System.exit(0);
+            //System.err.println("Could not create SpeeechAct from IThought [SpeechActFactory]");
+            //System.exit(0);
+            temp = new SpeechAct(i.toString(),talker.getName(),getListener().getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
         }
         return temp;
 
