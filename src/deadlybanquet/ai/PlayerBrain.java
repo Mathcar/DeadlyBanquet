@@ -9,6 +9,7 @@ import deadlybanquet.model.World;
 import deadlybanquet.speech.SpeechAct;
 import java.util.*;
 
+import deadlybanquet.speech.TextPropertyEnum;
 import org.newdawn.slick.Image;
 public class PlayerBrain implements IPerceiver {
     Memory information;
@@ -52,7 +53,12 @@ public class PlayerBrain implements IPerceiver {
     public void observeInteraction(String who, String with){
         //witch IThought should be generated?
     }
-    
+
+    @Override
+    public TextPropertyEnum chooseProperty(String person) {
+        return TextPropertyEnum.PROPER;
+    }
+
     //Called on every person in the room (apart from who) when somebody picks up an object.
     @Override
     public void observePickUp(String who, String what){

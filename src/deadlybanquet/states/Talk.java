@@ -21,6 +21,7 @@ public class Talk extends BasicGameState {
 	private TextField text1, text2;
 	private World model;
 	private ConversationModel conv;
+	private ConversationTree convTree;
 	
 	public Talk(World world) {
 		model = world;
@@ -46,9 +47,9 @@ public class Talk extends BasicGameState {
 	}
 
 	public void render(GameContainer gc, StateBasedGame s, Graphics g) throws SlickException {
-		
-		model.getPlayerConv().getPlayerImage().draw(540,330,3);
-		model.getPlayerConv().getNpcImage().draw(0,50,3);
+		ConversationModel playerConv = model.getPlayerConv();
+		playerConv.getPlayerImage().draw(540,330,3);
+		playerConv.getNpcImage().draw(0,50,3);
 		g.setBackground(Color.white);
 		g.setColor(Color.black);
 		
@@ -60,7 +61,9 @@ public class Talk extends BasicGameState {
 		
 		//g.drawString(model.getPlayerConv().getIPerceiverPlayer().getName(), 555, 430 );
 		//g.drawString(model.getPlayerConv().getIperceiverNpc().getName(), 25, 150 );
-		
+		text1.setText("\n " +conv.getLatestResponse());
+
+		/*
 		if(answer == 1){
 
 			text1.setText("\n I'm great, but I'm late for a meeting.");
@@ -74,25 +77,33 @@ public class Talk extends BasicGameState {
 			text1.setText("\n Hi!");	
 			text2.setText("\n 1. Hello! How are you? \n 2. Good bye! ");
 		}
-		
+		*/
 		text1.render(gc,g);
 		text2.render(gc, g);
 		
 	}
 
+	//Called upon entering this state
+	@Override
+	public void enter(GameContainer gc, StateBasedGame  game){
+		conv = model.getPlayerConv();
+		convTree = new ConversationTree();
+	}
+
 	public void update(GameContainer gc, StateBasedGame s, int arg2) throws SlickException {
-	
+
 		if(gc.getInput().isKeyPressed(Input.KEY_E)){
 			gc.getInput().clearKeyPressedRecord();
 			s.enterState(States.game);
 		}
-
+		convTree.parseInputForConv(gc.getInput());
+		/*
 		if(gc.getInput().isKeyPressed(Input.KEY_1)){
 			answer = 1;
 		}else if(gc.getInput().isKeyPressed(Input.KEY_2)){
 			answer = 2;
 		}
-		
+		*/
 		gc.getInput().clearKeyPressedRecord();
 		
 	}
