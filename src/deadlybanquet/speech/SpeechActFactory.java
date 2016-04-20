@@ -85,6 +85,9 @@ public class SpeechActFactory {
         if(temp.contains("#person")){
             temp = temp.replace("#person",o.getPerson());
         }
+        if(temp.contains("#opinion")){
+            temp=temp.replace("#opinion",o.getPAD().getOpinion());
+        }
         return temp;
     }
 
@@ -191,6 +194,16 @@ public class SpeechActFactory {
                 temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.OPINION_QUESTION,prop,IThoughtList);
             }else{
                 //info on opinion on someone.
+                ArrayList<SpeechInfo> list = holder.getInfoFrase();
+                for(int k=0;k<list.size();k++){
+                    SpeechInfo si = list.get(k);
+                    if(si.getSpeechType().equals(SpeechType.INFO_P_OPINION)&&si.getTextProperty().equals(prop)){
+                        text=si.getText();
+                        break;
+                    }
+                }
+                text=parseSpeechAct(text,(Opinion) i);
+                temp=new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.INFO_P_OPINION,prop,IThoughtList);
             }
         }
 

@@ -53,6 +53,18 @@ public class PAD {
     public static PAD placeholderPAD(){
         return new PAD (-5, -5, -5);
     }
+
+    public String getOpinion(){
+        if(P>0&&A>0&&D>0) return "love";
+        else if(P<0&&A<0&&D<0) return "am not interested in";
+        else if(P>0&&A>0&&D<0) return "rely on";
+        else if(P<0&&A<0&&D>0) return "dislike";
+        else if(P>0&&A<0&&D>0) return "like";
+        else if(P<0&&A>0&&D<0) return "am scared of";
+        else if(P>0&&A<0&&D<0) return "want to obey";
+        else if(P<0&&A>0&&D>0) return "hate";
+        else return "can not describe my feelings for"; //todo make a better version of this method
+    }
     
     public boolean isPlaceholder(){
         return (P<-1||P>1);
