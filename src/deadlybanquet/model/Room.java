@@ -97,9 +97,27 @@ public class Room implements TileBasedMap {
     }
 
     public Path createPathToDoor(Character c, String target){
+    	Position temp = new Position(0,0);
         for(Door d : doors){
             if(d.getDestinationRoom().equals(target)){
-                return getPath((NPC)c, c.getPos(), d.getPos());
+            	temp = d.getPos();
+            	switch(d.getDirection()){
+            	case EAST:            		
+            		temp.x = temp.getX()-1;
+            		return getPath(c, c.getPos(), temp);	
+            	case WEST:
+            		temp.x = temp.getX()+1;
+            		return getPath(c, c.getPos(), temp);
+            	case NORTH:
+            		temp.y = temp.getY()+1;
+            		return getPath(c, c.getPos(), temp);
+            	case SOUTH: 
+            		temp.y = temp.getY()-1;
+            		return getPath(c, c.getPos(), temp);
+            	default:
+            		return getPath(c, c.getPos(), d.getPos());
+            	}
+               
             }
         }
         //No such door was found, or no path to it could be found
@@ -169,8 +187,11 @@ public class Room implements TileBasedMap {
     public Path createPathToPerson(Character mover, String targetName){
         Position target = new Position(0,0);
         for(Character c : characters){
-            if(c.getName().equals(targetName))
+            if(c.getName().equals(targetName)){
                 target = c.getPos();
+            	target.setY(target.getY()+1);
+            	
+            }
         }
         return getPath(mover,mover.getPos(), target);
     }
