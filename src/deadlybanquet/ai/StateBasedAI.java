@@ -71,10 +71,6 @@ public class StateBasedAI {
 			schedule.clear();
 			switch(state){
 				case IDLE_STATE:
-//					schedule.add(new TaskTurn(Direction.EAST));//only spins the character at the moment
-//					schedule.add(new TaskTurn(Direction.SOUTH));
-//					schedule.add(new TaskTurn(Direction.WEST));
-//					schedule.add(new TaskTurn(Direction.NORTH));
 					
 					schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
 					break;
@@ -123,17 +119,19 @@ public class StateBasedAI {
 		if(closest == null || getDistance(aic.getCharacter(), closest)>4){
 			return Direction.SOUTH; 
 		}
-		if(aic.getCharacter().getPos().getX() - closest.getPos().getX() < aic.getCharacter().getPos().getY() - closest.getPos().getY()){
+		
+		if(Math.abs(aic.getCharacter().getPos().getX() - closest.getPos().getX()) < 
+				Math.abs(aic.getCharacter().getPos().getY() - closest.getPos().getY())){
 			if(aic.getCharacter().getPos().getY() > closest.getPos().getY()){
 				return Direction.NORTH;
 			}else{
-				return Direction.EAST;
+				return Direction.SOUTH;
 			}
 		}else{
 			if(aic.getCharacter().getPos().getX() > closest.getPos().getX()){
 				return Direction.WEST;
 			}else{
-				return Direction.SOUTH;
+				return Direction.EAST;
 			}
 		}
 	}
