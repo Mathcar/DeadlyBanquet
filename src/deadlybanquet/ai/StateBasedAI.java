@@ -42,7 +42,7 @@ public class StateBasedAI {
 		
 		genConditions(aic); 
 		
-		selectState();
+		selectState(aic);
 		
 		generateSchedule(aic);
 
@@ -98,19 +98,49 @@ public class StateBasedAI {
 		//add more conditions
 	}
 	
-	private void selectState(){
-//		for(Condition c: conditions){
-//			if(c.getCondition()==ConditionState.TALKING){
-			if(conditions.contains(new Condition(ConditionState.TALKING))){
-				conditions.add(new Condition(ConditionState.INTERUPTED));
-				state=AIState.TALKING_STATE;
-			}
-//		}
+	private void selectState(AIControler aic){
+		switch(state){
+			case IDLE_STATE:
+				if(conditions.contains(new Condition(ConditionState.TALKING))){
+					conditions.add(new Condition(ConditionState.INTERUPTED));
+					state=AIState.TALKING_STATE;
+				}else if(aic.hasPath()){
+					state=AIState.MOVEING_STATE;
+				}
+				break;
+			case TALKING_STATE:
+				if(!conditions.contains(new Condition(ConditionState.TALKING))){
+					state=AIState.IDLE_STATE;
+				}
+				break;
+			case MOVEING_STATE:
+				if(!aic.hasPath()){
+					state=AIState.IDLE_STATE;
+				}
+				break;
+		}
 	}
 	
 	private void runSchedule(AIControler aic){
 		if(!schedule.isEmpty() && schedule.peek().execute(aic)){
 			schedule.poll();
+		}
+	}
+	
+	private void talkToCharcterSchedual(Character character){
+		//find character
+		//walk to character
+		//interact (with character)
+	}
+	
+	private void moveFromAway(){
+		//get closest character
+		//move one step away from that character
+	}
+	
+	private void findCharacterSchedual(Character character){
+		if(!characters.contains(character)){
+			//walk to next room
 		}
 	}
 	
