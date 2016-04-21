@@ -126,10 +126,15 @@ public class Room implements TileBasedMap {
 
     //Checks if the room has a door with connection to a specified room
     public boolean hasConnectionTo(String room){
+        System.out.println("Checking connection from " + this.name + " to " + room);
         for(Door d : doors){
-            if(d.getDestinationRoom().equals(room))
+            System.out.println("Destination room of door = " + d.getDestinationRoom());
+            if(d.getDestinationRoom().equals(room)) {
+                System.out.println("A door was found with connection to that room");
                 return true;
+            }
         }
+        System.out.println("No door found with that connection");
         return false;
     }
 
@@ -284,7 +289,10 @@ public class Room implements TileBasedMap {
     @Override
     //Return a boolean as to whether a tile is blocked or not, x and y coordinates should be in tile-format
     //Collision detection needs to be added!!
-    public boolean blocked(PathFindingContext pathFindingContext, int x, int y) {
+    public boolean blocked(PathFindingContext pfc, int x, int y) {
+        /*System.out.println(new Position(x,y).toString()  +  "       source = " +
+                new Position(pfc.getSourceX(), pfc.getSourceY()).toString() + "    current = "
+                + new Position(pathFinder.getCurrentX(), pathFinder.getCurrentY()).toString());*/
         return isBlocked(x,y);
     }
 

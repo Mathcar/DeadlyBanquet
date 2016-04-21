@@ -27,7 +27,10 @@ public class World implements ActionListener, TileBasedMap {
     private static HashMap<AIControler, NPCBrain> controlerBrainMap;
     private static Time time;
     private Player player;
+    //Pathfinding variables
     private AStarPathFinder masterPathfinder;
+    private Position targetPosition;
+
     private ArrayList<AIControler> aiss;
     private AIControler ai;
     private boolean talk;
@@ -298,10 +301,9 @@ public class World implements ActionListener, TileBasedMap {
     //Attempt to create a MasterPath from current room to any specified room
     public boolean attemptCreateMasterPath(AIControler aic, String targetRoom){
         Character c = aic.getCharacter();
-        MasterPath mp = new MasterPath();
         Room r = getRoomOfCharacter(c);
         System.out.println(r.getName());
-        mp = createMasterPathTo(r.getName(), targetRoom);
+        MasterPath mp = createMasterPathTo(r.getName(), targetRoom);
         if(mp!=null){               //Was a masterPath actually made?
             aic.setMasterPath(mp);  //Send created MasterPath to AI
             return true;        //MasterPath successfully created and sent
@@ -505,14 +507,15 @@ public class World implements ActionListener, TileBasedMap {
     public MasterPath createMasterPathTo(String origin, String target){
         Position org = getRoomPosition(origin);
         Position targ = getRoomPosition(target);
+        //Needs to be correct for pathfinding to work
+        targetPosition = targ;
         System.out.println(org.getX() + " "+ org.getY() +" "+ targ.getX() + " "+ targ.getY());
         Path p = masterPathfinder.findPath(null, org.getX(), org.getY(), targ.getX(), targ.getY());
         MasterPath mp = new MasterPath();
-        System.out.println(p);
        if(p != null){
-    	   for(int i = 0; i<p.getLength(); i++){
+    	   for(int i = 1; i<p.getLength(); i++){
             	mp.addStep(roomMap[p.getX(i)][p.getY(i)].getName());
-            	
+            	System.out.println(" Step " + i + "   is " + roomMap[p.getX(i)][p.getY(i)].getName());
         	}
        }
         return mp;
@@ -546,12 +549,16 @@ public class World implements ActionListener, TileBasedMap {
 
     @Override
     public boolean blocked(PathFindingContext pfc, int x, int y) {
-    	System.out.println(roomMap[pfc.getSourceX()][pfc.getSourceY()].getName());
-    	System.out.println(roomMap[x][y].getName());
+        /*System.out.println(new Position(x,y).toString()  +  "       source = " +
+                                new Position(pfc.getSourceX(), pfc.getSourceY()).toString() + "    current = "
+                        + new Position(masterPathfinder.getCurrentX(), masterPathfinder.getCurrentY()).toString());*/
+        if(targetPosition.getX() == x && targetPosition.getY() == y)
+            return false;               //Override so pathfinding doesnt interpret target as blocked
         if(roomMap[x][y] != null && roomMap[pfc.getSourceX()][pfc.getSourceY()].hasConnectionTo(roomMap[x][y].getName())){
-        	
+            //System.out.println(roomMap[x][y].getName() +  " is free");
             return false;
         }else
+            //System.out.println(new Position(x,y).toString()+ " is blocked");
             return true;
     }
 
