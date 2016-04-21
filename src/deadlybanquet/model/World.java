@@ -211,12 +211,12 @@ public class World implements ActionListener, TileBasedMap {
         				player.getCharacter().setTalking(true);
         		        a.getCharacter().setTalking(true);
         		        //attemptCreatePathToPerson(a, "Frido");
-        		        attemptCreateMasterPath(a, "Kitchen");
+        		        //attemptCreateMasterPath(a, "Kitchen");
         		      //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
         		       // attemptCreatePathToDoor(a, "Bedroom");
     	
         				
-        		      //  talk = true;
+        		        talk = true;
         				return true;
         			}
         		}	      

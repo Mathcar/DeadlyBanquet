@@ -75,6 +75,8 @@ public class ConversationModel {
                 SpeechAct sa = getPlayerChoice();
                 doOneRound(sa);
             }
+        }else{
+            //TODO Create flow for npc-npc conversation
         }
         /*if(iteration == 0){
             perceiver1.selectPhrase(saFactory.getDialogueOptions(true));

@@ -1,8 +1,6 @@
 package deadlybanquet.model;
 
-import deadlybanquet.ai.BeingPolite;
-import deadlybanquet.ai.IThought;
-import deadlybanquet.ai.Whereabouts;
+import deadlybanquet.ai.*;
 import deadlybanquet.speech.SpeechAct;
 import deadlybanquet.speech.TextPropertyEnum;
 import org.newdawn.slick.Input;
@@ -76,7 +74,7 @@ public class ConversationTree {
                 parseInputQuestionLocation(input, cm);
                 break;
             case QUESTION_OPINION :
-                //parseInputQuestionOpinion(input);
+                parseInputQuestionOpinion(input, cm);
                 break;
             case GOODBYE :
                 parseInputGoodbye(input);
@@ -111,6 +109,7 @@ public class ConversationTree {
                 text = getPrintQuestionLocation();
                 break;
             case QUESTION_OPINION :
+                text = getPrintQuestionOpinion();
                 break;
             case GOODBYE :
                 text = getPrintGoodbye();
@@ -137,7 +136,7 @@ public class ConversationTree {
     private String getPrintGreeting(){
         String temp = "";
         for(int i = 0; i<3; i++){
-            temp += "\n  " + (i+1) + ".  " + alternatives.get(i).getLine();
+            temp += "  " + (i+1) + ".  " + alternatives.get(i).getLine() + " \n";
         }
         return temp;
     }
@@ -185,6 +184,73 @@ public class ConversationTree {
     }
 
     private void parseInputQuestionLocation(Input input, ConversationModel cm){
+        who = chooseAPerson(input);
+        //A character has been chosen
+        if(!who.equals("")){
+            setCurrentState(State.TEXT_PROPERTY_CHOICE);
+            //Create an IThought of Whereabouts type with a null location and then get
+            //the resulting speechacts for NEUTRAL, PROPER and COLLOQUIAL
+            alternatives = cm.getAllPropertyVariations(new Whereabouts(who, ""));
+        }
+    }
+
+
+
+    private String getPrintQuestionLocation(){
+        return getPrintPersonChoice();
+    }
+
+    private void parseInputQuestionOpinion(Input input, ConversationModel cm){
+        who = chooseAPerson(input);
+        if(!who.equals("")) {
+            alternatives = cm.getAllPropertyVariations(new Opinion(who, PAD.placeholderPAD()));
+            setCurrentState(State.TEXT_PROPERTY_CHOICE);
+        }
+    }
+
+    private String getPrintQuestionOpinion(){
+        return getPrintPersonChoice();
+    }
+
+    private void parseInputTextProperty(Input input){
+        if(input.isKeyPressed(Input.KEY_1)){
+            setFinalChoice(alternatives.get(0));
+        } else if(input.isKeyPressed(Input.KEY_2)) {
+            setFinalChoice(alternatives.get(1));
+        } else if(input.isKeyPressed(Input.KEY_3) ) {
+            setFinalChoice(alternatives.get(2));
+        }else if(input.isKeyPressed(Input.KEY_4)) {
+            resetToDefaults();
+        }
+    }
+
+    private String getPrintTextProperty(){
+        String temp = "        Choose what to say:    ";
+        for(int i = 0; i<3; i++){
+            temp += "\n  " + (i+1) + ".  " + alternatives.get(i).getLine();
+        }
+        temp += "\n  4.  abort mission";
+        return temp;
+    }
+
+    public boolean isChoiceCompleted(){
+        return choiceCompleted;
+    }
+
+    public SpeechAct getFinalChoice(){
+        if(choiceCompleted) {
+            System.out.println("Final choice fetched : " + finalChoice.getLine());
+            //resetToDefaults();          //choice has been recorded, now reset the tree
+            //TODO NEED A COPY FUNCTION FOR SPEECHACTS
+            hasFinalChoiceBeenFetched = true;
+            return finalChoice;
+        }
+        else
+            return null;                //This should never happen, so a crash is intended
+    }
+
+    private String chooseAPerson(Input input){
+        String who = "";
         if(input.isKeyPressed(Input.KEY_1)){
             System.out.println("Name chosen = " + characters.get((currentCounter)));
             who = characters.get(currentCounter);
@@ -206,16 +272,10 @@ public class ConversationTree {
             currentCounter-=3;
             System.out.println("currentCounter has been set to " + currentCounter);
         }
-        //A character has been chosen
-        if(!who.equals("")){
-            setCurrentState(State.TEXT_PROPERTY_CHOICE);
-            //Create an IThought of Whereabouts type with a null location and then get
-            //the resulting speechacts for NEUTRAL, PROPER and COLLOQUIAL
-            alternatives = cm.getAllPropertyVariations(new Whereabouts(who, ""));
-        }
+        return who;
     }
 
-    private String getPrintQuestionLocation(){
+    private String getPrintPersonChoice(){
         String temp = "       Choose which person to ask about ";
         int numberDisplayed = 1;
         for(int i = currentCounter; i<characters.size() && i<currentCounter+3; i++) {
@@ -230,47 +290,6 @@ public class ConversationTree {
             temp += "\n  " + numberDisplayed + ".  Previous 3 names";
         }
         return temp;
-    }
-
-    private void parseInputQuestionOpinion(Input input, ConversationModel cm){
-        parseInputQuestionLocation(input, cm);  //These are exactly the same as it looks now!
-
-    }
-
-    private void parseInputTextProperty(Input input){
-        if(input.isKeyPressed(Input.KEY_1)){
-            setFinalChoice(alternatives.get(0));
-        } else if(input.isKeyPressed(Input.KEY_2)) {
-            setFinalChoice(alternatives.get(1));
-        } else if(input.isKeyPressed(Input.KEY_3) ) {
-            setFinalChoice(alternatives.get(2));
-        }else if(input.isKeyPressed(Input.KEY_4)) {
-            resetToDefaults();
-        }
-    }
-
-    private String getPrintTextProperty(){
-        String temp = "";
-        for(int i = 0; i<3; i++){
-            temp += "\n  " + (i+1) + ".  " + alternatives.get(i).getLine();
-        }
-        return temp;
-    }
-
-    public boolean isChoiceCompleted(){
-        return choiceCompleted;
-    }
-
-    public SpeechAct getFinalChoice(){
-        if(choiceCompleted) {
-            System.out.println("Final choice fetched : " + finalChoice.getLine());
-            //resetToDefaults();          //choice has been recorded, now reset the tree
-            //TODO NEED A COPY FUNCTION FOR SPEECHACTS
-            hasFinalChoiceBeenFetched = true;
-            return finalChoice;
-        }
-        else
-            return null;                //This should never happen, so a crash is intended
     }
 
     private void setCurrentState(State newState){
