@@ -2,6 +2,7 @@ package deadlybanquet.speech;
 
 
 import deadlybanquet.ai.*;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -223,14 +224,15 @@ public class SpeechActFactory {
     NOT DONE!
     todo: Check ConversationModel Diagram.
      */
-    public ArrayList<SpeechAct> getDialogueOptions(TextPropertyEnum prop,Boolean first){
+    public ArrayList<SpeechAct> getDialogueOptions(Boolean first){
         ArrayList<SpeechAct> temp = new ArrayList<>();
 
         //add first thing
         IThought i = talker.getMemory().information.first();
         Whereabouts w = new Whereabouts("Tom","hell");
         Opinion o = new Opinion("Tom",new PAD(0.0,0.0,0.0));
-
+        //TODO FUL KOD, DETTA MÅSTE FIXAS, TOG BORT prop SOM PARAMETER
+        TextPropertyEnum prop = TextPropertyEnum.NEUTRAL;
         if(first==true){
             temp.add(convertIThoughtToSpeechAct(BeingPolite.GREET,prop));
         }else{

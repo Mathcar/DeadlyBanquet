@@ -19,6 +19,7 @@ public class AIControler {
 	private int movmentTimer = 0;
 	private MasterPath masterPath;
 	private Path path;
+	private int movtim = 0;
 	
 	public AIControler(ActionListener al){
 		this.character = new Character(al, "Frido", 3, 3);
@@ -34,23 +35,34 @@ public class AIControler {
 	
 	public void moveNPC(){
 		if(path!=null) {
-        	if(pathStep != 0){
-        		this.getCharacter().getPrevPos().setX( path.getStep(pathStep-1).getX());
-        		this.getCharacter().getPrevPos().setY(path.getStep(pathStep-1).getY());
-        	}
-            int targetX = path.getStep(pathStep).getX()*32;
-            int targetY = path.getStep(pathStep).getY()*32;
+            int targetX = path.getStep(pathStep).getX();
+            int targetY = path.getStep(pathStep).getY();
             int x = getCharacter().getPos().getX();
             int y = getCharacter().getPos().getY();
             if (targetX != x) {
-                x += (targetX - x) / Math.abs(targetX - x); //Move one pixel per update in the correct x direction
+                if(x < targetX){
+                	this.getCharacter().setDirection(Direction.EAST);
+                }else{
+                	this.getCharacter().setDirection(Direction.WEST);
+                }
+                this.getCharacter().executeMove();
+               
+            	//x += (targetX - x) / Math.abs(targetX - x); //Move one pixel per update in the correct x direction
             } else if (targetY != y) {
-                y += (targetY - y) / Math.abs(targetY - y); //Move one pixel per update in the correct x direction
+            	if(y < targetY){
+                	this.getCharacter().setDirection(Direction.SOUTH);
+                }else{
+                	this.getCharacter().setDirection(Direction.NORTH);
+                }
+                this.getCharacter().executeMove();
+              
+            	//y += (targetY - y) / Math.abs(targetY - y); //Move one pixel per update in the correct x direction
             } else if (path.getLength() > pathStep+1) {
                 pathStep++;  //If a grid has been reached, increment the path so the next grid will be the target
             } else{
                 path = null; //Remove current path if destination has been reached
             }
+
         }
 	}
 
@@ -89,7 +101,9 @@ public class AIControler {
         }
 	}
 
-    public MasterPath requestMasterPath(){return new MasterPath();}
+    public MasterPath requestMasterPath(){
+    	return masterPath;
+    }
 
 	public Path requestPath(){return new Path();}
 
@@ -153,6 +167,15 @@ public class AIControler {
 		/*Task t = new TaskTurn(Direction.EAST);
 		t.execute(this);'
 		*/
+		
+		if(movtim < 1){
+			moveNPC();
+			movtim = 16;
+		}
+		
+		movtim--;
+		
+		
 		statebasedAI.think(this, world);
 	}
 	//end
@@ -175,5 +198,9 @@ public class AIControler {
 		}else{
 			return true;
 		}
+	}
+
+	public Path getPath(){
+		return this.path;
 	}
 }

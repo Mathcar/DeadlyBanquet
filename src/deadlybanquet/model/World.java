@@ -212,6 +212,12 @@ public class World implements ActionListener, TileBasedMap {
        		        
         				player.getCharacter().setTalking(true);
         		        a.getCharacter().setTalking(true);
+        		        //attemptCreatePathToPerson(a, "Frido");
+        		        
+        		        //createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
+        		        //attemptCreatePathToDoor(a, "Bedroom");
+        		        //System.out.println(a.requestMasterPath());
+        		        	
         				
         		        talk = true;
         				return true;
@@ -495,10 +501,13 @@ public class World implements ActionListener, TileBasedMap {
     public MasterPath createMasterPathTo(String origin, String target){
         Position org = getRoomPosition(origin);
         Position targ = getRoomPosition(target);
+        System.out.println(origin + " " + target + " " + org + " " + targ);
         Path p = masterPathfinder.findPath(null, org.getX(), org.getY(), targ.getX(), targ.getY());
         MasterPath mp = new MasterPath();
+        System.out.println(p);
         for(int i = 0; i<p.getLength(); i++){
             mp.addStep(roomMap[p.getX(i)][p.getY(i)].getName());
+            
         }
         return mp;
     }

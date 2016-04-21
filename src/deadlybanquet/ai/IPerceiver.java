@@ -3,7 +3,9 @@ package deadlybanquet.ai;
 import deadlybanquet.speech.SpeechAct;
 import java.util.ArrayList;
 
+import deadlybanquet.speech.TextPropertyEnum;
 import org.newdawn.slick.Image;
+import org.w3c.dom.Text;
 
 /**
  *
@@ -22,6 +24,9 @@ public interface IPerceiver {
     //else or examines (but does not pick up) an object in the room. (Other than the person
     //with whom the person is talking, obviously)
     void observeInteraction(String who, String with);
+
+    //Returns the TextProperty that should be used in conversation with person
+    TextPropertyEnum chooseProperty(String person);
 
     //Called on every person in the room (apart from who) when somebody picks up an object.
     void observePickUp(String who, String what);
