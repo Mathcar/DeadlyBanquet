@@ -94,6 +94,7 @@ public class World implements ActionListener, TileBasedMap {
         roomMap[1][2] = new Room("res/pictures/bedroom.tmx", "Bedroom",this);
         roomMap[2][1] = new Room("res/pictures/kitchen.tmx", "Kitchen",this);
         masterPathfinder = new AStarPathFinder(this, 10, false);
+
     }
 
     //World's update function, somewhat unsure  as to what parameters are supposed
@@ -207,13 +208,12 @@ public class World implements ActionListener, TileBasedMap {
         				player.getCharacter().setTalking(true);
         		        a.getCharacter().setTalking(true);
         		        //attemptCreatePathToPerson(a, "Frido");
-        		        
-        		        //createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
-        		        //attemptCreatePathToDoor(a, "Bedroom");
-        		        //System.out.println(a.requestMasterPath());
-        		        	
+        		        attemptCreateMasterPath(a, "Kitchen");
+        		      //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
+        		       // attemptCreatePathToDoor(a, "Bedroom");
+    	
         				
-        		        talk = true;
+        		      //  talk = true;
         				return true;
         			}
         		}	      
@@ -300,6 +300,7 @@ public class World implements ActionListener, TileBasedMap {
         Character c = aic.getCharacter();
         MasterPath mp = new MasterPath();
         Room r = getRoomOfCharacter(c);
+        System.out.println(r.getName());
         mp = createMasterPathTo(r.getName(), targetRoom);
         if(mp!=null){               //Was a masterPath actually made?
             aic.setMasterPath(mp);  //Send created MasterPath to AI
@@ -504,14 +505,16 @@ public class World implements ActionListener, TileBasedMap {
     public MasterPath createMasterPathTo(String origin, String target){
         Position org = getRoomPosition(origin);
         Position targ = getRoomPosition(target);
-        System.out.println(origin + " " + target + " " + org + " " + targ);
+        System.out.println(org.getX() + " "+ org.getY() +" "+ targ.getX() + " "+ targ.getY());
         Path p = masterPathfinder.findPath(null, org.getX(), org.getY(), targ.getX(), targ.getY());
         MasterPath mp = new MasterPath();
         System.out.println(p);
-        for(int i = 0; i<p.getLength(); i++){
-            mp.addStep(roomMap[p.getX(i)][p.getY(i)].getName());
-            
-        }
+       if(p != null){
+    	   for(int i = 0; i<p.getLength(); i++){
+            	mp.addStep(roomMap[p.getX(i)][p.getY(i)].getName());
+            	
+        	}
+       }
         return mp;
     }
     
@@ -543,9 +546,12 @@ public class World implements ActionListener, TileBasedMap {
 
     @Override
     public boolean blocked(PathFindingContext pfc, int x, int y) {
-        if(roomMap[x][y] != null && roomMap[pfc.getSourceX()][pfc.getSourceY()].hasConnectionTo(roomMap[x][y].getName()))
+    	System.out.println(roomMap[pfc.getSourceX()][pfc.getSourceY()].getName());
+    	System.out.println(roomMap[x][y].getName());
+        if(roomMap[x][y] != null && roomMap[pfc.getSourceX()][pfc.getSourceY()].hasConnectionTo(roomMap[x][y].getName())){
+        	
             return false;
-        else
+        }else
             return true;
     }
 
