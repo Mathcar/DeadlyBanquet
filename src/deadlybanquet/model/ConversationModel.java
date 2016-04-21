@@ -1,6 +1,8 @@
-package deadlybanquet;
+package deadlybanquet.model;
 
+import deadlybanquet.ai.IThought;
 import deadlybanquet.speech.SpeechActFactory;
+import deadlybanquet.speech.SpeechType;
 import deadlybanquet.speech.TextPropertyEnum;
 import org.newdawn.slick.Image;
 
@@ -11,6 +13,7 @@ import deadlybanquet.model.NPC;
 import deadlybanquet.model.Player;
 import deadlybanquet.speech.SpeechAct;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,7 +26,9 @@ public class ConversationModel {
     private IPerceiver perceiver1, perceiver2;
     private Image playerImage,npcImage;
     private SpeechActFactory saFactory;
+    private SpeechAct playersChoice;
     private boolean hasPlayer;
+    private boolean conversationCompleted;
     private int iteration = 0;
     private final int maxIterations = 4;
     //Used to record the conversation
@@ -50,10 +55,12 @@ public class ConversationModel {
     }
 
     private void initDefaults(){
-        //saFactory = new SpeechActFactory();
+        //TODO NO PERCEIVERS IN THE FACTORY!
+        saFactory = new SpeechActFactory(perceiver1, perceiver2);
         actHistory = new HashMap<>();
         actHistory.put(perceiver1, new ArrayList<SpeechAct>());
         actHistory.put(perceiver2, new ArrayList<SpeechAct>());
+        conversationCompleted = false;
         System.out.println("Defaults initialized");
     }
 
@@ -61,11 +68,20 @@ public class ConversationModel {
         // for now assume that player will start to speak
 
         boolean end=false;
-        if(iteration == 0){
+
+
+        if(hasPlayer){
+            if(playersChoice!= null){
+                SpeechAct sa = getPlayerChoice();
+                doOneRound(sa);
+            }
+        }
+        /*if(iteration == 0){
             perceiver1.selectPhrase(saFactory.getDialogueOptions(true));
         }
-
         saFactory.getDialogueOptions(true);
+        /*
+
         /*while(!end){
             SpeechAct p = player.saySomeThing();
             p.setSpeaker(player.getName());
@@ -84,12 +100,51 @@ public class ConversationModel {
         SpeechAct answer = null;
         //answer = perceiver2.getAnswer();
         sendActToPerceiver(perceiver1, act); //No response should be created here
+        if(act.getSpeechType() == SpeechType.GOODBYE){
+            conversationCompleted = true;
+        }
     }
 
     //Handles sending a speechact to a perceiver and record and archive what is needed
     private void sendActToPerceiver(IPerceiver p, SpeechAct act){
         actHistory.get(p).add(act);     //Add act to history
         p.hear(act);
+    }
+
+    public ArrayList<SpeechAct> getAllPropertyVariations(IThought thought){
+        ArrayList<SpeechAct> temp = new ArrayList<>();
+        temp.add(saFactory.convertIThoughtToSpeechAct(thought, TextPropertyEnum.NEUTRAL));
+        temp.add(saFactory.convertIThoughtToSpeechAct(thought, TextPropertyEnum.PROPER));
+        temp.add(saFactory.convertIThoughtToSpeechAct(thought, TextPropertyEnum.COLLOQUIAL));
+        return temp;
+    }
+
+    //Used as an internal getter so that the variable is reset after reading it!
+    private SpeechAct getPlayerChoice(){
+        SpeechAct act = playersChoice;
+        System.out.println(act.getLine() + "     is the line before reset of playerChoice");
+        playersChoice = null;
+        System.out.println(act.getLine() + "     is the line after reset of playerChoice");
+        return act;
+    }
+
+    public boolean isConversationOver(){
+        return conversationCompleted;
+    }
+
+    //Called from the Talk state once a speechact has been constructed using the interface
+    //This is only used in conversations that contain the player
+    public void recieveChoice(SpeechAct sa){
+        if(sa == null){
+            System.out.println("Speech act received was null :(");
+        }else {
+            System.out.println("Player choice received : " + sa.getLine());
+            playersChoice = sa;
+            //TODO This should most likely be set in the doOneRound() method instead!
+            if(sa.getSpeechType() == SpeechType.GOODBYE){
+                conversationCompleted = true;
+            }
+        }
     }
 
     //Returns the latest string sent by the 2nd perciever.

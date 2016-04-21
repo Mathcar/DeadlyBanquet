@@ -1,11 +1,10 @@
 package deadlybanquet.states;
 
+import deadlybanquet.ai.BeingPolite;
 import org.newdawn.slick.Color;
 
-import deadlybanquet.ConversationModel;
-import deadlybanquet.RenderSet;
+import deadlybanquet.model.ConversationModel;
 import deadlybanquet.model.*;
-import deadlybanquet.model.Character;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -22,6 +21,8 @@ public class Talk extends BasicGameState {
 	private World model;
 	private ConversationModel conv;
 	private ConversationTree convTree;
+
+	private boolean isExitingState;
 	
 	public Talk(World world) {
 		model = world;
@@ -47,6 +48,8 @@ public class Talk extends BasicGameState {
 	}
 
 	public void render(GameContainer gc, StateBasedGame s, Graphics g) throws SlickException {
+		if(isExitingState)
+			return;				//State is being changed, so data no longer exists
 		ConversationModel playerConv = model.getPlayerConv();
 		playerConv.getPlayerImage().draw(540,330,3);
 		playerConv.getNpcImage().draw(0,50,3);
@@ -62,22 +65,8 @@ public class Talk extends BasicGameState {
 		//g.drawString(model.getPlayerConv().getIPerceiverPlayer().getName(), 555, 430 );
 		//g.drawString(model.getPlayerConv().getIperceiverNpc().getName(), 25, 150 );
 		text1.setText("\n " +conv.getLatestResponse());
+		text2.setText("\n" + convTree.getPrint());
 
-		/*
-		if(answer == 1){
-
-			text1.setText("\n I'm great, but I'm late for a meeting.");
-
-			text2.setText(" \n 2. Ok! Good bye! ");
-	
-		}else if(answer == 2){
-			text1.setText("\n Talk to you later!");
-			text2.setText("\n Press 'e' to leave");
-		}else{
-			text1.setText("\n Hi!");	
-			text2.setText("\n 1. Hello! How are you? \n 2. Good bye! ");
-		}
-		*/
 		text1.render(gc,g);
 		text2.render(gc, g);
 		
@@ -87,23 +76,36 @@ public class Talk extends BasicGameState {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame  game){
 		conv = model.getPlayerConv();
-		convTree = new ConversationTree();
+		convTree = new ConversationTree(model, conv.getAllPropertyVariations(BeingPolite.GREET));
+		isExitingState = false;
+	}
+
+	private void resetRunningData(){
+		conv = null;
+		convTree = null;
+		isExitingState = true;
 	}
 
 	public void update(GameContainer gc, StateBasedGame s, int arg2) throws SlickException {
 
-		if(gc.getInput().isKeyPressed(Input.KEY_E)){
+		if(gc.getInput().isKeyPressed(Input.KEY_E) || conv.isConversationOver()){
 			gc.getInput().clearKeyPressedRecord();
+			resetRunningData();
 			s.enterState(States.game);
+		}else {
+			convTree.parseInputForConv(gc.getInput(), conv);
+			if (convTree.isChoiceCompleted()) {
+				conv.recieveChoice(convTree.getFinalChoice());
+			}
+
+			/*
+			if(gc.getInput().isKeyPressed(Input.KEY_1)){
+				answer = 1;
+			}else if(gc.getInput().isKeyPressed(Input.KEY_2)){
+				answer = 2;
+			}
+			*/
 		}
-		convTree.parseInputForConv(gc.getInput());
-		/*
-		if(gc.getInput().isKeyPressed(Input.KEY_1)){
-			answer = 1;
-		}else if(gc.getInput().isKeyPressed(Input.KEY_2)){
-			answer = 2;
-		}
-		*/
 		gc.getInput().clearKeyPressedRecord();
 		
 	}

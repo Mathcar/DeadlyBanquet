@@ -1,17 +1,11 @@
 package deadlybanquet.model;
 
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
 
-import deadlybanquet.AI;
-import deadlybanquet.ConversationModel;
 import deadlybanquet.RenderSet;
-import deadlybanquet.View;
 import deadlybanquet.ai.AIControler;
 import deadlybanquet.ai.NPCBrain;
 import deadlybanquet.ai.BrainFactory;
@@ -74,7 +68,7 @@ public class World implements ActionListener, TileBasedMap {
     	aiss = new ArrayList<>();
     	controlerBrainMap = new HashMap<AIControler, NPCBrain>();
     	createNpc(new Position(9,5), "Frido", "Living Room" );
-    	createNpc(new Position(13,9), "Candy", "Living Room" );
+    	createNpc(new Position(10,13), "Candy", "Living Room" );
     	createNpc(new Position(2,2), "BURT", "Living Room" );
     	createNpc(new Position(7,12), "Cindy", "Kitchen" );
     	createNpc(new Position(9,7), "Aragorn", "Kitchen" );
@@ -313,6 +307,15 @@ public class World implements ActionListener, TileBasedMap {
         }
         return false;   //Something went wrong and no MasterPath was created
 
+    }
+
+    //Returns a list with the names of all the current characters
+    public ArrayList<String> getAllCharacterNames(){
+        ArrayList<String> names = new ArrayList<>();
+        for(AIControler aic : aiss){
+            names.add(aic.getCharacterName());
+        }
+        return names;
     }
 
     @Override
