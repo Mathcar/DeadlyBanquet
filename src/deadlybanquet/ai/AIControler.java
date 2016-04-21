@@ -164,4 +164,16 @@ public class AIControler {
 	public boolean isBlocked() {
 		return character.isBlocked();
 	}
+	
+	public void abortPath(){
+		path = null;
+	}
+	
+	public boolean hasPath(){
+		if(path==null){
+			return false;
+		}else{
+			return true;
+		}
+	}
 }
