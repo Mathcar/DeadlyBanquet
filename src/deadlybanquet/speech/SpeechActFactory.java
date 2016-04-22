@@ -33,42 +33,42 @@ public class SpeechActFactory {
 
     SpeechAct lastThingSaid;
 
-    IPerceiver talker;
+    //IPerceiver talker;
     public SpeechActFactory(IPerceiver A, IPerceiver B){
         this.A=A;
         this.B=B;
-        talker=this.A;
+        //talker=this.A;
     }
 
-    private void changeTalker(){
+    /*private void changeTalker(){
         if(talker.equals(A)){
             talker=B;
         }else{
             talker=A;
         }
-    }
+    }*/
 
-    private IPerceiver getListener(){
+    /*private IPerceiver getListener(){
         if(talker.equals(A)){
             return B;
         }else{
             return A;
         }
-    }
+    }*/
 
 
-    private String parseSpeechAct(String text){
+    private static String parseSpeechAct(String text,IPerceiver speaker,IPerceiver listener){
         String temp = text;
         if(temp.contains("#name")){
-            temp = temp.replace("#name",getListener().getName());
+            temp = temp.replace("#name",listener.getName());
         }
         return temp;
     }
 
-    private String parseSpeechAct(String text, Whereabouts w){
+    private static String parseSpeechAct(String text, Whereabouts w,IPerceiver speaker,IPerceiver listener){
         String temp=text;
         if(temp.contains("#name")){
-            temp = temp.replace("#name",getListener().getName());
+            temp = temp.replace("#name",listener.getName());
         }
         if(temp.contains("#location")){
             temp = temp.replace("#location",w.getRoom());
@@ -79,10 +79,10 @@ public class SpeechActFactory {
         return temp;
     }
 
-    private String parseSpeechAct(String text, Opinion o){
+    private static String parseSpeechAct(String text, Opinion o,IPerceiver speaker,IPerceiver listener){
         String temp = text;
         if(temp.contains("#name")){
-            temp = temp.replace("#name",getListener().getName());
+            temp = temp.replace("#name",listener.getName());
         }
         if(temp.contains("#person")){
             temp = temp.replace("#person",o.getPerson());
@@ -95,7 +95,7 @@ public class SpeechActFactory {
 
 
 
-    public SpeechAct convertIThoughtToSpeechAct(IThought i, TextPropertyEnum prop){
+    public static SpeechAct convertIThoughtToSpeechAct(IThought i, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
         ArrayList<IThought> IThoughtList = new ArrayList<>();
         IThoughtList.add(i);
         SpeechAct temp = new SpeechAct();
@@ -112,8 +112,8 @@ public class SpeechActFactory {
                         text=list.get(k).getText();
                     }
                 }
-                text=parseSpeechAct(text);
-                temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.GREET,prop,IThoughtList);
+                text=parseSpeechAct(text,speaker,listener);
+                temp = new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.GREET,prop,IThoughtList);
             }
             else if(i.equals(BeingPolite.GOODBYE)) {
                 ArrayList<SpeechInfo> list = holder.getGreetingFrase();
@@ -123,8 +123,8 @@ public class SpeechActFactory {
                         text = list.get(k).getText();
                     }
                 }
-                text=parseSpeechAct(text);
-                temp = new SpeechAct(text, talker.getName(), getListener().getName(), SpeechType.GOODBYE, prop,IThoughtList);
+                text=parseSpeechAct(text,speaker,listener);
+                temp = new SpeechAct(text, speaker.getName(), listener.getName(), SpeechType.GOODBYE, prop,IThoughtList);
             }
             else{
                 System.err.println("SpeechActFactory: What i want to say is not yet implemented");
@@ -146,8 +146,8 @@ public class SpeechActFactory {
                             break;
                         }
                     }
-                    text=parseSpeechAct(text,(Whereabouts) i);
-                    temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.WHERE_LOCATION,prop,IThoughtList);
+                    text=parseSpeechAct(text,(Whereabouts) i,speaker,listener);
+                    temp = new SpeechAct(text,listener.getName(),listener.getName(),SpeechType.WHERE_LOCATION,prop,IThoughtList);
                 }else if(((Whereabouts) i).getRoom().equals("")){
                     // where is getCharacter()
                     for(int k=0;k<list.size();k++){
@@ -157,8 +157,8 @@ public class SpeechActFactory {
                             break;
                         }
                     }
-                    text=parseSpeechAct(text,(Whereabouts) i);
-                    temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.WHERE_PERSON,prop,IThoughtList);
+                    text=parseSpeechAct(text,(Whereabouts) i,speaker,listener);
+                    temp = new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.WHERE_PERSON,prop,IThoughtList);
                 }
             }else{ // not a question!
                 String text = i.toString();
@@ -175,8 +175,8 @@ public class SpeechActFactory {
                         break;
                     }
                 }
-                text=parseSpeechAct(text,(Whereabouts) i);
-                temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.INFO_P_LOCATION,prop,IThoughtList);
+                text=parseSpeechAct(text,(Whereabouts) i,speaker,listener);
+                temp = new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.INFO_P_LOCATION,prop,IThoughtList);
             }
         }else if(i instanceof Opinion){
             /*
@@ -192,8 +192,8 @@ public class SpeechActFactory {
                         break;
                     }
                 }
-                text=parseSpeechAct(text,(Opinion) i);
-                temp = new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.OPINION_QUESTION,prop,IThoughtList);
+                text=parseSpeechAct(text,(Opinion) i,speaker,listener);
+                temp = new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.OPINION_QUESTION,prop,IThoughtList);
             }else{
                 //info on opinion on someone.
                 ArrayList<SpeechInfo> list = holder.getInfoFrase();
@@ -204,8 +204,8 @@ public class SpeechActFactory {
                         break;
                     }
                 }
-                text=parseSpeechAct(text,(Opinion) i);
-                temp=new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.INFO_P_OPINION,prop,IThoughtList);
+                text=parseSpeechAct(text,(Opinion) i,speaker,listener);
+                temp=new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.INFO_P_OPINION,prop,IThoughtList);
             }
         }else if(i instanceof Do){
             if(i.isQuestion()){
@@ -218,7 +218,7 @@ public class SpeechActFactory {
             //Something terrible has happend.
             //System.err.println("Could not create SpeeechAct from IThought [SpeechActFactory]");
             //System.exit(0);
-            temp = new SpeechAct(i.toString(),talker.getName(),getListener().getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
+            temp = new SpeechAct(i.toString(),speaker.getName(),listener.getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
         }
         return temp;
 
@@ -229,22 +229,22 @@ public class SpeechActFactory {
     NOT DONE!
     todo: Check ConversationModel Diagram.
      */
-    public ArrayList<SpeechAct> getDialogueOptions(Boolean first){
+    public static ArrayList<SpeechAct> getDialogueOptions(IPerceiver speaker, IPerceiver listener,Boolean first){
         ArrayList<SpeechAct> temp = new ArrayList<>();
 
         //add first thing
-        IThought i = talker.getMemory().information.first();
+        IThought i = speaker.getMemory().information.first();
         Whereabouts w = new Whereabouts("Tom","hell");
         Opinion o = new Opinion("Tom",new PAD(0.0,0.0,0.0));
         //TODO FUL KOD, DETTA MÅSTE FIXAS, TOG BORT prop SOM PARAMETER
         TextPropertyEnum prop = TextPropertyEnum.NEUTRAL;
         if(first==true){
-            temp.add(convertIThoughtToSpeechAct(BeingPolite.GREET,prop));
+            temp.add(convertIThoughtToSpeechAct(BeingPolite.GREET,prop,speaker,listener));
         }else{
-            temp.add(convertIThoughtToSpeechAct(i,prop));
-            temp.add(convertIThoughtToSpeechAct(w,prop));
-            temp.add(convertIThoughtToSpeechAct(o,prop));
-            temp.add(convertIThoughtToSpeechAct(BeingPolite.GOODBYE,prop));
+            temp.add(convertIThoughtToSpeechAct(i,prop,speaker,listener));
+            temp.add(convertIThoughtToSpeechAct(w,prop,speaker,listener));
+            temp.add(convertIThoughtToSpeechAct(o,prop,speaker,listener));
+            temp.add(convertIThoughtToSpeechAct(BeingPolite.GOODBYE,prop,speaker,listener));
         }
 
 
