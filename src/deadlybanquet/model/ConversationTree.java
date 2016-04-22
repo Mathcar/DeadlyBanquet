@@ -43,7 +43,8 @@ public class ConversationTree {
 
     //Event variables
     private State stateToSkip;
-    private String who2, what, when;
+    private String who2, when;
+    private Do.What what;
 
     //Greeting variables
 
@@ -62,7 +63,7 @@ public class ConversationTree {
         who = "";
         who2 = "";
         when = "";
-        what = "";
+        what = null;
         alternatives = null;
         finalChoice = null;
         hasFinalChoiceBeenFetched = false;
@@ -331,13 +332,13 @@ public class ConversationTree {
     private void parseInputQuestionEventWhat(Input input, ConversationModel cm){
         if (stateToSkip != State.QUESTION_EVENT_WHAT){
             if (input.isKeyPressed(Input.KEY_1)) {
-                what = "Dong";
+                what = Do.What.MOVETO;
             } else if (input.isKeyPressed(Input.KEY_2)) {
-                what = "Natures Prophet";
+                what = Do.What.MURDER;
             } else if (input.isKeyPressed(Input.KEY_3)) {
-                what = "Spectre";
+                //what = Do.What.PICKUP;
             }
-            if(!what.equals("")){
+            if(what != null){
                 eventDebug();
                // cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
                 //setCurrentState(State.TEXT_PROPERTY_CHOICE);
@@ -353,10 +354,10 @@ public class ConversationTree {
     }
 
     private String getPrintQuestionEventWhat(){
-        String temp = "        Choose the utilized object";
-        temp += "\n  1.  Dong";
-        temp += "\n  2.  Natures Prophet";
-        temp += "\n  3.  Spectre";
+        String temp = "        Choose the event ";
+        temp += "\n  1.  Moved to ";
+        temp += "\n  2.  Murdered ";
+        temp += "\n  3.  Interacted with";
         return temp;
     }
 
