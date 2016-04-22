@@ -21,6 +21,7 @@ import deadlybanquet.ai.Say.How;
 import deadlybanquet.model.TimeStamp;
 import static deadlybanquet.model.World.getTimeStamp;
 import deadlybanquet.speech.SpeechAct;
+import static deadlybanquet.speech.SpeechActFactory.convertIThoughtToSpeechAct;
 import deadlybanquet.speech.TextPropertyEnum;
 import static deadlybanquet.speech.TextPropertyEnum.NEUTRAL;
 
