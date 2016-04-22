@@ -17,12 +17,11 @@ import static deadlybanquet.ai.Say.How.*;
 import deadlybanquet.Talkable;
 import static deadlybanquet.ai.Desire.dg.GOAL;
 import deadlybanquet.ai.Say.How;
-import deadlybanquet.model.Time;
-import static deadlybanquet.model.World.getTime;
+import deadlybanquet.model.TimeStamp;
+import static deadlybanquet.model.World.getTimeStamp;
 import deadlybanquet.speech.SpeechAct;
 import deadlybanquet.speech.TextPropertyEnum;
 
-import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
 
 public class NPCBrain implements IPerceiver, Talkable {
@@ -265,7 +264,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                     foundData.add(b);
         }
         //Check if I have an idea that somebody else might know
-        Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "",null, 0.0, null);
+        Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "", 0.0, null);
 		if(foundData.isEmpty()) foundData=memory.find(tofind);
         //if I have no idea whatsoever about where the person is
         if(foundData.isEmpty()){
@@ -298,7 +297,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                                 //Speaker has acceded to a request we made
                                 if (h.type==REQUEST){
                                     //content of a request should be either a do or a say object.
-                                    Time time = getTime();
+                                    TimeStamp time = getTimeStamp();
                                     Desire desire = new Desire(GOAL,h.content, time, 1.0);
                                     //TODO maybe add another interface to avoid such code?
                                     SomebodyElse newinfo = new SomebodyElse(desire,you, new PAD(1,0,0),1.0);
@@ -398,7 +397,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         if (foundData.isEmpty()){
             //If no previous information is available, return
             //I am happy/sad for you.
-            s.time=getTime();
+            s.time=getTimeStamp();
             memory.information.add(s);
             PAD opinion = new PAD(inEmotion.pad.getP(), 0, 0);
             s.opinion = opinion;
@@ -446,7 +445,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     private void acceptWithCertainty(String person, IThought stateofworld, double certainty){
         SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, certainty);
-        previnfo.time=getTime();
+        previnfo.time=getTimeStamp();
         //Find any previous information on the subject
         SortedList foundData = memory.find(previnfo);
         if (!foundData.isEmpty()){
@@ -550,6 +549,20 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     public void observeRoomChange(String person, String origin, String destination){
+        System.out.println("NPC registered room change");
+        SortedList res = memory.find (new Whereabouts(person, ""));
+        TimeStamp t = getTimeStamp();
+        t.incrementTime(-1);
+        Whereabouts w = new Whereabouts(person, origin,1.0, t);
+        Whereabouts n = new Whereabouts(person, destination, 1.0, getTimeStamp(), w);
+        if (res.isEmpty()){           
+            memory.add(n);
+        }
+        else {
+            Whereabouts old = (Whereabouts) res.first();
+            w.setPrevious(old);
+            memory.replace(old, n);
+        }
     }
     
     public void observeInteraction(String who, String with){
@@ -576,7 +589,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     @Override
     public void seePeople(ArrayList<String> people) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override

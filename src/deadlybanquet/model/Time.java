@@ -22,13 +22,7 @@ public class Time {
     }
 
     public TimeStamp time(){
-        return new TimeStamp(this);
-    }
-    
-    public Time placeholderTime(){
-        Time t = new Time();
-        t.forceSetTime(-1, 0, 0);
-        return t;
+        return new TimeStamp(hour,day,minutes);
     }
 
     public void incrementTime(float deltaTime){
@@ -49,26 +43,4 @@ public class Time {
         this.hour = hour;
         this.minutes = (float)minutes;
     }
-
-    public int getHour(){
-        return hour;
-    }
-
-    public int getMinute(){
-        return (int)minutes;
-    }
-
-    public int getDay(){
-        return day;
-    }
-    
-    public boolean isPlaceHolder(){
-        return day<0;
-    }
-    
-    public Time copy(){
-        return new Time(day,hour,minutes);
-    }
-
-
 }

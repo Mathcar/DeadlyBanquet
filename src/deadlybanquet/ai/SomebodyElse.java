@@ -1,6 +1,6 @@
 package deadlybanquet.ai;
 
-import deadlybanquet.model.Time;
+import deadlybanquet.model.TimeStamp;
 
 /**
  * Represents the idea that I think with howsure certainty that aboutPerson thinks... 
@@ -16,10 +16,10 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
     public PAD opinion;
     //TODO restrict to smaller range
     public double howsure;
-    public Time time;
+    public TimeStamp time;
     public SomebodyElse previous;
     
-    public SomebodyElse(IThought w, String a, PAD o, double h, Time t, SomebodyElse p){
+    public SomebodyElse(IThought w, String a, PAD o, double h, TimeStamp t, SomebodyElse p){
         what=w;
         aboutPerson =a;
         opinion = o;
@@ -79,7 +79,7 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
     
     @Override
     public SomebodyElse copy(){
-        Time t=time;
+        TimeStamp t=time;
         if(t!=null)
             t=t.copy();
         PAD p =opinion;

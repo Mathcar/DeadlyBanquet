@@ -42,4 +42,9 @@ public class Memory {
     public void add(IThought i){
         information.add(i);
     }
+    
+    public void replace(IThought old, IThought replacement){
+        information.remove(old);
+        information.add(replacement);
+    }
 }

@@ -1,7 +1,7 @@
 package deadlybanquet.ai;
 
 import static deadlybanquet.ai.Say.How.*;
-import deadlybanquet.model.Time;
+import deadlybanquet.model.TimeStamp;
 
 /**
  *
@@ -28,12 +28,12 @@ public class Say implements IThought{
     //hearer is the receiver.
     //When when is not null, this indicates something which
     //has been said (or will be said).
-    Time when;
+    TimeStamp when;
     
     public Say(String s, String h, IThought c, How t){
         this(s,h,c,t,null);
     }
-    public Say (String s, String h, IThought c, How t, Time time){
+    public Say (String s, String h, IThought c, How t, TimeStamp time){
         speaker=s;
         hearer=h;
         content=c;
@@ -96,7 +96,7 @@ public class Say implements IThought{
     
     @Override
     public Say copy(){
-        Time t=when;
+        TimeStamp t=when;
         if(t!=null)
             t=t.copy();
         return new Say(speaker,hearer,content,type, t);

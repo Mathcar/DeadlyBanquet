@@ -1,6 +1,6 @@
 package deadlybanquet.ai;
 
-import deadlybanquet.model.Time;
+import deadlybanquet.model.TimeStamp;
 
 /**
  * Representation of a desire or goal.
@@ -20,7 +20,7 @@ public class Desire implements IThought{
     /**
      * Null means always current. No placeholder (no way to ask when)
      */
-    public Time time;
+    public TimeStamp time;
     
     /** This should lie between -1 and 1.
      *  Placeholder is a value larger than 1. Null is a value smaller than -1
@@ -34,7 +34,7 @@ public class Desire implements IThought{
      */
     public dg desireorgoal;
     
-    public Desire(Desire.dg dg, IThought w, Time t, double s){
+    public Desire(Desire.dg dg, IThought w, TimeStamp t, double s){
         desireorgoal=dg;
         what=w;
         time=t;
@@ -87,7 +87,7 @@ public class Desire implements IThought{
     
     @Override
     public Desire copy(){
-        Time t=time;
+        TimeStamp t=time;
         if(t!=null)
             t=t.copy();
         

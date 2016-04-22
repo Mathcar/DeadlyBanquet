@@ -1,6 +1,6 @@
 package deadlybanquet.ai;
 
-import deadlybanquet.model.Time;
+import deadlybanquet.model.TimeStamp;
 
 /**
  * Describes things with format somebody does something to something/somebody/somewhere
@@ -21,9 +21,9 @@ public class Do implements IThought{
     private String doer;
     //who is murdered, what is picked up...
     private String withWhat;
-    private Time when;
+    private TimeStamp when;
     //Describes whether somebody actually does/did item or just intended to do so
-    public Do(What what, String doer, String to, Time time) {
+    public Do(What what, String doer, String to, TimeStamp time) {
         this.what=what;
         this.doer=doer;
         this.when=time;
@@ -74,7 +74,7 @@ public class Do implements IThought{
     
     @Override
     public Do copy(){
-        Time t=when;
+        TimeStamp t=when;
         if(t!=null)
             t=t.copy();
         return new Do(what,doer,withWhat, t);
@@ -109,11 +109,11 @@ public class Do implements IThought{
         this.withWhat = withWhat;
     }
 
-    public Time getWhen() {
+    public TimeStamp getWhen() {
         return when;
     }
 
-    public void setWhen(Time when) {
+    public void setWhen(TimeStamp when) {
         this.when = when;
     }
 }
