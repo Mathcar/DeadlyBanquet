@@ -20,6 +20,10 @@ public class Time {
         hour=h;
         minutes=m;
     }
+
+    public TimeStamp time(){
+        return new TimeStamp(this);
+    }
     
     public Time placeholderTime(){
         Time t = new Time();
