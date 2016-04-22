@@ -21,6 +21,7 @@ import deadlybanquet.model.TimeStamp;
 import static deadlybanquet.model.World.getTimeStamp;
 import deadlybanquet.speech.SpeechAct;
 import deadlybanquet.speech.TextPropertyEnum;
+import static deadlybanquet.speech.TextPropertyEnum.NEUTRAL;
 
 import java.util.*;
 
@@ -82,7 +83,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     //--------------------------------------------------------------------------
     //This method evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
-    public void hear(SpeechAct act){
+    public SpeechAct hear(SpeechAct act){
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         String you = act.getSpeaker();
@@ -128,8 +129,8 @@ public class NPCBrain implements IPerceiver, Talkable {
                                 
                 default: System.out.println(me + " says: I didn't understand a word of that.");
             }
-            selectResponse(possibleAnswers);
         }
+        return selectResponse(possibleAnswers,you);
     }
     
     private void processOpinion(Opinion inOpinion, String you, ArrayList<IThought> ans){
@@ -477,7 +478,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     //contains several pieces of information
     //responsible for sending the response and updating one's own opinion of the
     //world in accordance with how one believes the statement to change the world/
-    private void selectResponse(ArrayList<IThought> possibleResponses){
+    private SpeechAct selectResponse(ArrayList<IThought> possibleResponses, String you){
         //This is the real thing
         //speak(makeSpeechAct(possibleResponses, me));
         ArrayList<IThought> ans = new ArrayList<>();
@@ -485,11 +486,12 @@ public class NPCBrain implements IPerceiver, Talkable {
             ans.add(i.copy());
         }
         debugInfo=ans;
-        if(ans.isEmpty()) return;
+        //if(ans.isEmpty()) return;
         System.out.print(me + " says: ");
         for (IThought i: ans){
             System.out.println(i);
         }
+        return convertIThoughtToSpeechAct(ans, NEUTRAL,me,you);
         
     }
     //--------------------------------------------------------------------------
@@ -566,7 +568,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     public void observeInteraction(String who, String with){
-        
+        //memory.add(new Say(who,with,));
     }
     
     public void observePickUp(String who, String what){

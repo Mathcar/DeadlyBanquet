@@ -140,7 +140,7 @@ public class World implements ActionListener, TileBasedMap {
     }
 
     //Return current time in a timestamp
-    public static TimeStamp getTimeStamp(){ return time.time()};
+    public static TimeStamp getTimeStamp(){ return time.time();};
 
     public void createDoorConnectionsInRooms(){
         for(int i = 1; i< roomMap.length-1; i++){

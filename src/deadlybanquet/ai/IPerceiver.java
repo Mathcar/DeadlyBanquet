@@ -14,7 +14,7 @@ import org.w3c.dom.Text;
 public interface IPerceiver {
 
     //This method responds to a speech act, returning an appropriate reply.
-    void hear(SpeechAct act);
+    SpeechAct hear(SpeechAct act);
 
     //Selects a phrase out of a list of possible ones. Used instead of hear when the perciever
     //has the initiative in the conversation

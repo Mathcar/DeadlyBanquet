@@ -10,8 +10,7 @@ import deadlybanquet.model.TimeStamp;
 public class Say implements IThought{
     
     public enum How {
-        //SAY, this was supposed to convey A said to B that... but we'll give this a miss
-        //unless we get really bored at some point.
+        SAY, 
         AGREE, //information being agreed with gets sent along
         DISAGREE, //one's own opinion gets sent along
         YESNO, //this is really just for polite responses: Oh, is it?

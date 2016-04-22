@@ -12,7 +12,9 @@ public class Do implements IThought{
         MOVETO,
         PICKUP,
         PUTDOWN,
-        MURDER;
+        MURDER,
+        TALKTO; //Implies that people were talking to each other, but with no information
+        //about what they say
     }
 
 
