@@ -6,4 +6,7 @@ I would say I #opinion #person;PROPER;INFO_P_OPINION;
 I #opinion #person, you feel me?;COLLOQUIAL;INFO_P_OPINION;
 I don't know;NEUTRAL;DONT_KNOW;
 I do not have a clue;PROPER;DONT_KNOW;
-Sorry, no idea man;COLLOQUIAL;DONT_KNOW
+Sorry, no idea man;COLLOQUIAL;DONT_KNOW;
+#person did #what at #time with #item fosho;COLLOQUIAL;EVENT_INFO;
+#person did #what at #time with #item;NEUTRAL;EVENT_INFO;
+indeed #person did #what at #time with #item;PROPER;EVENT_INFO;
