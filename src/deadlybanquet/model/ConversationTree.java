@@ -43,7 +43,7 @@ public class ConversationTree {
 
     //Event variables
     private State stateToSkip;
-    private String who2, when;
+    private String who2, when, item;
     private Do.What what;
 
     //Greeting variables
@@ -340,16 +340,14 @@ public class ConversationTree {
             }
             if(what != null){
                 eventDebug();
-               // cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
-                //setCurrentState(State.TEXT_PROPERTY_CHOICE);
+                //cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
+                //setCurrentState(State.TEXT_PROPERTY_CHOICE);/
 
             }
         }else {
             eventDebug();
             //cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
-           // setCurrentState(State.TEXT_PROPERTY_CHOICE);
-
-
+            //setCurrentState(State.TEXT_PROPERTY_CHOICE);
         }
     }
 

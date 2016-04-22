@@ -56,7 +56,6 @@ public class ConversationModel {
 
     private void initDefaults(){
         //TODO NO PERCEIVERS IN THE FACTORY!
-        saFactory = new SpeechActFactory(perceiver1, perceiver2);
         actHistory = new HashMap<>();
         actHistory.put(perceiver1, new ArrayList<SpeechAct>());
         actHistory.put(perceiver2, new ArrayList<SpeechAct>());
