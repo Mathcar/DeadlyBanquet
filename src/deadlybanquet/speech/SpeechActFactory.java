@@ -206,6 +206,8 @@ public class SpeechActFactory {
                 text=parseSpeechAct(text,(Opinion) i);
                 temp=new SpeechAct(text,talker.getName(),getListener().getName(),SpeechType.INFO_P_OPINION,prop,IThoughtList);
             }
+        }else if(i instanceof Do){
+            //if(.isQuest)
         }
 
 
