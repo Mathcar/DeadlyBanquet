@@ -11,51 +11,6 @@ import java.util.ArrayList;
  * @author omega
  */
 public class SpeechActFactory {
-    /**
-     * 
-     * @param intendedcontent the intended content.
-     * @return a speech act which conveys as much as possible of the intended content,
-     * using multiple sentences where necessary. If content could not be conveyed, return error.
-     */
-    // I WANT TO REMOVE THIS, IS THAT OK??
-    //YES GO AHEAD \Karin
-    public static SpeechAct makeSpeechAct(ArrayList<IThought> intendedcontent, String speaker){
-        if(intendedcontent.isEmpty()) return null;
-        System.out.print(speaker + " says: ");
-        for (IThought i: intendedcontent){
-            System.out.println(i);
-        }
-        return null;
-    }
-
-    IPerceiver A;
-    IPerceiver B;
-
-    SpeechAct lastThingSaid;
-
-    //IPerceiver talker;
-    public SpeechActFactory(IPerceiver A, IPerceiver B){
-        this.A=A;
-        this.B=B;
-        //talker=this.A;
-    }
-
-    /*private void changeTalker(){
-        if(talker.equals(A)){
-            talker=B;
-        }else{
-            talker=A;
-        }
-    }*/
-
-    /*private IPerceiver getListener(){
-        if(talker.equals(A)){
-            return B;
-        }else{
-            return A;
-        }
-    }*/
-
 
     private static String parseSpeechAct(String text,IPerceiver speaker,IPerceiver listener){
         String temp = text;
@@ -209,7 +164,13 @@ public class SpeechActFactory {
             }
         }else if(i instanceof Do){
             if(i.isQuestion()){
-                //if()
+                if(((Do) i).getDoer().equals("")){
+                    //question about who did something at sometime with something.
+                }else if(((Do) i).getWithWhat().equals("")){
+                    //question about with what someone did something at som timeto somebody.
+                }else if(((Do) i).getWhen().isPlaceHolder()){
+                    //question about when someone did something with something to somebody.
+                }
             }
         }
 
