@@ -16,6 +16,7 @@ import static deadlybanquet.ai.Say.How.*;
 
 import deadlybanquet.Talkable;
 import static deadlybanquet.ai.Desire.dg.GOAL;
+import static deadlybanquet.ai.Do.What.*;
 import deadlybanquet.ai.Say.How;
 import deadlybanquet.model.TimeStamp;
 import static deadlybanquet.model.World.getTimeStamp;
@@ -568,11 +569,11 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     public void observeInteraction(String who, String with){
-        //memory.add(new Say(who,with,));
+        memory.add(new Do(TALKTO, who,with, getTimeStamp()));
     }
     
     public void observePickUp(String who, String what){
-        
+        memory.add(new Do(PICKUP, who,what, getTimeStamp()));
     }
     
     public void observePutDown(String who, String what){

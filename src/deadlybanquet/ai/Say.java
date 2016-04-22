@@ -20,6 +20,9 @@ public class Say implements IThought{
     }
     String speaker;
     String hearer;
+    //Null is placeholder: What did a say to b?
+    //To answer I don't know, just answer do with talkto: To be interpreted as
+    //I saw them speak.
     IThought content;
     How type;
     //This is null if one is currently doing that speech act
