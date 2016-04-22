@@ -13,5 +13,5 @@ public enum SpeechType {
     INFO_P_LOCATION,
     DONT_KNOW,
 	EVENT_QUESTION,
-	INFO_EVENT;
+	EVENT_INFO;
 }
