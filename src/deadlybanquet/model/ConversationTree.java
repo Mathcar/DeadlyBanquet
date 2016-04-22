@@ -19,6 +19,10 @@ public class ConversationTree {
         QUESTION_LOCATION,
         QUESTION_OPINION,
         QUESTION_EVENT,
+        QUESTION_EVENT_WHO,
+        QUESTION_EVENT_WHO2,
+        QUESTION_EVENT_WHAT,
+        QUESTION_EVENT_WHEN,
         TEXT_PROPERTY_CHOICE,
         FINISHED
     }
@@ -32,9 +36,14 @@ public class ConversationTree {
     private ArrayList<String> characters;
     private int currentCounter;
     private String who;     //current person selected
-    private IThought thought;
+
+
     private ArrayList<SpeechAct> alternatives;
     private boolean hasFinalChoiceBeenFetched;
+
+    //Event variables
+    private State stateToSkip;
+    private String who2, what, when;
 
     //Greeting variables
 
@@ -51,7 +60,9 @@ public class ConversationTree {
         currentState = State.INITIAL;
         currentCounter = 0;
         who = "";
-        thought = null;
+        who2 = "";
+        when = "";
+        what = "";
         alternatives = null;
         finalChoice = null;
         hasFinalChoiceBeenFetched = false;
@@ -75,6 +86,21 @@ public class ConversationTree {
                 break;
             case QUESTION_OPINION :
                 parseInputQuestionOpinion(input, cm);
+                break;
+            case QUESTION_EVENT :
+                parseInputQuestionEvent(input);
+                break;
+            case QUESTION_EVENT_WHO :
+                parseInputQuestionEventWho(input);
+                break;
+            case QUESTION_EVENT_WHO2 :
+                parseInputQuestionEventWho2(input);
+                break;
+            case QUESTION_EVENT_WHEN :
+                parseInputQuestionEventWhen(input);
+                break;
+            case QUESTION_EVENT_WHAT :
+                parseInputQuestionEventWhat(input);
                 break;
             case GOODBYE :
                 parseInputGoodbye(input);
@@ -110,6 +136,21 @@ public class ConversationTree {
                 break;
             case QUESTION_OPINION :
                 text = getPrintQuestionOpinion();
+                break;
+            case QUESTION_EVENT :
+                text = getPrintQuestionEvent();
+                break;
+            case QUESTION_EVENT_WHO :
+                text = getPrintQuestionEventWho();
+                break;
+            case QUESTION_EVENT_WHO2 :
+                text = getPrintQuestionEventWho2();
+                break;
+            case QUESTION_EVENT_WHEN :
+                text = getPrintQuestionEventWhen();
+                break;
+            case QUESTION_EVENT_WHAT :
+                text = getPrintQuestionEventWhat();
                 break;
             case GOODBYE :
                 text = getPrintGoodbye();
@@ -172,7 +213,7 @@ public class ConversationTree {
         } else if(input.isKeyPressed(Input.KEY_2)) {
             setCurrentState(State.QUESTION_OPINION);
         } else if(input.isKeyPressed(Input.KEY_3)) {
-            //setCurrentState(State.QUESTION_EVENT);      //TODO On ice for now
+            setCurrentState(State.QUESTION_EVENT);      //TODO On ice for now
         }
     }
 
@@ -180,6 +221,7 @@ public class ConversationTree {
         String temp = "";
         temp += "  1. Ask about someones whereabouts";
         temp += "\n  2. Ask about the adversaries opinion of someone";
+        temp += "\n  3. Ask about an event.";
         return temp;
     }
 
@@ -197,7 +239,7 @@ public class ConversationTree {
 
 
     private String getPrintQuestionLocation(){
-        return getPrintPersonChoice();
+        return getPrintPersonChoice("");
     }
 
     private void parseInputQuestionOpinion(Input input, ConversationModel cm){
@@ -209,7 +251,118 @@ public class ConversationTree {
     }
 
     private String getPrintQuestionOpinion(){
-        return getPrintPersonChoice();
+        return getPrintPersonChoice("");
+    }
+
+    private void parseInputQuestionEvent(Input input) {
+        if (input.isKeyPressed(Input.KEY_1)) {
+            stateToSkip = State.QUESTION_EVENT_WHO;
+        } else if (input.isKeyPressed(Input.KEY_2)) {
+            stateToSkip = State.QUESTION_EVENT_WHO2;
+        } else if (input.isKeyPressed(Input.KEY_3)) {
+            stateToSkip = State.QUESTION_EVENT_WHAT;
+        } else if (input.isKeyPressed(Input.KEY_4)) {
+            stateToSkip = State.QUESTION_EVENT_WHEN;
+        }
+        if(stateToSkip != null)
+            setCurrentState(State.QUESTION_EVENT_WHO);
+    }
+
+    private String getPrintQuestionEvent(){
+        String temp ="";
+        temp+= "  1.  Ask about who did something";
+        temp+= "  2.  Ask about to whom someone did something";
+        temp+= "  3.  Ask about with what someone did something";
+        temp+= "  4.  Ask about when something happened";
+        return temp;
+    }
+
+    private void parseInputQuestionEventWho(Input input){
+        if(stateToSkip != State.QUESTION_EVENT_WHO ) {
+            who = chooseAPerson(input);
+            if(!who.equals(""))
+                currentState = State.QUESTION_EVENT_WHO2;
+        }else
+            currentState = State.QUESTION_EVENT_WHO2;
+    }
+
+    private String getPrintQuestionEventWho(){
+        String temp = "";
+        temp = getPrintPersonChoice("Choose the perpetrator");
+        return temp;
+    }
+
+    private void parseInputQuestionEventWho2(Input input){
+        if(stateToSkip != State.QUESTION_EVENT_WHO2 ) {
+            who2 = chooseAPerson(input);
+            if(!who.equals(""))
+                setCurrentState(State.QUESTION_EVENT_WHEN);
+        }else
+            setCurrentState(State.QUESTION_EVENT_WHEN);
+    }
+
+    private String getPrintQuestionEventWho2(){
+        String temp = "";
+        temp = getPrintPersonChoice("Choose the victim/target?");
+        return temp;
+    }
+
+    private void parseInputQuestionEventWhen(Input input) {
+        if (stateToSkip != State.QUESTION_EVENT_WHEN){
+            if (input.isKeyPressed(Input.KEY_1)) {
+                when = "Morning";
+            } else if (input.isKeyPressed(Input.KEY_2)) {
+                when = "Afternoon";
+            } else if (input.isKeyPressed(Input.KEY_3)) {
+                when = "Evening";
+            }
+            if(!when.equals("")){
+                setCurrentState(State.QUESTION_EVENT_WHAT);
+            }
+        }else
+            setCurrentState(State.QUESTION_EVENT_WHAT);
+    }
+
+    private String getPrintQuestionEventWhen(){
+        String temp = "         When did it happen?";
+        temp += "\n  1.  During the morning";
+        temp += "\n  2.  During the afternoon";
+        temp += "\n  3.  During the evening";
+        return temp;
+    }
+
+    private void parseInputQuestionEventWhat(Input input){
+        if (stateToSkip != State.QUESTION_EVENT_WHAT){
+            if (input.isKeyPressed(Input.KEY_1)) {
+                what = "Dong";
+            } else if (input.isKeyPressed(Input.KEY_2)) {
+                what = "Natures Prophet";
+            } else if (input.isKeyPressed(Input.KEY_3)) {
+                what = "Spectre";
+            }
+            if(!what.equals("")){
+                //setCurrentState(State.TEXT_PROPERTY_CHOICE);
+                eventDebug();
+            }
+        }else {
+            //setCurrentState(State.TEXT_PROPERTY_CHOICE);
+            eventDebug();
+
+        }
+    }
+
+    private String getPrintQuestionEventWhat(){
+        String temp = "        Choose the utilized object";
+        temp += "\n  1.  Dong";
+        temp += "\n  2.  Natures Prophet";
+        temp += "\n  3.  Spectre";
+        return temp;
+    }
+
+    private void eventDebug(){
+        String temp = "";
+        temp+= "Who = " + who + "     When = " + when + "      Who2 = " + who2
+                + "      What = " + what;
     }
 
     private void parseInputTextProperty(Input input){
@@ -275,8 +428,10 @@ public class ConversationTree {
         return who;
     }
 
-    private String getPrintPersonChoice(){
+    private String getPrintPersonChoice(String heading){
         String temp = "       Choose which person to ask about ";
+        if(!heading.equals(""))
+            temp = heading;
         int numberDisplayed = 1;
         for(int i = currentCounter; i<characters.size() && i<currentCounter+3; i++) {
             temp += "\n  " + numberDisplayed + ".  " + characters.get(i);
