@@ -14,13 +14,14 @@ public class Do implements IThought{
         PUTDOWN,
         MURDER;
     }
-    
-    public What what;
+
+
+    private What what;
     //Placeholder is empty string, null is null.
-    public String doer;
+    private String doer;
     //who is murdered, what is picked up...
-    public String withWhat;
-    public Time when;
+    private String withWhat;
+    private Time when;
     //Describes whether somebody actually does/did item or just intended to do so
     public Do(What what, String doer, String to, Time time) {
         this.what=what;
@@ -82,5 +83,37 @@ public class Do implements IThought{
     @Override
     public void setCertainty(double i){
         
+    }
+
+    public What getWhat() {
+        return what;
+    }
+
+    public void setWhat(What what) {
+        this.what = what;
+    }
+
+    public String getDoer() {
+        return doer;
+    }
+
+    public void setDoer(String doer) {
+        this.doer = doer;
+    }
+
+    public String getWithWhat() {
+        return withWhat;
+    }
+
+    public void setWithWhat(String withWhat) {
+        this.withWhat = withWhat;
+    }
+
+    public Time getWhen() {
+        return when;
+    }
+
+    public void setWhen(Time when) {
+        this.when = when;
     }
 }
