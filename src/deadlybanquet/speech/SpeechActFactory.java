@@ -2,6 +2,7 @@ package deadlybanquet.speech;
 
 
 import deadlybanquet.ai.*;
+import deadlybanquet.model.World;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -49,10 +50,14 @@ public class SpeechActFactory {
     }
 
     private static String parseSpeechAct(String text, Opinion o,IPerceiver speaker,IPerceiver listener){
-
+        return "NOT DONEEEEEEE GTFO";
     }
 
 
+    public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,String speaker,String listener){
+        //magic
+        return convertIThoughtToSpeechAct(iList,prop, World.stringToIPreciver(speaker),World.stringToIPreciver(listener));
+    }
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
         IThought i = iList.get(0);
@@ -225,13 +230,22 @@ public class SpeechActFactory {
         Opinion o = new Opinion("Tom",new PAD(0.0,0.0,0.0));
         //TODO FUL KOD, DETTA MÅSTE FIXAS, TOG BORT prop SOM PARAMETER
         TextPropertyEnum prop = TextPropertyEnum.NEUTRAL;
+        ArrayList<IThought> list = new  ArrayList<>();
         if(first==true){
-            temp.add(convertIThoughtToSpeechAct(BeingPolite.GREET,prop,speaker,listener));
+            list.add(BeingPolite.GREET);
+            temp.add(convertIThoughtToSpeechAct(list,prop,speaker,listener));
         }else{
-            temp.add(convertIThoughtToSpeechAct(i,prop,speaker,listener));
-            temp.add(convertIThoughtToSpeechAct(w,prop,speaker,listener));
-            temp.add(convertIThoughtToSpeechAct(o,prop,speaker,listener));
-            temp.add(convertIThoughtToSpeechAct(BeingPolite.GOODBYE,prop,speaker,listener));
+            list.add(i);
+            temp.add(convertIThoughtToSpeechAct(list,prop,speaker,listener));
+            list.clear();
+            list.add(w);
+            temp.add(convertIThoughtToSpeechAct(list,prop,speaker,listener));
+            list.clear();
+            list.add(o);
+            temp.add(convertIThoughtToSpeechAct(list,prop,speaker,listener));
+            list.clear();
+            list.add(BeingPolite.GOODBYE);
+            temp.add(convertIThoughtToSpeechAct(list,prop,speaker,listener));
         }
 
 

@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import deadlybanquet.RenderSet;
-import deadlybanquet.ai.AIControler;
-import deadlybanquet.ai.NPCBrain;
-import deadlybanquet.ai.BrainFactory;
-import deadlybanquet.ai.PlayerBrain;
+import deadlybanquet.ai.*;
 import deadlybanquet.states.States;
 
 import org.newdawn.slick.GameContainer;
@@ -24,6 +21,7 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
  * Created by Hampus on 2016-03-04.
  */
 public class World implements ActionListener, TileBasedMap {
+    private static World current;
     private static HashMap<AIControler, NPCBrain> controlerBrainMap;
     private static Time time;
     private Player player;
@@ -42,6 +40,7 @@ public class World implements ActionListener, TileBasedMap {
     private Room[][] roomMap;
 
     public World(){
+        current=this;
         //Create all rooms and place them in the roomMap
         initRoomMap();
         //This must be done after all rooms that are intended to be there
@@ -140,7 +139,7 @@ public class World implements ActionListener, TileBasedMap {
     }
 
     //Return current time in a timestamp
-    public static TimeStamp getTimeStamp(){ return time.time()};
+    public static TimeStamp getTimeStamp(){ return time.time();}
 
     public void createDoorConnectionsInRooms(){
         for(int i = 1; i< roomMap.length-1; i++){
@@ -576,6 +575,10 @@ public class World implements ActionListener, TileBasedMap {
 
     public static NPCBrain getControlerBrain(AIControler aic){
         return controlerBrainMap.get(aic);
+    }
+
+    public static IPerceiver stringToIPreciver(String name){
+        return null;// TODO IMPORTANTEEEE
     }
     
 }
