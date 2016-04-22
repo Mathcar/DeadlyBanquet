@@ -11,5 +11,7 @@ public enum SpeechType {
     OPINION_QUESTION,
     INFO_P_OPINION,
     INFO_P_LOCATION,
-    DONT_KNOW;
+    DONT_KNOW,
+	EVENT_QUESTION,
+	INFO_EVENT;
 }
