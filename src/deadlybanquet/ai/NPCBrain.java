@@ -485,8 +485,13 @@ public class NPCBrain implements IPerceiver, Talkable {
         for (IThought i : possibleResponses){
             ans.add(i.copy());
         }
-        makeSpeechAct(ans, me);
         debugInfo=ans;
+        if(ans.isEmpty()) return;
+        System.out.print(me + " says: ");
+        for (IThought i: ans){
+            System.out.println(i);
+        }
+        
     }
     //--------------------------------------------------------------------------
     //SECTION: Debugging stuff

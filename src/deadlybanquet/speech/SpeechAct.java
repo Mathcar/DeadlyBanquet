@@ -51,7 +51,7 @@ public class SpeechAct {
         return speaker;
     }
 
-    public void setSpesker(String talker) {
+    public void setSpeaker(String talker) {
         this.speaker = talker;
     }
 
@@ -81,5 +81,10 @@ public class SpeechAct {
 
     public ArrayList<IThought> getContent(){
         return this.content;
+    }
+    
+    //for debugging
+    public void setContent(ArrayList<IThought> c){
+        this.content = c;
     }
 }

@@ -4,7 +4,6 @@ import static deadlybanquet.ai.BackStory.*;
 import static deadlybanquet.ai.BrainFactory.makeBrain;
 import static deadlybanquet.ai.Do.What.MURDER;
 import static deadlybanquet.model.World.getTime;
-import deadlybanquet.speech.GreetingPhrase;
 import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class HearExample {
 
     @Before
     public void setUp(){
-        input = new GreetingPhrase();
+        input = new SpeechAct();
         content = new ArrayList<>();
         input.setContent(content);
         input.setSpeaker("Bill");

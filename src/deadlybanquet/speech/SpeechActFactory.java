@@ -18,6 +18,7 @@ public class SpeechActFactory {
      * using multiple sentences where necessary. If content could not be conveyed, return error.
      */
     // I WANT TO REMOVE THIS, IS THAT OK??
+    //YES GO AHEAD \Karin
     public static SpeechAct makeSpeechAct(ArrayList<IThought> intendedcontent, String speaker){
         if(intendedcontent.isEmpty()) return null;
         System.out.print(speaker + " says: ");
