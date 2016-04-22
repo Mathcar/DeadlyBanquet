@@ -87,4 +87,9 @@ public class SpeechAct {
     public void setContent(ArrayList<IThought> c){
         this.content = c;
     }
+
+    public SpeechAct copy(){
+        SpeechAct s = this;
+        return new SpeechAct(s.getLine(),s.getSpeaker(),s.getListener(),s.getSpeechType(),s.getProperty(),s.getContent());
+    }
 }
