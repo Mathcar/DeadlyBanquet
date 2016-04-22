@@ -100,7 +100,7 @@ public class ConversationTree {
                 parseInputQuestionEventWhen(input);
                 break;
             case QUESTION_EVENT_WHAT :
-                parseInputQuestionEventWhat(input);
+                parseInputQuestionEventWhat(input, cm);
                 break;
             case GOODBYE :
                 parseInputGoodbye(input);
@@ -260,8 +260,6 @@ public class ConversationTree {
         } else if (input.isKeyPressed(Input.KEY_2)) {
             stateToSkip = State.QUESTION_EVENT_WHO2;
         } else if (input.isKeyPressed(Input.KEY_3)) {
-            stateToSkip = State.QUESTION_EVENT_WHAT;
-        } else if (input.isKeyPressed(Input.KEY_4)) {
             stateToSkip = State.QUESTION_EVENT_WHEN;
         }
         if(stateToSkip != null)
@@ -270,10 +268,9 @@ public class ConversationTree {
 
     private String getPrintQuestionEvent(){
         String temp ="";
-        temp+= "  1.  Ask about who did something";
-        temp+= "  2.  Ask about to whom someone did something";
-        temp+= "  3.  Ask about with what someone did something";
-        temp+= "  4.  Ask about when something happened";
+        temp+= "\n  1.  Ask about who did something to someone";
+        temp+= "\n  2.  Ask about to whom someone did something";
+        temp+= "\n  3.  Ask about when something happened";
         return temp;
     }
 
@@ -281,9 +278,9 @@ public class ConversationTree {
         if(stateToSkip != State.QUESTION_EVENT_WHO ) {
             who = chooseAPerson(input);
             if(!who.equals(""))
-                currentState = State.QUESTION_EVENT_WHO2;
+                setCurrentState(State.QUESTION_EVENT_WHO2);
         }else
-            currentState = State.QUESTION_EVENT_WHO2;
+            setCurrentState(State.QUESTION_EVENT_WHO2);
     }
 
     private String getPrintQuestionEventWho(){
@@ -295,7 +292,7 @@ public class ConversationTree {
     private void parseInputQuestionEventWho2(Input input){
         if(stateToSkip != State.QUESTION_EVENT_WHO2 ) {
             who2 = chooseAPerson(input);
-            if(!who.equals(""))
+            if(!who2.equals(""))
                 setCurrentState(State.QUESTION_EVENT_WHEN);
         }else
             setCurrentState(State.QUESTION_EVENT_WHEN);
@@ -331,7 +328,7 @@ public class ConversationTree {
         return temp;
     }
 
-    private void parseInputQuestionEventWhat(Input input){
+    private void parseInputQuestionEventWhat(Input input, ConversationModel cm){
         if (stateToSkip != State.QUESTION_EVENT_WHAT){
             if (input.isKeyPressed(Input.KEY_1)) {
                 what = "Dong";
@@ -341,12 +338,16 @@ public class ConversationTree {
                 what = "Spectre";
             }
             if(!what.equals("")){
-                //setCurrentState(State.TEXT_PROPERTY_CHOICE);
                 eventDebug();
+               // cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
+                //setCurrentState(State.TEXT_PROPERTY_CHOICE);
+
             }
         }else {
-            //setCurrentState(State.TEXT_PROPERTY_CHOICE);
             eventDebug();
+            //cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
+           // setCurrentState(State.TEXT_PROPERTY_CHOICE);
+
 
         }
     }
@@ -363,6 +364,7 @@ public class ConversationTree {
         String temp = "";
         temp+= "Who = " + who + "     When = " + when + "      Who2 = " + who2
                 + "      What = " + what;
+        System.out.println(temp);
     }
 
     private void parseInputTextProperty(Input input){
@@ -380,7 +382,7 @@ public class ConversationTree {
     private String getPrintTextProperty(){
         String temp = "        Choose what to say:    ";
         for(int i = 0; i<3; i++){
-            temp += "\n  " + (i+1) + ".  " + alternatives.get(i).getLine();
+            temp += "\n  " + (i+1) + ".  \"" + alternatives.get(i).getLine() + "\"";
         }
         temp += "\n  4.  abort mission";
         return temp;
