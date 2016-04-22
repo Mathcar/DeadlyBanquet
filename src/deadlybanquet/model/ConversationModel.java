@@ -114,11 +114,13 @@ public class ConversationModel {
 
     public ArrayList<SpeechAct> getAllPropertyVariations(IThought thought){
         ArrayList<SpeechAct> temp = new ArrayList<>();
-        temp.add(SpeechActFactory.convertIThoughtToSpeechAct(thought,
+        ArrayList<IThought> tempI = new ArrayList<IThought>();
+        tempI.add(thought);
+        temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI,
                                 TextPropertyEnum.NEUTRAL, perceiver1, perceiver2));
-        temp.add(SpeechActFactory.convertIThoughtToSpeechAct(thought, TextPropertyEnum.PROPER,
+        temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI, TextPropertyEnum.PROPER,
                                                             perceiver1, perceiver2));
-        temp.add(SpeechActFactory.convertIThoughtToSpeechAct(thought, TextPropertyEnum.COLLOQUIAL,
+        temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI, TextPropertyEnum.COLLOQUIAL,
                                                                 perceiver1, perceiver2));
         return temp;
     }
