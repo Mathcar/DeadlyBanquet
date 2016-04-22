@@ -34,23 +34,28 @@ public class SpeechActFactory {
         return temp;
     }
 
-    private static String parseSpeechAct(String text, Opinion o,IPerceiver speaker,IPerceiver listener){
+    private static String parseSpeechAct(String text, Do d,IPerceiver speaker,IPerceiver listener){
         String temp = text;
         if(temp.contains("#name")){
             temp = temp.replace("#name",listener.getName());
         }
-        if(temp.contains("#person")){
-            temp = temp.replace("#person",o.getPerson());
+        if(temp.contains("#doer")){
+            temp = temp.replace("#doer",d.getDoer());
         }
-        if(temp.contains("#opinion")){
-            temp=temp.replace("#opinion",o.getPAD().getOpinion());
-        }
+        /*if(temp.contains("#reciver")){
+            temp = temp.replace("#reciver",d.get);
+        }*/
         return temp;
+    }
+
+    private static String parseSpeechAct(String text, Opinion o,IPerceiver speaker,IPerceiver listener){
+
     }
 
 
 
-    public static SpeechAct convertIThoughtToSpeechAct(IThought i, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
+    public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
+        IThought i = iList.get(0);
         ArrayList<IThought> IThoughtList = new ArrayList<>();
         IThoughtList.add(i);
         SpeechAct temp = new SpeechAct();
@@ -163,14 +168,35 @@ public class SpeechActFactory {
                 temp=new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.INFO_P_OPINION,prop,IThoughtList);
             }
         }else if(i instanceof Do){
+            String text=i.toString();
             if(i.isQuestion()){
+                ArrayList<SpeechInfo> list = holder.getQuestionFrase();
                 if(((Do) i).getDoer().equals("")){
-                    //question about who did something at sometime with something.
+                    //question about who did something with something at some time
+                    //and
+                    //question about who did something to someone at some time
                 }else if(((Do) i).getWithWhat().equals("")){
-                    //question about with what someone did something at som timeto somebody.
+                    //question about with what someone did to something at sometime.
+                    //and
+                    //question about to whom someone did something at sometime
                 }else if(((Do) i).getWhen().isPlaceHolder()){
-                    //question about when someone did something with something to somebody.
+                    //question about when someone did something with something.
+                    //and
+                    //questiona about when someone did something with someone.
+
+                    //OBS. alla dessa 6 frågot kommer behöva en egen distinkt SPEACHTYPE
                 }
+            }else{
+                ArrayList<SpeechInfo> list = holder.getInfoFrase();
+                for(int k = 0;k<list.size();k++){
+                    SpeechInfo si=list.get(k);
+                    if(si.getSpeechType().equals(SpeechType.EVENT_INFO)&&si.getTextProperty().equals(prop)){
+                        text=si.getText();
+                        break;
+                    }
+                }
+                text=parseSpeechAct(text,(Do) i,speaker,listener);
+                temp=new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.EVENT_INFO,prop,IThoughtList);
             }
         }
 
