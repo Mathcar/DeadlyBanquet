@@ -54,7 +54,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     //TODO this should include an opinion about oneself
     private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
-    
+    private String here;
     
     
     //this constructor replaces any bad values by defaults.
@@ -73,6 +73,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         if (desires !=null) this.desires = desires;
         if (goals!=null) this.goals = goals;
         if (plan!=null) this.plan = plan;
+        here=currentRoom;
         me = name;
         this.aic= aic;
     }
@@ -578,12 +579,12 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     public void observePutDown(String who, String what){
-        
+        memory.add(new Do(PUTDOWN, who,what, getTimeStamp()));
     }
 
     //Character does some thinking, cooling down, executing plan etc.
     public void update(){
-        
+        System.out.println("Calling update function on " + me +", but don't expect anything to happen.");
     }
 
     //this method creates plans for any goals and puts
@@ -593,7 +594,19 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     @Override
     public void seePeople(ArrayList<String> people) {
-        
+        TimeStamp t = getTimeStamp();
+        for (String person:people){
+            SortedList res = memory.find (new Whereabouts(person, ""));          
+            Whereabouts w = new Whereabouts(person, here ,1.0, t);
+            if (res.isEmpty()){           
+                memory.add(w);
+            }
+            else {
+                Whereabouts old = (Whereabouts) res.first();
+                w.setPrevious(old);
+                memory.replace(old, w);
+            }
+        }
     }
 
     @Override
