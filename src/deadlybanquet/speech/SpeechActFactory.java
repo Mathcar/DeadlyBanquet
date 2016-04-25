@@ -181,6 +181,7 @@ public class SpeechActFactory {
                     //and
                     //question about who did something to someone at some time
                 }else if(((Do) i).getWithWhat().equals("")){
+
                     //question about with what someone did to something at sometime.
                     //and
                     //question about to whom someone did something at sometime

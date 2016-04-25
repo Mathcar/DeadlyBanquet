@@ -62,6 +62,16 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
         
         //Create the time object (it's initialization is done in it's constructor)
         time = new Time();
+
+        //add all the items and such.
+        ArrayList<String>temp = getAllCharacterNames();
+        ItemsAndNameSingelton.getInstance().setAllNames(temp);
+        temp.remove(player.getName());
+        ItemsAndNameSingelton.getInstance().setAllNPCNames(temp);
+        temp.clear();
+        temp = ItemsAndNameSingelton.getInstance().readFile();
+        ItemsAndNameSingelton.getInstance().setItems(temp);
+        // All the items and names are added in the singelton class.
     }
 
     public void initPlayer(){
