@@ -104,10 +104,10 @@ public class ConversationTree {
                 parseInputQuestionEventWho(input);
                 break;
             case QUESTION_EVENT_ITEM :
-                parseInputQuestionEventItem(input);
+                parseInputQuestionEventItem(input, cm);
                 break;
             case QUESTION_EVENT_WHO2 :
-                parseInputQuestionEventWho2(input);
+                parseInputQuestionEventWho2(input, cm);
                 break;
             /*
             case QUESTION_EVENT_WHEN :
@@ -115,7 +115,7 @@ public class ConversationTree {
                 break;
                 */
             case QUESTION_EVENT_WHAT :
-                parseInputQuestionEventWhat(input, cm);
+                parseInputQuestionEventWhat(input);
                 break;
             case GOODBYE :
                 parseInputGoodbye(input);
@@ -296,16 +296,16 @@ public class ConversationTree {
         if(stateToSkip != State.QUESTION_EVENT_WHO ) {
             who = chooseAPerson(input);
             if(!who.equals("")) {
-                if(what == Do.What.MURDER)
-                    setCurrentState(State.QUESTION_EVENT_WHO2);
-                else if(what == Do.What.PICKUP)
+                if(what == Do.What.PICKUP)
                     setCurrentState(State.QUESTION_EVENT_ITEM);
+                else
+                    setCurrentState(State.QUESTION_EVENT_WHO2);
             }
         }else {
-            if (what == Do.What.MURDER)
-                setCurrentState(State.QUESTION_EVENT_WHO2);
-            else if (what == Do.What.PICKUP)
+            if(what == Do.What.PICKUP)
                 setCurrentState(State.QUESTION_EVENT_ITEM);
+            else
+                setCurrentState(State.QUESTION_EVENT_WHO2);
         }
     }
 
@@ -315,13 +315,17 @@ public class ConversationTree {
         return temp;
     }
 
-    private void parseInputQuestionEventWho2(Input input){
+    private void parseInputQuestionEventWho2(Input input, ConversationModel cm){
         if(stateToSkip != State.QUESTION_EVENT_WHO2 ) {
             who2 = chooseAPerson(input);
-            if(!who2.equals(""))
-                setCurrentState(State.QUESTION_EVENT_WHAT);
-        }else
-            setCurrentState(State.QUESTION_EVENT_WHAT);
+            if(!who2.equals("")) {
+                cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
+                setCurrentState(State.TEXT_PROPERTY_CHOICE);
+            }
+        }else {
+            cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
+            setCurrentState(State.TEXT_PROPERTY_CHOICE);
+        }
     }
 
     private String getPrintQuestionEventWho2(){
@@ -330,13 +334,17 @@ public class ConversationTree {
         return temp;
     }
 
-    private void parseInputQuestionEventItem(Input input){
+    private void parseInputQuestionEventItem(Input input, ConversationModel cm){
         if(stateToSkip != State.QUESTION_EVENT_ITEM ) {
             item = chooseAnItem(input);
-            if(!item.equals(""))
-                setCurrentState(State.QUESTION_EVENT_WHAT);
-        }else
-            setCurrentState(State.QUESTION_EVENT_WHAT);
+            if(!item.equals("")) {
+                cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
+                 setCurrentState(State.TEXT_PROPERTY_CHOICE);
+            }
+        }else {
+            cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
+            setCurrentState(State.TEXT_PROPERTY_CHOICE);
+        }
     }
 
     private String getPrintQuestionEventItem(){
@@ -371,7 +379,7 @@ public class ConversationTree {
     }
     */
 
-    private void parseInputQuestionEventWhat(Input input, ConversationModel cm){
+    private void parseInputQuestionEventWhat(Input input){
         if (stateToSkip != State.QUESTION_EVENT_WHAT){
             if (input.isKeyPressed(Input.KEY_1)) {
                 what = Do.What.MOVETO;
@@ -496,7 +504,7 @@ public class ConversationTree {
     }
 
     private String getPrintItemChoice(String heading){
-        String temp = "       Choose which person to ask about ";
+        String temp = "       Choose which item to ask about ";
         if(!heading.equals(""))
             temp = heading;
         return getPrintChooseStringFromList(temp, items);

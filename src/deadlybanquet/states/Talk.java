@@ -97,6 +97,7 @@ public class Talk extends BasicGameState {
 			if (convTree.isChoiceCompleted()) {
 				conv.recieveChoice(convTree.getFinalChoice());
 			}
+			conv.runConversation();
 
 			/*
 			if(gc.getInput().isKeyPressed(Input.KEY_1)){

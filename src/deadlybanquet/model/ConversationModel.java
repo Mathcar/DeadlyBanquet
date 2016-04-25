@@ -63,7 +63,7 @@ public class ConversationModel {
         System.out.println("Defaults initialized");
     }
 
-    private void conversation(){
+    public void runConversation(){
         // for now assume that player will start to speak
 
         boolean end=false;
@@ -71,7 +71,9 @@ public class ConversationModel {
 
         if(hasPlayer){
             if(playersChoice!= null){
+                System.out.println("Players choice exists!");
                 SpeechAct sa = getPlayerChoice();
+                System.out.println("Line = " + sa.getLine());
                 doOneRound(sa);
             }
         }else{
@@ -97,19 +99,21 @@ public class ConversationModel {
     }
 
     private void doOneRound(SpeechAct act){
-        sendActToPerceiver(perceiver2, act); //Should return an answer or there should be a handle for one
-        SpeechAct answer = null;
+        SpeechAct answer = sendActToPerceiver(perceiver2, act); //Should return an answer or there should be a handle for one
         //answer = perceiver2.getAnswer();
-        sendActToPerceiver(perceiver1, act); //No response should be created here
-        if(act.getSpeechType() == SpeechType.GOODBYE){
+        System.out.println("Answer = " + answer.getLine());
+        sendActToPerceiver(perceiver1, answer); //No response should be created here
+
+        if(answer.getSpeechType() == SpeechType.GOODBYE){
             conversationCompleted = true;
         }
     }
 
     //Handles sending a speechact to a perceiver and record and archive what is needed
-    private void sendActToPerceiver(IPerceiver p, SpeechAct act){
+    private SpeechAct sendActToPerceiver(IPerceiver p, SpeechAct act){
         actHistory.get(p).add(act);     //Add act to history
-        p.hear(act);
+
+        return p.hear(act);
     }
 
     public ArrayList<SpeechAct> getAllPropertyVariations(IThought thought){
@@ -128,9 +132,7 @@ public class ConversationModel {
     //Used as an internal getter so that the variable is reset after reading it!
     private SpeechAct getPlayerChoice(){
         SpeechAct act = playersChoice;
-        System.out.println(act.getLine() + "     is the line before reset of playerChoice");
         playersChoice = null;
-        System.out.println(act.getLine() + "     is the line after reset of playerChoice");
         return act;
     }
 
@@ -147,9 +149,9 @@ public class ConversationModel {
             System.out.println("Player choice received : " + sa.getLine());
             playersChoice = sa;
             //TODO This should most likely be set in the doOneRound() method instead!
-            if(sa.getSpeechType() == SpeechType.GOODBYE){
+            /*if(sa.getSpeechType() == SpeechType.GOODBYE){
                 conversationCompleted = true;
-            }
+            }*/
         }
     }
 
