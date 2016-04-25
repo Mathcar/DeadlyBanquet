@@ -264,7 +264,7 @@ public class ConversationTree {
             stateToSkip = State.QUESTION_EVENT_WHEN;
         }
         if(stateToSkip != null)
-            setCurrentState(State.QUESTION_EVENT_WHO);
+            setCurrentState(State.QUESTION_EVENT_WHAT);
     }
 
     private String getPrintQuestionEvent(){
@@ -315,10 +315,12 @@ public class ConversationTree {
                 when = "Evening";
             }
             if(!when.equals("")){
-                setCurrentState(State.QUESTION_EVENT_WHAT);
+                eventDebug();
+                //FINISHED HERE
             }
         }else
-            setCurrentState(State.QUESTION_EVENT_WHAT);
+            eventDebug();
+            //FINISHED HERE;
     }
 
     private String getPrintQuestionEventWhen(){
@@ -339,12 +341,13 @@ public class ConversationTree {
                 //what = Do.What.PICKUP;
             }
             if(what != null){
-                eventDebug();
+                //TODO swap to item or person
+                setCurrentState(State.QUESTION_EVENT_WHO);
                 //cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
-                //setCurrentState(State.TEXT_PROPERTY_CHOICE);/
 
             }
         }else {
+            System.out.println("THIS SHOULD NOT HAPPEN (Comment from conversationTree)");
             eventDebug();
             //cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
             //setCurrentState(State.TEXT_PROPERTY_CHOICE);
