@@ -245,6 +245,8 @@ public class SpeechActFactory {
             IThoughtList.size();
             temp = new SpeechAct(i.toString(),speaker.getName(),listener.getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
         }
+        System.out.println("SPEEACHACTFACTORY: Right before the retrun statement, will run the speachActs debug method");
+        temp.deBugString();
         return temp;
 
     }
