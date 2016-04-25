@@ -464,17 +464,18 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
             if(aic.getCharacterName().equals(c.getName()))
                 return aic;
         }
-
+        System.out.println("No related aicontroller could be found");
         return null;
 
     }
 
     private AIControler getRelatedControler(String name){
+        System.out.println("Name to get related controller for : " + name);
         for(AIControler aic : aiss){
             if(aic.getCharacterName().equals(name))
                 return aic;
         }
-
+        System.out.println("No related aicontroller could be found");
         return null;
 
     }
@@ -607,8 +608,13 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     public static IPerceiver stringToIPerceiver(String name){
         if(name == current.player.getName())
             return playerBrain;
-        else
-            return controlerBrainMap.get(current.getRelatedControler(name));
+        else {
+            AIControler aic = current.getRelatedControler(name);
+            aic.getCharacterName();
+            NPCBrain npcbrain = controlerBrainMap.get(aic);
+            npcbrain.getName();
+            return npcbrain;
+        }
     }
     
 }

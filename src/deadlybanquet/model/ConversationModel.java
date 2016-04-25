@@ -112,7 +112,6 @@ public class ConversationModel {
     //Handles sending a speechact to a perceiver and record and archive what is needed
     private SpeechAct sendActToPerceiver(IPerceiver p, SpeechAct act){
         actHistory.get(p).add(act);     //Add act to history
-
         return p.hear(act);
     }
 

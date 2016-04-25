@@ -64,7 +64,7 @@ public class SpeechActFactory {
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,String speaker,String listener){
         //magic
-        return convertIThoughtToSpeechAct(iList,prop, World.stringToIPeeceiver(speaker),World.stringToIPeeceiver(listener));
+        return convertIThoughtToSpeechAct(iList,prop, World.stringToIPerceiver(speaker),World.stringToIPerceiver(listener));
     }
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
@@ -239,6 +239,10 @@ public class SpeechActFactory {
             //Something terrible has happend.
             //System.err.println("Could not create SpeeechAct from IThought [SpeechActFactory]");
             //System.exit(0);
+            i.toString();
+            speaker.getName();
+            listener.getName();
+            IThoughtList.size();
             temp = new SpeechAct(i.toString(),speaker.getName(),listener.getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
         }
         return temp;
