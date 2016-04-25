@@ -64,7 +64,7 @@ public class SpeechActFactory {
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,String speaker,String listener){
         //magic
-        return convertIThoughtToSpeechAct(iList,prop, World.stringToIPreciver(speaker),World.stringToIPreciver(listener));
+        return convertIThoughtToSpeechAct(iList,prop, World.stringToIPeeceiver(speaker),World.stringToIPeeceiver(listener));
     }
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
