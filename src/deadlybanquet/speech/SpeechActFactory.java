@@ -2,6 +2,7 @@ package deadlybanquet.speech;
 
 
 import deadlybanquet.ai.*;
+import deadlybanquet.model.ItemsAndNameSingelton;
 import deadlybanquet.model.World;
 import org.w3c.dom.Text;
 
@@ -180,17 +181,35 @@ public class SpeechActFactory {
                     //question about who did something with something at some time
                     //and
                     //question about who did something to someone at some time
+                    if(ItemsAndNameSingelton.getInstance().getItems().contains(((Do) i).getWithWhat())){
+                        //question about who did WHAT with ITEM
+                        for(int k=0;k<list.size();k++){
+                            SpeechInfo si = list.get(k);
+                            if(si.getSpeechType().equals(SpeechType.EVENT_QUESTION_WHAT_ITEM)&&si.getTextProperty().equals(prop)){
+                                text=si.getText();
+                                break;
+                            }
+                        }
+                        text=parseSpeechAct(text,(Do) i,speaker,listener);
+                        temp=new SpeechAct(text,speaker.getName(),listener.getName(),
+                                SpeechType.EVENT_QUESTION_WHAT_ITEM,prop,IThoughtList);
+                    }else{
+                        //question about who did WHAT to WHOM;
+                        for(int k=0;k<list.size();k++){
+                            SpeechInfo si = list.get(k);
+                            if(si.getSpeechType().equals(SpeechType.EVENT_QUESTION_WHAT_RECEIVER)&&si.getTextProperty().equals(prop)){
+                                text=si.getText();
+                                break;
+                            }
+                        }
+                        text=parseSpeechAct(text,(Do) i,speaker,listener);
+                        temp=new SpeechAct(text,speaker.getName(),listener.getName(),
+                                SpeechType.EVENT_QUESTION_WHAT_RECEIVER,prop,IThoughtList);
+                    }
                 }else if(((Do) i).getWithWhat().equals("")){
-
-                    //question about with what someone did to something at sometime.
-                    //and
-                    //question about to whom someone did something at sometime
-                }else if(((Do) i).getWhen().isPlaceHolder()){
-                    //question about when someone did something with something.
-                    //and
-                    //questiona about when someone did something with someone.
-
-                    //OBS. alla dessa 6 frågot kommer behöva en egen distinkt SPEACHTYPE
+                    text="this is a question about withwhat or to whom, someone did something";
+                    temp=new SpeechAct(text,speaker.getName(),listener.getName(),
+                            SpeechType.EVENT_QUESTION_DOER_WHAT,prop,IThoughtList);
                 }
             }else{
                 ArrayList<SpeechInfo> list = holder.getInfoFrase();

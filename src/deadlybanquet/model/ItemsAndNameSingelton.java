@@ -26,7 +26,8 @@ public class ItemsAndNameSingelton {
         ArrayList<String> temp=new ArrayList<String>();
         BufferedReader br = null;
         String line = "";
-        File file = new File("res/speech/items");
+        File file = new File("res/items/items");
+
         try{
             br = new BufferedReader(new FileReader(file.getAbsolutePath()));
             while((line=br.readLine()) != null){
