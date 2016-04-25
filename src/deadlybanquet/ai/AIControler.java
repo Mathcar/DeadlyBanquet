@@ -175,19 +175,23 @@ public class AIControler {
 		}*/
 		
 		
-		if(path != null && movtim < 1){
+		if(hasPath() && movtim < 1){
 			moveNPC(world);
 			movtim = MOVEMNET_DELAY/2;
+		}
+		
+		if(masterPath != null && !masterPath.isEmpty() && hasPath() == false){
+			world.attemptCreatePathToDoor(this, masterPath.getNext());
+			if(world.attemptChangeRooms(getCharacter())){
+				masterPath.removeNext();
+			}
 		}
 	
         if(!getCharacter().isMoving()){
         	Direction d = world.getRoomOfCharacter(getCharacter()).getAdjacentDoorDirection(getCharacter().getPos());
         	if(d != null){
-        		getCharacter().setDirection(d);	
-        	}
-        	
-        	
-        	
+        		getCharacter().setDirection(d);
+        	}	
         }
 		
 		movtim--;

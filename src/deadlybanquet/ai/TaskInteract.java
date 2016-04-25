@@ -11,8 +11,10 @@ public class TaskInteract implements Task {
 	
 	@Override
 	public boolean execute(AIControler aiControler) {
-		return taskEx.attemptTalk(aiControler.getCharacter());
-		
+		if(!aiControler.hasPath()){
+			return taskEx.attemptTalk(aiControler.getCharacter());
+		}
+		return false;
 	}
 
 }

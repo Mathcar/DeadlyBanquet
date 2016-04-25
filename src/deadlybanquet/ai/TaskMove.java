@@ -3,12 +3,11 @@ package deadlybanquet.ai;
 import org.newdawn.slick.util.pathfinding.Path; // not sure this is the correct Path
 
 import deadlybanquet.model.Direction;
+import deadlybanquet.model.MasterPath;
 import deadlybanquet.model.Position;
 import deadlybanquet.ai.MoveTypes;
 
 public class TaskMove implements Task{
-	
-	
 	
 	String target;
 	TaskExecuter taskEx;
@@ -23,14 +22,13 @@ public class TaskMove implements Task{
 	@Override
 	public boolean execute(AIControler aiControler) {
 		if(!aiControler.hasPath()){
-		if(moveType == MoveTypes.DOOR){
-			return taskEx.attemptCreatePathToDoor(aiControler, target);
-		}else if(moveType == MoveTypes.PERSON){
-			System.out.println("kioli" + target);
-			return taskEx.attemptCreatePathToPerson(aiControler, target);
-		}else{
-			return taskEx.attemptCreateMasterPath(aiControler, target);
-		}
+			if(moveType == MoveTypes.DOOR){
+				return taskEx.attemptCreatePathToDoor(aiControler, target);
+			}else if(moveType == MoveTypes.PERSON){
+				return taskEx.attemptCreatePathToPerson(aiControler, target);
+			}else{
+				return taskEx.attemptCreateMasterPath(aiControler, target);
+			}
 		}
 		return false;
 	}
