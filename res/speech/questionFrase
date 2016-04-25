@@ -7,3 +7,7 @@ Who's chilling in the #location;COLLOQUIAL;WHERE_LOCATION;
 How do you feel about #person;NEUTRAL;OPINION_QUESTION;
 what do you think about my man #person;COLLOQUIAL;OPINION_QUESTION;
 Do you mind telling me your opinion about #person;PROPER;OPINION_QUESTION;
+You know who went and did #what at #time with #item;COLLOQUIAL;EVENT_QUESTION;
+Do you know who did #what at #time with a #item;NEUTRAL;EVENT_QUESTION;
+Do you happen to be aware about who did #what at #time with a #item;PROPER;EVENT_QUESTION;
+Ey mate do you know with what #item #doer did #what at #time to #reciever;COLLOQUIAL;EVENT_QUESTION;

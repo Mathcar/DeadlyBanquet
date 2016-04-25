@@ -56,7 +56,6 @@ public class ConversationModel {
 
     private void initDefaults(){
         //TODO NO PERCEIVERS IN THE FACTORY!
-        saFactory = new SpeechActFactory(perceiver1, perceiver2);
         actHistory = new HashMap<>();
         actHistory.put(perceiver1, new ArrayList<SpeechAct>());
         actHistory.put(perceiver2, new ArrayList<SpeechAct>());
@@ -115,9 +114,14 @@ public class ConversationModel {
 
     public ArrayList<SpeechAct> getAllPropertyVariations(IThought thought){
         ArrayList<SpeechAct> temp = new ArrayList<>();
-        temp.add(saFactory.convertIThoughtToSpeechAct(thought, TextPropertyEnum.NEUTRAL));
-        temp.add(saFactory.convertIThoughtToSpeechAct(thought, TextPropertyEnum.PROPER));
-        temp.add(saFactory.convertIThoughtToSpeechAct(thought, TextPropertyEnum.COLLOQUIAL));
+        ArrayList<IThought> tempI = new ArrayList<IThought>();
+        tempI.add(thought);
+        temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI,
+                                TextPropertyEnum.NEUTRAL, perceiver1, perceiver2));
+        temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI, TextPropertyEnum.PROPER,
+                                                            perceiver1, perceiver2));
+        temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI, TextPropertyEnum.COLLOQUIAL,
+                                                                perceiver1, perceiver2));
         return temp;
     }
 

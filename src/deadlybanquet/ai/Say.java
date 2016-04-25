@@ -1,7 +1,7 @@
 package deadlybanquet.ai;
 
 import static deadlybanquet.ai.Say.How.*;
-import deadlybanquet.model.Time;
+import deadlybanquet.model.TimeStamp;
 
 /**
  *
@@ -10,8 +10,7 @@ import deadlybanquet.model.Time;
 public class Say implements IThought{
     
     public enum How {
-        //SAY, this was supposed to convey A said to B that... but we'll give this a miss
-        //unless we get really bored at some point.
+        SAY, 
         AGREE, //information being agreed with gets sent along
         DISAGREE, //one's own opinion gets sent along
         YESNO, //this is really just for polite responses: Oh, is it?
@@ -21,6 +20,9 @@ public class Say implements IThought{
     }
     String speaker;
     String hearer;
+    //Null is placeholder: What did a say to b?
+    //To answer I don't know, just answer do with talkto: To be interpreted as
+    //I saw them speak.
     IThought content;
     How type;
     //This is null if one is currently doing that speech act
@@ -28,12 +30,12 @@ public class Say implements IThought{
     //hearer is the receiver.
     //When when is not null, this indicates something which
     //has been said (or will be said).
-    Time when;
+    TimeStamp when;
     
     public Say(String s, String h, IThought c, How t){
         this(s,h,c,t,null);
     }
-    public Say (String s, String h, IThought c, How t, Time time){
+    public Say (String s, String h, IThought c, How t, TimeStamp time){
         speaker=s;
         hearer=h;
         content=c;
@@ -96,7 +98,7 @@ public class Say implements IThought{
     
     @Override
     public Say copy(){
-        Time t=when;
+        TimeStamp t=when;
         if(t!=null)
             t=t.copy();
         return new Say(speaker,hearer,content,type, t);

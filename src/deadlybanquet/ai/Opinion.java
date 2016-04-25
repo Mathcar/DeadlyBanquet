@@ -1,6 +1,6 @@
 package deadlybanquet.ai;
 
-import deadlybanquet.model.Time;
+import deadlybanquet.model.TimeStamp;
 
 /**
  * 
@@ -11,14 +11,14 @@ public class Opinion implements IThought{
     //With a placeholder pad, this becomes the question: What do you think about person?
     private PAD pad;
     //The time when this opinion first became current.
-    private Time time;
+    private TimeStamp time;
     private Opinion previous;
     
     public Opinion(String about, PAD pad){
         this(about,pad,null,null);
     }
     
-    public Opinion(String about, PAD opinion, Time t, Opinion p){
+    public Opinion(String about, PAD opinion, TimeStamp t, Opinion p){
         person=about;
         pad=opinion;
         time=t;
@@ -69,7 +69,7 @@ public class Opinion implements IThought{
     
     @Override
     public Opinion copy(){
-        Time t=time;
+        TimeStamp t=time;
         if(t!=null)
             t=t.copy();
         PAD p =pad;
@@ -94,7 +94,7 @@ public class Opinion implements IThought{
         return pad;
     }
 
-    public Time getTime() {
+    public TimeStamp getTimeStamp() {
         return time;
     }
 

@@ -24,7 +24,7 @@ public class PlayerBrain implements IPerceiver {
     //this method accepts a speech act and adds the information to its memory.
     //This method should not evaluate memory as that is the (human) player's or brains job.
     @Override
-    public void hear(SpeechAct act){
+    public SpeechAct hear(SpeechAct act){
     	for(IThought i: act.getContent()){
     		Opinion compOpinion = new Opinion(act.getSpeaker(), new PAD(0,0,0));
     		SortedList tempSet = information.find(compOpinion);
@@ -38,6 +38,8 @@ public class PlayerBrain implements IPerceiver {
     		
     		this.information.add(new SomebodyElse(i, act.getSpeaker(), speeker.getPAD(), 1));
     	}
+        //TODO Return something sensible
+        return null;
     }
     
     //Called on every person in origin and destination rooms on room change.

@@ -16,13 +16,15 @@ import static deadlybanquet.ai.Say.How.*;
 
 import deadlybanquet.Talkable;
 import static deadlybanquet.ai.Desire.dg.GOAL;
+import static deadlybanquet.ai.Do.What.*;
 import deadlybanquet.ai.Say.How;
-import deadlybanquet.model.Time;
-import static deadlybanquet.model.World.getTime;
+import deadlybanquet.model.TimeStamp;
+import static deadlybanquet.model.World.getTimeStamp;
 import deadlybanquet.speech.SpeechAct;
+import static deadlybanquet.speech.SpeechActFactory.convertIThoughtToSpeechAct;
 import deadlybanquet.speech.TextPropertyEnum;
+import static deadlybanquet.speech.TextPropertyEnum.NEUTRAL;
 
-import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.*;
 
 public class NPCBrain implements IPerceiver, Talkable {
@@ -52,7 +54,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     //TODO this should include an opinion about oneself
     private ArrayList<Opinion> opinions = new ArrayList<>(); //TODO add this to constructor
     private ArrayList<Whereabouts> whereabouts = new ArrayList<>();
-    
+    private String here;
     
     
     //this constructor replaces any bad values by defaults.
@@ -71,6 +73,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         if (desires !=null) this.desires = desires;
         if (goals!=null) this.goals = goals;
         if (plan!=null) this.plan = plan;
+        here=currentRoom;
         me = name;
         this.aic= aic;
     }
@@ -83,7 +86,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     //--------------------------------------------------------------------------
     //This method evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
-    public void hear(SpeechAct act){
+    public SpeechAct hear(SpeechAct act){
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         String you = act.getSpeaker();
@@ -129,8 +132,8 @@ public class NPCBrain implements IPerceiver, Talkable {
                                 
                 default: System.out.println(me + " says: I didn't understand a word of that.");
             }
-            selectResponse(possibleAnswers);
         }
+        return selectResponse(possibleAnswers,you);
     }
     
     private void processOpinion(Opinion inOpinion, String you, ArrayList<IThought> ans){
@@ -265,7 +268,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                     foundData.add(b);
         }
         //Check if I have an idea that somebody else might know
-        Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "",null, 0.0, null);
+        Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "", 0.0, null);
 		if(foundData.isEmpty()) foundData=memory.find(tofind);
         //if I have no idea whatsoever about where the person is
         if(foundData.isEmpty()){
@@ -298,7 +301,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                                 //Speaker has acceded to a request we made
                                 if (h.type==REQUEST){
                                     //content of a request should be either a do or a say object.
-                                    Time time = getTime();
+                                    TimeStamp time = getTimeStamp();
                                     Desire desire = new Desire(GOAL,h.content, time, 1.0);
                                     //TODO maybe add another interface to avoid such code?
                                     SomebodyElse newinfo = new SomebodyElse(desire,you, new PAD(1,0,0),1.0);
@@ -398,7 +401,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         if (foundData.isEmpty()){
             //If no previous information is available, return
             //I am happy/sad for you.
-            s.time=getTime();
+            s.time=getTimeStamp();
             memory.information.add(s);
             PAD opinion = new PAD(inEmotion.pad.getP(), 0, 0);
             s.opinion = opinion;
@@ -446,7 +449,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     private void acceptWithCertainty(String person, IThought stateofworld, double certainty){
         SomebodyElse previnfo = new SomebodyElse(stateofworld,person,null, certainty);
-        previnfo.time=getTime();
+        previnfo.time=getTimeStamp();
         //Find any previous information on the subject
         SortedList foundData = memory.find(previnfo);
         if (!foundData.isEmpty()){
@@ -478,15 +481,21 @@ public class NPCBrain implements IPerceiver, Talkable {
     //contains several pieces of information
     //responsible for sending the response and updating one's own opinion of the
     //world in accordance with how one believes the statement to change the world/
-    private void selectResponse(ArrayList<IThought> possibleResponses){
+    private SpeechAct selectResponse(ArrayList<IThought> possibleResponses, String you){
         //This is the real thing
         //speak(makeSpeechAct(possibleResponses, me));
         ArrayList<IThought> ans = new ArrayList<>();
         for (IThought i : possibleResponses){
             ans.add(i.copy());
         }
-        makeSpeechAct(ans, me);
         debugInfo=ans;
+        //if(ans.isEmpty()) return;
+        System.out.print(me + " says: ");
+        for (IThought i: ans){
+            System.out.println(i);
+        }
+        return convertIThoughtToSpeechAct(ans, NEUTRAL,me,you);
+        
     }
     //--------------------------------------------------------------------------
     //SECTION: Debugging stuff
@@ -545,23 +554,37 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     public void observeRoomChange(String person, String origin, String destination){
+        System.out.println("NPC registered room change");
+        SortedList res = memory.find (new Whereabouts(person, ""));
+        TimeStamp t = getTimeStamp();
+        t.incrementTime(-1);
+        Whereabouts w = new Whereabouts(person, origin,1.0, t);
+        Whereabouts n = new Whereabouts(person, destination, 1.0, getTimeStamp(), w);
+        if (res.isEmpty()){           
+            memory.add(n);
+        }
+        else {
+            Whereabouts old = (Whereabouts) res.first();
+            w.setPrevious(old);
+            memory.replace(old, n);
+        }
     }
     
     public void observeInteraction(String who, String with){
-        
+        memory.add(new Do(TALKTO, who,with, getTimeStamp()));
     }
     
     public void observePickUp(String who, String what){
-        
+        memory.add(new Do(PICKUP, who,what, getTimeStamp()));
     }
     
     public void observePutDown(String who, String what){
-        
+        memory.add(new Do(PUTDOWN, who,what, getTimeStamp()));
     }
 
     //Character does some thinking, cooling down, executing plan etc.
     public void update(){
-        
+        System.out.println("Calling update function on " + me +", but don't expect anything to happen.");
     }
 
     //this method creates plans for any goals and puts
@@ -571,7 +594,20 @@ public class NPCBrain implements IPerceiver, Talkable {
     
     @Override
     public void seePeople(ArrayList<String> people) {
-      //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        TimeStamp t = getTimeStamp();
+        for (String person:people){
+            SortedList res = memory.find (new Whereabouts(person, ""));          
+            Whereabouts w = new Whereabouts(person, here ,1.0, t);
+            if (res.isEmpty()){           
+                memory.add(w);
+            }
+            else {
+                Whereabouts old = (Whereabouts) res.first();
+                w.setPrevious(old);
+                memory.replace(old, w);
+            }
+        }
+
     }
 
     @Override

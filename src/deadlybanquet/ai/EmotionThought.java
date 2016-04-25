@@ -1,6 +1,6 @@
 package deadlybanquet.ai;
 
-import deadlybanquet.model.Time;
+import deadlybanquet.model.TimeStamp;
 
 /**
  * Representation of an emotion or temperament
@@ -15,14 +15,14 @@ public class EmotionThought implements IThought{
     
     public PAD pad;
     
-    public Time time;
+    public TimeStamp time;
     public EmotionThought previous;
 
     public EmotionThought(et e, PAD p){
         this(e,p,null,null);
     }
     
-    public EmotionThought(et e, PAD p, Time t, EmotionThought em){
+    public EmotionThought(et e, PAD p, TimeStamp t, EmotionThought em){
         emotionortemperament=e;
         pad=p;
         time=t;
@@ -65,7 +65,7 @@ public class EmotionThought implements IThought{
     
     @Override
     public EmotionThought copy(){
-        Time t=time;
+        TimeStamp t=time;
         if(t!=null)
             t=t.copy();
         PAD p =pad;

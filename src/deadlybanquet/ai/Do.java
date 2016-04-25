@@ -1,6 +1,6 @@
 package deadlybanquet.ai;
 
-import deadlybanquet.model.Time;
+import deadlybanquet.model.TimeStamp;
 
 /**
  * Describes things with format somebody does something to something/somebody/somewhere
@@ -12,17 +12,20 @@ public class Do implements IThought{
         MOVETO,
         PICKUP,
         PUTDOWN,
-        MURDER;
+        MURDER,
+        TALKTO; //Implies that people were talking to each other, but with no information
+        //about what they say
     }
-    
-    public What what;
+
+
+    private What what;
     //Placeholder is empty string, null is null.
-    public String doer;
+    private String doer;
     //who is murdered, what is picked up...
-    public String withWhat;
-    public Time when;
+    private String withWhat;
+    private TimeStamp when;
     //Describes whether somebody actually does/did item or just intended to do so
-    public Do(What what, String doer, String to, Time time) {
+    public Do(What what, String doer, String to, TimeStamp time) {
         this.what=what;
         this.doer=doer;
         this.when=time;
@@ -73,7 +76,7 @@ public class Do implements IThought{
     
     @Override
     public Do copy(){
-        Time t=when;
+        TimeStamp t=when;
         if(t!=null)
             t=t.copy();
         return new Do(what,doer,withWhat, t);
@@ -82,5 +85,37 @@ public class Do implements IThought{
     @Override
     public void setCertainty(double i){
         
+    }
+
+    public What getWhat() {
+        return what;
+    }
+
+    public void setWhat(What what) {
+        this.what = what;
+    }
+
+    public String getDoer() {
+        return doer;
+    }
+
+    public void setDoer(String doer) {
+        this.doer = doer;
+    }
+
+    public String getWithWhat() {
+        return withWhat;
+    }
+
+    public void setWithWhat(String withWhat) {
+        this.withWhat = withWhat;
+    }
+
+    public TimeStamp getWhen() {
+        return when;
+    }
+
+    public void setWhen(TimeStamp when) {
+        this.when = when;
     }
 }

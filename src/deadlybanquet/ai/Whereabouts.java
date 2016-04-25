@@ -1,6 +1,6 @@
 package deadlybanquet.ai;
 
-import deadlybanquet.model.Time;
+import deadlybanquet.model.TimeStamp;
 
 /**
  * Represents that somebody or something is/was somewhere (in a room)
@@ -11,21 +11,35 @@ public class Whereabouts implements IThought{
     private String character;
     private PAD opinion;
     private double certainty;
-    private Time time;
+    private TimeStamp time;
 
 
     private Whereabouts previous;
     
+    /**
+     * 
+     * @param character
+     * @param room 
+     */
     public Whereabouts (String character, String room){
-        this(character,room,null,1.0,null);
+        this(character,room,null,1.0,null, null);
     }
-      
-    public Whereabouts(String character, String room, PAD o, double cert,  Time time){
+    
+    public Whereabouts(String character, String room, double cert,  TimeStamp time){
+        this(character,room,null,cert,time, null);
+    }
+    
+    public Whereabouts(String character, String room, double cert,  TimeStamp time, Whereabouts p){
+        this(character,room,null,cert,time, p);
+    }
+    
+    public Whereabouts(String character, String room, PAD o, double cert,  TimeStamp time, Whereabouts previous){
         this.character=character;
         this.room=room;
         opinion=o;
         certainty=cert;
         this.time=time;
+        this.previous=previous;
     }
     
     @Override
@@ -65,12 +79,16 @@ public class Whereabouts implements IThought{
         return 1;
     }
 
-    public Time getTime() {
+    public TimeStamp getTimeStamp() {
         return time;
     }
 
     public Whereabouts getPrevious() {
         return previous;
+    }
+    
+    public void setPrevious(Whereabouts p){
+        previous=p;
     }
 
     public PAD getOpinion() {
@@ -87,13 +105,13 @@ public class Whereabouts implements IThought{
     
     @Override
     public Whereabouts copy(){
-        Time t=time;
+        TimeStamp t=time;
         if(t!=null)
             t=t.copy();
         PAD p =opinion;
         if(p!=null)
             p=p.copy();
-        return new Whereabouts(room, character, p, certainty, t);
+        return new Whereabouts(room, character, p, certainty, t,null);
     }
     
     @Override
