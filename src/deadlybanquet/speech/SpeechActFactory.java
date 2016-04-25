@@ -51,7 +51,14 @@ public class SpeechActFactory {
     }
 
     private static String parseSpeechAct(String text, Opinion o,IPerceiver speaker,IPerceiver listener){
-        return "NOT DONEEEEEEE GTFO";
+        String temp = text;
+        if(temp.contains("#name")){
+            temp = temp.replace("#name",listener.getName());
+        }
+        if(temp.contains("#opinion")){
+            temp = temp.replace("#opinion",o.getPAD().getOpinion());
+        }
+        return temp;
     }
 
 
@@ -215,13 +222,15 @@ public class SpeechActFactory {
                 ArrayList<SpeechInfo> list = holder.getInfoFrase();
                 for(int k = 0;k<list.size();k++){
                     SpeechInfo si=list.get(k);
-                    if(si.getSpeechType().equals(SpeechType.EVENT_INFO)&&si.getTextProperty().equals(prop)){
+                    //todo may be wrong
+                    if(si.getSpeechType().equals(SpeechType.EVENT_INFO_RECEIVER_WHAT_DOER)&&si.getTextProperty().equals(prop)){
                         text=si.getText();
                         break;
                     }
                 }
                 text=parseSpeechAct(text,(Do) i,speaker,listener);
-                temp=new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.EVENT_INFO,prop,IThoughtList);
+                // todo may be wrong
+                temp=new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.EVENT_INFO_RECEIVER_WHAT_DOER,prop,IThoughtList);
             }
         }
 
