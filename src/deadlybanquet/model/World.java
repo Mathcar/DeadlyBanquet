@@ -469,6 +469,16 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
 
     }
 
+    private AIControler getRelatedControler(String name){
+        for(AIControler aic : aiss){
+            if(aic.getCharacterName().equals(name))
+                return aic;
+        }
+
+        return null;
+
+    }
+
     public Room getRoomOfCharacter(Character c){
         for(Room[] rs :  roomMap){
             for(Room r : rs){
@@ -594,8 +604,11 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
         return controlerBrainMap.get(aic);
     }
 
-    public static IPerceiver stringToIPreciver(String name){
-        return null;// TODO IMPORTANTEEEE
+    public static IPerceiver stringToIPerceiver(String name){
+        if(name == current.player.getName())
+            return playerBrain;
+        else
+            return controlerBrainMap.get(current.getRelatedControler(name));
     }
     
 }
