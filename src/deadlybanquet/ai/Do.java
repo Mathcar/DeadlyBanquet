@@ -25,6 +25,10 @@ public class Do implements IThought{
     private String withWhat;
     private TimeStamp when;
     //Describes whether somebody actually does/did item or just intended to do so
+    
+    public Do (What what, String doer, String to) {
+        this(what,doer,to,null);
+    }
     public Do(What what, String doer, String to, TimeStamp time) {
         this.what=what;
         this.doer=doer;

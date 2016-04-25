@@ -5,7 +5,6 @@ import static deadlybanquet.ai.BrainFactory.makeBrain;
 import static deadlybanquet.ai.Do.What.MURDER;
 import static deadlybanquet.model.World.getTime;
 import deadlybanquet.speech.SpeechAct;
-import static deadlybanquet.speech.SpeechActFactory.makeSpeechAct;
 import java.util.ArrayList;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -69,7 +68,7 @@ public class HearExample {
                     "Derek", null, 1.0);*/
         //We are maniplating Bill into saying this
         content.add(starter);
-        makeSpeechAct(content, "Bill");
+        //makeSpeechAct(content, "Bill");
         //Bill.plantFalseOpinion((Opinion)starter);
         Bill.plantFalseMemory(starter);
         //Jane.plantFalseMemory(starter);
@@ -103,7 +102,7 @@ public class HearExample {
     
     private void runConversation(NPCBrain first, NPCBrain second, ArrayList<IThought> ideas){
         content.add(ideas.get(0));
-        makeSpeechAct(content, "Bill");
+        //makeSpeechAct(content, "Bill");
         Bill.plantFalseMemory(ideas.get(0));
         ideas.remove(0);
         while (true){
@@ -117,7 +116,7 @@ public class HearExample {
                 Jane.plantFalseMemory(ideas.get(0));
                 content.add(ideas.get(0));
                 ideas.remove(0);
-                makeSpeechAct(content, "Jane");
+                //makeSpeechAct(content, "Jane");
             }
             //It is now Jane's turn to speak
             input.setSpeaker("Jane");
@@ -130,7 +129,7 @@ public class HearExample {
                 Bill.plantFalseMemory(ideas.get(0));
                 content.add(ideas.get(0));
                 ideas.remove(0);
-                makeSpeechAct(content, "Bill");
+                //makeSpeechAct(content, "Bill");
             }
             input.setSpeaker("Bill");
             //And now we are in the same state as we were before the loop starts for the first time.
