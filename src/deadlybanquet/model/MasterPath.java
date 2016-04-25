@@ -30,6 +30,14 @@ public class MasterPath {
     public void removeNext(){
         steps.removeFirst();
     }
+    
+    public boolean isEmpty(){
+    	if(steps.isEmpty()){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    }
 
 
 }

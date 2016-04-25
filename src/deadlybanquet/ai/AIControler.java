@@ -33,37 +33,37 @@ public class AIControler {
 		pathStep = 0;
 	}
 	
-	public void moveNPC(){
-		if(path!=null) {
-            int targetX = path.getStep(pathStep).getX();
-            int targetY = path.getStep(pathStep).getY();
-            int x = getCharacter().getPos().getX();
-            int y = getCharacter().getPos().getY();
-            if (targetX != x) {
-                if(x < targetX){
-                	this.getCharacter().setDirection(Direction.EAST);
-                }else{
-                	this.getCharacter().setDirection(Direction.WEST);
-                }
-                this.getCharacter().executeMove();
-               
-            	//x += (targetX - x) / Math.abs(targetX - x); //Move one pixel per update in the correct x direction
-            } else if (targetY != y) {
-            	if(y < targetY){
-                	this.getCharacter().setDirection(Direction.SOUTH);
-                }else{
-                	this.getCharacter().setDirection(Direction.NORTH);
-                }
-                this.getCharacter().executeMove();
-              
-            	//y += (targetY - y) / Math.abs(targetY - y); //Move one pixel per update in the correct x direction
-            } else if (path.getLength() > pathStep+1) {
-                pathStep++;  //If a grid has been reached, increment the path so the next grid will be the target
-            } else{
-                path = null; //Remove current path if destination has been reached
+	public void moveNPC(World world){
+		Character c = getCharacter();
+        int targetX = path.getStep(pathStep).getX();
+        int targetY = path.getStep(pathStep).getY();
+        int x = c.getPos().getX();
+        int y = c.getPos().getY();
+        if (targetX != x) {
+            if(x < targetX){
+            	c.setDirection(Direction.EAST);
+            }else{
+            	c.setDirection(Direction.WEST);
             }
-
+            world.attemptMove(getCharacter(), getCharacterDirection());
+           
+        	//x += (targetX - x) / Math.abs(targetX - x); //Move one pixel per update in the correct x direction
+        } else if (targetY != y) {
+        	if(y < targetY){
+            	c.setDirection(Direction.SOUTH);
+            }else{
+            	c.setDirection(Direction.NORTH);
+            }
+            world.attemptMove(c, getCharacterDirection());
+          
+        	//y += (targetY - y) / Math.abs(targetY - y); //Move one pixel per update in the correct x direction
+        } else if (path.getLength() > pathStep+1) {
+            pathStep++;  //If a grid has been reached, increment the path so the next grid will be the target
+        } else{
+            path = null; //Remove current path if destination has been reached
         }
+        
+
 	}
 
 	//Called on every person in origin and destination rooms on room change.
@@ -168,15 +168,31 @@ public class AIControler {
 		t.execute(this);'
 		*/
 		
-		if(movtim < 1){
-			moveNPC();
-			movtim = 16;
+		/*if(masterPath != null && !masterPath.isEmpty() && path == null){
+			world.attemptCreatePathToDoor(this, masterPath.getNext());
+			world.attemptChangeRooms(this.getCharacter());
+			world.attemptCreatePathToPerson(this, "Cindy");
+		}*/
+		
+		
+		if(path != null && movtim < 1){
+			moveNPC(world);
+			movtim = MOVEMNET_DELAY/2;
 		}
+	
+        if(!getCharacter().isMoving()){
+        	Direction d = world.getRoomOfCharacter(getCharacter()).getAdjacentDoorDirection(getCharacter().getPos());
+        	if(d != null){
+        		getCharacter().setDirection(d);	
+        	}
+        	
+        	
+        	
+        }
 		
 		movtim--;
 		
-		
-		statebasedAI.think(this, world);
+		statebasedAI.think(this, world, world);
 	}
 	//end
 

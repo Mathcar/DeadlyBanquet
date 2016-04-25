@@ -100,7 +100,7 @@ public class Room implements TileBasedMap {
     	Position temp = new Position(0,0);
         for(Door d : doors){
             if(d.getDestinationRoom().equals(target)){
-            	temp = d.getPos();
+            	temp= d.getPos();
             	switch(d.getDirection()){
             	case EAST:            		
             		temp.x = temp.getX()-1;
@@ -140,6 +140,21 @@ public class Room implements TileBasedMap {
 
     public String getName(){
         return name;
+    }
+    
+    public Direction getAdjacentDoorDirection(Position pos){
+    	for(Door d : doors){
+			if(Position.getAdjacentPositionInDirection(pos, Direction.EAST).equals(d.getPos())){
+				return Direction.EAST;
+			}else if(Position.getAdjacentPositionInDirection(pos, Direction.WEST).equals(d.getPos())){
+				return Direction.WEST;
+			}else if(Position.getAdjacentPositionInDirection(pos, Direction.SOUTH).equals(d.getPos())){
+				return Direction.SOUTH;
+			}else if(Position.getAdjacentPositionInDirection(pos, Direction.NORTH).equals(d.getPos())){
+				return Direction.NORTH;
+			}
+    	}
+    	return null;
     }
 
     public ArrayList<Character> getCharactersInRoom(){
@@ -194,8 +209,15 @@ public class Room implements TileBasedMap {
         for(Character c : characters){
             if(c.getName().equals(targetName)){
                 target = c.getPos();
-            	target.setY(target.getY()+1);
-            	
+                if(!isBlocked(target.getX(), target.getY()+1)){
+                	target.setY(target.getY()+1);
+                }else if(!isBlocked(target.getX()-1, target.getY())){
+                	target.setX(target.getX()-1);	
+                }else if(!isBlocked(target.getX(), target.getY()-1)){
+                	target.setY(target.getY()-1);	
+                }else if(!isBlocked(target.getX()+1, target.getY())){
+                	target.setX(target.getX()+1);
+                }
             }
         }
         return getPath(mover,mover.getPos(), target);

@@ -420,4 +420,8 @@ public class Character implements Renderable, Mover{
 	public boolean isBlocked(){
 		return blocked;
 	}
+	public boolean isMoving(){
+		return moving;
+	}
+	
 }

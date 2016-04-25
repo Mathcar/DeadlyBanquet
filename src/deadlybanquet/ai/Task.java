@@ -1,6 +1,6 @@
 package deadlybanquet.ai;
 
-public interface Task {
+public interface Task{
 
 	/**
 	 * Execute the task on the given character.

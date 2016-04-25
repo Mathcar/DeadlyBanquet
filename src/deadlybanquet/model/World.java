@@ -10,6 +10,7 @@ import deadlybanquet.ai.AIControler;
 import deadlybanquet.ai.NPCBrain;
 import deadlybanquet.ai.BrainFactory;
 import deadlybanquet.ai.PlayerBrain;
+import deadlybanquet.ai.TaskExecuter;
 import deadlybanquet.states.States;
 
 import org.newdawn.slick.GameContainer;
@@ -23,7 +24,7 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
 /**
  * Created by Hampus on 2016-03-04.
  */
-public class World implements ActionListener, TileBasedMap {
+public class World implements ActionListener, TileBasedMap, TaskExecuter {
     private static HashMap<AIControler, NPCBrain> controlerBrainMap;
     private static Time time;
     private Player player;
@@ -210,8 +211,8 @@ public class World implements ActionListener, TileBasedMap {
        		        
         				player.getCharacter().setTalking(true);
         		        a.getCharacter().setTalking(true);
-        		        //attemptCreatePathToPerson(a, "Frido");
-        		        //attemptCreateMasterPath(a, "Kitchen");
+        		        attemptCreatePathToPerson(a, "Frido");
+        		      //  attemptCreateMasterPath(a, "Kitchen");
         		      //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
         		       // attemptCreatePathToDoor(a, "Bedroom");
     	

@@ -36,7 +36,7 @@ public class StateBasedAI {
 		characters = new ArrayList<Character>();
 	}
 	
-	public void think(AIControler aic, World world){ //method is not runnable
+	public void think(AIControler aic, World world, TaskExecuter taskEx){ //method is not runnable
 		
 		getCharactersInRoom(aic, world);
 		
@@ -44,7 +44,7 @@ public class StateBasedAI {
 		
 		selectState(aic);
 		
-		generateSchedule(aic);
+		generateSchedule(aic, taskEx);
 
 		conditions.clear();
 
@@ -66,7 +66,7 @@ public class StateBasedAI {
 		characters.addAll(world.getRoomOfCharacter(aic.getCharacter()).getAllCharacters());
 	}
 
-	private void generateSchedule(AIControler aic) {
+	private void generateSchedule(AIControler aic, TaskExecuter taskEx) {
 		if(schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))){
 			schedule.clear();
 			switch(state){
@@ -78,7 +78,8 @@ public class StateBasedAI {
 					schedule.add(new TaskIdle());
 					break;
 				case MOVEING_STATE:
-					schedule.add(new TaskIdle());
+					System.out.println("dsadas");
+					schedule.add(new TaskMove("Frido", taskEx, MoveTypes.PERSON));
 					break;
 				default:
 					break;
@@ -101,7 +102,7 @@ public class StateBasedAI {
 	private void selectState(AIControler aic){
 		switch(state){
 			case IDLE_STATE:
-				if(conditions.contains(new Condition(ConditionState.TALKING))){
+				if(conditions.contains(ConditionState.TALKING)){
 					conditions.add(new Condition(ConditionState.INTERUPTED));
 					state=AIState.TALKING_STATE;
 				}else if(aic.hasPath()){
@@ -127,7 +128,14 @@ public class StateBasedAI {
 		}
 	}
 	
-	private void talkToCharcterSchedual(Character character){
+	private void talkToCharacterSchedule(Character character,TaskExecuter taskEx){
+		
+		if(characters.contains(character)){
+			schedule.add(new TaskMove(character.getName(),taskEx,MoveTypes.PERSON));
+			schedule.add(new TaskInteract(taskEx));
+		}
+		
+		
 		//find character
 		//walk to character
 		//interact (with character)

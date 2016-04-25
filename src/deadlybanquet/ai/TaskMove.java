@@ -2,24 +2,38 @@ package deadlybanquet.ai;
 
 import org.newdawn.slick.util.pathfinding.Path; // not sure this is the correct Path
 
+import deadlybanquet.model.Direction;
 import deadlybanquet.model.Position;
+import deadlybanquet.ai.MoveTypes;
 
-public class TaskMove implements Task {
+public class TaskMove implements Task{
 	
-	private String room;
-	private Position pos;
-	private Path path;
 	
-	public TaskMove(Path path, String room, Position pos){
-		this.room = room;
-		this.pos = pos;
-		this.path = path;
+	
+	String target;
+	TaskExecuter taskEx;
+	MoveTypes moveType;
+	
+	public TaskMove(String targ, TaskExecuter tEx, MoveTypes mt){
+		target = targ;
+		taskEx = tEx;
+		moveType = mt;
 	}
 
 	@Override
 	public boolean execute(AIControler aiControler) {
-		// TODO Auto-generated method stub
+		if(!aiControler.hasPath()){
+		if(moveType == MoveTypes.DOOR){
+			return taskEx.attemptCreatePathToDoor(aiControler, target);
+		}else if(moveType == MoveTypes.PERSON){
+			System.out.println("kioli" + target);
+			return taskEx.attemptCreatePathToPerson(aiControler, target);
+		}else{
+			return taskEx.attemptCreateMasterPath(aiControler, target);
+		}
+		}
 		return false;
 	}
+	
 
 }
