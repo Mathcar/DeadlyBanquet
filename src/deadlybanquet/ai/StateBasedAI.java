@@ -44,7 +44,7 @@ public class StateBasedAI {
 		
 		selectState(aic);
 		
-		generateSchedule(aic, taskEx);
+		generateSchedule(aic,world ,taskEx);
 
 		conditions.clear();
 
@@ -66,7 +66,7 @@ public class StateBasedAI {
 		characters.addAll(world.getRoomOfCharacter(aic.getCharacter()).getAllCharacters());
 	}
 
-	private void generateSchedule(AIControler aic, TaskExecuter taskEx) {
+	private void generateSchedule(AIControler aic,World world, TaskExecuter taskEx) {
 		if(schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))){
 			schedule.clear();
 			switch(state){
@@ -78,8 +78,8 @@ public class StateBasedAI {
 					schedule.add(new TaskIdle());
 					break;
 				case MOVEING_STATE:
-					System.out.println("dsadas");
-					schedule.add(new TaskMove("Frido", taskEx, MoveTypes.PERSON));
+					schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.DOOR));
+					schedule.add(new TaskMove("BURT", taskEx, MoveTypes.PERSON));
 					break;
 				default:
 					break;
@@ -128,13 +128,14 @@ public class StateBasedAI {
 		}
 	}
 	
-	private void talkToCharacterSchedule(Character character,TaskExecuter taskEx){
+	private void talkToCharacterSchedule(Character character,World world, TaskExecuter taskEx){
 		
 		if(characters.contains(character)){
 			schedule.add(new TaskMove(character.getName(),taskEx,MoveTypes.PERSON));
-			schedule.add(new TaskInteract(taskEx));
+		}else{
+			schedule.add(new TaskMove(world.getRoomOfCharacter(character).getName(), taskEx, MoveTypes.ROOM));
 		}
-		
+		schedule.add(new TaskInteract(taskEx));
 		
 		//find character
 		//walk to character
