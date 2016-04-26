@@ -98,6 +98,11 @@ public class SpeechActFactory {
             return new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
         }
 
+        /*Change all the say objects to the actual object*/
+        if(i instanceof Say){
+            i=((Say) i).content;
+        }
+
         if(i instanceof BeingPolite){
             /*
             BEINGPOLTE

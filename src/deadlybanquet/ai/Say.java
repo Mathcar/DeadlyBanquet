@@ -18,19 +18,19 @@ public class Say implements IThought{
        // REASON; //With placeholder: why. Without placeholder: because.
         //We are leaving out reason as well unless we get really bored.
     }
-    String speaker;
-    String hearer;
+    public String speaker;
+    public String hearer;
     //Null is placeholder: What did a say to b?
     //To answer I don't know, just answer do with talkto: To be interpreted as
     //I saw them speak.
-    IThought content;
-    How type;
+    public IThought content;
+    public How type;
     //This is null if one is currently doing that speech act
     //i.e. speaker is the person sending this IThought and
     //hearer is the receiver.
     //When when is not null, this indicates something which
     //has been said (or will be said).
-    TimeStamp when;
+    public TimeStamp when;
     
     public Say(String s, String h, IThought c, How t){
         this(s,h,c,t,null);
@@ -120,7 +120,7 @@ public class Say implements IThought{
 
     @Override
     public Boolean dontKnow(){
-        return speaker==null || hearer==null||when==null||content==null;
+        return speaker==null || hearer==null||content==null;
     }
     
 }
