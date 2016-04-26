@@ -105,14 +105,17 @@ public class ConversationModel {
         System.out.println("Answer = " + answer.getLine());
         sendActToPerceiver(perceiver1, answer); //No response should be created here
 
-        if(answer.getSpeechType() == SpeechType.GOODBYE){
+        if(act.getSpeechType() == SpeechType.GOODBYE){
             conversationCompleted = true;
         }
     }
 
     //Handles sending a speechact to a perceiver and record and archive what is needed
     private SpeechAct sendActToPerceiver(IPerceiver p, SpeechAct act){
-        actHistory.get(p).add(act);     //Add act to history
+        if(p==perceiver1)
+            actHistory.get(perceiver2).add(act);     //Add act to history
+        else
+            actHistory.get(perceiver1).add(act);
         return p.hear(act);
     }
 
