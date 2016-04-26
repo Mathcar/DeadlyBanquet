@@ -106,4 +106,10 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
         howsure=i;
     }
 
+    @Override
+    public Boolean dontKnow(){
+        System.err.println("dont know method in this SomebodeElse class are NOT done");
+        return false;
+    }
+
 }

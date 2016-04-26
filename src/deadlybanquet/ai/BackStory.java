@@ -56,4 +56,7 @@ public enum BackStory implements IThought{
         
     }
 
+    public Boolean dontKnow(){
+        return false;
+    }
 }

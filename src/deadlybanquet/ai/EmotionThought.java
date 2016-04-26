@@ -89,5 +89,9 @@ public class EmotionThought implements IThought{
         
     }
 
-	
+    @Override
+    public Boolean dontKnow(){
+        return emotionortemperament==null||pad==null||time==null;
+    }
+
 }

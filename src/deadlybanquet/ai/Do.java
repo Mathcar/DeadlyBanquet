@@ -131,4 +131,16 @@ public class Do implements IThought{
     public void setWhen(TimeStamp when) {
         this.when = when;
     }
+
+    @Override
+    public Boolean dontKnow(){
+        return doer==null || withWhat==null;
+    }
+    public String whatWhatisAbout(){
+        if(what.equals(What.MURDER)||what.equals(What.TALKTO)||what.equals(What.MOVETO)){
+            return "person";
+        }else{
+            return "item";
+        }
+    }
 }
