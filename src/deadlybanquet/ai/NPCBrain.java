@@ -262,7 +262,8 @@ public class NPCBrain implements IPerceiver, Talkable {
     private void processWhereabouts(Whereabouts inWhere, String you, ArrayList<IThought> possibleAnswers){
         //Check if I have an idea about where the person is
         SortedList foundData = new SortedList();
-        acceptUncritically(you, inWhere);
+        if (!inWhere.isQuestion())
+            acceptUncritically(you, inWhere);
         for (Whereabouts b:whereabouts){
             if (b.getCharacter()==inWhere.getCharacter())
                     foundData.add(b);
