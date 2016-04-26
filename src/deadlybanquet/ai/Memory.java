@@ -47,4 +47,14 @@ public class Memory {
         information.remove(old);
         information.add(replacement);
     }
+    
+    public void debugPrintMemory(){
+    	System.out.println("========= DEBUG ===========");
+    	System.out.println();
+    	for(IThought i:information){
+    		System.out.println(i.debugMessage());
+    		System.out.println();
+    	}
+    	System.out.println("========== END ============");
+    }
 }

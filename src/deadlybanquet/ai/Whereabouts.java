@@ -43,6 +43,16 @@ public class Whereabouts implements IThought{
     }
     
     @Override
+	public String debugMessage() {
+		return "Whereoubouts:\n"
+    			+ "Room: " + room + "\n"
+    			+ "Character: " + character + "\n"
+				+ "Opinion: " + opinion.toString() + "\n"
+				+ "Certainty:" + certainty + "\n"
+				+ "Time: " + time.getDay() + ":" + time.getHour() + ":" + time.getMinute() + "\n";
+	}
+    
+    @Override
     public String toString(){
         return character + " is with " + certainty + "certainty " + "in the " + room + "of which circumstance current person thinks" + opinion;
     }

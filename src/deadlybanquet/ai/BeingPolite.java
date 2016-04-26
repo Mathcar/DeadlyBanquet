@@ -7,7 +7,12 @@ package deadlybanquet.ai;
  */
 public enum BeingPolite implements IThought{
     GREET, GOODBYE, THANKS, THANKSANYWAY;
-
+    
+    @Override
+	public String debugMessage() {
+		return "BeingPolite:\nGREET/GOODBYE/THANKS/THANKSANYWAY\nCertanty: 1";
+	}
+    
     @Override
     public boolean contains(IThought i) {
         if(i==null) return true;
@@ -46,4 +51,5 @@ public enum BeingPolite implements IThought{
     public void setCertainty(double i){
         
     }
+
 }

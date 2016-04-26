@@ -37,6 +37,15 @@ public class Do implements IThought{
     }
     
     @Override
+	public String debugMessage() {
+		return "Do:\n" 
+				+ "what:" + what + "\n"
+				+ "Doer: " + doer + "\n"
+				+ "WithWhat: " + withWhat + "\n"
+				+ "TimeStamp: " + when.getDay() + ":" + when.getHour() + ":" + when.getMinute() + "\n";
+	}
+    
+    @Override
     public boolean contains(IThought i) {
         if(i==null) return true;
         if(!this.getClass().equals(i.getClass())) return false;

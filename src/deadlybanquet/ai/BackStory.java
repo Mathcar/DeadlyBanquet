@@ -13,6 +13,11 @@ public enum BackStory implements IThought{
     SNOWEDIN, NOMOBILESIGNAL;
     
     @Override
+	public String debugMessage() {
+		return "BackStory:\nSNOWEDIN/NOMOBILESIGNAL\nCertanty: 1";
+	}
+    
+    @Override
     public boolean contains(IThought i) {
         if(i==null) return true;
         if(!this.getClass().equals(i.getClass())) return false;
@@ -50,4 +55,5 @@ public enum BackStory implements IThought{
     public void setCertainty(double i){
         
     }
+
 }

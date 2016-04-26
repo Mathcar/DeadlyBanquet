@@ -42,4 +42,6 @@ public interface IThought{
      * Note that this implementation has no relationship with the equals method.
      */
     public int compareTo(IThought i);
+    
+    public String debugMessage();
 }

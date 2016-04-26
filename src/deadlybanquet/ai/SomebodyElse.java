@@ -32,6 +32,16 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
         this(w,a,o,h,null,null);
     }
     
+    @Override
+	public String debugMessage() {
+    	return  "SomebodyElse:\n"
+    			+ "what:(\n" + ((what!=null) ? what.debugMessage() : null ) + "\n)"
+    			+ "AboutPesron: " + aboutPerson + "\n"
+				+ "Opinion: " + opinion.toString() + "\n"
+				+ "HowSure:" + howsure + "\n"
+				+ "Time: " + time.getDay() + ":" + time.getHour() + ":" + time.getMinute() + "\n"
+				+ "Prevoius:(\n" + ((previous!=null) ? previous.debugMessage() : null ) + "\n)";
+	}
     
     @Override
     public String toString(){
@@ -95,4 +105,5 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
     public void setCertainty(double i){
         howsure=i;
     }
+
 }

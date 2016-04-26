@@ -43,6 +43,15 @@ public class Say implements IThought{
         this.when = time;
     }
     
+    @Override
+	public String debugMessage() {
+    	return 	"Say:\n"
+    			+ "Speaker: " + speaker + "\n"
+    			+ "Hearer: " + hearer+ "\n"
+				+ "Content: " + ((content!=null) ? content.debugMessage() : null ) + "\n"
+				+ "How:" + type + "\n"
+				+ "When: " + when.getDay() + ":" + when.getHour() + ":" + when.getMinute() + "\n";
+	}
     
     @Override
     public String toString(){

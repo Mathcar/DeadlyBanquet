@@ -26,6 +26,15 @@ public class Opinion implements IThought{
     }
     
     @Override
+	public String debugMessage() {
+    	return 	"Opinion:\n"
+    			+ "Person: " + person + "\n"
+				+ "PAD: " + pad.toString() + "\n"
+				+ "Time: " + time.getDay() + ":" + time.getHour() + ":" + time.getMinute() + "\n" 
+				+ ((previous!=null) ? previous.debugMessage() : null );
+	}
+    
+    @Override
     public String toString(){
         return "feeling " + pad + " about " + person;
     }
@@ -101,4 +110,5 @@ public class Opinion implements IThought{
     public Opinion getPrevious() {
         return previous;
     }
+
 }

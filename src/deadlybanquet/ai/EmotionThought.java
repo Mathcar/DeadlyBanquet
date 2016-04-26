@@ -28,6 +28,16 @@ public class EmotionThought implements IThought{
         time=t;
         previous=em;
     }
+    
+    @Override
+	public String debugMessage() {
+		return 	"EmotionThought:\n"
+				+ "Emotion or Temperament: " + emotionortemperament + "\n"
+				+ "PAD: " + pad.toString() + "\n"
+				+ "Time: " + time.getDay() + ":" + time.getHour() + ":" + time.getMinute() + "\n" 
+				+ ((previous!=null) ? previous.debugMessage() : null );
+	}
+    
     @Override
     public void setPlaceHolderToNull() {
         if (pad.getP()<-1) pad=null;
@@ -78,4 +88,6 @@ public class EmotionThought implements IThought{
     public void setCertainty(double i){
         
     }
+
+	
 }

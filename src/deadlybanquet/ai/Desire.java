@@ -42,6 +42,15 @@ public class Desire implements IThought{
     }
     
     @Override
+	public String debugMessage() {
+		return "Desire:\n"
+				+ "what:(\n" + ((what!=null) ? what.debugMessage() : null ) + "\n)\n"
+				+ "Time: " + time.getDay() + ":" + time.getHour() + ":" + time.getMinute() + "\n"
+				+ "Strength: " + strength + "\n"
+				+ "DesireOrGoal: " + desireorgoal;
+	}
+    
+    @Override
     //It is not possible to get a match on strength.
     public boolean contains(IThought i) {
         if(i==null) return true;
