@@ -127,4 +127,11 @@ public class Do implements IThought{
     public Boolean dontKnow(){
         return doer==null || withWhat==null;
     }
+    public String whatWhatisAbout(){
+        if(what.equals(What.MURDER)||what.equals(What.TALKTO)||what.equals(What.MOVETO)){
+            return "person";
+        }else{
+            return "item";
+        }
+    }
 }
