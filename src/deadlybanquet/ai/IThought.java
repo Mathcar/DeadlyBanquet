@@ -33,6 +33,8 @@ public interface IThought{
     public boolean isQuestion();
     
     public IThought copy();
+
+    public Boolean dontKnow();
     
     /**
      * 

@@ -118,6 +118,10 @@ public class Whereabouts implements IThought{
     public void setCertainty(double i){
         certainty=i;
     }
-    
+
+    @Override
+    public Boolean dontKnow(){
+        return room==null || character==null;
+    }
     
 }

@@ -122,4 +122,9 @@ public class Do implements IThought{
     public void setWhen(TimeStamp when) {
         this.when = when;
     }
+
+    @Override
+    public Boolean dontKnow(){
+        return doer==null || withWhat==null;
+    }
 }

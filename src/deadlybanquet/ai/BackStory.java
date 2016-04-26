@@ -50,4 +50,8 @@ public enum BackStory implements IThought{
     public void setCertainty(double i){
         
     }
+
+    public Boolean dontKnow(){
+        return false;
+    }
 }

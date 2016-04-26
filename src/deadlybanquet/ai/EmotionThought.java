@@ -78,4 +78,9 @@ public class EmotionThought implements IThought{
     public void setCertainty(double i){
         
     }
+
+    @Override
+    public Boolean dontKnow(){
+        return emotionortemperament==null||pad==null||time==null;
+    }
 }

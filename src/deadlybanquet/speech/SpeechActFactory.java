@@ -24,6 +24,9 @@ public class SpeechActFactory {
 
     private static String parseSpeechAct(String text, Whereabouts w,IPerceiver speaker,IPerceiver listener){
         String temp=text;
+        if(w.equals(null)){
+            System.err.println("Whereabout cobject with text: "+text+"is NULL");
+        }
         if(temp.contains("#name")){
             temp = temp.replace("#name",listener.getName());
         }
@@ -51,12 +54,18 @@ public class SpeechActFactory {
     }
 
     private static String parseSpeechAct(String text, Opinion o,IPerceiver speaker,IPerceiver listener){
+        if(o.equals(null)){
+            System.err.println("Opinion cobject with text: "+text+"is NULL");
+        }
         String temp = text;
         if(temp.contains("#name")){
             temp = temp.replace("#name",listener.getName());
         }
         if(temp.contains("#opinion")){
             temp = temp.replace("#opinion",o.getPAD().getOpinion());
+        }
+        if(temp.contains("#person")){
+            temp=temp.replace("#person",o.getPerson());
         }
         return temp;
     }
@@ -73,6 +82,21 @@ public class SpeechActFactory {
         IThoughtList.add(i);
         SpeechAct temp = new SpeechAct();
         SpeechActHolder holder = SpeechActHolder.getInstance();
+
+        if(i.dontKnow()){
+            ArrayList<SpeechInfo> list = holder.getInfoFrase();
+            String text=i.toString();
+            for(int k=0;k<list.size();k++){
+                SpeechInfo si=list.get(k);
+                if(si.getSpeechType().equals(SpeechType.DONT_KNOW)&&si.getTextProperty().equals(prop)){
+                    text=si.getText();
+                    break;
+                }
+            }
+            //text=parseSpeechAct(text,speaker,listener);
+            return new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
+        }
+
         if(i instanceof BeingPolite){
             /*
             BEINGPOLTE

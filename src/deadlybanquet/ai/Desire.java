@@ -98,4 +98,9 @@ public class Desire implements IThought{
     public void setCertainty(double i){
         strength=i;
     }
+
+    @Override
+    public Boolean dontKnow(){
+        return desireorgoal==null||what==null;
+    }
 }

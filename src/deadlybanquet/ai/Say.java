@@ -106,7 +106,12 @@ public class Say implements IThought{
     
     @Override
     public void setCertainty(double i){
-        
+
+    }
+
+    @Override
+    public Boolean dontKnow(){
+        return speaker==null || hearer==null||when==null||content==null;
     }
     
 }

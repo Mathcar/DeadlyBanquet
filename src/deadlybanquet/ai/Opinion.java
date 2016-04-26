@@ -58,7 +58,7 @@ public class Opinion implements IThought{
     @Override
     public boolean isQuestion() {
         return pad.isPlaceholder();
-    }//todo this always return TRUE why?
+    }
 
     @Override
     public int compareTo(IThought o) {
@@ -100,5 +100,10 @@ public class Opinion implements IThought{
 
     public Opinion getPrevious() {
         return previous;
+    }
+
+    @Override
+    public Boolean dontKnow(){
+        return pad==null;
     }
 }
