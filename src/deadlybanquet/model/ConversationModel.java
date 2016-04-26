@@ -73,7 +73,8 @@ public class ConversationModel {
             if(playersChoice!= null){
                 System.out.println("Players choice exists!");
                 SpeechAct sa = getPlayerChoice();
-                System.out.println("Line = " + sa.getLine());
+                System.out.println("Line = " + sa.getLine() + " speaker = " + sa.getSpeaker()
+                                    + " listener = " +sa.getListener());
                 doOneRound(sa);
             }
         }else{
@@ -118,6 +119,7 @@ public class ConversationModel {
     public ArrayList<SpeechAct> getAllPropertyVariations(IThought thought){
         ArrayList<SpeechAct> temp = new ArrayList<>();
         ArrayList<IThought> tempI = new ArrayList<IThought>();
+        //System.out.println("speaker = " + perceiver1.getName());
         tempI.add(thought);
         temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI,
                                 TextPropertyEnum.NEUTRAL, perceiver1, perceiver2));
@@ -125,6 +127,9 @@ public class ConversationModel {
                                                             perceiver1, perceiver2));
         temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI, TextPropertyEnum.COLLOQUIAL,
                                                                 perceiver1, perceiver2));
+        /*for(SpeechAct sa : temp)
+            System.out.println("Speaker =  " + sa.getSpeaker() + "   Listener = " + sa.getListener());
+        */
         return temp;
     }
 

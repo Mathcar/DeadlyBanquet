@@ -12,10 +12,14 @@ import java.util.*;
 import deadlybanquet.speech.TextPropertyEnum;
 import org.newdawn.slick.Image;
 public class PlayerBrain implements IPerceiver {
-    Memory information;
-    World world;
+    private Memory information;
+    private World world;
+    private String name;
     //TODO CONSTRUCTOR ONLY TEMPORARILY ADDED, NOT SURE IF EMPTY MEMORY IS SUPPPOSED TO BE MADE
-    public PlayerBrain(){information = new Memory(new SortedList());}
+    public PlayerBrain(String name){
+        information = new Memory(new SortedList());
+        this.name = name;
+    }
     public PlayerBrain(SortedList s, World world){
         information = new Memory(s);
         this.world = world;
@@ -81,8 +85,7 @@ public class PlayerBrain implements IPerceiver {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
     
     @Override

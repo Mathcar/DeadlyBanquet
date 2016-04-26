@@ -76,7 +76,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
 
     public void initPlayer(){
         Character playerCharacter = new Character(this, "Gandalf", 9, 13);
-        playerBrain = new PlayerBrain();
+        playerBrain = new PlayerBrain(playerCharacter.getName());
         player = new Player(playerCharacter, playerBrain);
         roomMap[2][2].addCharacter(playerCharacter);
     }
