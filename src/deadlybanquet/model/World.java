@@ -41,6 +41,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     private boolean talk;
     private ConversationModel playerConv;
     private static PlayerBrain playerBrain;
+    
 
     //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
     //for the rooms to get their connections made
@@ -75,7 +76,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     }
 
     public void initPlayer(){
-        Character playerCharacter = new Character(this, "Gandalf", 9, 13);
+        Character playerCharacter = new Character(this, "NoName", 9, 13);
         playerBrain = new PlayerBrain(playerCharacter.getName());
         player = new Player(playerCharacter, playerBrain);
         roomMap[2][2].addCharacter(playerCharacter);
@@ -615,6 +616,12 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
             npcbrain.getName();
             return npcbrain;
         }
+    }
+    public Player getPlayer(){
+    	return player;
+    }
+    public PlayerBrain getPlayerBrain(){
+    	return playerBrain;
     }
     
 }

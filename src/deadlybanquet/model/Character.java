@@ -423,5 +423,7 @@ public class Character implements Renderable, Mover{
 	public boolean isMoving(){
 		return moving;
 	}
-	
+	public void setName(String playerName){
+		name = playerName;
+	}
 }

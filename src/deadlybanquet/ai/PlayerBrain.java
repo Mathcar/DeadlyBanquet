@@ -97,5 +97,7 @@ public class PlayerBrain implements IPerceiver {
 		// TODO Auto-generated method stub
 		return null;
 	}
-   
+	public void setName(String name){
+		this.name = name;
+	}
 }
