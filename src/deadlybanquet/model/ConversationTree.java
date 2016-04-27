@@ -319,11 +319,11 @@ public class ConversationTree {
         if(stateToSkip != State.QUESTION_EVENT_WHO2 ) {
             who2 = chooseAPerson(input);
             if(!who2.equals("")) {
-                cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
+                alternatives = cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
                 setCurrentState(State.TEXT_PROPERTY_CHOICE);
             }
         }else {
-            cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
+            alternatives = cm.getAllPropertyVariations(new Do(what, who, who2, null)); //TODO fix time
             setCurrentState(State.TEXT_PROPERTY_CHOICE);
         }
     }

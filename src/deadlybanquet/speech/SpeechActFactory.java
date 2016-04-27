@@ -47,9 +47,18 @@ public class SpeechActFactory {
         if(temp.contains("#doer")){
             temp = temp.replace("#doer",d.getDoer());
         }
-        /*if(temp.contains("#reciver")){
-            temp = temp.replace("#reciver",d.get);
-        }*/
+        if(temp.contains("#reciver")){
+            temp = temp.replace("#reciver",d.getWithWhat());
+        }
+        if(temp.contains("#item")){
+            temp=temp.replace("#item",d.getWithWhat());
+        }
+        if(temp.contains("#time")){
+            temp=temp.replace("#time",d.getWhen().toString());
+        }
+        if(temp.contains("#what")){
+            temp=temp.replace("#what",d.getWhat().toString());
+        }
         return temp;
     }
 
@@ -274,17 +283,34 @@ public class SpeechActFactory {
                 }
             }else{
                 ArrayList<SpeechInfo> list = holder.getInfoFrase();
-                for(int k = 0;k<list.size();k++){
-                    SpeechInfo si=list.get(k);
-                    //todo may be wrong
-                    if(si.getSpeechType().equals(SpeechType.EVENT_INFO_RECEIVER_WHAT_DOER)&&si.getTextProperty().equals(prop)){
-                        text=si.getText();
-                        break;
+                //THIS IS AN INFO ABOUT AN EVENT!
+                if(((Do) i).getWhen()==null){
+                    //dont know the time
+                    if(((Do) i).whatWhatisAbout().equals("person")){
+                        //I dont know the time and the statement is about a PERSON
+                        text=createText(text,list,SpeechType.EVENT_INFO_RECEIVER_WHAT_DOER,prop);
+                        text=parseSpeechAct(text,((Do)i),speaker,listener);
+                        temp = new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.EVENT_INFO_RECEIVER_WHAT_DOER,prop,IThoughtList);
+                    }else{
+                        //I dont know the time and the statement  is about an ITEM
+                        text=createText(text,list,SpeechType.EVENT_INFO_DOER_WHAT_ITEM,prop);
+                        text=parseSpeechAct(text,((Do)i),speaker,listener);
+                        temp = new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.EVENT_INFO_DOER_WHAT_ITEM,prop,IThoughtList);
+                    }
+                }else{
+                    //know the time
+                    if(((Do) i).whatWhatisAbout().equals("person")){
+                        //know the time and its about PERSON
+                        text=createText(text,list,SpeechType.EVENT_INFO_DOER_WHAT_TIME_RECEIVER,prop);
+                        text=parseSpeechAct(text,((Do)i),speaker,listener);
+                        temp = new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.EVENT_INFO_DOER_WHAT_TIME_RECEIVER,prop,IThoughtList);
+                    }else{
+                        //know the time and its about ITEM
+                        text=createText(text,list,SpeechType.EVENT_INFO_DOER_WHAT_TIME_ITEM,prop);
+                        text=parseSpeechAct(text,((Do)i),speaker,listener);
+                        temp = new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.EVENT_INFO_DOER_WHAT_TIME_ITEM,prop,IThoughtList);
                     }
                 }
-                text=parseSpeechAct(text,(Do) i,speaker,listener);
-                // todo may be wrong
-                temp=new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.EVENT_INFO_RECEIVER_WHAT_DOER,prop,IThoughtList);
             }
         }
 
