@@ -79,6 +79,13 @@ public class ConversationModel {
             }
         }else{
             //TODO Create flow for npc-npc conversation
+            //Force start by greeting
+            //answer should be a greeting
+            //then let perceiver1 choose the question to start the hear loop
+            //keep track of the conversation by forving a goodbye after a certain amount
+            //of iterations
+
+            
         }
         /*if(iteration == 0){
             perceiver1.selectPhrase(saFactory.getDialogueOptions(true));
