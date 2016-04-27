@@ -44,6 +44,22 @@ public class Do implements IThought{
 				+ "WithWhat: " + withWhat + "\n"
 				+ "TimeStamp: " + when.getDay() + ":" + when.getHour() + ":" + when.getMinute() + "\n";
 	}
+
+    public String whatToString(){
+        if(what.equals(What.MURDER)){
+            return "murderd";
+        }else if(what.equals(What.MOVETO)){
+            return "moved to";
+        }else if(what.equals(What.PICKUP)){
+            return "picked up";
+        }else if(what.equals(What.TALKTO)){
+            return "talked to";
+        }else if(what.equals(What.PUTDOWN)){
+            return "put down";
+        }else{
+            return "DID SOMETHING[could not find the WHAT]";
+        }
+    }
     
     @Override
     public boolean contains(IThought i) {

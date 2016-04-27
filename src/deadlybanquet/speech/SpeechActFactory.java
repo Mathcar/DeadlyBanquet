@@ -57,7 +57,7 @@ public class SpeechActFactory {
             temp=temp.replace("#time",d.getWhen().toString());
         }
         if(temp.contains("#what")){
-            temp=temp.replace("#what",d.getWhat().toString());
+            temp=temp.replace("#what",d.whatToString());
         }
         return temp;
     }
