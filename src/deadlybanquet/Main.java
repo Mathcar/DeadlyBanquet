@@ -42,7 +42,7 @@ public class Main extends StateBasedGame{
 		SpeechAct s =factory.convertIThoughtToSpeechAct(new Do(Do.What.MURDER,"Tom","Mathias",new Time()), TextPropertyEnum.PROPER);
 		//SpeechAct s =factory.convertIThoughtToSpeechAct(new Whereabouts("Tom","Kitchen",null,1.0,null), TextPropertyEnum.COLLOQUIAL);
 		//SpeechAct s = factory.convertIThoughtToSpeechAct(BeingPolite.GREET,TextPropertyEnum.PROPER);
-		System.out.println("line: "+s.getLine());
+		Debug.printDebugMessage("line: "+s.getLine());
 
 */
 

@@ -69,7 +69,8 @@ public class AIControler {
 	//Called on every person in origin and destination rooms on room change.
 	public void observeRoomChange(String who, String origin, String destination){
 		//DEBUG
-		System.out.println(getCharacterName() + " has seen " + who + " enter " + destination + " from " + origin);
+		Debug.printDebugMessage(getCharacterName() + " has seen " + who + " enter " + destination + " from " + origin,
+									Debug.Channel.OBSERVING);
         //
 		NPCBrain myBrain = World.getControlerBrain(this);
 		myBrain.observeRoomChange(who,origin,destination);
@@ -79,10 +80,11 @@ public class AIControler {
 	public void seePeople (ArrayList<String> people){
         NPCBrain myBrain = World.getControlerBrain(this);
         myBrain.seePeople(people);
-        System.out.println(getCharacterName() + " sees these people upon entering the room: ");
+		String temp = getCharacterName() + " sees these people upon entering the room: ";
         for(String s : people){
-            System.out.println(s);
-        }
+            temp += "\n " + s;
+		}
+		Debug.printDebugMessage(temp, Debug.Channel.OBSERVING);
 	}
 
 	public void observeInteraction(String who, String with){
@@ -191,8 +193,8 @@ public class AIControler {
 			}
 		}
 		else{
-			if(getCharacterName().equals("BURT"))
-				System.out.println("BURT had no path so he is now thinking");
+			Debug.printDebugMessage(getCharacterName() + " had no path and is now thinking", Debug.Channel.NPC,
+										getCharacterName());
 			statebasedAI.think(this, world, world); //Only think if path is blocked or non-existent
 		}
 	

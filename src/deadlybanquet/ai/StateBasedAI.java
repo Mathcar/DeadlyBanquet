@@ -7,6 +7,7 @@ import java.util.Queue;
 
 import deadlybanquet.ai.Condition.ConditionState;
 import deadlybanquet.model.Character;
+import deadlybanquet.model.Debug;
 import deadlybanquet.model.Direction;
 import deadlybanquet.speech.SpeechAct;
 import deadlybanquet.model.World;
@@ -16,210 +17,228 @@ import deadlybanquet.speech.TextPropertyEnum;
 
 public class StateBasedAI {
 
-	private enum AIState{
-		IDLE_STATE,
-		TALKING_STATE,
-		MOVEING_STATE
-	}
+    private enum AIState {
+        IDLE_STATE,
+        TALKING_STATE,
+        MOVEING_STATE
+    }
 
-	
-	private AIState state;
-	
-	private List<Condition> conditions;
-	
-	private Queue<Task> schedule;
-	
-	private List<Character> characters;
-	
-	public StateBasedAI(){
-		schedule = new LinkedList<Task>();
-		state = AIState.IDLE_STATE;
-		conditions = new ArrayList<Condition>();
-		characters = new ArrayList<Character>();
-	}
-	
-	public void think(AIControler aic, World world, TaskExecuter taskEx){ //method is not runnable
-		
-		getCharactersInRoom(aic, world);
-		
-		genConditions(aic); 
-		
-		selectState(aic);
 
-		if(schedule.isEmpty() && aic.getCharacterName().equals("BURT")){
-			System.out.println("BURT has an empty schedule!");
-		}
+    private SpeechAct intendedPhrase;
 
-		generateSchedule(aic,world ,taskEx);
+    private AIState state;
 
-		conditions.clear();
+    private List<Condition> conditions;
 
-		runSchedule(aic);
+    private Queue<Task> schedule;
 
-		
-	}
+    private List<Character> characters;
 
-	//Should optimally utilize the schedule created in think() to
-	//select an appropriate phrase for the conversation
-	public SpeechAct selectPhrase(ArrayList<SpeechAct> acts){
-		int index = (int)(Math.random()*4 + 0.5);
-		SpeechAct choice = acts.get(index);
-		return choice;
-	}
-	//Should return the phrase the AI wanted to express when initiating a conversation
-	public SpeechAct getIntendedPhrase(){
-		//TODO revise and complete implementation
-		//Remove this if this method becomes up-to-date complete
-		System.out.println("getIntendedPhrase() in StateBasedAI is not yet complete");
-		IThought thought = new Whereabouts("Candy", "");
-		TextPropertyEnum tpe  = TextPropertyEnum.NEUTRAL;
-		return SpeechActFactory.convertIThoughtToSpeechAct(thought, tpe, "Zigge", "Candy");
-	}
-	
-	private void getCharactersInRoom(AIControler aic, World world) {
-		characters.clear();
-		characters.addAll(world.getRoomOfCharacter(aic.getCharacter()).getAllCharacters());
-	}
+    public StateBasedAI() {
+        schedule = new LinkedList<Task>();
+        state = AIState.IDLE_STATE;
+        conditions = new ArrayList<Condition>();
+        characters = new ArrayList<Character>();
+    }
 
-	private void generateSchedule(AIControler aic,World world, TaskExecuter taskEx) {
-		if(!schedule.isEmpty())
-			return;					/*this should not be neccessary, but for some reason
-										the condition below always returns true! */
-		if(schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))){
-			if(aic.getCharacterName().equals("BURT)"))
-				System.out.println("generating new schedule!");
-			schedule.clear();
-			switch(state){
-				case IDLE_STATE:
-					if(aic.getCharacterName().equals("BURT"))
-						talkToCharacterSchedule("Frido", world, taskEx);
-					//schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
-					break;
-				case TALKING_STATE:
-					schedule.add(new TaskIdle());
-					break;
-				case MOVEING_STATE:
-					schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
-					schedule.add(new TaskMove("Daisy", taskEx, MoveTypes.PERSON));
-					break;
-				default:
-					break;
-			}
-		}
-	}
+    public void think(AIControler aic, World world, TaskExecuter taskEx) { //method is not runnable
 
-	private void genConditions(AIControler aic){
-		if(aic.isTalking()){
-			conditions.add(new Condition(ConditionState.TALKING));
-		}
-		if(aic.isBlocked()){
-			aic.setBlocked(false);
-			conditions.add(new Condition(ConditionState.INTERUPTED));
-		}
-		
-		//add more conditions
-	}
-	
-	private void selectState(AIControler aic){
-		switch(state){
-			case IDLE_STATE:
-				if(conditions.contains(ConditionState.TALKING)){
-					conditions.add(new Condition(ConditionState.INTERUPTED));
-					state=AIState.TALKING_STATE;
-				}else if(aic.hasPath()){
-					state=AIState.MOVEING_STATE;
-				}
-				break;
-			case TALKING_STATE:
-				if(!conditions.contains(new Condition(ConditionState.TALKING))){
-					state=AIState.IDLE_STATE;
-				}
-				break;
-			case MOVEING_STATE:
-				if(!aic.hasPath()){
-					state=AIState.IDLE_STATE;
-				}
-				break;
-		}
-	}
-	
-	private void runSchedule(AIControler aic){
-		if(!schedule.isEmpty() && schedule.peek().execute(aic)){
-			System.out.println(schedule.peek().toString() + " Remaining tasks = " + schedule.size());
-			schedule.poll();
-		}
-	}
-	
-	private void talkToCharacterSchedule(String character,World world, TaskExecuter taskEx){
-		for(Character c : characters){
-			if(c.getName().equals(character)) {
-				schedule.add(new TaskMove(character, taskEx, MoveTypes.PERSON));
-				System.out.println("added taskMove in talkToCharacterSchedule");
-				schedule.add(new TaskTurn(Direction.NORTH));
-			}
-		}
+        getCharactersInRoom(aic, world);
+
+        genConditions(aic);
+
+        selectState(aic);
+
+        if (schedule.isEmpty()) {
+            Debug.printDebugMessage(aic.getCharacterName() + " has an empty schedule!", Debug.Channel.NPC,
+                    aic.getCharacterName());
+        }
+
+        generateSchedule(aic, world, taskEx);
+
+        conditions.clear();
+
+        runSchedule(aic);
+
+
+    }
+
+    //Should optimally utilize the schedule created in think() to
+    //select an appropriate phrase for the conversation
+    public SpeechAct selectPhrase(ArrayList<SpeechAct> acts) {
+        int index = (int) (Math.random() * 4 + 0.5);
+        SpeechAct choice = acts.get(index);
+        return choice;
+    }
+
+    //Should return the phrase the AI wanted to express when initiating a conversation
+    public SpeechAct getIntendedPhrase() {
+        //TODO revise and complete implementation
+        //Remove this if this method becomes up-to-date complete
+        //Debug.printDebugMessage();("getIntendedPhrase() in StateBasedAI is not yet complete");
+
+        return intendedPhrase;
+    }
+
+    private void getCharactersInRoom(AIControler aic, World world) {
+        characters.clear();
+        characters.addAll(world.getRoomOfCharacter(aic.getCharacter()).getAllCharacters());
+    }
+
+    private void generateSchedule(AIControler aic, World world, TaskExecuter taskEx) {
+        if (!schedule.isEmpty())
+            return;					/*this should not be neccessary, but for some reason
+                                        the condition below always returns true! */
+        Debug.printDebugMessage("Amount of conditions = " + conditions.size(), Debug.Channel.NPC, aic.getCharacterName());
+        for (Condition c : conditions) {
+            Debug.printDebugMessage(c.toString(), Debug.Channel.NPC, aic.getCharacterName());
+        }
+
+        if (schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))) {
+            if (aic.getCharacterName().equals("BURT)"))
+                Debug.printDebugMessage("generating new schedule!", Debug.Channel.NPC, aic.getCharacterName());
+            schedule.clear();
+            switch (state) {
+                case IDLE_STATE:
+                    if (aic.getCharacterName().equals("BURT"))
+                        talkToCharacterSchedule("Frido", world, aic, taskEx);
+                    //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
+                    break;
+                case TALKING_STATE:
+                    schedule.add(new TaskIdle());
+                    break;
+                case MOVEING_STATE:
+                    schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
+                    schedule.add(new TaskMove("Daisy", taskEx, MoveTypes.PERSON));
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void genConditions(AIControler aic) {
+        if (aic.isTalking()) {
+            conditions.add(new Condition(ConditionState.TALKING));
+        }
+        if (aic.isBlocked()) {
+            aic.setBlocked(false);
+            conditions.add(new Condition(ConditionState.INTERUPTED));
+        }
+
+        //add more conditions
+    }
+
+    private void selectState(AIControler aic) {
+        switch (state) {
+            case IDLE_STATE:
+                if (conditions.contains(ConditionState.TALKING)) {
+                    Debug.printDebugMessage("Talking condition discovered, swapping state to talking state",
+                            Debug.Channel.NPC, aic.getCharacterName());
+                    // Cant see the point of this one, wont it just disrupt the talking state on in the next frame?
+                    //   /Hampus
+                    //conditions.add(new Condition(ConditionState.INTERUPTED));
+                    state = AIState.TALKING_STATE;
+                } else if (aic.hasPath()) {
+                    state = AIState.MOVEING_STATE;
+                }
+                break;
+            case TALKING_STATE:
+                if (!conditions.contains(new Condition(ConditionState.TALKING))) {
+                    state = AIState.IDLE_STATE;
+                }
+                break;
+            case MOVEING_STATE:
+                if (!aic.hasPath()) {
+                    state = AIState.IDLE_STATE;
+                }
+                break;
+        }
+    }
+
+    private void runSchedule(AIControler aic) {
+        if (!schedule.isEmpty() && schedule.peek().execute(aic)) {
+            Debug.printDebugMessage(aic.getCharacterName() + " executed " + schedule.peek().toString() +
+                            " Remaining tasks = " + schedule.size(),
+                    Debug.Channel.NPC, aic.getCharacterName());
+            schedule.poll();
+        }
+    }
+
+    private void talkToCharacterSchedule(String character, World world, AIControler aic, TaskExecuter taskEx) {
+        for (Character c : characters) {
+            if (c.getName().equals(character)) {
+                schedule.add(new TaskMove(character, taskEx, MoveTypes.PERSON));
+                Debug.printDebugMessage(aic.getCharacterName() + " added taskMove in talkToCharacterSchedule",
+                        Debug.Channel.NPC, aic.getCharacterName());
+                schedule.add(new TaskTurn(Direction.NORTH));
+                intendedPhrase = SpeechActFactory.convertIThoughtToSpeechAct(new Whereabouts("Candy", ""),
+                        TextPropertyEnum.NEUTRAL, aic.getCharacterName(), character);
+            }
+        }
 		/*if(characters.contains(character)){
 			schedule.add(new TaskMove(character.getName(),taskEx,MoveTypes.PERSON));
 		}else{
 			//schedule.add(new TaskMove(world.getRoomOfCharacter(character).getName(), taskEx, MoveTypes.ROOM));
 		}*/
-		schedule.add(new TaskInteract(taskEx));
-		System.out.println("added taskInteract in talkToCharacterSchedule");
-		
-		//find character
-		//walk to character
-		//interact (with character)
-	}
-	
-	private void moveFromAway(){
-		//get closest character
-		//move one step away from that character
-	}
-	
-	private void findCharacterSchedual(Character character){
-		if(!characters.contains(character)){
-			//walk to next room
-		}
-	}
-	
-	private Direction getDirectionToClosestCharacter(AIControler aic){
-		Character closest = getClosestCharacter(aic);
-		if(closest == null || getDistance(aic.getCharacter(), closest)>4){
-			return Direction.SOUTH; 
-		}
-		
-		if(Math.abs(aic.getCharacter().getPos().getX() - closest.getPos().getX()) < 
-				Math.abs(aic.getCharacter().getPos().getY() - closest.getPos().getY())){
-			if(aic.getCharacter().getPos().getY() > closest.getPos().getY()){
-				return Direction.NORTH;
-			}else{
-				return Direction.SOUTH;
-			}
-		}else{
-			if(aic.getCharacter().getPos().getX() > closest.getPos().getX()){
-				return Direction.WEST;
-			}else{
-				return Direction.EAST;
-			}
-		}
-	}
-	
-	private Character getClosestCharacter(AIControler aic){
-		Character tmp=null;
-		for(Character c: characters){
-			if(tmp==null || (getDistance(tmp,aic.getCharacter())>getDistance(c, aic.getCharacter()))){
-				if(!c.equals(aic.getCharacter())){
-					tmp=c;
-				}
-			}
-		}
-		
-		return tmp;
-	}
-	
-	private int getDistance(Character c1, Character c2){
+        schedule.add(new TaskInteract(taskEx));
+        Debug.printDebugMessage(aic.getCharacterName() + " added taskInteract in talkToCharacterSchedule",
+                Debug.Channel.NPC, aic.getCharacterName());
+
+        //find character
+        //walk to character
+        //interact (with character)
+    }
+
+    private void moveFromAway() {
+        //get closest character
+        //move one step away from that character
+    }
+
+    private void findCharacterSchedual(Character character) {
+        if (!characters.contains(character)) {
+            //walk to next room
+        }
+    }
+
+    private Direction getDirectionToClosestCharacter(AIControler aic) {
+        Character closest = getClosestCharacter(aic);
+        if (closest == null || getDistance(aic.getCharacter(), closest) > 4) {
+            return Direction.SOUTH;
+        }
+
+        if (Math.abs(aic.getCharacter().getPos().getX() - closest.getPos().getX()) <
+                Math.abs(aic.getCharacter().getPos().getY() - closest.getPos().getY())) {
+            if (aic.getCharacter().getPos().getY() > closest.getPos().getY()) {
+                return Direction.NORTH;
+            } else {
+                return Direction.SOUTH;
+            }
+        } else {
+            if (aic.getCharacter().getPos().getX() > closest.getPos().getX()) {
+                return Direction.WEST;
+            } else {
+                return Direction.EAST;
+            }
+        }
+    }
+
+    private Character getClosestCharacter(AIControler aic) {
+        Character tmp = null;
+        for (Character c : characters) {
+            if (tmp == null || (getDistance(tmp, aic.getCharacter()) > getDistance(c, aic.getCharacter()))) {
+                if (!c.equals(aic.getCharacter())) {
+                    tmp = c;
+                }
+            }
+        }
+
+        return tmp;
+    }
+
+    private int getDistance(Character c1, Character c2) {
 //		return Math.min(Math.abs(c1.getPos().getX()-c2.getPos().getX()),Math.abs(c1.getPos().getY()-c2.getPos().getY()));
-		return Math.abs(c1.getPos().getX()-c2.getPos().getX()) + Math.abs(c1.getPos().getY()-c2.getPos().getY());
-	}
-	
+        return Math.abs(c1.getPos().getX() - c2.getPos().getX()) + Math.abs(c1.getPos().getY() - c2.getPos().getY());
+    }
+
 }

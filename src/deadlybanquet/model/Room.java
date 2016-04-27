@@ -92,7 +92,7 @@ public class Room implements TileBasedMap {
             debugMsg = debugMsg + "\n Destination Room : " + d.getDestinationRoom();
             debugMsg = debugMsg + "\n With the direction : " + d.getDirection();
         }
-        System.out.println(debugMsg);
+        Debug.printDebugMessage(debugMsg, Debug.Channel.WORLD);
         //--------------------------------------------------------------------
     }
 
@@ -126,15 +126,15 @@ public class Room implements TileBasedMap {
 
     //Checks if the room has a door with connection to a specified room
     public boolean hasConnectionTo(String room){
-        System.out.println("Checking connection from " + this.name + " to " + room);
+        Debug.printDebugMessage("Checking connection from " + this.name + " to " + room, Debug.Channel.WORLD);
         for(Door d : doors){
-            System.out.println("Destination room of door = " + d.getDestinationRoom());
+            Debug.printDebugMessage("Destination room of door = " + d.getDestinationRoom(), Debug.Channel.WORLD);
             if(d.getDestinationRoom().equals(room)) {
-                System.out.println("A door was found with connection to that room");
+                Debug.printDebugMessage("A door was found with connection to that room", Debug.Channel.WORLD);
                 return true;
             }
         }
-        System.out.println("No door found with that connection");
+        Debug.printDebugMessage("No door found with that connection", Debug.Channel.WORLD);
         return false;
     }
 
@@ -179,15 +179,15 @@ public class Room implements TileBasedMap {
     private boolean isBlocked(int x, int y){
         for(Character c : characters){
             if(c.getPos().getX() == x && c.getPos().getY() == y){
-                System.out.println("Character is blocking tile " + c.getName());
+                Debug.printDebugMessage("Character is blocking tile " + c.getName(), Debug.Channel.PATHFINDING);
                 return true;                    //A Characters is occupying this tile
             }
         }
         for(int i = map.getLayerCount()-1; i>=0;i--){
             if(i!=0) {
                 if (map.getTileId(x, y, i) != 0) {
-                    System.out.println("tile at " + x + ", " + y +" was blocked on layer " +
-                                        i);
+                    Debug.printDebugMessage("tile at " + x + ", " + y +" was blocked on layer " +
+                                        i, Debug.Channel.PATHFINDING);
                     return true;       //Tile has something static in the blocked layers
                 }
             }
@@ -277,7 +277,7 @@ public class Room implements TileBasedMap {
         for(Door d : doors) {
             if(d.getDirection()==Direction.getOppositeDirection(origin)){
                 Position pos = Position.getAdjacentPositionInDirection(d.getPos(),origin);
-                System.out.println(pos.toString());
+                Debug.printDebugMessage(pos.toString(), Debug.Channel.WORLD);
                 return isBlocked(pos.getX(), pos.getY());
             }
         }
@@ -287,10 +287,10 @@ public class Room implements TileBasedMap {
 
     ///Debug function, used to print out a list of all layers which are occupied on a tile
     public void debugTileOnPos(Position pos){
-        System.out.println("Tile at " + pos.toString() + "  has something on layers: ");
+        Debug.printDebugMessage("Tile at " + pos.toString() + "  has something on layers: ", Debug.Channel.WORLD);
         for(int i = 0; i<map.getLayerCount();i++){
             if(map.getTileId(pos.getX(), pos.getY(), i)!=0)
-                System.out.println( i + ",          ");
+                Debug.printDebugMessage( i + ",          ", Debug.Channel.WORLD);
         }
     }
 
@@ -312,7 +312,7 @@ public class Room implements TileBasedMap {
     //Return a boolean as to whether a tile is blocked or not, x and y coordinates should be in tile-format
     //Collision detection needs to be added!!
     public boolean blocked(PathFindingContext pfc, int x, int y) {
-        /*System.out.println(new Position(x,y).toString()  +  "       source = " +
+        /*Debug.printDebugMessage(new Position(x,y).toString()  +  "       source = " +
                 new Position(pfc.getSourceX(), pfc.getSourceY()).toString() + "    current = "
                 + new Position(pathFinder.getCurrentX(), pathFinder.getCurrentY()).toString());*/
         return isBlocked(x,y);

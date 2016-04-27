@@ -51,6 +51,10 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     private Room[][] roomMap;
 
     public World(){
+        //init the Debug class, use the control over channels to make debug a bit more ordered!
+        Debug.init();
+        //Set which npc will be able to print messages to debug, if none is set then all of them will be able to send
+        Debug.setDebugNPC("BURT");
         current=this;
 
         npcConversations = new ArrayList<>();
@@ -64,7 +68,8 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
         initPlayer();
         //Initialized all AI/NPC and their Characters
         initAIs();
-        
+
+
         
         //Create the time object (it's initialization is done in it's constructor)
         time = new Time();
@@ -78,20 +83,33 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
         temp = ItemsAndNameSingelton.getInstance().readFile();
         ItemsAndNameSingelton.getInstance().setItems(temp);
         // All the items and names are added in the singelton class.
+        //Create initialization memories (like who is in the same room and such)
+        initBasicMemories();
     }
 
-    public void initPlayer(){
+    //plant basic memories like the positions of the people in the same room in all the AIs
+    private void initBasicMemories(){
+        for(AIControler aic : aiss){
+            Room r = getRoomOfCharacter(aic.getCharacter());
+            for(Character c : r.getAllCharacters()){
+                getControlerBrain(aic).plantFalseMemory(new Whereabouts(c.getName(),
+                        r.getName()));
+            }
+        }
+    }
+
+    private void initPlayer(){
         Character playerCharacter = new Character(this, "NoName", 9, 13);
         playerBrain = new PlayerBrain(playerCharacter.getName());
         player = new Player(playerCharacter, playerBrain);
         roomMap[2][2].addCharacter(playerCharacter);
     }
 
-    public void initAIs(){
+    private void initAIs(){
         //Not really sure in which order these thing are supposed to be initialized, but regardless
         //it should be done in here
     	aiss = new ArrayList<>();
-    	controlerBrainMap = new HashMap<AIControler, NPCBrain>();
+    	controlerBrainMap = new HashMap<>();
     	createNpc(new Position(9,5), "Frido", "Living Room" );
     	createNpc(new Position(10,13), "Candy", "Living Room" );
     	createNpc(new Position(2,2), "BURT", "Living Room" );
@@ -100,19 +118,18 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     	createNpc(new Position(9,3), "Daisy", "Bedroom" );
     }
     //always use when creating an npc 
-    public void createNpc (Position pos, String name, String room){
+    private void createNpc (Position pos, String name, String room){
     	Character npc = new Character(this, name, pos.getX(), pos.getY());
     	AIControler	ai = new AIControler(this,npc);
-        NPCBrain brain = BrainFactory.makeBrain(room, npc.getName());
+        NPCBrain brain = BrainFactory.makeBrain(room, npc.getName(), ai);
     	aiss.add(ai);
-    	System.out.println(room);
+    	Debug.printDebugMessage(name + " created in " +room, Debug.Channel.WORLD);
         controlerBrainMap.put(ai, brain);
-    	System.out.println(room);
         Position p = getRoomPosition(room);
     	roomMap[p.getX()][p.getY()].addCharacter(npc);
     }
 
-    public void initRoomMap(){
+    private void initRoomMap(){
         roomMap = new Room[4][4];       //Needs to be updated as more rooms are added
         //add room initiations
         roomMap[2][2] = new Room("res/pictures/living_room2.tmx", "Living Room",this);
@@ -170,14 +187,18 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
 
     //Cleans up all the conversation vy notifying the characters and then removing the conversation
     private void cleanUpConversation(ConversationModel cm){
-        System.out.println("Conversation with " + cm.getIPerceiver1().getName() + " and " +
-                            cm.getIPerceiver2() + " is now being cleaned up...");
+        Debug.printDebugMessage("Conversation with " + cm.getIPerceiver1().getName() + " and " +
+                            cm.getIPerceiver2().getName() + " is now being cleaned up...", Debug.Channel.CONVERSATION);
         getCharacterRef(cm.getIPerceiver1().getName()).setTalking(false);
         getCharacterRef(cm.getIPerceiver2().getName()).setTalking(false);
-        if(cm == playerConv)
+        if(cm == playerConv) {
             playerConv = null;
-        else
+            //Debug.printDebugMessage();("Playerconversation cleaned up!");
+        }
+        else {
             npcConversations.remove(cm);
+            //Debug.printDebugMessage();("Npc conversation cleaned up!");
+        }
     }
 
     private void removeFromConversation(IPerceiver p){
@@ -215,7 +236,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
                                         + "\n West : " + west + "\n East : " + east;
                     debugMsg = "Room namned : " + roomMap[i][j].getName() +
                                 "\n Room at position (" + i + ", " + j + ") \n" + debugMsg ;
-                    System.out.println(debugMsg);
+                    Debug.printDebugMessage();(debugMsg);
                     //---------------------------------------------------------------*/
                     //All neighbours have been compiled, now notify the room
                     roomMap[i][j].assignDoorConnections(north, south, east, west);
@@ -251,7 +272,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
 
     public boolean attemptTalk(Character chr){
         Room temp = getRoomOfCharacter(chr);
-        System.out.println(chr.getName() + " attempts to talk...");
+        Debug.printDebugMessage(chr.getName() + " attempts to talk...", Debug.Channel.WORLD);
     	if(temp.isCharacterOn(chr.getFacedTilePos())){
             Character c = temp.getCharacterOnPos(chr.getFacedTilePos());
             AIControler target = getRelatedControler(c);
@@ -261,7 +282,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
                         target.getCharacter().getDefaultImage());
                 player.getCharacter().setTalking(true);
                 target.getCharacter().setTalking(true);
-                attemptCreatePathToPerson(target, "Frido");
+                //attemptCreatePathToPerson(target, "Frido");
               //  attemptCreateMasterPath(a, "Kitchen");
               //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
                // attemptCreatePathToDoor(a, "Bedroom");
@@ -273,8 +294,8 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
                 AIControler attempter = getRelatedControler(chr);
                 c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
                 setUpConversation(attempter, target);
-                System.out.println(attempter.getCharacterName() + " started a conversation with " +
-                                    target.getCharacterName());
+                Debug.printDebugMessage(attempter.getCharacterName() + " started a conversation with " +
+                                    target.getCharacterName(), Debug.Channel.WORLD);
                 return true;
             }
     	}
@@ -287,7 +308,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
 	    	Room targetRoom = getRoomRef(d.getDestinationRoom());
 	        Room originRoom = getRoomRef(d.getOriginRoom());
 	        /*//----------------------------------DEBUG--------------------------------
-	        System.out.println(originRoom.getName() + "   to   " + targetRoom.getName()
+	        Debug.printDebugMessage();(originRoom.getName() + "   to   " + targetRoom.getName()
 	                            + " entering from " + ce.getEnterDirection().toString() );
 	        //-----------------------------------------------------------------------*/
 	
@@ -308,7 +329,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     	}
         /*//----------------------------------DEBUG--------------------------------
         else{
-            System.out.println(ce.getTargetRoom() + " Was blocked from " + ce.getEnterDirection().toString());
+            Debug.printDebugMessage();(ce.getTargetRoom() + " Was blocked from " + ce.getEnterDirection().toString());
         }
         //-----------------------------------------------------------------------*/
     
@@ -357,7 +378,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     public boolean attemptCreateMasterPath(AIControler aic, String targetRoom){
         Character c = aic.getCharacter();
         Room r = getRoomOfCharacter(c);
-        System.out.println(r.getName());
+        Debug.printDebugMessage("Attempting to create a MasterPath for " + r.getName(), Debug.Channel.WORLD);
         MasterPath mp = createMasterPathTo(r.getName(), targetRoom);
         if(mp!=null){               //Was a masterPath actually made?
             aic.setMasterPath(mp);  //Send created MasterPath to AI
@@ -389,110 +410,30 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
             }
         }
         */
-       
+       /*
         //ActionEvent fired when a character wants to change room/walk through a door
         if(e.getID() == EventEnum.CHANGE_ROOMS.ordinal()) {
-            ChangeRoomEvent ce = (ChangeRoomEvent)e;
+            ChangeRoomEvent ce = (ChangeRoomEvent) e;
             //Check if new room has space, remove from old room, add to new
             Room targetRoom = getRoomRef(ce.getTargetRoom());
             Room originRoom = getRoomRef(ce.getOriginRoom());
-            /*//----------------------------------DEBUG--------------------------------
-            System.out.println(originRoom.getName() + "   to   " + targetRoom.getName()
+            //----------------------------------DEBUG--------------------------------
+            Debug.printDebugMessage();(originRoom.getName() + "   to   " + targetRoom.getName()
                                 + " entering from " + ce.getEnterDirection().toString() );
-            //-----------------------------------------------------------------------*/
+            //-----------------------------------------------------------------------
 
             if (!targetRoom.entranceIsBlocked(ce.getEnterDirection())) {
-                Character c = (Character)ce.getSource();
+                Character c = (Character) ce.getSource();
                 originRoom.removeCharacter(c);
                 //Tell the affected rooms to notify all characters so that this can be added
                 //to memory
-                targetRoom.addCharacterToRoom(c,ce.getEnterDirection());
-                notifyRoomChange(originRoom,targetRoom,c);
+                targetRoom.addCharacterToRoom(c, ce.getEnterDirection());
+                notifyRoomChange(originRoom, targetRoom, c);
                 seePeople(c, targetRoom);
 
 
             }
-            /*//----------------------------------DEBUG--------------------------------
-            else{
-                System.out.println(ce.getTargetRoom() + " Was blocked from " + ce.getEnterDirection().toString());
-            }
-            //-----------------------------------------------------------------------*/
-        }
-        /*      OBSOLETE
-        if(e.getID() == EventEnum.CHECK_DOOR.ordinal()){
-        	Character characterTemp = (Character) e.getSource();
-        	for (Room[] rm : roomMap) {
-        		for (Room r : rm) {
-                    if(r != null && r.hasCharacter(characterTemp)){
-                    	r.checkDoor(e);
-                    }
-                }
-        	}
-        }
-        
-        if(e.getID() == EventEnum.TALK_TO.ordinal()){
-        	Character characterTemp = (Character) e.getSource();
-        	for (Room[] rm : roomMap) {
-                for (Room r : rm) {
-                    if(r !=null && r.hasCharacter(characterTemp)){
-                    	if(r.isCharacterOn(characterTemp.getFacedTilePos())){
-                    		if(player.isCharacter(characterTemp)){
-                    			Character c = r.getCharacterOnPos(characterTemp.getFacedTilePos());
-	                    		for(AIControler a : aiss){
-	                    			if(a.getCharacterId() == c.getId()){
-	                    				c.setDirection(Direction.getOppositeDirection(characterTemp.getDirection()));
-	                    				playerConv = new ConversationModel(player,a.getNpc());
-	                    				talk = true;
-	                    			}
-	                    		}	      
-                    		}
-                    		//change to talk state between cahracterTemp and r.getCharacterOnPos(characterTemp.getFacedTilePos()
-                    	}
-                    }	
-                }
-        	}
         }*/
-        /*---------------------OBSOLETE, REPLACED BY attemptCreatePathTo... methods found above---------
-        if(e.getID() == EventEnum.REQUEST_PATH_TO_PERSON.ordinal()){
-            Path p;
-            for(Room[] rs : roomMap){
-                for(Room r : rs){
-                    if(r!=null){
-                        if (r.hasCharacter((Character)e.getSource())) {
-                            p = r.createPathToPerson((NPC) e.getSource(), e.getActionCommand());
-                            sendPathToAI(((Character) e.getSource()).getName(), p);
-                        }
-                    }
-                }
-            }
-        }
-        //The actioncommand in this event is presumed to contain the name of the room you wish to enter
-        if(e.getID() == EventEnum.REQUEST_PATH_TO_DOOR.ordinal()){
-            Path p;
-            for(Room[] rs : roomMap){
-                for(Room r : rs){
-                    if(r!=null && r.hasCharacter((Character)e.getSource()) && r.hasConnectionTo(e.getActionCommand())){
-                        p = r.createPathToDoor((Character)e.getSource(), e.getActionCommand());
-                    }
-                }
-            }
-            //send the path to the correct AI
-        //    sendPathToAI(((Character)e.getSource()).getName();
-        }
-        if(e.getID() == EventEnum.REQUEST_PATH_TO_ROOM.ordinal()){
-            Character c = (Character)e.getSource();
-            MasterPath mp = new MasterPath();
-            for(Room[] rs : roomMap){
-                for(Room r : rs){
-                    if(r != null && r.hasCharacter(c)){
-                        mp = createMasterPathTo(r.getName(), e.getActionCommand());
-                    }
-                }
-            }
-            //Send masterpath to correct AI
-            sendMasterPathToAI(c.getName(), mp);
-        }
-        */
     }
 
     private AIControler getRelatedControler(Character c){
@@ -500,18 +441,18 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
             if(aic.getCharacterName().equals(c.getName()))
                 return aic;
         }
-        System.out.println("No related aicontroller could be found");
+        Debug.printDebugMessage("No related aicontroller could be found", Debug.Channel.WORLD);
         return null;
 
     }
 
     private AIControler getRelatedControler(String name){
-        System.out.println("Name to get related controller for : " + name);
+        //Debug.printDebugMessage();("Name to get related controller for : " + name);
         for(AIControler aic : aiss){
             if(aic.getCharacterName().equals(name))
                 return aic;
         }
-        System.out.println("No related aicontroller could be found");
+        Debug.printDebugMessage("No related aicontroller could be found for this name : " + name, Debug.Channel.WORLD);
         return null;
 
     }
@@ -525,7 +466,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
                 }
             }
         }
-        System.out.println("Character of AIC doesnt exist in any room... error...");
+        Debug.printDebugMessage("Character of AIC doesnt exist in any room... error...", Debug.Channel.WORLD);
         return null; //THIS SHOULD NEVER HAPPEN
     }
 
@@ -575,13 +516,15 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
         Position targ = getRoomPosition(target);
         //Needs to be correct for pathfinding to work
         targetPosition = targ;
-        System.out.println(org.getX() + " "+ org.getY() +" "+ targ.getX() + " "+ targ.getY());
+        Debug.printDebugMessage(org.getX() + " "+ org.getY() +" "+ targ.getX() + " "+ targ.getY(),
+                                                Debug.Channel.MASTER_PATH);
         Path p = masterPathfinder.findPath(null, org.getX(), org.getY(), targ.getX(), targ.getY());
         MasterPath mp = new MasterPath();
        if(p != null){
     	   for(int i = 1; i<p.getLength(); i++){
             	mp.addStep(roomMap[p.getX(i)][p.getY(i)].getName());
-            	System.out.println(" Step " + i + "   is " + roomMap[p.getX(i)][p.getY(i)].getName());
+            	Debug.printDebugMessage(" Step " + i + "   is " + roomMap[p.getX(i)][p.getY(i)].getName(),
+                                            Debug.Channel.MASTER_PATH );
         	}
        }
         return mp;
@@ -615,16 +558,16 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
 
     @Override
     public boolean blocked(PathFindingContext pfc, int x, int y) {
-        /*System.out.println(new Position(x,y).toString()  +  "       source = " +
+        /*Debug.printDebugMessage();(new Position(x,y).toString()  +  "       source = " +
                                 new Position(pfc.getSourceX(), pfc.getSourceY()).toString() + "    current = "
                         + new Position(masterPathfinder.getCurrentX(), masterPathfinder.getCurrentY()).toString());*/
         if(targetPosition.getX() == x && targetPosition.getY() == y)
             return false;               //Override so pathfinding doesnt interpret target as blocked
         if(roomMap[x][y] != null && roomMap[pfc.getSourceX()][pfc.getSourceY()].hasConnectionTo(roomMap[x][y].getName())){
-            //System.out.println(roomMap[x][y].getName() +  " is free");
+            //Debug.printDebugMessage();(roomMap[x][y].getName() +  " is free");
             return false;
         }else
-            //System.out.println(new Position(x,y).toString()+ " is blocked");
+            //Debug.printDebugMessage();(new Position(x,y).toString()+ " is blocked");
             return true;
     }
 
@@ -644,7 +587,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
             if(aic.getCharacterName().equals(name))
                 return aic.getCharacter();
         }
-        System.out.println("getCharacterRef() couldnt find any character with that name!");
+        Debug.printDebugMessage("getCharacterRef() couldnt find any character with that name!", Debug.Channel.WORLD);
         return null;
     }
 

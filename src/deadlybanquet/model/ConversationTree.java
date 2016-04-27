@@ -77,7 +77,7 @@ public class ConversationTree {
         finalChoice = null;
         hasFinalChoiceBeenFetched = false;
         choiceCompleted = false;
-        System.out.println("ConversationTree has been reset");
+        Debug.printDebugMessage("ConversationTree has been reset", Debug.Channel.CONVERSATION);
     }
 
     public void parseInputForConv(Input input, ConversationModel cm){
@@ -398,7 +398,7 @@ public class ConversationTree {
                // setCurrentState(State.TEXT_PROPERTY_CHOICE);
             }
         }else {
-            System.out.println("THIS SHOULD NOT HAPPEN (Comment from conversationTree)");
+            Debug.printDebugMessage("THIS SHOULD NOT HAPPEN (Comment from conversationTree)", Debug.Channel.CONVERSATION);
             setCurrentState(State.QUESTION_EVENT_WHO);
         }
     }
@@ -415,7 +415,7 @@ public class ConversationTree {
         String temp = "";
         temp+= "Who = " + who +  "      Who2 = " + who2
                 + "      What = " + what;
-        System.out.println(temp);
+        Debug.printDebugMessage(temp, Debug.Channel.CONVERSATION);
     }
 
     private void parseInputTextProperty(Input input){
@@ -445,7 +445,7 @@ public class ConversationTree {
 
     public SpeechAct getFinalChoice(){
         if(choiceCompleted) {
-            System.out.println("Final choice fetched : " + finalChoice.getLine());
+            Debug.printDebugMessage("Final choice fetched : " + finalChoice.getLine(), Debug.Channel.CONVERSATION);
             //resetToDefaults();          //choice has been recorded, now reset the tree
             //TODO NEED A COPY FUNCTION FOR SPEECHACTS
             hasFinalChoiceBeenFetched = true;
@@ -458,25 +458,25 @@ public class ConversationTree {
     private String chooseStringFromList(Input input, ArrayList<String> choices, String debugLine){
         String item = "";
         if(input.isKeyPressed(Input.KEY_1)){
-            System.out.println(debugLine + choices.get((currentCounter)));
+            Debug.printDebugMessage(debugLine + choices.get((currentCounter)), Debug.Channel.CONVERSATION);
             item = choices.get(currentCounter);
         } else if(input.isKeyPressed(Input.KEY_2) && choices.size()>currentCounter+1) {
-            System.out.println(debugLine + choices.get((currentCounter + 1)));
+            Debug.printDebugMessage(debugLine + choices.get((currentCounter + 1)), Debug.Channel.CONVERSATION);
             item = choices.get(currentCounter + 1);
         } else if(input.isKeyPressed(Input.KEY_3) && choices.size()>currentCounter+2) {
-            System.out.println(debugLine + choices.get((currentCounter + 2)));
+            Debug.printDebugMessage(debugLine + choices.get((currentCounter + 2)), Debug.Channel.CONVERSATION);
             item = choices.get(currentCounter + 2);
         } else if(choices.size()>currentCounter+3) {
             if (input.isKeyPressed((Input.KEY_4))) {
                 currentCounter += 3;
-                System.out.println("currentCounter has been set to " + currentCounter);
+                Debug.printDebugMessage("currentCounter has been set to " + currentCounter, Debug.Channel.CONVERSATION);
             } else if (input.isKeyPressed(Input.KEY_5) && currentCounter >= 3) {
                 currentCounter -= 3;
-                System.out.println("currentCounter has been set to " + currentCounter);
+                Debug.printDebugMessage("currentCounter has been set to " + currentCounter, Debug.Channel.CONVERSATION);
             }
         }else if(input.isKeyPressed(Input.KEY_4) && currentCounter>=3) {
             currentCounter-=3;
-            System.out.println("currentCounter has been set to " + currentCounter);
+            Debug.printDebugMessage("currentCounter has been set to " + currentCounter, Debug.Channel.CONVERSATION);
         }
         return item;
 
@@ -526,13 +526,13 @@ public class ConversationTree {
         String debug = "Changing state from " + currentState.toString();
         currentState = newState;
         debug += " to " + currentState.toString();
-        System.out.println(debug);
+        Debug.printDebugMessage(debug, Debug.Channel.CONVERSATION);
     }
 
     private void setFinalChoice(SpeechAct sa) {
         if (sa != null) {
             finalChoice = sa;
-            System.out.println("Final choice has been set to:  " + finalChoice.getLine());
+            Debug.printDebugMessage("Final choice has been set to:  " + finalChoice.getLine(), Debug.Channel.CONVERSATION);
             choiceCompleted = true;
             setCurrentState(State.FINISHED);
         }

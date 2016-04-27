@@ -57,14 +57,14 @@ public class OldPlayer {
 
     public void update(Input input, int delta, GameWindow world) {
         if ((playerx / 32 == 5 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E)) || (input.isKeyPressed(Input.KEY_2))) {
-            System.out.println("Should be changing room now!");
+            Debug.printDebugMessage("Should be changing room now!");
             playerx = 9 * 32;
             playery = 2 * 32;
             world.swapRooms(2);     //Request the world to change active room
             playerLookingDown = true;
             playerLookingUp = false;
         } else if (playerx / 32 == 9 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E) || input.isKeyPressed(Input.KEY_1)) {
-            System.out.println("Should be changing room now!");
+            Debug.printDebugMessage("Should be changing room now!");
             playerx = 5 * 32;
             playery = 2 * 32;
             world.swapRooms(1);    //Request the world to change active room
@@ -72,7 +72,7 @@ public class OldPlayer {
             playerLookingUp = false;
         }
         else if (playerx / 32 == 9 && playery / 32 == 1 && playerLookingUp && input.isKeyPressed(Input.KEY_E) || input.isKeyPressed(Input.KEY_3)) {
-        	System.out.println("Should be changing room now!");
+        	Debug.printDebugMessage("Should be changing room now!");
         	playerx = 9 * 32;
         	playery = 4 * 32;
         	world.swapRooms(3);    //Request the world to change active room

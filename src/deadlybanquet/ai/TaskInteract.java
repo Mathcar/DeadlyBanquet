@@ -1,5 +1,7 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Debug;
+
 public class TaskInteract implements Task {
 
 	private TaskExecuter taskEx;
@@ -12,7 +14,7 @@ public class TaskInteract implements Task {
 	@Override
 	public boolean execute(AIControler aiControler) {
 		if(!aiControler.hasPath()){					//WHY THIS CHECK?? /Hampus
-			System.out.println("TaskInteract executing...");
+			Debug.printDebugMessage("TaskInteract executing...", Debug.Channel.NPC, aiControler.getCharacterName());
 			return taskEx.attemptTalk(aiControler.getCharacter());
 		}
 		return false;

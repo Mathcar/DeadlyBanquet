@@ -88,9 +88,9 @@ public class GameWindow extends BasicGameState {
         //PATHFINDING TEST INPUTS-----------------------------------------
         if(input.isMousePressed(0)) {
         	
-            System.out.println("mouse is at " + input.getMouseX() / 32 + "   " + input.getMouseY() / 32);
+            Debug.printDebugMessage("mouse is at " + input.getMouseX() / 32 + "   " + input.getMouseY() / 32);
             testNPC.addPath(pathFinder.findPath(testNPC, testNPC.x / 32, testNPC.y / 32, input.getMouseX() / 32, input.getMouseY() / 32));
-            System.out.println("Path made ");
+            Debug.printDebugMessage("Path made ");
         }
         
         //-----------------------------------------------------------------

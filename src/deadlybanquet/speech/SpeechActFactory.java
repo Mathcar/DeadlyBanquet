@@ -2,6 +2,7 @@ package deadlybanquet.speech;
 
 
 import deadlybanquet.ai.*;
+import deadlybanquet.model.Debug;
 import deadlybanquet.model.ItemsAndNameSingelton;
 import deadlybanquet.model.World;
 import org.w3c.dom.Text;
@@ -338,7 +339,8 @@ public class SpeechActFactory {
             IThoughtList.size();
             temp = new SpeechAct(i.toString(),speaker.getName(),listener.getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
         }
-        System.out.println("SPEEACHACTFACTORY: Right before the retrun statement, will run the speachActs debug method");
+        Debug.printDebugMessage("SPEEACHACTFACTORY: Right before the retrun statement, will run the speachActs debug method",
+                                Debug.Channel.SPEECH_ACTS);
         temp.deBugString();
         return temp;
 

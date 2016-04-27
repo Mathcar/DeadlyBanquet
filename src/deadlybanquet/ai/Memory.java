@@ -1,5 +1,7 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Debug;
+
 import java.util.TreeSet;
 
 /**
@@ -49,12 +51,11 @@ public class Memory {
     }
     
     public void debugPrintMemory(){
-    	System.out.println("========= DEBUG ===========");
-    	System.out.println();
+        String temp = "========= DEBUG ===========";
     	for(IThought i:information){
-    		System.out.println(i.debugMessage());
-    		System.out.println();
+    		temp +="\n" +  i.debugMessage();
     	}
-    	System.out.println("========== END ============");
+    	temp+= "\n========== END ============";
+        Debug.printDebugMessage(temp, Debug.Channel.BRAIN);
     }
 }

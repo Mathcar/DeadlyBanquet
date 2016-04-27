@@ -26,7 +26,8 @@ public class BrainFactory {
                     ArrayList<Desire>goals,
                     ArrayList<IThought>plan,
                     String room,
-                    String name){
+                    String name,
+                    AIControler aic){
         if (emotion==null){
             double p = Math.random()*2-1;
             double a = Math.random()*2-1;
@@ -41,10 +42,10 @@ public class BrainFactory {
         }
         
        if(name==null) throw new NullPointerException("No name supplied for new NPC.");
-       return new NPCBrain (information, emotion, temperament, desires, goals, plan, room, name, null); //needs AIController      
+       return new NPCBrain (information, emotion, temperament, desires, goals, plan, room, name, aic); //needs AIController
     }
 
-    public static NPCBrain makeBrain(String room, String name){
-        return makeBrain(null,null,null,null,null,null,room,name);
+    public static NPCBrain makeBrain(String room, String name, AIControler aic){
+        return makeBrain(null,null,null,null,null,null,room,name, aic);
     }
 }

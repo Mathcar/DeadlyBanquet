@@ -24,6 +24,7 @@ import deadlybanquet.speech.SpeechAct;
 import static deadlybanquet.speech.SpeechActFactory.convertIThoughtToSpeechAct;
 import deadlybanquet.speech.TextPropertyEnum;
 import static deadlybanquet.speech.TextPropertyEnum.NEUTRAL;
+import deadlybanquet.model.Debug;
 
 import java.util.*;
 
@@ -130,7 +131,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                         processDesire((Desire) t, you, possibleAnswers);
                     break;
                                 
-                default: System.out.println(me + " says: I didn't understand a word of that.");
+                default: Debug.printDebugMessage(me + " says: I didn't understand a word of that.", Debug.Channel.BRAIN);
             }
         }
         return selectResponse(possibleAnswers,you);
@@ -356,7 +357,8 @@ public class NPCBrain implements IPerceiver, Talkable {
                                 content.setCertainty(-content.getCertainty());
                                 possibleAnswers.add(new Say(me, you, content, DISAGREE, null));
                                 break;
-                default: System.out.println(me + "says: Incoming Say object is making my mind boggle.");
+                default: Debug.printDebugMessage(me + "says: Incoming Say object is making my mind boggle.",
+                                                    Debug.Channel.BRAIN);
             }
         }
         else {
@@ -497,10 +499,11 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
         debugInfo=ans;
         //if(ans.isEmpty()) return;
-        System.out.print(me + " says: ");
+        String temp = me + " says: ";
         for (IThought i: ans){
-            System.out.println(i);
+            temp+= temp.toString();
         }
+        Debug.printDebugMessage(temp, Debug.Channel.BRAIN);
         return convertIThoughtToSpeechAct(ans, NEUTRAL,me,you);
         
     }
@@ -515,7 +518,7 @@ public class NPCBrain implements IPerceiver, Talkable {
             return;
         }
         memory.add(i);
-        System.out.println("Planting IThought in " + me);
+        Debug.printDebugMessage("Planting IThought in " + me, Debug.Channel.BRAIN);
     }
     
     public ArrayList<IThought> debugInfo;
@@ -550,7 +553,9 @@ public class NPCBrain implements IPerceiver, Talkable {
         return aic.selectPhrase(acts);
     }
 
-    public SpeechAct getIntendedPhrase(){return aic.getIntendedPhrase();}
+    public SpeechAct getIntendedPhrase(){
+        aic.getCharacterName();
+        return aic.getIntendedPhrase();}
 
     public AIControler getAIControler(){
         return aic;
@@ -563,7 +568,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     }
     
     public void observeRoomChange(String person, String origin, String destination){
-        System.out.println("NPC registered room change");
+        Debug.printDebugMessage("NPC registered room change", Debug.Channel.BRAIN);
         SortedList res = memory.find (new Whereabouts(person, ""));
         TimeStamp t = getTimeStamp();
         t.incrementTime(-1);
@@ -593,7 +598,8 @@ public class NPCBrain implements IPerceiver, Talkable {
 
     //Character does some thinking, cooling down, executing plan etc.
     public void update(){
-        System.out.println("Calling update function on " + me +", but don't expect anything to happen.");
+        Debug.printDebugMessage("Calling update function on " + me + ", but don't expect anything to happen.",
+                                    Debug.Channel.BRAIN);
     }
 
     //this method creates plans for any goals and puts

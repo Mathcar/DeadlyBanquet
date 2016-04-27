@@ -1,13 +1,11 @@
 package deadlybanquet.model;
 
-import deadlybanquet.ai.IThought;
+import deadlybanquet.ai.*;
 import deadlybanquet.speech.SpeechActFactory;
 import deadlybanquet.speech.SpeechType;
 import deadlybanquet.speech.TextPropertyEnum;
 import org.newdawn.slick.Image;
 
-import deadlybanquet.ai.BeingPolite;
-import deadlybanquet.ai.IPerceiver;
 import deadlybanquet.model.Character;
 import deadlybanquet.model.NPC;
 import deadlybanquet.model.Player;
@@ -33,6 +31,7 @@ public class ConversationModel {
     private final int maxIterations = 4;
     //Used to record the conversation
     private HashMap<IPerceiver, ArrayList<SpeechAct>> actHistory;
+    private SpeechAct decidedAnswer;
 
     //Constructor needed when player is a part of the conversation
     public ConversationModel(IPerceiver player, IPerceiver npc, Image playerImage, Image npcImage){
@@ -65,10 +64,10 @@ public class ConversationModel {
         // for now assume that perceiver1 will start to speak
         if(hasPlayer){
             if(playersChoice!= null){
-                System.out.println("Players choice exists!");
+                Debug.printDebugMessage("Players choice exists!", Debug.Channel.CONVERSATION);
                 SpeechAct sa = getPlayerChoice();
-                System.out.println("Line = " + sa.getLine() + " speaker = " + sa.getSpeaker()
-                                    + " listener = " +sa.getListener());
+                Debug.printDebugMessage("Line = " + sa.getLine() + " speaker = " + sa.getSpeaker()
+                                    + " listener = " +sa.getListener(), Debug.Channel.CONVERSATION);
                 doOneRound(sa);
             }
         }else{
@@ -84,17 +83,20 @@ public class ConversationModel {
                     TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
                     SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
                                                                                     tpe, perceiver1, perceiver2);
-                    sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
-                    System.out.println("NPCs actually greeted each other without crash, score!");
+                    //sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
+                    sendActToPerceiver(perceiver2, greeting); //TODO NPC cant handle the Yes, GREET response
+                    Debug.printDebugMessage("NPCs actually greeted each other without crash, score!",
+                                                Debug.Channel.CONVERSATION);
                     iteration++;
                 } else if(iteration==1){  //Start the conversation using the phrase chosen by the StateBasedAI
-                    actHistory.get(perceiver1).add(sendActToPerceiver(perceiver1,
-                                                        sendActToPerceiver(perceiver2,perceiver1.getIntendedPhrase())));
-                    System.out.println("NPC actually asked the intended question and got an answer without crash, score!");
+                    SpeechAct answer = sendActToPerceiver(perceiver2, perceiver1.getIntendedPhrase());
+                    decidedAnswer = sendActToPerceiver(perceiver1,answer);
+                    Debug.printDebugMessage("NPC actually asked the intended question and got an answer without crash, score!",
+                                                Debug.Channel.CONVERSATION);
                     iteration++;
                 } else{     //Just run the conversation using old answers and the hear function!
-                    SpeechAct answer = sendActToPerceiver(perceiver2, getIndendedAct(perceiver1));
-                    actHistory.get(perceiver1).add(sendActToPerceiver(perceiver1, answer));
+                    SpeechAct answer = sendActToPerceiver(perceiver2, decidedAnswer);
+                    decidedAnswer = sendActToPerceiver(perceiver1, answer);
                     iteration++;
                 }
             }
@@ -109,7 +111,7 @@ public class ConversationModel {
     private void doOneRound(SpeechAct act){
         SpeechAct answer = sendActToPerceiver(perceiver2, act); //Should return an answer or there should be a handle for one
         //answer = perceiver2.getAnswer();
-        System.out.println("Answer = " + answer.getLine());
+        Debug.printDebugMessage("Answer = " + answer.getLine(), Debug.Channel.CONVERSATION);
         sendActToPerceiver(perceiver1, answer); //No response should be created here
         if(act.getSpeechType() == SpeechType.GOODBYE){
             conversationCompleted = true;
@@ -118,6 +120,8 @@ public class ConversationModel {
 
     //Handles sending a speechact to a perceiver and record and archive what is needed
     private SpeechAct sendActToPerceiver(IPerceiver p, SpeechAct act){
+        Debug.printDebugMessage(act.getSpeaker() + " said   \"" + act.getLine() + "\"       to " + act.getListener(),
+                                     Debug.Channel.CONVERSATION);
         if(p==perceiver1)
             actHistory.get(perceiver2).add(act);     //Add act to history
         else
@@ -128,7 +132,7 @@ public class ConversationModel {
     public ArrayList<SpeechAct> getAllPropertyVariations(IThought thought){
         ArrayList<SpeechAct> temp = new ArrayList<>();
         ArrayList<IThought> tempI = new ArrayList<IThought>();
-        //System.out.println("speaker = " + perceiver1.getName());
+        //Debug.printDebugMessage("speaker = " + perceiver1.getName());
         tempI.add(thought);
         temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI,
                                 TextPropertyEnum.NEUTRAL, perceiver1, perceiver2));
@@ -137,7 +141,7 @@ public class ConversationModel {
         temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI, TextPropertyEnum.COLLOQUIAL,
                                                                 perceiver1, perceiver2));
         /*for(SpeechAct sa : temp)
-            System.out.println("Speaker =  " + sa.getSpeaker() + "   Listener = " + sa.getListener());
+            Debug.printDebugMessage("Speaker =  " + sa.getSpeaker() + "   Listener = " + sa.getListener());
         */
         return temp;
     }
@@ -157,9 +161,9 @@ public class ConversationModel {
     //This is only used in conversations that contain the player
     public void recieveChoice(SpeechAct sa){
         if(sa == null){
-            System.out.println("Speech act received was null :(");
+            Debug.printDebugMessage("Speech act received was null", Debug.Channel.CONVERSATION);
         }else {
-            System.out.println("Player choice received : " + sa.getLine());
+            Debug.printDebugMessage("Player choice received : " + sa.getLine(), Debug.Channel.CONVERSATION);
             playersChoice = sa;
             //TODO This should most likely be set in the doOneRound() method instead!
             /*if(sa.getSpeechType() == SpeechType.GOODBYE){
@@ -172,24 +176,13 @@ public class ConversationModel {
     //Intended for use with the view and therefore only get the second perceivers answer
     public String getLatestResponse(){
         ArrayList<SpeechAct>  acts = actHistory.get(perceiver2);
-        //System.out.println("current size of responses : " + acts.size());
+        //Debug.printDebugMessage("current size of responses : " + acts.size());
         if(acts.size() == 0)
             return "";      //No act has been sent yet so there is nothing to display
         else
             return acts.get(acts.size()-1).getLine();   //Return latest line of act
     }
 
-    //Return the calculated speechAct from last received answer
-    private SpeechAct getIndendedAct(IPerceiver p){
-        ArrayList<SpeechAct>  acts = actHistory.get(p);
-        //System.out.println("current size of responses : " + acts.size());
-        if(acts.size() == 0) {
-            System.out.println("getIntendedAct failed since no act have been logged!");
-            return null;      //No act has been sent yet so there is nothing to display
-        }
-        else
-            return acts.get(acts.size()-1);   //Return latest line of act
-    }
 
     public Image getPlayerImage(){
     	return playerImage;

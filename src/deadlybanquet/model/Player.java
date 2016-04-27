@@ -79,10 +79,11 @@ public class Player implements Talkable {
 	//called on entering a room
 	public void seePeople (ArrayList<String> people){
 		playerBrain.seePeople(people);
-		System.out.println(getName() + " sees these people upon entering the room: ");
+		String temp= getName() + " sees these people upon entering the room: ";
 		for(String s : people){
-			System.out.println(s);
+			temp+=s;
 		}
+		Debug.printDebugMessage(temp, Debug.Channel.PLAYER);
 		//TODO IMPLEMENT
 	}
 

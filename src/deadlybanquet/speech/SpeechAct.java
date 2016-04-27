@@ -2,6 +2,7 @@ package deadlybanquet.speech;
 
 
 import deadlybanquet.ai.IThought;
+import deadlybanquet.model.Debug;
 import org.lwjgl.Sys;
 
 import java.util.ArrayList;
@@ -95,8 +96,9 @@ public class SpeechAct {
     }
 
     public void deBugString(){
-        System.out.println("Line: "+line+"\nSpeaker: "+speaker+"\nListener: "+listener+"\nSpeechType: "+
-                speechType.toString()+"\nProperty: "+property.toString()+"\nIThought lists size: "+
-        content.size()+"\nFirst I thought in the lists to string method: "+content.get(0).toString());
+        Debug.printDebugMessage("Line: " + line + "\nSpeaker: " + speaker + "\nListener: " + listener + "\nSpeechType: " +
+                speechType.toString() + "\nProperty: " + property.toString() + "\nIThought lists size: " +
+                content.size() + "\nFirst I thought in the lists to string method: " + content.get(0).toString(),
+                Debug.Channel.SPEECH_ACTS);
     }
 }

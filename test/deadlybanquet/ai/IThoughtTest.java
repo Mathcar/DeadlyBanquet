@@ -25,7 +25,7 @@ public class IThoughtTest {
         tree.add(new Whereabouts("Oscar", "Kitchen", null, 0.5, null));
         tree.add(new Whereabouts("April", "Kitchen", null, 0.5, null));
         for (IThought i:tree)
-            System.out.println(i);
+            Debug.printDebugMessage(i);
     }
     
     @Test

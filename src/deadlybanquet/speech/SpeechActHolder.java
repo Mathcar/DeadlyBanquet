@@ -3,6 +3,7 @@ package deadlybanquet.speech;
 import deadlybanquet.ai.BeingPolite;
 import deadlybanquet.ai.IThought;
 import deadlybanquet.ai.Whereabouts;
+import deadlybanquet.model.Debug;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -72,7 +73,7 @@ public class SpeechActHolder {
             if (fileEntry.isDirectory()) {
                 listFilesForFolder(fileEntry);
             } else {
-                System.out.println(fileEntry.getName());
+                Debug.printDebugMessage(fileEntry.getName(), Debug.Channel.SPEECH_ACTS);
             }
         }
     }
