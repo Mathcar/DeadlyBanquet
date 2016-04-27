@@ -59,7 +59,8 @@ public class Do implements IThought{
     public void setPlaceHolderToNull() {
         if (doer=="") doer=null;
         if (withWhat=="") withWhat=null;
-        if (when.isPlaceHolder()) when=null;
+        
+        if (when!=null && when.isPlaceHolder()) when=null;
     }
 
     @Override
