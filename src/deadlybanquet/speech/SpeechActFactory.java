@@ -85,6 +85,18 @@ public class SpeechActFactory {
         return convertIThoughtToSpeechAct(iList,prop, World.stringToIPerceiver(speaker),World.stringToIPerceiver(listener));
     }
 
+    public static SpeechAct convertIThoughtToSpeechAct(IThought t,TextPropertyEnum prop, IPerceiver speaker,IPerceiver listener){
+        ArrayList<IThought> list = new ArrayList<>();
+        list.add(t);
+        return convertIThoughtToSpeechAct(list,prop,speaker,listener);
+    }
+
+    public static SpeechAct convertIThoughtToSpeechAct(IThought t,TextPropertyEnum prop, String speaker,String listener){
+        ArrayList<IThought> list = new ArrayList<>();
+        list.add(t);
+        return convertIThoughtToSpeechAct(list,prop,speaker,listener);
+    }
+
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
         IThought i = iList.get(0);
         ArrayList<IThought> IThoughtList = new ArrayList<>();
