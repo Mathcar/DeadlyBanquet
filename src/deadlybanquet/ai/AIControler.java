@@ -122,6 +122,8 @@ public class AIControler {
 		return statebasedAI.selectPhrase(acts);
 	}
 
+	public SpeechAct getIntendedPhrase(){ return statebasedAI.getIntendedPhrase();}
+
 
 	public String getCharacterName(){
 		return character.getName();

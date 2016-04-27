@@ -550,6 +550,8 @@ public class NPCBrain implements IPerceiver, Talkable {
         return aic.selectPhrase(acts);
     }
 
+    public SpeechAct getIntendedPhrase(){return aic.getIntendedPhrase();}
+
     public AIControler getAIControler(){
         return aic;
     }

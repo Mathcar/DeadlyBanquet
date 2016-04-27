@@ -10,6 +10,8 @@ import deadlybanquet.model.Character;
 import deadlybanquet.model.Direction;
 import deadlybanquet.speech.SpeechAct;
 import deadlybanquet.model.World;
+import deadlybanquet.speech.SpeechActFactory;
+import deadlybanquet.speech.TextPropertyEnum;
 
 
 public class StateBasedAI {
@@ -59,6 +61,14 @@ public class StateBasedAI {
 		int index = (int)(Math.random()*4 + 0.5);
 		SpeechAct choice = acts.get(index);
 		return choice;
+	}
+	//Should return the phrase the AI wanted to express when initiating a conversation
+	public SpeechAct getIntendedPhrase(){
+		//TODO revise and complete implementation
+		//Remove this if this method becomes up-to-date complete
+		System.out.println("getIntendedPhrase() in StateBasedAI is not yet complete");
+		SpeechAct act = ;
+		return SpeechActFactory.convertIThoughtToSpeechAct(act, tpe, );
 	}
 	
 	private void getCharactersInRoom(AIControler aic, World world) {

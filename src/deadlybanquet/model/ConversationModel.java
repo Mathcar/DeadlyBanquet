@@ -90,9 +90,10 @@ public class ConversationModel {
                     TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
                     ArrayList<IThought> thoughts = new ArrayList<>();
                     thoughts.add(BeingPolite.GREET);
-                    SpeechAct sa = SpeechActFactory.convertIThoughtToSpeechAct(thoughts, tpe, perceiver1, perceiver2);
-
-
+                    SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(thoughts, tpe, perceiver1, perceiver2);
+                    perceiver1.hear(perceiver2.hear(greeting));
+                } else if(iteration==1){  //Start the conversation using the state based ai
+                    perceiver1.getIntendedPhrase();
                 }
             }
 

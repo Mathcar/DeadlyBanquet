@@ -39,6 +39,10 @@ public interface IPerceiver {
 
     //called on entering a room
     void seePeople(ArrayList<String> people);
+
+    //Should return the speechact intended to be said when initiating a conversation
+    //Only used on the ai
+    SpeechAct getIntendedPhrase();
     
     Memory getMemory(); //todo please add this.
 
