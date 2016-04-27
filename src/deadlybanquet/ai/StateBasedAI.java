@@ -25,11 +25,11 @@ public class StateBasedAI {
 	
 	private AIState state;
 	
-	List<Condition> conditions;
+	private List<Condition> conditions;
 	
 	private Queue<Task> schedule;
 	
-	List<Character> characters;
+	private List<Character> characters;
 	
 	public StateBasedAI(){
 		schedule = new LinkedList<Task>();
@@ -45,7 +45,11 @@ public class StateBasedAI {
 		genConditions(aic); 
 		
 		selectState(aic);
-		
+
+		if(schedule.isEmpty() && aic.getCharacterName().equals("BURT")){
+			System.out.println("BURT has an empty schedule!");
+		}
+
 		generateSchedule(aic,world ,taskEx);
 
 		conditions.clear();
@@ -67,8 +71,9 @@ public class StateBasedAI {
 		//TODO revise and complete implementation
 		//Remove this if this method becomes up-to-date complete
 		System.out.println("getIntendedPhrase() in StateBasedAI is not yet complete");
-		SpeechAct act = ;
-		return SpeechActFactory.convertIThoughtToSpeechAct(act, tpe, );
+		IThought thought = new Whereabouts("Candy", "");
+		TextPropertyEnum tpe  = TextPropertyEnum.NEUTRAL;
+		return SpeechActFactory.convertIThoughtToSpeechAct(thought, tpe, "Zigge", "Candy");
 	}
 	
 	private void getCharactersInRoom(AIControler aic, World world) {
@@ -77,12 +82,18 @@ public class StateBasedAI {
 	}
 
 	private void generateSchedule(AIControler aic,World world, TaskExecuter taskEx) {
+		if(!schedule.isEmpty())
+			return;					/*this should not be neccessary, but for some reason
+										the condition below always returns true! */
 		if(schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))){
+			if(aic.getCharacterName().equals("BURT)"))
+				System.out.println("generating new schedule!");
 			schedule.clear();
 			switch(state){
 				case IDLE_STATE:
-					
-					schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
+					if(aic.getCharacterName().equals("BURT"))
+						talkToCharacterSchedule("Frido", world, taskEx);
+					//schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
 					break;
 				case TALKING_STATE:
 					schedule.add(new TaskIdle());
@@ -134,18 +145,26 @@ public class StateBasedAI {
 	
 	private void runSchedule(AIControler aic){
 		if(!schedule.isEmpty() && schedule.peek().execute(aic)){
+			System.out.println(schedule.peek().toString() + " Remaining tasks = " + schedule.size());
 			schedule.poll();
 		}
 	}
 	
-	private void talkToCharacterSchedule(Character character,World world, TaskExecuter taskEx){
-		
-		if(characters.contains(character)){
+	private void talkToCharacterSchedule(String character,World world, TaskExecuter taskEx){
+		for(Character c : characters){
+			if(c.getName().equals(character)) {
+				schedule.add(new TaskMove(character, taskEx, MoveTypes.PERSON));
+				System.out.println("added taskMove in talkToCharacterSchedule");
+				schedule.add(new TaskTurn(Direction.NORTH));
+			}
+		}
+		/*if(characters.contains(character)){
 			schedule.add(new TaskMove(character.getName(),taskEx,MoveTypes.PERSON));
 		}else{
-			schedule.add(new TaskMove(world.getRoomOfCharacter(character).getName(), taskEx, MoveTypes.ROOM));
-		}
+			//schedule.add(new TaskMove(world.getRoomOfCharacter(character).getName(), taskEx, MoveTypes.ROOM));
+		}*/
 		schedule.add(new TaskInteract(taskEx));
+		System.out.println("added taskInteract in talkToCharacterSchedule");
 		
 		//find character
 		//walk to character

@@ -28,9 +28,10 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
 public class World implements ActionListener, TileBasedMap, TaskExecuter {
     private static World current;
-
+    private static PlayerBrain playerBrain;
     private static HashMap<AIControler, NPCBrain> controlerBrainMap;
     private static Time time;
+
     private Player player;
     //Pathfinding variables
     private AStarPathFinder masterPathfinder;
@@ -39,8 +40,10 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     private ArrayList<AIControler> aiss;
     private AIControler ai;
     private boolean talk;
+    //Conversation data
     private ConversationModel playerConv;
-    private static PlayerBrain playerBrain;
+    private ArrayList<ConversationModel> npcConversations;
+
     
 
     //roomMap needs to have empty borders! [0][any], [any][0], [max][any],[any][max] all need to be unfilled
@@ -49,6 +52,8 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
 
     public World(){
         current=this;
+
+        npcConversations = new ArrayList<>();
         //Create all rooms and place them in the roomMap
         initRoomMap();
         //This must be done after all rooms that are intended to be there
@@ -137,17 +142,45 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
 
             }
         }
-
         for(AIControler ai : aiss){
             ai.update(this, deltaTime);
         }
-        
+        //Update all ongoing conversations
+        for(ConversationModel cm : npcConversations){
+            cm.runConversation();
+            if(cm.isConversationOver())
+                cleanUpConversation(cm);
+        }
         if(talk){
         	s.enterState(States.talk);
         	talk = false;
+        }else if(playerConv != null && playerConv.isConversationOver()){
+            cleanUpConversation(playerConv);
         }
         
         player.update(this, container, s, deltaTime);
+
+    }
+
+    private void setUpConversation(AIControler aic1, AIControler aic2){
+        npcConversations.add(new ConversationModel(getControlerBrain(aic1), getControlerBrain(aic2)));
+        aic1.getCharacter().setTalking(true);
+        aic2.getCharacter().setTalking(true);
+    }
+
+    //Cleans up all the conversation vy notifying the characters and then removing the conversation
+    private void cleanUpConversation(ConversationModel cm){
+        System.out.println("Conversation with " + cm.getIPerceiver1().getName() + " and " +
+                            cm.getIPerceiver2() + " is now being cleaned up...");
+        getCharacterRef(cm.getIPerceiver1().getName()).setTalking(false);
+        getCharacterRef(cm.getIPerceiver2().getName()).setTalking(false);
+        if(cm == playerConv)
+            playerConv = null;
+        else
+            npcConversations.remove(cm);
+    }
+
+    private void removeFromConversation(IPerceiver p){
 
     }
 
@@ -218,30 +251,32 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
 
     public boolean attemptTalk(Character chr){
         Room temp = getRoomOfCharacter(chr);
+        System.out.println(chr.getName() + " attempts to talk...");
     	if(temp.isCharacterOn(chr.getFacedTilePos())){
+            Character c = temp.getCharacterOnPos(chr.getFacedTilePos());
+            AIControler target = getRelatedControler(c);
     		if(player.isCharacter(chr)){
-    			Character c = temp.getCharacterOnPos(chr.getFacedTilePos());
-        		for(AIControler a : aiss){
-        			if(a.getCharacterId() == c.getId()){
-        				c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
+                c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
+                playerConv = new ConversationModel(playerBrain,controlerBrainMap.get(target), player.getCharacter().getDefaultImage(),
+                        target.getCharacter().getDefaultImage());
+                player.getCharacter().setTalking(true);
+                target.getCharacter().setTalking(true);
+                attemptCreatePathToPerson(target, "Frido");
+              //  attemptCreateMasterPath(a, "Kitchen");
+              //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
+               // attemptCreatePathToDoor(a, "Bedroom");
+                talk = true;
+                return true;
 
-        				playerConv = new ConversationModel(playerBrain,controlerBrainMap.get(a), player.getCharacter().getDefaultImage(),
-        						a.getCharacter().getDefaultImage());
-       		        
-        				player.getCharacter().setTalking(true);
-        		        a.getCharacter().setTalking(true);
-        		        attemptCreatePathToPerson(a, "Frido");
-        		      //  attemptCreateMasterPath(a, "Kitchen");
-        		      //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
-        		       // attemptCreatePathToDoor(a, "Bedroom");
-    	
-        				
-        		        talk = true;
-        				return true;
-        			}
-        		}	      
     		}
-              
+            else{       //Character attempting to talk is an npc
+                AIControler attempter = getRelatedControler(chr);
+                c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
+                setUpConversation(attempter, target);
+                System.out.println(attempter.getCharacterName() + " started a conversation with " +
+                                    target.getCharacterName());
+                return true;
+            }
     	}
     	return false;
     }
@@ -600,6 +635,17 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     
     public ConversationModel getPlayerConv(){
     	return playerConv;
+    }
+
+    private Character getCharacterRef(String name){
+        if(name.equals(player.getName()))
+            return player.getCharacter();
+        for(AIControler aic : aiss){
+            if(aic.getCharacterName().equals(name))
+                return aic.getCharacter();
+        }
+        System.out.println("getCharacterRef() couldnt find any character with that name!");
+        return null;
     }
 
     public static NPCBrain getControlerBrain(AIControler aic){

@@ -175,18 +175,25 @@ public class AIControler {
 			world.attemptChangeRooms(this.getCharacter());
 			world.attemptCreatePathToPerson(this, "Cindy");
 		}*/
-		
-		
-		if(hasPath() && movtim < 1){
-			moveNPC(world);
-			movtim = MOVEMNET_DELAY/2;
-		}
-		
-		if(masterPath != null && !masterPath.isEmpty() && hasPath() == false){
-			world.attemptCreatePathToDoor(this, masterPath.getNext());
-			if(world.attemptChangeRooms(getCharacter())){
-				masterPath.removeNext();
+
+		if(isTalking())
+			return;			//Do not update anything if in a conversations
+							//Conversation "updates" are handled in ConversationModel and NPCBrain
+		if(hasPath() || masterPath != null) {
+			if (hasPath() && movtim < 1) {
+				moveNPC(world);
+				movtim = MOVEMNET_DELAY / 2;
+			} else if (masterPath != null && !masterPath.isEmpty()) {
+				world.attemptCreatePathToDoor(this, masterPath.getNext());
+				if (world.attemptChangeRooms(getCharacter())) {
+					masterPath.removeNext();
+				}
 			}
+		}
+		else{
+			if(getCharacterName().equals("BURT"))
+				System.out.println("BURT had no path so he is now thinking");
+			statebasedAI.think(this, world, world); //Only think if path is blocked or non-existent
 		}
 	
         if(!getCharacter().isMoving()){
@@ -198,7 +205,7 @@ public class AIControler {
 		
 		movtim--;
 		
-		statebasedAI.think(this, world, world);
+
 	}
 	//end
 

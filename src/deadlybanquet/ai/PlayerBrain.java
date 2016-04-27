@@ -83,6 +83,12 @@ public class PlayerBrain implements IPerceiver {
         
     }
 
+    @Override
+    public SpeechAct getIntendedPhrase(){
+        System.err.println("getIntendedPhrase should not be called on the player!");
+        return null;
+    }
+
 	@Override
 	public String getName() {
 		return name;

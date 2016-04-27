@@ -55,20 +55,14 @@ public class ConversationModel {
     }
 
     private void initDefaults(){
-        //TODO NO PERCEIVERS IN THE FACTORY!
         actHistory = new HashMap<>();
         actHistory.put(perceiver1, new ArrayList<SpeechAct>());
         actHistory.put(perceiver2, new ArrayList<SpeechAct>());
         conversationCompleted = false;
-        System.out.println("Defaults initialized");
     }
 
     public void runConversation(){
-        // for now assume that player will start to speak
-
-        boolean end=false;
-
-
+        // for now assume that perceiver1 will start to speak
         if(hasPlayer){
             if(playersChoice!= null){
                 System.out.println("Players choice exists!");
@@ -88,33 +82,28 @@ public class ConversationModel {
                 //First runthrough means only greetings should be exchanged
                 if(iteration==0){
                     TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
-                    ArrayList<IThought> thoughts = new ArrayList<>();
-                    thoughts.add(BeingPolite.GREET);
-                    SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(thoughts, tpe, perceiver1, perceiver2);
-                    perceiver1.hear(perceiver2.hear(greeting));
-                } else if(iteration==1){  //Start the conversation using the state based ai
-                    perceiver1.getIntendedPhrase();
+                    SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
+                                                                                    tpe, perceiver1, perceiver2);
+                    sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
+                    System.out.println("NPCs actually greeted each other without crash, score!");
+                    iteration++;
+                } else if(iteration==1){  //Start the conversation using the phrase chosen by the StateBasedAI
+                    actHistory.get(perceiver1).add(sendActToPerceiver(perceiver1,
+                                                        sendActToPerceiver(perceiver2,perceiver1.getIntendedPhrase())));
+                    System.out.println("NPC actually asked the intended question and got an answer without crash, score!");
+                    iteration++;
+                } else{     //Just run the conversation using old answers and the hear function!
+                    SpeechAct answer = sendActToPerceiver(perceiver2, getIndendedAct(perceiver1));
+                    actHistory.get(perceiver1).add(sendActToPerceiver(perceiver1, answer));
+                    iteration++;
                 }
             }
-
-        }
-        /*if(iteration == 0){
-            perceiver1.selectPhrase(saFactory.getDialogueOptions(true));
-        }
-        saFactory.getDialogueOptions(true);
-        /*
-
-        /*while(!end){
-            SpeechAct p = player.saySomeThing();
-            p.setSpeaker(player.getName());
-            npc.getBrain.hear(p);
-            npc.think();
-            SpeechAct n= npc.getAi.createSpeechAct();
-            player.getBrain.hear(n);
-            if(p.getContent().contains(BeingPolite.GOODBYE) || n.getContent().contains(BeingPolite.GOODBYE)){
-                end=true;
+            else{
+                //Should say goodbye here instead, but starting like this for debug
+                //TODO add goodbye phrases here instead
+                conversationCompleted = true;
             }
-        }*/
+        }
     }
 
     private void doOneRound(SpeechAct act){
@@ -122,7 +111,6 @@ public class ConversationModel {
         //answer = perceiver2.getAnswer();
         System.out.println("Answer = " + answer.getLine());
         sendActToPerceiver(perceiver1, answer); //No response should be created here
-
         if(act.getSpeechType() == SpeechType.GOODBYE){
             conversationCompleted = true;
         }
@@ -191,6 +179,18 @@ public class ConversationModel {
             return acts.get(acts.size()-1).getLine();   //Return latest line of act
     }
 
+    //Return the calculated speechAct from last received answer
+    private SpeechAct getIndendedAct(IPerceiver p){
+        ArrayList<SpeechAct>  acts = actHistory.get(p);
+        //System.out.println("current size of responses : " + acts.size());
+        if(acts.size() == 0) {
+            System.out.println("getIntendedAct failed since no act have been logged!");
+            return null;      //No act has been sent yet so there is nothing to display
+        }
+        else
+            return acts.get(acts.size()-1);   //Return latest line of act
+    }
+
     public Image getPlayerImage(){
     	return playerImage;
     }
@@ -200,7 +200,7 @@ public class ConversationModel {
     public IPerceiver getIPerceiver1(){
     	return perceiver1;
     }
-    public IPerceiver getIperceiver2(){
+    public IPerceiver getIPerceiver2(){
     	return perceiver2;
     }
 
