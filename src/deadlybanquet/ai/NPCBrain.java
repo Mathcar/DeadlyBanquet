@@ -384,14 +384,20 @@ public class NPCBrain implements IPerceiver, Talkable {
     private void processDo(Do inDo, String you, ArrayList<IThought> possibleAnswers){
         SortedList foundData = new SortedList();
         foundData = memory.find (inDo);
-        Say c;
+        IThought c;
         acceptUncritically (you, inDo);
         if (!foundData.isEmpty()){
             c = new Say (me, you, foundData.first(), AGREE);
             possibleAnswers.add(c);
             return;
         }
-        c = new Say(me, you, inDo, YESNO);
+        if(inDo.isQuestion()){
+            inDo.setPlaceHolderToNull();
+            c=inDo;
+        }
+        else {
+            c = new Say(me, you, inDo, YESNO);
+        }
         possibleAnswers.add(c);
     }
     

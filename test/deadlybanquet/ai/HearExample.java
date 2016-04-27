@@ -3,6 +3,7 @@ package deadlybanquet.ai;
 import static deadlybanquet.ai.BackStory.*;
 import static deadlybanquet.ai.BrainFactory.makeBrain;
 import static deadlybanquet.ai.Do.What.MURDER;
+import deadlybanquet.model.World;
 import static deadlybanquet.model.World.getTime;
 import deadlybanquet.speech.SpeechAct;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class HearExample {
     ArrayList<IThought> content;
     NPCBrain Jane;
     NPCBrain Bill;
+    World world;
     public HearExample() {
     }
 
@@ -30,6 +32,7 @@ public class HearExample {
         input.setSpeaker("Bill");
         Jane = makeBrain("Hell", "Jane");
         Bill = makeBrain("Hell", "Bill");
+        world=new World();
     }
     @Test
     public void testOpinion() {
@@ -54,9 +57,9 @@ public class HearExample {
     
     @Test
     public void testConversation(){
-        Opinion starter;
+        IThought starter;
         //starter = new Whereabouts("Jane", "");
-        //starter = new Whereabouts("Alice", "Kitchen");
+        starter = new Whereabouts("Alice", "");
         starter = new Opinion("Alice", new PAD (1,1,1));
         //starter = new Opinion ("Alice", PAD.placeholderPAD());
         //starter = NOMOBILESIGNAL;
@@ -70,7 +73,8 @@ public class HearExample {
         content.add(starter);
         //makeSpeechAct(content, "Bill");
         //Bill.plantFalseOpinion((Opinion)starter);
-        Bill.plantFalseMemory(starter);
+        //Bill.plantFalseMemory(starter);
+        Jane.observeRoomChange("Alice", "Bedroom", "kitchen");
         //Jane.plantFalseMemory(starter);
         while (true){
             //Jane hears and puts her response into debugInfo.
