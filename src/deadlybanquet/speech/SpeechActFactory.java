@@ -47,8 +47,8 @@ public class SpeechActFactory {
         if(temp.contains("#doer")){
             temp = temp.replace("#doer",d.getDoer());
         }
-        if(temp.contains("#reciver")){
-            temp = temp.replace("#reciver",d.getWithWhat());
+        if(temp.contains("#receiver")){
+            temp = temp.replace("#receiver",d.getWithWhat());
         }
         if(temp.contains("#item")){
             temp=temp.replace("#item",d.getWithWhat());
@@ -238,7 +238,7 @@ public class SpeechActFactory {
                                 break;
                             }
                         }*/
-                        text=createText(text,list,SpeechType.EVENT_INFO_DOER_WHAT_ITEM,prop);
+                        text=createText(text,list,SpeechType.EVENT_QUESTION_WHAT_ITEM,prop);
                         text=parseSpeechAct(text,(Do) i,speaker,listener);
                         temp=new SpeechAct(text,speaker.getName(),listener.getName(),
                                 SpeechType.EVENT_QUESTION_WHAT_ITEM,prop,IThoughtList);
@@ -284,6 +284,7 @@ public class SpeechActFactory {
             }else{
                 ArrayList<SpeechInfo> list = holder.getInfoFrase();
                 //THIS IS AN INFO ABOUT AN EVENT!
+                //System.err.println("THIS IS AN INFO EVENT!!!!: "+i.toString());
                 if(((Do) i).getWhen()==null){
                     //dont know the time
                     if(((Do) i).whatWhatisAbout().equals("person")){
