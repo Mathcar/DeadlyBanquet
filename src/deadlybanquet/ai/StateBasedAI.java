@@ -78,8 +78,8 @@ public class StateBasedAI {
 					schedule.add(new TaskIdle());
 					break;
 				case MOVEING_STATE:
-					schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.DOOR));
-					schedule.add(new TaskMove("BURT", taskEx, MoveTypes.PERSON));
+					schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
+					schedule.add(new TaskMove("Daisy", taskEx, MoveTypes.PERSON));
 					break;
 				default:
 					break;
