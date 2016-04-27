@@ -84,8 +84,18 @@ public class ConversationModel {
             //then let perceiver1 choose the question to start the hear loop
             //keep track of the conversation by forving a goodbye after a certain amount
             //of iterations
+            if(iteration<maxIterations){
+                //First runthrough means only greetings should be exchanged
+                if(iteration==0){
+                    TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
+                    ArrayList<IThought> thoughts = new ArrayList<>();
+                    thoughts.add(BeingPolite.GREET);
+                    SpeechAct sa = SpeechActFactory.convertIThoughtToSpeechAct(thoughts, tpe, perceiver1, perceiver2);
 
-            
+
+                }
+            }
+
         }
         /*if(iteration == 0){
             perceiver1.selectPhrase(saFactory.getDialogueOptions(true));
