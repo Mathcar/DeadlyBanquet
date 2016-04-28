@@ -1,6 +1,6 @@
 package deadlybanquet.model;
 
-import deadlybanquet.AI;
+
 import deadlybanquet.RenderObject;
 import deadlybanquet.RenderSet;
 
@@ -24,11 +24,10 @@ public class Room implements TileBasedMap {
     private AStarPathFinder pathFinder;
     private ArrayList<Character> characters;
     private ArrayList<Door> doors;
-    private ActionListener actList; 
     public static final int DOOR_LAYER = 3;
     
 
-    public Room(String tilemapURL, String name, ActionListener al){
+    public Room(String tilemapURL, String name){
         try {
             map = new TiledMap(tilemapURL);
         }catch(SlickException se){
@@ -38,8 +37,6 @@ public class Room implements TileBasedMap {
         pathFinder = new AStarPathFinder(this, 50, false);
         characters = new ArrayList<Character>();
         createDoors();
-        
-        this.actList = al;
 
     }
 
