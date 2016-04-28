@@ -252,24 +252,7 @@ public class Room implements TileBasedMap {
             return true;
         }
     }
-/*               OBSOLETE
-    //Checks if a character can move to its desired destination.
-    //tells the character to conduct its move if it can, otherwise notifies
-    //the character through "notifyBlocked()"
-    public void moveWithCollision(ActionEvent e){
-        Character c = (Character)e.getSource();
-        if(hasCharacter(c)){
-            Position newPos = c.getFacedTilePos();
-            if(!isInBoundaries(newPos) || isBlocked(newPos.getX(), newPos.getY())){
-                //tile is blocked, send notification to related ai/character?
-                c.notifyBlocked();
-
-            }else{
-                c.executeMove(); //character can move
-            }
-        }
-    }
-*/
+    
     public boolean entranceIsBlocked(Direction origin){
         for(Door d : doors) {
             if(d.getDirection()==Direction.getOppositeDirection(origin)){
@@ -338,15 +321,6 @@ public class Room implements TileBasedMap {
             }
         }
     }
-    /*              OBOSOLETE
-    public void checkDoor(ActionEvent e){
-    	Position p = ((Character) e.getSource()).getFacedTilePos();
-    	for(Door d : doors){
-    		if(d.getX() == p.getX() && d.getY() == p.getY()){
-    			((Character) e.getSource()).enterDoor(d.getDestinationRoom(), d.getOriginRoom());
-    		}
-    	}
-    }*/
 
     public boolean isCharacterOn(Position p){
     	for(Character c: characters){

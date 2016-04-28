@@ -15,19 +15,6 @@ import org.newdawn.slick.util.pathfinding.AStarPathFinder;
 
 
 public class GameWindow extends BasicGameState {
-	/*------------OBSOLETE VARIABLES-----------------
-	private TiledMap map1, map2, map3;
-	private int roomNum = 1;
-	// A*pathfinding testing variables-------------
-	private AStarPathFinder pathFinder;
-	private LayerBasedTileMap pathfindingMap;
-	private int currentX = 0;
-	private int currentY = 0;
-	private int currentLayer = 0;
-	private NPCMover testNPC;
-	private Image npcImage;
-	private OldPlayer thePlayer;
-	*/
 	private View view;
 	private World model;
 
@@ -36,38 +23,10 @@ public class GameWindow extends BasicGameState {
 	}
 
 	public void render(GameContainer container, StateBasedGame s,Graphics g) throws SlickException {
-	/*			OBSOLETE
-		if(roomNum == 1){
-			map1.render(0, 0);
-			npcImage.draw(testNPC.x, testNPC.y);
-		}
-		else if(roomNum == 2){
-			map2.render(0, 0);
-		}else if(roomNum == 3){
-			map3.render(0, 0);
-		}
-		thePlayer.render();			//play the player animation
-		*/
 		view.drawRenderObjects(model.getRenderSet(),g);
 	}
 
-	public void init(GameContainer container, StateBasedGame s) throws SlickException {
-		/*map1 = new TiledMap("res/pictures/living_room2.tmx");
-		map2 = new TiledMap("res/pictures/kitchen.tmx");
-		map3 = new TiledMap("res/pictures/bedroom.tmx");
-		thePlayer = new OldPlayer(); //create the player object
-		
-        //Pathfinding test inits-----------------------------
-		npcImage = new Image("res/pictures/testNPC.png");    //ALSO MOVED
-		pathfindingMap = new LayerBasedTileMap(map1);
-		pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		testNPC = new NPCMover(9*32,9*32);
-        //----------------------------------------------------
-        		OLD CODE
-        */
-
-
-		
+	public void init(GameContainer container, StateBasedGame s) throws SlickException {		
 		view = new View(container.getHeight(), container.getWidth());
 		
 	}
@@ -111,41 +70,4 @@ public class GameWindow extends BasicGameState {
 		// TODO Auto-generated method stub
 		return States.game;
 	}
-
-	/* OBSOLETE
-    //Draws a grid over the background TiledMap, currently requires origin of (0,0)
-    public void drawGrid(Graphics g){
-        for(int i = 0; i<pathfindingMap.getWidthInTiles(); i++){
-            for(int j=0; j<pathfindingMap.getHeightInTiles();j++){
-                g.drawRect(i*32,j*32,32,32);
-            }
-        }
-
-    }
-    */
-
-/*			OBSOLETE
-	//Needs to be updated when rooms are fully defined!!!
-	public void swapRooms(int roomID){
-
-		if(roomID == 2) {
-			roomNum = 2;
-			pathfindingMap = new LayerBasedTileMap(map2);
-			pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		}else if(roomID == 1){
-			roomNum=1;
-			pathfindingMap = new LayerBasedTileMap(map1);
-			pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		}
-		else{
-			roomNum=3;
-			pathfindingMap = new LayerBasedTileMap(map3);
-			pathFinder = new AStarPathFinder(pathfindingMap, 100, false);
-		}
-	}
-					NOT USED IN NEW MODEL*/
-
-
-
-
 }

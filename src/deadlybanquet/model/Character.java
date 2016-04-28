@@ -103,7 +103,6 @@ public class Character implements Renderable, Mover{
 		}
 		traits = new LinkedList<Trait>();
 		idCounter++;
-		//this.blocked=false;		OBOLETE
 	}
 
     public void meetNewCharacter(Character person){
@@ -192,51 +191,11 @@ public class Character implements Renderable, Mover{
 	public void setDirection(Direction dir){
 		direction = dir;
 	}
-
-	/* ---------------OBSOLETE, ACTIONEVENTS ARE NO LONGER USED!-------------
-	public void moveE(){
-		this.direction = Direction.EAST;
-		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
-	}
-	
-	public void moveW(){
-		this.direction = Direction.WEST;
-		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
-	}
-	
-	public void moveN(){
-		this.direction = Direction.NORTH;
-		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
-	}
-	
-	public void moveS(){
-		this.direction = Direction.SOUTH;
-		this.actList.actionPerformed(new ActionEvent(this, 0, "move"));
-	}
-	----------------------------------------------------------------*/
 	
 	public void executeMove(){
         Position newPos = getFacedTilePos();
         moving = true;
         setPos(newPos);
-        /*      Functionality held in getFacedTilePos renders this obsolete
-		switch(this.direction){
-			case NORTH:
-				pos.decY();
-				moving = true;
-			case SOUTH:
-				pos.incY();
-				moving = true;
-			case WEST:
-				pos.decX();
-				moving = true;
-			case EAST:
-				pos.incX();
-				moving = true;
-			default:
-				break;
-		}
-		*/
 	}
 
 	/*
@@ -348,49 +307,6 @@ public class Character implements Renderable, Mover{
 	public boolean equals(Character c){
 		return c.getName().equals(name);
 	}
-
-	/*-------------OBSOLETE, BLOCKED STATUS IS IN AIC INSTEAD----------
-	public void notifyBlocked() {
-		this.blocked=true;
-	}
-	
-	public boolean isBlocked() {
-		return this.blocked;
-	}
-	
-	public void unblock(){
-		this.blocked = false;
-	}
-	--------------------------------------------------------------------*/
-
-	/*------------------OBSOLETE, ACTIONEVENTS ARE NO LONGER USED!---------------------
-	//Request a path to a door withing the current room which leads to targRoom
-	//OBS! This yields NOTHING if no door connects to the targRoom
-	public void reqPathToDoor(String targRoom){
-		actList.actionPerformed(new ActionEvent(this, EventEnum.REQUEST_PATH_TO_DOOR.ordinal(), targRoom));
-	}
-
-	//Requests a masterpath in between rooms
-	public void reqMasterPathToRoom(String targRoom){
-		actList.actionPerformed(new ActionEvent(this, EventEnum.REQUEST_PATH_TO_ROOM.ordinal(), targRoom));
-	}
-
-	//Requests a path to a specific person
-	public void reqPathToPerson(String personName){
-		actList.actionPerformed(new ActionEvent(this, EventEnum.REQUEST_PATH_TO_PERSON.ordinal(), personName));
-	}
-	
-	public void attemptRoomChange(){
-		this.actList.actionPerformed(new ActionEvent(this, EventEnum.CHECK_DOOR.ordinal(), ""));
-	}
-	
-	public void tryTalk(){
-		this.actList.actionPerformed(new ActionEvent(this, EventEnum.TALK_TO.ordinal(), ""));
-	}
-
-	public void enterDoor(String toRoom, String fromRoom){
-		this.actList.actionPerformed(new ChangeRoomEvent(this, fromRoom, toRoom, this.direction));
-	}*/
 
 	public String getRoom() {
 		return room;
