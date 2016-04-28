@@ -20,8 +20,8 @@ public class Player implements Talkable {
 	private final static int MOVEMENT_DELAY = 32;
 	private int movementTimer = MOVEMENT_DELAY;
 	
-	public Player(ActionListener al, PlayerBrain brain){
-		this.character = new Character(al, "Gandalf", 5, 5);
+	public Player(PlayerBrain brain){
+		this.character = new Character("Gandalf", 5, 5);
 		playerBrain = brain;
 	}
 	

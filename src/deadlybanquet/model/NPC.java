@@ -12,13 +12,13 @@ public class NPC extends Character implements Mover{
 
 	private Character c;
 	
-	public NPC(ActionListener al , String name, int xPos, int yPos) {
-		super(al, name, xPos, yPos);
+	public NPC(String name, int xPos, int yPos) {
+		super(name, xPos, yPos);
 		
 	}
 	
 	public NPC(ActionListener al, Character c){
-		super(al, c);
+		super(c);
 		this.c = c;
 	}
 

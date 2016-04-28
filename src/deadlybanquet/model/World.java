@@ -26,7 +26,7 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
  * Created by Hampus on 2016-03-04.
  */
 
-public class World implements ActionListener, TileBasedMap, TaskExecuter {
+public class World implements TileBasedMap, TaskExecuter {
     private static World current;
     private static PlayerBrain playerBrain;
     private static HashMap<AIControler, NPCBrain> controlerBrainMap;
@@ -99,7 +99,7 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     }
 
     private void initPlayer(){
-        Character playerCharacter = new Character(this, "NoName", 9, 13);
+        Character playerCharacter = new Character("NoName", 9, 13);
         playerBrain = new PlayerBrain(playerCharacter.getName());
         player = new Player(playerCharacter, playerBrain);
         roomMap[2][2].addCharacter(playerCharacter);
@@ -119,8 +119,8 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     }
     //always use when creating an npc 
     private void createNpc (Position pos, String name, String room){
-    	Character npc = new Character(this, name, pos.getX(), pos.getY());
-    	AIControler	ai = new AIControler(this,npc);
+    	Character npc = new Character(name, pos.getX(), pos.getY());
+    	AIControler	ai = new AIControler(npc);
         NPCBrain brain = BrainFactory.makeBrain(room, npc.getName(), ai);
     	aiss.add(ai);
     	Debug.printDebugMessage(name + " created in " +room, Debug.Channel.WORLD);
@@ -132,9 +132,9 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
     private void initRoomMap(){
         roomMap = new Room[4][4];       //Needs to be updated as more rooms are added
         //add room initiations
-        roomMap[2][2] = new Room("res/pictures/living_room2.tmx", "Living Room",this);
-        roomMap[1][2] = new Room("res/pictures/bedroom.tmx", "Bedroom",this);
-        roomMap[2][1] = new Room("res/pictures/kitchen.tmx", "Kitchen",this);
+        roomMap[2][2] = new Room("res/pictures/living_room2.tmx", "Living Room");
+        roomMap[1][2] = new Room("res/pictures/bedroom.tmx", "Bedroom");
+        roomMap[2][1] = new Room("res/pictures/kitchen.tmx", "Kitchen");
         masterPathfinder = new AStarPathFinder(this, 10, false);
 
     }
@@ -395,45 +395,6 @@ public class World implements ActionListener, TileBasedMap, TaskExecuter {
             names.add(aic.getCharacterName());
         }
         return names;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //ActionEvent fired when a character wished to move
-        /*      OBSOLETE, use attempMove() instead!
-        if(e.getID() == EventEnum.MOVE.ordinal()) {
-            for (Room[] rm : roomMap) {
-                for (Room r : rm) {
-                    if(r!= null)
-                        r.moveWithCollision(e);
-                }
-            }
-        }
-        */
-       /*
-        //ActionEvent fired when a character wants to change room/walk through a door
-        if(e.getID() == EventEnum.CHANGE_ROOMS.ordinal()) {
-            ChangeRoomEvent ce = (ChangeRoomEvent) e;
-            //Check if new room has space, remove from old room, add to new
-            Room targetRoom = getRoomRef(ce.getTargetRoom());
-            Room originRoom = getRoomRef(ce.getOriginRoom());
-            //----------------------------------DEBUG--------------------------------
-            Debug.printDebugMessage();(originRoom.getName() + "   to   " + targetRoom.getName()
-                                + " entering from " + ce.getEnterDirection().toString() );
-            //-----------------------------------------------------------------------
-
-            if (!targetRoom.entranceIsBlocked(ce.getEnterDirection())) {
-                Character c = (Character) ce.getSource();
-                originRoom.removeCharacter(c);
-                //Tell the affected rooms to notify all characters so that this can be added
-                //to memory
-                targetRoom.addCharacterToRoom(c, ce.getEnterDirection());
-                notifyRoomChange(originRoom, targetRoom, c);
-                seePeople(c, targetRoom);
-
-
-            }
-        }*/
     }
 
     private AIControler getRelatedControler(Character c){

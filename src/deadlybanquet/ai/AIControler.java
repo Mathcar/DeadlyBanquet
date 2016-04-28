@@ -20,14 +20,8 @@ public class AIControler {
 	private MasterPath masterPath;
 	private Path path;
 	private int movtim = 0;
-	
-	public AIControler(ActionListener al){
-		this.character = new Character(al, "Frido", 3, 3);
-		statebasedAI = new StateBasedAI();
-        pathStep = 0;
-	}
-	
-	public AIControler(ActionListener al, Character c){
+		
+	public AIControler(Character c){
 		this.character = c;
 		statebasedAI = new StateBasedAI();
 		pathStep = 0;

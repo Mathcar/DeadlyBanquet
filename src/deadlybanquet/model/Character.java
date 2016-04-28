@@ -56,7 +56,7 @@ public class Character implements Renderable, Mover{
 
     private Map opinions = new HashMap<Integer, Opinion>();
 	
-    public Character(ActionListener al, Character c){
+    public Character(Character c){
     	this.id = c.getId();
     	this.name = c.getName();
     	this.pos = c.getPos();
@@ -65,7 +65,7 @@ public class Character implements Renderable, Mover{
     		
     }
 	
-	public Character(ActionListener al, String name, int xPos, int yPos){
+	public Character(String name, int xPos, int yPos){
         //set ID
         
         this.id=idCounter;
@@ -77,7 +77,6 @@ public class Character implements Renderable, Mover{
 		
 		this.talking = false;
 		
-		this.actList = al;
 		
 		try {
 			if(id == 0){
