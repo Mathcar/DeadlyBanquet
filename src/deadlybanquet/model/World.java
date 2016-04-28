@@ -55,6 +55,7 @@ public class World implements TileBasedMap, TaskExecuter {
         Debug.init();
         //Set which npc will be able to print messages to debug, if none is set then all of them will be able to send
         Debug.setDebugNPC("BURT");
+        //Debug.setChannelStatus(Debug.Channel.SPEECH_ACTS, false);
         current=this;
 
         npcConversations = new ArrayList<>();
@@ -163,10 +164,14 @@ public class World implements TileBasedMap, TaskExecuter {
             ai.update(this, deltaTime);
         }
         //Update all ongoing conversations
+        ArrayList<ConversationModel> cleanupList = new ArrayList<>();
         for(ConversationModel cm : npcConversations){
             cm.runConversation();
             if(cm.isConversationOver())
-                cleanUpConversation(cm);
+                cleanupList.add(cm);
+        }
+        for(ConversationModel cm : cleanupList){
+            cleanUpConversation(cm);
         }
         if(talk){
         	s.enterState(States.talk);

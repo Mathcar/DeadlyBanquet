@@ -1,5 +1,6 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Debug;
 import deadlybanquet.model.TimeStamp;
 
 /**
@@ -121,7 +122,7 @@ public class Whereabouts implements IThought{
         PAD p =opinion;
         if(p!=null)
             p=p.copy();
-        return new Whereabouts(room, character, p, certainty, t,null);
+        return new Whereabouts(character, room, p, certainty, t,null);
     }
     
     @Override

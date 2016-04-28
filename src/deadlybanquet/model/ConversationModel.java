@@ -97,6 +97,7 @@ public class ConversationModel {
                 } else{     //Just run the conversation using old answers and the hear function!
                     SpeechAct answer = sendActToPerceiver(perceiver2, decidedAnswer);
                     decidedAnswer = sendActToPerceiver(perceiver1, answer);
+                    Debug.printDebugMessage("One round of conversation is completed!", Debug.Channel.CONVERSATION);
                     iteration++;
                 }
             }

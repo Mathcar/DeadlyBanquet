@@ -87,6 +87,8 @@ public class NPCBrain implements IPerceiver, Talkable {
     //This method evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
     public SpeechAct hear(SpeechAct act){
+        Debug.printDebugMessage(me + " HEARS = " + act.getLine() + " ||| intended for = " + act.getListener()
+                                + " and said by = " + act.getSpeaker(), Debug.Channel.BRAIN);
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         String you = act.getSpeaker();
@@ -281,6 +283,7 @@ public class NPCBrain implements IPerceiver, Talkable {
             else
                 foundData.add(new Say(me, you, inWhere, YESNO));
         }
+        Whereabouts w = (Whereabouts)foundData.first();
         possibleAnswers.add(foundData.first());
     }
     
@@ -500,7 +503,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         //if(ans.isEmpty()) return;
         String temp = me + " says: ";
         for (IThought i: ans){
-            temp+= temp.toString();
+            temp+=  i.toString();
         }
         Debug.printDebugMessage(temp, Debug.Channel.BRAIN);
         return convertIThoughtToSpeechAct(ans, NEUTRAL,me,you);
