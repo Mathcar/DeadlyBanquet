@@ -89,6 +89,7 @@ public class Talk extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame s, int arg2) throws SlickException {
 
 		if(gc.getInput().isKeyPressed(Input.KEY_E) || conv.isConversationOver()){
+			conv.setConversationOver(true);
 			gc.getInput().clearKeyPressedRecord();
 			resetRunningData();
 			s.enterState(States.game);

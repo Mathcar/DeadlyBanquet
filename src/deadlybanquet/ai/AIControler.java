@@ -185,8 +185,7 @@ public class AIControler {
 					masterPath.removeNext();
 				}
 			}
-		}
-		else{
+		}else if(!getCharacter().isMoving()){
 			Debug.printDebugMessage(getCharacterName() + " had no path and is now thinking", Debug.Channel.NPC,
 										getCharacterName());
 			statebasedAI.think(this, world, world); //Only think if path is blocked or non-existent

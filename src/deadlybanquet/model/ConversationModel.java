@@ -156,6 +156,10 @@ public class ConversationModel {
     public boolean isConversationOver(){
         return conversationCompleted;
     }
+    
+    public void setConversationOver(boolean b){
+    	conversationCompleted = b;
+    }
 
     //Called from the Talk state once a speechact has been constructed using the interface
     //This is only used in conversations that contain the player

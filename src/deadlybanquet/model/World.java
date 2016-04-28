@@ -269,6 +269,29 @@ public class World implements TileBasedMap, TaskExecuter {
         return null;
     }
     
+    public boolean attemptTurnToAdjacentCharacter(Character c, Character c2){
+
+    	int x = c.getPos().getX();
+    	int y = c.getPos().getY();
+    	int targetX  = c2.getPos().getX();
+    	int targetY  = c2.getPos().getY();
+    	if(x == targetX && y == targetY-1){
+    		c.setDirection(Direction.SOUTH);
+    		return true;
+    	}else if(x == targetX && y == targetY+1){
+    		c.setDirection(Direction.NORTH);
+    		return true;
+    	}else if(x == targetX-1 && y == targetY){
+    		c.setDirection(Direction.EAST);
+    		return true;
+    	}else if(x == targetX+1 && y == targetY){
+    		c.setDirection(Direction.WEST);
+    		return true;
+    	}
+    	
+    	return false;
+    	
+    }
 
     public boolean attemptTalk(Character chr){
         Room temp = getRoomOfCharacter(chr);
@@ -282,7 +305,7 @@ public class World implements TileBasedMap, TaskExecuter {
                         target.getCharacter().getDefaultImage());
                 player.getCharacter().setTalking(true);
                 target.getCharacter().setTalking(true);
-                //attemptCreatePathToPerson(target, "Frido");
+                attemptCreatePathToPerson(target, "Frido");
               //  attemptCreateMasterPath(a, "Kitchen");
               //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
                // attemptCreatePathToDoor(a, "Bedroom");

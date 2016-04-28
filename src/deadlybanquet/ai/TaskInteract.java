@@ -13,11 +13,8 @@ public class TaskInteract implements Task {
 	
 	@Override
 	public boolean execute(AIControler aiControler) {
-		if(!aiControler.hasPath()){					//WHY THIS CHECK?? /Hampus
-			Debug.printDebugMessage("TaskInteract executing...", Debug.Channel.NPC, aiControler.getCharacterName());
-			return taskEx.attemptTalk(aiControler.getCharacter());
-		}
-		return false;
+		Debug.printDebugMessage("TaskInteract executing...", Debug.Channel.NPC, aiControler.getCharacterName());
+		return taskEx.attemptTalk(aiControler.getCharacter());
 	}
 
 }

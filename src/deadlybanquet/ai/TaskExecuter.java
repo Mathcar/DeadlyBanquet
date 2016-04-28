@@ -15,4 +15,5 @@ public interface TaskExecuter {
 	public boolean attemptCreatePathToPerson(AIControler aic, String s);
 	public boolean attemptCreatePathToDoor(AIControler aic, String s);
 	public boolean attemptCreateMasterPath(AIControler aic, String s);
+	public boolean attemptTurnToAdjacentCharacter(Character c, Character c2);
 }

@@ -100,15 +100,16 @@ public class StateBasedAI {
             switch (state) {
                 case IDLE_STATE:
                     if (aic.getCharacterName().equals("BURT"))
-                        talkToCharacterSchedule("Frido", world, aic, taskEx);
+                        talkToCharacterSchedule("Candy", world, aic, taskEx);
                     //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
                     break;
                 case TALKING_STATE:
                     schedule.add(new TaskIdle());
                     break;
                 case MOVEING_STATE:
-                    schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
-                    schedule.add(new TaskMove("Daisy", taskEx, MoveTypes.PERSON));
+                	talkToCharacterSchedule("Daisy", world, aic, taskEx);
+                    //schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
+                    //schedule.add(new TaskMove("Daisy", taskEx, MoveTypes.PERSON));
                     break;
                 default:
                     break;
@@ -156,11 +157,15 @@ public class StateBasedAI {
     }
 
     private void runSchedule(AIControler aic) {
-        if (!schedule.isEmpty() && schedule.peek().execute(aic)) {
-            Debug.printDebugMessage(aic.getCharacterName() + " executed " + schedule.peek().toString() +
-                            " Remaining tasks = " + schedule.size(),
-                    Debug.Channel.NPC, aic.getCharacterName());
-            schedule.poll();
+        if (!schedule.isEmpty() ) {
+        	if(schedule.peek().execute(aic)){
+	            Debug.printDebugMessage(aic.getCharacterName() + " executed " + schedule.peek().toString() +
+	                            " Remaining tasks = " + schedule.size(),
+	                    Debug.Channel.NPC, aic.getCharacterName());
+	            schedule.poll();
+        	}else{
+        		
+        	}
         }
     }
 
@@ -170,7 +175,7 @@ public class StateBasedAI {
                 schedule.add(new TaskMove(character, taskEx, MoveTypes.PERSON));
                 Debug.printDebugMessage(aic.getCharacterName() + " added taskMove in talkToCharacterSchedule",
                         Debug.Channel.NPC, aic.getCharacterName());
-                schedule.add(new TaskTurn(Direction.NORTH));
+                schedule.add(new TaskTurnTo(taskEx, c));
                 intendedPhrase = SpeechActFactory.convertIThoughtToSpeechAct(new Whereabouts("Candy", ""),
                         TextPropertyEnum.NEUTRAL, aic.getCharacterName(), character);
             }
