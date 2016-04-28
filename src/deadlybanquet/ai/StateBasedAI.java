@@ -95,8 +95,7 @@ public class StateBasedAI {
         }
 
         if (schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))) {
-            if (aic.getCharacterName().equals("BURT)"))
-                Debug.printDebugMessage("generating new schedule!", Debug.Channel.NPC, aic.getCharacterName());
+            Debug.printDebugMessage("generating new schedule!", Debug.Channel.NPC, aic.getCharacterName());
             schedule.clear();
             switch (state) {
                 case IDLE_STATE:
