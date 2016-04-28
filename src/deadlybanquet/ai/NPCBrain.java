@@ -9,7 +9,6 @@ package deadlybanquet.ai;
  * of IThought objects.
  */
 
-import static deadlybanquet.AI.speak;
 import static deadlybanquet.ai.BeingPolite.*;
 import static deadlybanquet.ai.PAD.placeholderPAD;
 import static deadlybanquet.ai.Say.How.*;
