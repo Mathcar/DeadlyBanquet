@@ -296,7 +296,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                 foundData.add(new Say(me, you, inWhere, YESNO));
         }
         possibleAnswers.add(foundData.first());
-        if (!inWhere.isQuestion())
+        if (!inWhere.isQuestion()&&!inWhere.dontKnow())
             acceptUncritically(you, inWhere);
     }
     
