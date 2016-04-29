@@ -194,8 +194,9 @@ public class Character implements Renderable, Mover{
 	
 	public void executeMove(){
         Position newPos = getFacedTilePos();
-        moving = true;
         setPos(newPos);
+        moving = true;
+        
 	}
 
 	/*

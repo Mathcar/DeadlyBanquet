@@ -305,7 +305,7 @@ public class World implements TileBasedMap, TaskExecuter {
                         target.getCharacter().getDefaultImage());
                 player.getCharacter().setTalking(true);
                 target.getCharacter().setTalking(true);
-                attemptCreatePathToPerson(target, "Frido");
+               // attemptCreatePathToPerson(target, "Frido");
               //  attemptCreateMasterPath(a, "Kitchen");
               //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
                // attemptCreatePathToDoor(a, "Bedroom");

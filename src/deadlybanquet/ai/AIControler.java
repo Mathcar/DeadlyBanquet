@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import deadlybanquet.ai.Condition.ConditionState;
 import deadlybanquet.model.*;
 
 import deadlybanquet.speech.SpeechAct;
@@ -16,7 +17,6 @@ public class AIControler {
 	private StateBasedAI statebasedAI;
 	private int pathStep;
 	private final static int MOVEMNET_DELAY = 32;
-	private int movmentTimer = 0;
 	private MasterPath masterPath;
 	private Path path;
 	private int movtim = 0;
@@ -24,40 +24,36 @@ public class AIControler {
 	public AIControler(Character c){
 		this.character = c;
 		statebasedAI = new StateBasedAI();
-		pathStep = 0;
 	}
 	
-	public void moveNPC(World world){
-		Character c = getCharacter();
-        int targetX = path.getStep(pathStep).getX();
-        int targetY = path.getStep(pathStep).getY();
-        int x = c.getPos().getX();
-        int y = c.getPos().getY();
-        if (targetX != x) {
-            if(x < targetX){
-            	c.setDirection(Direction.EAST);
-            }else{
-            	c.setDirection(Direction.WEST);
-            }
-            world.attemptMove(getCharacter(), getCharacterDirection());
-           
-        	//x += (targetX - x) / Math.abs(targetX - x); //Move one pixel per update in the correct x direction
-        } else if (targetY != y) {
-        	if(y < targetY){
-            	c.setDirection(Direction.SOUTH);
-            }else{
-            	c.setDirection(Direction.NORTH);
-            }
-            world.attemptMove(c, getCharacterDirection());
-          
-        	//y += (targetY - y) / Math.abs(targetY - y); //Move one pixel per update in the correct x direction
-        } else if (path.getLength() > pathStep+1) {
-            pathStep++;  //If a grid has been reached, increment the path so the next grid will be the target
-        } else{
+	public boolean moveNPC(World world){
+		if(path.getLength() > pathStep){
+			Character c = getCharacter();
+	        int targetX = path.getStep(pathStep).getX();
+	        int targetY = path.getStep(pathStep).getY();
+	        int x = c.getPos().getX();
+	        int y = c.getPos().getY();
+	        if (targetX != x) {
+	            if(x < targetX){
+	            	c.setDirection(Direction.EAST);
+	            }else{
+	            	c.setDirection(Direction.WEST);
+	            }
+	            pathStep++;
+	            return world.attemptMove(getCharacter(), getCharacterDirection());
+	        } else if (targetY != y) {
+	        	if(y < targetY){
+	            	c.setDirection(Direction.SOUTH);	
+	            }else{
+	            	c.setDirection(Direction.NORTH);
+	            }
+	        	pathStep++;
+	            return world.attemptMove(c, getCharacterDirection());
+	        }
+		}else{
             path = null; //Remove current path if destination has been reached
         }
-        
-
+        return false;
 	}
 
 	//Called on every person in origin and destination rooms on room change.
@@ -105,7 +101,7 @@ public class AIControler {
 
 	public void setPath(Path p){
 		//Reset path counter?
-        pathStep  = 0;
+        pathStep  = 1;
 		path = p;
 	}
 
@@ -177,30 +173,25 @@ public class AIControler {
 							//Conversation "updates" are handled in ConversationModel and NPCBrain
 		if(hasPath() || masterPath != null) {
 			if (hasPath() && movtim < 1) {
-				moveNPC(world);
-				movtim = MOVEMNET_DELAY / 2;
-			} else if (masterPath != null && !masterPath.isEmpty()) {
+				if(!moveNPC(world)){
+					path = null;
+					character.setBlocked(true);
+				}else{
+					movtim = MOVEMNET_DELAY;
+				}
+			}else if (!hasPath() && masterPath != null && !masterPath.isEmpty()) {
 				world.attemptCreatePathToDoor(this, masterPath.getNext());
 				if (world.attemptChangeRooms(getCharacter())) {
 					masterPath.removeNext();
 				}
 			}
+			
+			movtim--;
 		}else if(!getCharacter().isMoving()){
 			Debug.printDebugMessage(getCharacterName() + " had no path and is now thinking", Debug.Channel.NPC,
 										getCharacterName());
 			statebasedAI.think(this, world, world); //Only think if path is blocked or non-existent
-		}
-	
-        if(!getCharacter().isMoving()){
-        	Direction d = world.getRoomOfCharacter(getCharacter()).getAdjacentDoorDirection(getCharacter().getPos());
-        	if(d != null){
-        		getCharacter().setDirection(d);
-        	}	
-        }
-		
-		movtim--;
-		
-
+		}    
 	}
 	//end
 
