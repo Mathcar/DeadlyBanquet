@@ -55,6 +55,7 @@ public class World implements TileBasedMap, TaskExecuter {
         Debug.init();
         //Set which npc will be able to print messages to debug, if none is set then all of them will be able to send
         Debug.setDebugNPC("BURT");
+        Debug.setChannelStatus(Debug.Channel.SPEECH_ACTS, false);
         current=this;
 
         npcConversations = new ArrayList<>();

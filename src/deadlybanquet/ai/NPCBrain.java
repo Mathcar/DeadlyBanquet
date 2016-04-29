@@ -262,19 +262,22 @@ public class NPCBrain implements IPerceiver, Talkable {
     private void processWhereabouts(Whereabouts inWhere, String you, ArrayList<IThought> possibleAnswers){
         //Check if I have an idea about where the person is
         SortedList foundData = new SortedList();
-        if (!inWhere.isQuestion())
-            acceptUncritically(you, inWhere);
+        System.out.println("Received whereabouts");
         for (Whereabouts b:whereabouts){
+            System.out.println(b);
             if (b.getCharacter()==inWhere.getCharacter()){
                 if(b.getRoom()==inWhere.getRoom()){
                     possibleAnswers.add(new Say(me, you, inWhere, AGREE));
                     return;
                 }
             }
-        }
+        }    
         //Check if I have an idea that somebody else might know
         Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "", 0.0, null);
-	if(foundData.isEmpty()) foundData=memory.find(tofind);
+	if(foundData.isEmpty()) {
+            foundData=memory.find(tofind);
+            System.out.println("foundData is empty");
+        }
         //if I have no idea whatsoever about where the person is
         if(foundData.isEmpty()){
             //if this is a question
@@ -286,6 +289,8 @@ public class NPCBrain implements IPerceiver, Talkable {
                 foundData.add(new Say(me, you, inWhere, YESNO));
         }
         possibleAnswers.add(foundData.first());
+        if (!inWhere.isQuestion())
+            acceptUncritically(you, inWhere);
     }
     
     private void processBeingPolite(BeingPolite t, String speaker, ArrayList<IThought> possibleAnswers){
@@ -520,6 +525,11 @@ public class NPCBrain implements IPerceiver, Talkable {
             opinions.add(o);
             return;
         }
+        /*if(i instanceof Whereabouts){
+            Whereabouts o = (Whereabouts) i;
+            whereabouts.add(o);
+            return;
+        }*/
         memory.add(i);
         Debug.printDebugMessage("Planting IThought in " + me, Debug.Channel.BRAIN);
     }

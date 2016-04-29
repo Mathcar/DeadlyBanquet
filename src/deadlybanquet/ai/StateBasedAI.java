@@ -100,7 +100,7 @@ public class StateBasedAI {
             switch (state) {
                 case IDLE_STATE:
                     if (aic.getCharacterName().equals("BURT"))
-                        talkToCharacterSchedule("Candy", world, aic, taskEx);
+                        talkToCharacterSchedule("Frido", world, aic, taskEx);
                     //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
                     break;
                 case TALKING_STATE:

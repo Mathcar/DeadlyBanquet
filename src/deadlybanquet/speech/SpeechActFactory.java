@@ -32,6 +32,7 @@ public class SpeechActFactory {
             temp = temp.replace("#name",listener.getName());
         }
         if(temp.contains("#location")){
+            System.out.println(w);
             temp = temp.replace("#location",w.getRoom());
         }
         if(temp.contains("#person")){
