@@ -268,7 +268,7 @@ public class NPCBrain implements IPerceiver, Talkable {
     private void processWhereabouts(Whereabouts inWhere, String you, ArrayList<IThought> possibleAnswers){
         //Check if I have an idea about where the person is
         SortedList foundData = new SortedList();
-        System.out.println("Received whereabouts");
+        System.out.println("Received whereabouts, currently has " + whereabouts.size() + " whereabouts");
         for (Whereabouts b:whereabouts){
             System.out.println(b);
             if (b.getCharacter()==inWhere.getCharacter()){
@@ -278,10 +278,20 @@ public class NPCBrain implements IPerceiver, Talkable {
                 }
                 foundData.add(b);
             }
-        }    
+        }
+        for(Whereabouts b : memory.getAllWhereabouts()){
+            System.out.println(b);
+            if (b.getCharacter()==inWhere.getCharacter()){
+                if(b.getRoom()==inWhere.getRoom()){
+                    possibleAnswers.add(new Say(me, you, inWhere, AGREE));
+                    return;
+                }
+                foundData.add(b);
+            }
+        }
         //Check if I have an idea that somebody else might know
         Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "", 0.0, null);
-	if(foundData.isEmpty()) {
+	    if(foundData.isEmpty()) {
             foundData=memory.find(tofind);
             System.out.println("foundData is empty");
         }
