@@ -123,7 +123,11 @@ public class SpeechActFactory {
 
         /*Change all the say objects to the actual object*/
         if(i instanceof Say){
-            i=((Say) i).content;
+            if(((Say)i).type.equals(Say.How.AGREE)){
+                i=((Say) i).content;
+            }else{
+                return new SpeechAct("ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
+            }
         }
 
         if(i instanceof BeingPolite){
@@ -340,9 +344,9 @@ public class SpeechActFactory {
             IThoughtList.size();
             temp = new SpeechAct(i.toString(),speaker.getName(),listener.getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
         }
-        Debug.printDebugMessage("SPEEACHACTFACTORY: Right before the retrun statement, will run the speachActs debug method",
-                                Debug.Channel.SPEECH_ACTS);
-        temp.deBugString();
+        //Debug.printDebugMessage("SPEEACHACTFACTORY: Right before the retrun statement, will run the speachActs debug method",
+        //                        Debug.Channel.SPEECH_ACTS);
+        //temp.deBugString();
         return temp;
 
     }
