@@ -76,9 +76,19 @@ public class ConversationModel {
                     TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
                     SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
                             tpe, perceiver1, perceiver2);
-                    //sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
                     sendActToPerceiver(perceiver2, greeting); //TODO NPC cant handle the Yes, GREET response
                     Debug.printDebugMessage("NPCs actually greeted each other without crash, score!",
+                            Debug.Channel.CONVERSATION);
+                    iteration++;
+                }else if(iteration==1){
+                    if(playersChoice!=null){
+                        sendActToPerceiver(perceiver1, getPlayerChoice());
+                    }
+
+
+                    SpeechAct answer = sendActToPerceiver(perceiver2, perceiver1.getIntendedPhrase());
+                    decidedAnswer = sendActToPerceiver(perceiver1,answer);
+                    Debug.printDebugMessage("NPC actually asked the intended question and got an answer without crash, score!",
                             Debug.Channel.CONVERSATION);
                     iteration++;
                 }
@@ -98,8 +108,7 @@ public class ConversationModel {
                     TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
                     SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
                                                                                     tpe, perceiver1, perceiver2);
-                    //sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
-                    sendActToPerceiver(perceiver2, greeting); //TODO NPC cant handle the Yes, GREET response
+                    sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
                     Debug.printDebugMessage("NPCs actually greeted each other without crash, score!",
                                                 Debug.Channel.CONVERSATION);
                     iteration++;
