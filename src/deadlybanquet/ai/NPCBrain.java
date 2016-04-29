@@ -527,11 +527,13 @@ public class NPCBrain implements IPerceiver, Talkable {
         if(i instanceof Opinion){
             Opinion o = (Opinion) i;
             opinions.add(o);
+            Debug.printDebugMessage("Planting Opinion in " + me, Debug.Channel.BRAIN);
             return;
         }
         if(i instanceof Whereabouts){
             Whereabouts o = (Whereabouts) i;
             whereabouts.add(o);
+            Debug.printDebugMessage("Planting Whereabout in " + me, Debug.Channel.BRAIN);
             return;
         }
         memory.add(i);
