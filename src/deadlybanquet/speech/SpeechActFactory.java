@@ -100,6 +100,11 @@ public class SpeechActFactory {
     }
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
+
+        if(iList.size()<1){
+            return new SpeechAct("ok [ITHOUGHT LIST IS EMPTY]",speaker.getName(),listener.getName(),SpeechType.OK,prop,iList);
+        }
+
         IThought i = iList.get(0);
         ArrayList<IThought> IThoughtList = new ArrayList<>();
         IThoughtList.add(i);

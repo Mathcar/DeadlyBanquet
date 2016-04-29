@@ -525,11 +525,11 @@ public class NPCBrain implements IPerceiver, Talkable {
             opinions.add(o);
             return;
         }
-        /*if(i instanceof Whereabouts){
+        if(i instanceof Whereabouts){
             Whereabouts o = (Whereabouts) i;
             whereabouts.add(o);
             return;
-        }*/
+        }
         memory.add(i);
         Debug.printDebugMessage("Planting IThought in " + me, Debug.Channel.BRAIN);
     }
