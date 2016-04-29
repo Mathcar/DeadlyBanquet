@@ -83,8 +83,8 @@ public class ConversationModel {
                     TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
                     SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
                                                                                     tpe, perceiver1, perceiver2);
-                    //sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
-                    sendActToPerceiver(perceiver2, greeting); //TODO NPC cant handle the Yes, GREET response
+                    sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
+                    //sendActToPerceiver(perceiver2, greeting); //TODO NPC cant handle the Yes, GREET response
                     Debug.printDebugMessage("NPCs actually greeted each other without crash, score!",
                                                 Debug.Channel.CONVERSATION);
                     iteration++;

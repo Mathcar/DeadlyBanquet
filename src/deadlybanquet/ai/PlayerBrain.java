@@ -106,4 +106,14 @@ public class PlayerBrain implements IPerceiver {
 	public void setName(String name){
 		this.name = name;
 	}
+
+    @Override
+    public ArrayList<Whereabouts> getWhereabouts() {
+        throw new UnsupportedOperationException("No whereabouts in player brain. Observation functions not implemented."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ArrayList<Opinion> getOpinions() {
+        throw new UnsupportedOperationException("No Opinions in player brain."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
