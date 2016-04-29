@@ -100,12 +100,12 @@ public class SpeechActFactory {
     }
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
-
+        IThought i;
         if(iList.size()<1){
-            return new SpeechAct("ok [ITHOUGHT LIST IS EMPTY]",speaker.getName(),listener.getName(),SpeechType.OK,prop,iList);
+            i = BeingPolite.GOODBYE;
+        }else{
+            i = iList.get(0);
         }
-
-        IThought i = iList.get(0);
         ArrayList<IThought> IThoughtList = new ArrayList<>();
         IThoughtList.add(i);
         SpeechAct temp = new SpeechAct();
@@ -128,7 +128,7 @@ public class SpeechActFactory {
 
         /*Change all the say objects to the actual object*/
         if(i instanceof Say){
-            if(((Say)i).type.equals(Say.How.AGREE)){
+            if(((Say)i).content instanceof BeingPolite){
                 i=((Say) i).content;
             }else{
                 return new SpeechAct("ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
