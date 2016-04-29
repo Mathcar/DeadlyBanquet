@@ -219,6 +219,18 @@ public class ConversationModel {
             return acts.get(acts.size()-1).getLine();   //Return latest line of act
     }
 
+    public String printConversation(){
+        String temp = "   Printing completed conversation... \n";
+        ArrayList<SpeechAct> p1strings = actHistory.get(perceiver1);
+        ArrayList<SpeechAct> p2strings = actHistory.get(perceiver2);
+        for(int i = 0; i<p1strings.size();i++){
+            SpeechAct saP1  = p1strings.get(i);
+            SpeechAct saP2  = p2strings.get(i);
+            temp+= saP1.getSpeaker() + " said: " + saP1.getLine() + "\n";
+            temp+= saP2.getSpeaker() + " said: " + saP2.getLine() + "\n";
+        }
+        return temp;
+    }
 
     public Image getPlayerImage(){
     	return playerImage;

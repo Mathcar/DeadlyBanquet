@@ -71,8 +71,6 @@ public class World implements TileBasedMap, TaskExecuter {
         //Initialized all AI/NPC and their Characters
         initAIs();
 
-
-        
         //Create the time object (it's initialization is done in it's constructor)
         time = new Time();
 
@@ -94,8 +92,10 @@ public class World implements TileBasedMap, TaskExecuter {
         for(AIControler aic : aiss){
             Room r = getRoomOfCharacter(aic.getCharacter());
             for(Character c : r.getAllCharacters()){
-                getControlerBrain(aic).plantFalseMemory(new Whereabouts(c.getName(),
-                        r.getName()));
+                if(!aic.getCharacterName().equals("BURT")) {
+                    getControlerBrain(aic).plantFalseMemory(new Whereabouts(c.getName(),
+                            r.getName()));
+                }
             }
         }
     }
@@ -205,6 +205,7 @@ public class World implements TileBasedMap, TaskExecuter {
             npcConversations.remove(cm);
             //Debug.printDebugMessage();("Npc conversation cleaned up!");
         }
+        Debug.printDebugMessage(cm.printConversation(), Debug.Channel.CONVERSATION);
     }
 
     private void removeFromConversation(IPerceiver p){
