@@ -504,7 +504,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         //if(ans.isEmpty()) return;
         String temp = me + " says: ";
         for (IThought i: ans){
-            temp+= temp.toString();
+            temp+= i.toString();
         }
         Debug.printDebugMessage(temp, Debug.Channel.BRAIN);
         return convertIThoughtToSpeechAct(ans, NEUTRAL,me,you);

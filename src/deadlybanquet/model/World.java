@@ -162,11 +162,15 @@ public class World implements TileBasedMap, TaskExecuter {
         for(AIControler ai : aiss){
             ai.update(this, deltaTime);
         }
+        ArrayList<ConversationModel> cleanup = new ArrayList<>();
         //Update all ongoing conversations
         for(ConversationModel cm : npcConversations){
             cm.runConversation();
             if(cm.isConversationOver())
-                cleanUpConversation(cm);
+                cleanup.add(cm);
+        }
+        for(ConversationModel cm : cleanup) {
+            cleanUpConversation(cm);
         }
         if(talk){
         	s.enterState(States.talk);
