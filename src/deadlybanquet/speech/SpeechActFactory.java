@@ -128,7 +128,7 @@ public class SpeechActFactory {
 
         /*Change all the say objects to the actual object*/
         if(i instanceof Say){
-            if(((Say)i).type.equals(Say.How.AGREE)){
+            if(((Say)i).content instanceof BeingPolite){
                 i=((Say) i).content;
             }else{
                 return new SpeechAct("ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
