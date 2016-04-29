@@ -661,6 +661,5 @@ public class NPCBrain implements IPerceiver, Talkable {
     public ArrayList<Opinion> getOpinions() {
         return opinions;
     }
-    
-   
+    public boolean isPlayer(){return false;}
 }

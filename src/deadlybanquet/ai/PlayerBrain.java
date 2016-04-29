@@ -116,4 +116,5 @@ public class PlayerBrain implements IPerceiver {
     public ArrayList<Opinion> getOpinions() {
         throw new UnsupportedOperationException("No Opinions in player brain."); //To change body of generated methods, choose Tools | Templates.
     }
+    public boolean isPlayer(){return true;}
 }

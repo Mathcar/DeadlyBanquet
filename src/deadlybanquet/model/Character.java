@@ -325,6 +325,7 @@ public class Character implements Renderable, Mover{
 	}
 
 	public void setTalking(boolean talking) {
+		Debug.printDebugMessage("" + talking, Debug.Channel.NPC, this.name);
 		this.talking = talking;
 	}
 	
