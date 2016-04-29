@@ -32,6 +32,7 @@ public class SpeechActFactory {
             temp = temp.replace("#name",listener.getName());
         }
         if(temp.contains("#location")){
+            System.out.println(w);
             temp = temp.replace("#location",w.getRoom());
         }
         if(temp.contains("#person")){
@@ -99,6 +100,11 @@ public class SpeechActFactory {
     }
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
+
+        if(iList.size()<1){
+            return new SpeechAct("ok [ITHOUGHT LIST IS EMPTY]",speaker.getName(),listener.getName(),SpeechType.OK,prop,iList);
+        }
+
         IThought i = iList.get(0);
         ArrayList<IThought> IThoughtList = new ArrayList<>();
         IThoughtList.add(i);
@@ -122,7 +128,11 @@ public class SpeechActFactory {
 
         /*Change all the say objects to the actual object*/
         if(i instanceof Say){
-            i=((Say) i).content;
+            if(((Say)i).type.equals(Say.How.AGREE)){
+                i=((Say) i).content;
+            }else{
+                return new SpeechAct("ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
+            }
         }
 
         if(i instanceof BeingPolite){
@@ -339,9 +349,9 @@ public class SpeechActFactory {
             IThoughtList.size();
             temp = new SpeechAct(i.toString(),speaker.getName(),listener.getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
         }
-        Debug.printDebugMessage("SPEEACHACTFACTORY: Right before the retrun statement, will run the speachActs debug method",
-                                Debug.Channel.SPEECH_ACTS);
-        temp.deBugString();
+        //Debug.printDebugMessage("SPEEACHACTFACTORY: Right before the retrun statement, will run the speachActs debug method",
+        //                        Debug.Channel.SPEECH_ACTS);
+        //temp.deBugString();
         return temp;
 
     }
