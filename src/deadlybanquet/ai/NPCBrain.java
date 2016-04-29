@@ -637,6 +637,8 @@ public class NPCBrain implements IPerceiver, Talkable {
     public Memory getMemory(){
         return memory;
     }
+
+    public boolean isPlayer(){return false;}
     
    
 }

@@ -25,7 +25,6 @@ public class ConversationModel {
     private Image playerImage,npcImage;
     private SpeechActFactory saFactory;
     private SpeechAct playersChoice;
-    private boolean hasPlayer;
     private boolean conversationCompleted;
     private int iteration = 0;
     private final int maxIterations = 4;
@@ -40,16 +39,17 @@ public class ConversationModel {
         this.playerImage=playerImage;
         this.npcImage=npcImage;
         //Images should only be sent when player is in the conversation
-        hasPlayer = true;
         initDefaults();
     }
 
     //Constructor for a conversation inbetween NPCs
     public ConversationModel(IPerceiver npc1, IPerceiver npc2){
+        if(npc1.isPlayer() || npc2.isPlayer())
+            Debug.printDebugMessage("Wrong conversationModel constructor, use the one for the player!"
+                                    , Debug.Channel.CONVERSATION);
         this.perceiver1=npc1;
         this.perceiver2=npc2;
         //no images should mean that no player is in the conversation
-        hasPlayer = false;
         initDefaults();
     }
 
@@ -62,7 +62,7 @@ public class ConversationModel {
 
     public void runConversation(){
         // for now assume that perceiver1 will start to speak
-        if(hasPlayer){
+        if(perceiver1.isPlayer()){
             if(playersChoice!= null){
                 Debug.printDebugMessage("Players choice exists!", Debug.Channel.CONVERSATION);
                 SpeechAct sa = getPlayerChoice();
@@ -70,6 +70,21 @@ public class ConversationModel {
                                     + " listener = " +sa.getListener(), Debug.Channel.CONVERSATION);
                 doOneRound(sa);
             }
+        }else if(perceiver2.isPlayer()){
+            if(iteration<maxIterations){
+                if(iteration==0) {
+                    TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
+                    SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
+                            tpe, perceiver1, perceiver2);
+                    //sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
+                    sendActToPerceiver(perceiver2, greeting); //TODO NPC cant handle the Yes, GREET response
+                    Debug.printDebugMessage("NPCs actually greeted each other without crash, score!",
+                            Debug.Channel.CONVERSATION);
+                    iteration++;
+                }
+            }
+
+
         }else{
             //TODO Create flow for npc-npc conversation
             //Force start by greeting

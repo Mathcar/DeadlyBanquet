@@ -55,6 +55,8 @@ public class World implements TileBasedMap, TaskExecuter {
         Debug.init();
         //Set which npc will be able to print messages to debug, if none is set then all of them will be able to send
         Debug.setDebugNPC("BURT");
+        Debug.setChannelStatus(Debug.Channel.SPEECH_ACTS, false);
+        Debug.setChannelStatus(Debug.Channel.PATHFINDING, false);
         current=this;
 
         npcConversations = new ArrayList<>();
@@ -309,7 +311,7 @@ public class World implements TileBasedMap, TaskExecuter {
                         target.getCharacter().getDefaultImage());
                 player.getCharacter().setTalking(true);
                 target.getCharacter().setTalking(true);
-                attemptCreatePathToPerson(target, "Frido");
+                //attemptCreatePathToPerson(target, "Frido");
               //  attemptCreateMasterPath(a, "Kitchen");
               //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
                // attemptCreatePathToDoor(a, "Bedroom");

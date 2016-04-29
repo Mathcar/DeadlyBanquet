@@ -106,4 +106,6 @@ public class PlayerBrain implements IPerceiver {
 	public void setName(String name){
 		this.name = name;
 	}
+
+    public boolean isPlayer(){return true;}
 }
