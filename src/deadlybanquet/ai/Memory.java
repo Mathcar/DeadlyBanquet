@@ -2,6 +2,7 @@ package deadlybanquet.ai;
 
 import deadlybanquet.model.Debug;
 
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 /**
@@ -15,7 +16,7 @@ public class Memory {
     /**
      * 
      * @param information sorted set of initial information.
-     * @param room
+     * @param //room
      */
     public Memory(SortedList information){
         //if a null object is supplied, object will be initialized with empty TreeSet.
@@ -39,6 +40,17 @@ public class Memory {
             if (i.contains(thought)) results.add(i);
         }
         return results;
+    }
+
+    //
+    public ArrayList<Whereabouts> getAllWhereabouts(){
+        ArrayList<Whereabouts> temp=new ArrayList<>();
+        for (IThought i : information) {
+            if(i instanceof Whereabouts){
+                temp.add((Whereabouts) i);
+            }
+        }
+        return temp;
     }
     
     public void add(IThought i){

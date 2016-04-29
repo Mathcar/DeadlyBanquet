@@ -60,6 +60,9 @@ public class Player implements Talkable {
 				//character.attemptRoomChange();
 				//character.tryTalk();
 			}
+			else if(in.isKeyPressed(Input.KEY_Q)){
+				s.enterState(States.endgame);
+			}
 		}
 		movementTimer--;
 	}

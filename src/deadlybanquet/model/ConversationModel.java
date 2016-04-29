@@ -25,7 +25,6 @@ public class ConversationModel {
     private Image playerImage,npcImage;
     private SpeechActFactory saFactory;
     private SpeechAct playersChoice;
-    private boolean hasPlayer;
     private boolean conversationCompleted;
     private int iteration = 0;
     private final int maxIterations = 4;
@@ -40,16 +39,17 @@ public class ConversationModel {
         this.playerImage=playerImage;
         this.npcImage=npcImage;
         //Images should only be sent when player is in the conversation
-        hasPlayer = true;
         initDefaults();
     }
 
     //Constructor for a conversation inbetween NPCs
     public ConversationModel(IPerceiver npc1, IPerceiver npc2){
+        if(npc1.isPlayer() || npc2.isPlayer())
+            Debug.printDebugMessage("Wrong conversationModel constructor, use the one for the player!"
+                                    , Debug.Channel.CONVERSATION);
         this.perceiver1=npc1;
         this.perceiver2=npc2;
         //no images should mean that no player is in the conversation
-        hasPlayer = false;
         initDefaults();
     }
 
@@ -62,7 +62,7 @@ public class ConversationModel {
 
     public void runConversation(){
         // for now assume that perceiver1 will start to speak
-        if(hasPlayer){
+        if(perceiver1.isPlayer()){
             if(playersChoice!= null){
                 Debug.printDebugMessage("Players choice exists!", Debug.Channel.CONVERSATION);
                 SpeechAct sa = getPlayerChoice();
@@ -70,6 +70,31 @@ public class ConversationModel {
                                     + " listener = " +sa.getListener(), Debug.Channel.CONVERSATION);
                 doOneRound(sa);
             }
+        }else if(perceiver2.isPlayer()){
+            if(iteration<maxIterations){
+                if(iteration==0) {
+                    TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
+                    SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
+                            tpe, perceiver1, perceiver2);
+                    sendActToPerceiver(perceiver2, greeting); //TODO NPC cant handle the Yes, GREET response
+                    Debug.printDebugMessage("NPCs actually greeted each other without crash, score!",
+                            Debug.Channel.CONVERSATION);
+                    iteration++;
+                }else if(iteration==1){
+                    if(playersChoice!=null){
+                        sendActToPerceiver(perceiver1, getPlayerChoice());
+                    }
+
+
+                    SpeechAct answer = sendActToPerceiver(perceiver2, perceiver1.getIntendedPhrase());
+                    decidedAnswer = sendActToPerceiver(perceiver1,answer);
+                    Debug.printDebugMessage("NPC actually asked the intended question and got an answer without crash, score!",
+                            Debug.Channel.CONVERSATION);
+                    iteration++;
+                }
+            }
+
+
         }else{
             //TODO Create flow for npc-npc conversation
             //Force start by greeting
@@ -83,8 +108,8 @@ public class ConversationModel {
                     TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
                     SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
                                                                                     tpe, perceiver1, perceiver2);
-                    //sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
-                    sendActToPerceiver(perceiver2, greeting); //TODO NPC cant handle the Yes, GREET response
+                    sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
+
                     Debug.printDebugMessage("NPCs actually greeted each other without crash, score!",
                                                 Debug.Channel.CONVERSATION);
                     iteration++;
@@ -97,6 +122,13 @@ public class ConversationModel {
                 } else{     //Just run the conversation using old answers and the hear function!
                     SpeechAct answer = sendActToPerceiver(perceiver2, decidedAnswer);
                     decidedAnswer = sendActToPerceiver(perceiver1, answer);
+                    if(answer.getSpeechType()== SpeechType.GOODBYE ||
+                            decidedAnswer.getSpeechType() == SpeechType.GOODBYE) {
+                        conversationCompleted = true;
+                        Debug.printDebugMessage("Goodbye has been said!", Debug.Channel.CONVERSATION);
+                    }else{
+                        Debug.printDebugMessage(answer.getSpeechType().toString(), Debug.Channel.CONVERSATION);
+                    }
                     iteration++;
                 }
             }
@@ -187,6 +219,18 @@ public class ConversationModel {
             return acts.get(acts.size()-1).getLine();   //Return latest line of act
     }
 
+    public String printConversation(){
+        String temp = "   Printing completed conversation... \n";
+        ArrayList<SpeechAct> p1strings = actHistory.get(perceiver1);
+        ArrayList<SpeechAct> p2strings = actHistory.get(perceiver2);
+        for(int i = 0; i<p1strings.size();i++){
+            SpeechAct saP1  = p1strings.get(i);
+            SpeechAct saP2  = p2strings.get(i);
+            temp+= saP1.getSpeaker() + " said: " + saP1.getLine() + "\n";
+            temp+= saP2.getSpeaker() + " said: " + saP2.getLine() + "\n";
+        }
+        return temp;
+    }
 
     public Image getPlayerImage(){
     	return playerImage;
