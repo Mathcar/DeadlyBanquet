@@ -77,7 +77,8 @@ public class NPCBrain implements IPerceiver, Talkable {
         here=currentRoom;
         me = name;
         this.aic= aic;
-        whereabouts=w;
+        if (w!=null)
+            whereabouts=w;
     }
 
     //--------------------------------------------------------------------------
