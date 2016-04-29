@@ -265,12 +265,16 @@ public class NPCBrain implements IPerceiver, Talkable {
         if (!inWhere.isQuestion())
             acceptUncritically(you, inWhere);
         for (Whereabouts b:whereabouts){
-            if (b.getCharacter()==inWhere.getCharacter())
-                    foundData.add(b);
+            if (b.getCharacter()==inWhere.getCharacter()){
+                if(b.getRoom()==inWhere.getRoom()){
+                    possibleAnswers.add(new Say(me, you, inWhere, AGREE));
+                    return;
+                }
+            }
         }
         //Check if I have an idea that somebody else might know
         Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "", 0.0, null);
-		if(foundData.isEmpty()) foundData=memory.find(tofind);
+	if(foundData.isEmpty()) foundData=memory.find(tofind);
         //if I have no idea whatsoever about where the person is
         if(foundData.isEmpty()){
             //if this is a question
