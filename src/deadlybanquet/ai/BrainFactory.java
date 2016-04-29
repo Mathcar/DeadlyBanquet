@@ -49,7 +49,12 @@ public class BrainFactory {
         return makeBrain(null,null,null,null,null,null,room,name, aic);
     }
     
+    public static NPCBrain makeBrain(BrainInitInformation i){
+        return null;
+    }
+    
     public static ArrayList<NPCBrain> makeBrains(ArrayList<BrainInitInformation> list){
+        
         return null;
     }
 }
