@@ -122,6 +122,13 @@ public class ConversationModel {
                 } else{     //Just run the conversation using old answers and the hear function!
                     SpeechAct answer = sendActToPerceiver(perceiver2, decidedAnswer);
                     decidedAnswer = sendActToPerceiver(perceiver1, answer);
+                    if(answer.getSpeechType()== SpeechType.GOODBYE ||
+                            decidedAnswer.getSpeechType() == SpeechType.GOODBYE) {
+                        conversationCompleted = true;
+                        Debug.printDebugMessage("Goodbye has been said!", Debug.Channel.CONVERSATION);
+                    }else{
+                        Debug.printDebugMessage(answer.getSpeechType().toString(), Debug.Channel.CONVERSATION);
+                    }
                     iteration++;
                 }
             }
