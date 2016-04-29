@@ -66,7 +66,8 @@ public class NPCBrain implements IPerceiver, Talkable {
                     ArrayList<IThought>plan,
                     String currentRoom,
                     String name,
-                    AIControler aic){
+                    AIControler aic,
+                    ArrayList<Whereabouts> w){
         memory = new Memory (information);
         if (emotion!=null) this.emotion=emotion;
         if (temperament!=null) this.temperament=temperament;
@@ -76,6 +77,7 @@ public class NPCBrain implements IPerceiver, Talkable {
         here=currentRoom;
         me = name;
         this.aic= aic;
+        whereabouts=w;
     }
 
     //--------------------------------------------------------------------------
