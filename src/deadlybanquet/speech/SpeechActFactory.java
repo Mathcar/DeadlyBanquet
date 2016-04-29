@@ -133,6 +133,9 @@ public class SpeechActFactory {
             }else{
                 return new SpeechAct("ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
             }
+        }else if(i instanceof SomebodyElse){
+            i=((SomebodyElse)i).what;
+            System.err.println("The certainty of the WHAT in the SombedyElse object is: "+i.getCertainty());
         }
 
         if(i instanceof BeingPolite){
