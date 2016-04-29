@@ -50,4 +50,6 @@ public interface IPerceiver {
 
     String getName(); //todo please add this.
     
+    public ArrayList<Whereabouts> getWhereabouts();
+    public ArrayList<Opinion> getOpinions();
 }

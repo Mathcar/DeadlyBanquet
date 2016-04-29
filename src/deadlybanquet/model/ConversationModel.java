@@ -109,6 +109,7 @@ public class ConversationModel {
                     SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
                                                                                     tpe, perceiver1, perceiver2);
                     sendActToPerceiver(perceiver1, sendActToPerceiver(perceiver2, greeting));
+
                     Debug.printDebugMessage("NPCs actually greeted each other without crash, score!",
                                                 Debug.Channel.CONVERSATION);
                     iteration++;

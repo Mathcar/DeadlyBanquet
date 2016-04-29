@@ -87,11 +87,14 @@ public class NPCBrain implements IPerceiver, Talkable {
     //This method evaluates the content, changing both opinions and information
     //This method is also responsible for sending answers.
     public SpeechAct hear(SpeechAct act){
+        Debug.printDebugMessage(act.getLine(), Debug.Channel.BRAIN);
+        System.out.println(act.getContent());
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         String you = act.getSpeaker();
         makeEmptyOpinion(you);
         for (IThought t : content){
+            if(t.dontKnow()) continue;
             switch(t.getClass().getSimpleName()){
                 case "Opinion":
                 	processOpinion((Opinion) t, you, possibleAnswers);
@@ -270,6 +273,7 @@ public class NPCBrain implements IPerceiver, Talkable {
                     possibleAnswers.add(new Say(me, you, inWhere, AGREE));
                     return;
                 }
+                foundData.add(b);
             }
         }    
         //Check if I have an idea that somebody else might know
@@ -650,7 +654,14 @@ public class NPCBrain implements IPerceiver, Talkable {
         return memory;
     }
 
+    @Override
+    public ArrayList<Whereabouts> getWhereabouts() {
+        return whereabouts;
+    }
+
+    @Override
+    public ArrayList<Opinion> getOpinions() {
+        return opinions;
+    }
     public boolean isPlayer(){return false;}
-    
-   
 }

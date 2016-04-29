@@ -48,4 +48,8 @@ public class BrainFactory {
     public static NPCBrain makeBrain(String room, String name, AIControler aic){
         return makeBrain(null,null,null,null,null,null,room,name, aic);
     }
+    
+    public static ArrayList<NPCBrain> makeBrains(ArrayList<BrainInitInformation> list){
+        return null;
+    }
 }
