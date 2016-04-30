@@ -55,7 +55,8 @@ public class World implements TileBasedMap, TaskExecuter {
         Debug.init();
         //Set which npc will be able to print messages to debug, if none is set then all of them will be able to send
         Debug.setDebugNPC("BURT");
-        //Debug.setChannelStatus(Debug.Channel.SPEECH_ACTS, false);
+        Debug.setChannelStatus(Debug.Channel.SPEECH_ACTS, false);
+        Debug.setChannelStatus(Debug.Channel.PATHFINDING, false);
         current=this;
 
         npcConversations = new ArrayList<>();
@@ -70,8 +71,6 @@ public class World implements TileBasedMap, TaskExecuter {
         //Initialized all AI/NPC and their Characters
         initAIs();
 
-
-        
         //Create the time object (it's initialization is done in it's constructor)
         time = new Time();
 
@@ -93,8 +92,10 @@ public class World implements TileBasedMap, TaskExecuter {
         for(AIControler aic : aiss){
             Room r = getRoomOfCharacter(aic.getCharacter());
             for(Character c : r.getAllCharacters()){
-                getControlerBrain(aic).plantFalseMemory(new Whereabouts(c.getName(),
-                        r.getName()));
+                if(!aic.getCharacterName().equals("BURT")) {
+                    getControlerBrain(aic).plantFalseMemory(new Whereabouts(c.getName(),
+                            r.getName()));
+                }
             }
         }
     }
@@ -171,7 +172,7 @@ public class World implements TileBasedMap, TaskExecuter {
                 cleanupList.add(cm);
         }
         for(ConversationModel cm : cleanupList){
-            cleanUpConversation(cm);
+                cleanUpConversation(cm);
         }
         if(talk){
         	s.enterState(States.talk);
@@ -204,6 +205,7 @@ public class World implements TileBasedMap, TaskExecuter {
             npcConversations.remove(cm);
             //Debug.printDebugMessage();("Npc conversation cleaned up!");
         }
+        Debug.printDebugMessage(cm.printConversation(), Debug.Channel.CONVERSATION);
     }
 
     private void removeFromConversation(IPerceiver p){
@@ -310,7 +312,7 @@ public class World implements TileBasedMap, TaskExecuter {
                         target.getCharacter().getDefaultImage());
                 player.getCharacter().setTalking(true);
                 target.getCharacter().setTalking(true);
-                attemptCreatePathToPerson(target, "Frido");
+               // attemptCreatePathToPerson(target, "Frido");
               //  attemptCreateMasterPath(a, "Kitchen");
               //  createMasterPathTo(getRoomOfCharacter(a.getCharacter()).getName(), "Bedroom");
                // attemptCreatePathToDoor(a, "Bedroom");

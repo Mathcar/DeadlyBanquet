@@ -66,7 +66,8 @@ public class NPCBrain implements IPerceiver, Talkable {
                     ArrayList<IThought>plan,
                     String currentRoom,
                     String name,
-                    AIControler aic){
+                    AIControler aic,
+                    ArrayList<Whereabouts> w){
         memory = new Memory (information);
         if (emotion!=null) this.emotion=emotion;
         if (temperament!=null) this.temperament=temperament;
@@ -76,6 +77,8 @@ public class NPCBrain implements IPerceiver, Talkable {
         here=currentRoom;
         me = name;
         this.aic= aic;
+        if (w!=null)
+            whereabouts=w;
     }
 
     //--------------------------------------------------------------------------
@@ -89,11 +92,13 @@ public class NPCBrain implements IPerceiver, Talkable {
     public SpeechAct hear(SpeechAct act){
         Debug.printDebugMessage(me + " HEARS = " + act.getLine() + " ||| intended for = " + act.getListener()
                                 + " and said by = " + act.getSpeaker(), Debug.Channel.BRAIN);
+        System.out.println(act.getContent());
         ArrayList<IThought> content = act.getContent();
         ArrayList<IThought> possibleAnswers = new ArrayList<>();
         String you = act.getSpeaker();
         makeEmptyOpinion(you);
         for (IThought t : content){
+            if(t.dontKnow()) continue;
             switch(t.getClass().getSimpleName()){
                 case "Opinion":
                 	processOpinion((Opinion) t, you, possibleAnswers);
@@ -264,15 +269,33 @@ public class NPCBrain implements IPerceiver, Talkable {
     private void processWhereabouts(Whereabouts inWhere, String you, ArrayList<IThought> possibleAnswers){
         //Check if I have an idea about where the person is
         SortedList foundData = new SortedList();
-        if (!inWhere.isQuestion())
-            acceptUncritically(you, inWhere);
+        System.out.println("Received whereabouts, currently has " + whereabouts.size() + " whereabouts");
         for (Whereabouts b:whereabouts){
-            if (b.getCharacter()==inWhere.getCharacter())
-                    foundData.add(b);
+            System.out.println(b);
+            if (b.getCharacter()==inWhere.getCharacter()){
+                if(b.getRoom()==inWhere.getRoom()){
+                    possibleAnswers.add(new Say(me, you, inWhere, AGREE));
+                    return;
+                }
+                foundData.add(b);
+            }
+        }
+        for(Whereabouts b : memory.getAllWhereabouts()){
+            System.out.println(b);
+            if (b.getCharacter()==inWhere.getCharacter()){
+                if(b.getRoom()==inWhere.getRoom()){
+                    possibleAnswers.add(new Say(me, you, inWhere, AGREE));
+                    return;
+                }
+                foundData.add(b);
+            }
         }
         //Check if I have an idea that somebody else might know
         Whereabouts tofind = new Whereabouts(inWhere.getCharacter(), "", 0.0, null);
-		if(foundData.isEmpty()) foundData=memory.find(tofind);
+	    if(foundData.isEmpty()) {
+            foundData=memory.find(tofind);
+            System.out.println("foundData is empty");
+        }
         //if I have no idea whatsoever about where the person is
         if(foundData.isEmpty()){
             //if this is a question
@@ -285,6 +308,8 @@ public class NPCBrain implements IPerceiver, Talkable {
         }
         Whereabouts w = (Whereabouts)foundData.first();
         possibleAnswers.add(foundData.first());
+        if (!inWhere.isQuestion()&&!inWhere.dontKnow())
+            acceptUncritically(you, inWhere);
     }
     
     private void processBeingPolite(BeingPolite t, String speaker, ArrayList<IThought> possibleAnswers){
@@ -517,6 +542,13 @@ public class NPCBrain implements IPerceiver, Talkable {
         if(i instanceof Opinion){
             Opinion o = (Opinion) i;
             opinions.add(o);
+            Debug.printDebugMessage("Planting Opinion in " + me, Debug.Channel.BRAIN);
+            return;
+        }
+        if(i instanceof Whereabouts){
+            Whereabouts o = (Whereabouts) i;
+            whereabouts.add(o);
+            Debug.printDebugMessage("Planting Whereabout in " + me, Debug.Channel.BRAIN);
             return;
         }
         memory.add(i);
@@ -636,6 +668,15 @@ public class NPCBrain implements IPerceiver, Talkable {
     public Memory getMemory(){
         return memory;
     }
-    
-   
+
+    @Override
+    public ArrayList<Whereabouts> getWhereabouts() {
+        return whereabouts;
+    }
+
+    @Override
+    public ArrayList<Opinion> getOpinions() {
+        return opinions;
+    }
+    public boolean isPlayer(){return false;}
 }

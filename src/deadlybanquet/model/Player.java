@@ -56,11 +56,12 @@ public class Player implements Talkable {
 			}
 			if(in.isKeyPressed(Input.KEY_E)){
 				world.attemptChangeRooms(this.getCharacter());
-				
 				world.attemptTalk(this.getCharacter());
 				//character.attemptRoomChange();
 				//character.tryTalk();
-
+			}
+			else if(in.isKeyPressed(Input.KEY_Q)){
+				s.enterState(States.endgame);
 			}
 		}
 		movementTimer--;

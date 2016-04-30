@@ -33,6 +33,7 @@ public class SpeechActFactory {
             temp = temp.replace("#name",listener.getName());
         }
         if(temp.contains("#location")){
+            System.out.println(w);
             temp = temp.replace("#location",w.getRoom());
         }
         if(temp.contains("#person")){
@@ -100,7 +101,12 @@ public class SpeechActFactory {
     }
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
-        IThought i = iList.get(0);
+        IThought i;
+        if(iList.size()<1){
+            i = BeingPolite.GOODBYE;
+        }else{
+            i = iList.get(0);
+        }
         ArrayList<IThought> IThoughtList = new ArrayList<>();
         IThoughtList.add(i);
         SpeechAct temp = new SpeechAct();
@@ -123,7 +129,14 @@ public class SpeechActFactory {
 
         /*Change all the say objects to the actual object*/
         if(i instanceof Say){
-            i=((Say) i).content;
+            if(((Say)i).content instanceof BeingPolite){
+                i=((Say) i).content;
+            }else{
+                return new SpeechAct("ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
+            }
+        }else if(i instanceof SomebodyElse){
+            i=((SomebodyElse)i).what;
+            System.err.println("The certainty of the WHAT in the SombedyElse object is: "+i.getCertainty());
         }
 
         if(i instanceof BeingPolite){
