@@ -13,6 +13,7 @@ import org.newdawn.slick.util.pathfinding.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -352,5 +353,9 @@ public class Room implements TileBasedMap {
     public ArrayList<Character> getAllCharacters(){
     	return this.characters;
     }
+    
+    public Collection<? extends Door> getAllDoors() {
+		return this.doors;
+	}
 
 }

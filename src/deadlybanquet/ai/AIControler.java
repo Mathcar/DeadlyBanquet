@@ -179,7 +179,7 @@ public class AIControler {
 			if (hasPath() && movtim < 1) {
 				moveNPC(world);
 				movtim = MOVEMNET_DELAY / 2;
-			} else if (masterPath != null && !masterPath.isEmpty()) {
+			} else if (!hasPath() && masterPath != null && !masterPath.isEmpty()) {
 				world.attemptCreatePathToDoor(this, masterPath.getNext());
 				if (world.attemptChangeRooms(getCharacter())) {
 					masterPath.removeNext();
