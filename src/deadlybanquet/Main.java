@@ -75,8 +75,7 @@ public class Main extends StateBasedGame{
 		this.addState(new Pause());
 		this.addState(new Talk(model));
 		this.addState(new GameWindow(model));
-		
-
+		this.addState(new EndGame());
 		
 	}
 
