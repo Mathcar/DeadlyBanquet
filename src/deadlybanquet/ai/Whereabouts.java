@@ -1,5 +1,6 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Debug;
 import deadlybanquet.model.TimeStamp;
 
 /**

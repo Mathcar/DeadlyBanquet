@@ -149,17 +149,16 @@ public class StateBasedAI {
                     	}
                 	}
 	            	schedule.add(new TaskIdle());
-            			
-                	
-//                    if (aic.getCharacterName().equals("BURT"))
-//                        talkToCharacterSchedule("Candy", world, aic, taskEx);
-//                    //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
+                    if (aic.getCharacterName().equals("BURT"))
+                    	//schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
+                        talkToCharacterSchedule("Frido", world, aic, taskEx);
+                    //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
                     break;
                 case TALKING_STATE:
                     schedule.add(new TaskIdle());
                     break;
                 case MOVEING_STATE:
-                	talkToCharacterSchedule("Daisy", world, aic, taskEx);
+                	//talkToCharacterSchedule("Daisy", world, aic, taskEx);
                     //schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
                     //schedule.add(new TaskMove("Daisy", taskEx, MoveTypes.PERSON));
                     break;
@@ -228,6 +227,7 @@ public class StateBasedAI {
     }
 
     private void talkToCharacterSchedule(String character, World world, AIControler aic, TaskExecuter taskEx) {
+    	 
         for (Character c : characters) {
             if (c.getName().equals(character)) {
                 schedule.add(new TaskMove(character, taskEx, MoveTypes.PERSON));
@@ -238,6 +238,8 @@ public class StateBasedAI {
                         TextPropertyEnum.NEUTRAL, aic.getCharacterName(), character);
             }
         }
+        
+
 		/*if(characters.contains(character)){
 			schedule.add(new TaskMove(character.getName(),taskEx,MoveTypes.PERSON));
 		}else{

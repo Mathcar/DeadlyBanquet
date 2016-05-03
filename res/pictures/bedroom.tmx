@@ -9,6 +9,9 @@
  <tileset firstgid="321" name="Furniture-Wealthy-byLunarea" tilewidth="32" tileheight="32" tilecount="300" columns="20">
   <image source="Furniture-Wealthy-byLunarea.png" width="640" height="480"/>
  </tileset>
+ <tileset firstgid="621" name="dead" tilewidth="32" tileheight="32" tilecount="96" columns="12">
+  <image source="dead.png" width="384" height="256"/>
+ </tileset>
  <layer name="Tile Layer 1" width="20" height="10">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC1NkZGBQHMWjeBRjxQBGYoIBIAMAAA==
@@ -21,7 +24,7 @@
  </layer>
  <layer name="Tile Layer 3" width="20" height="10">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NggIB1jAwMD4H4ERA/ZoSIHYLSMLAWjY8MDiPJ8TExMPAD8Veg2Dcg/g7EwkC+CBOqnoOMCLV7gWweIM3LhKlWCchWBmJOIOYCYm4gVgdiDTTzkNVeBJqnAKQVsag1A7LN0fRaA/k2WMwjRS21AMz/e7GEKS61yABdLcz/F5HMg4UTMjDGElYgMXS12PyPLZxIVTsYAQALP9GzIAMAAA==
+   H4sIAAAAAAAAC2NggIB1jAwMD4H4ERA/ZoSIHYLSMLAWjY8MDiPJ8TExMPAD8Veg2Dcg/g7EwkC+CBOqnoOMCLV7gWweIM3LhKlWCchWBmJOIOYCYm4gVgdiDTTzkNVeBJqnAKQVsag1A7LN0fRaA/k2WMwjRS21AMz/e7GEKS61yABdLcz/F5HMg4UTMjDGElYgMXS12PyPLZyIVTuXhmFJKQAAFw4aRCADAAA=
   </data>
  </layer>
  <layer name="Tile Layer 4" width="20" height="10">

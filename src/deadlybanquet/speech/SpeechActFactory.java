@@ -5,6 +5,7 @@ import deadlybanquet.ai.*;
 import deadlybanquet.model.Debug;
 import deadlybanquet.model.ItemsAndNameSingelton;
 import deadlybanquet.model.World;
+import jdk.nashorn.internal.objects.annotations.Where;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class SpeechActFactory {
             temp = temp.replace("#name",listener.getName());
         }
         if(temp.contains("#location")){
+            System.out.println(w);
             temp = temp.replace("#location",w.getRoom());
         }
         if(temp.contains("#person")){
@@ -99,7 +101,12 @@ public class SpeechActFactory {
     }
 
     public static SpeechAct convertIThoughtToSpeechAct(ArrayList<IThought> iList, TextPropertyEnum prop,IPerceiver speaker,IPerceiver listener){
-        IThought i = iList.get(0);
+        IThought i;
+        if(iList.size()<1){
+            i = BeingPolite.GOODBYE;
+        }else{
+            i = iList.get(0);
+        }
         ArrayList<IThought> IThoughtList = new ArrayList<>();
         IThoughtList.add(i);
         SpeechAct temp = new SpeechAct();
@@ -122,7 +129,14 @@ public class SpeechActFactory {
 
         /*Change all the say objects to the actual object*/
         if(i instanceof Say){
-            i=((Say) i).content;
+            if(((Say)i).content instanceof BeingPolite){
+                i=((Say) i).content;
+            }else{
+                return new SpeechAct("ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
+            }
+        }else if(i instanceof SomebodyElse){
+            i=((SomebodyElse)i).what;
+            System.err.println("The certainty of the WHAT in the SombedyElse object is: "+i.getCertainty());
         }
 
         if(i instanceof BeingPolite){
@@ -160,6 +174,8 @@ public class SpeechActFactory {
             /*
             WHEREABOUTS
              */
+            Debug.printDebugMessage("Whereabout ithought being made to speechact = " +
+                    ((Whereabouts)i).toString(), Debug.Channel.SPEECH_ACTS);
             temp = new SpeechAct();
             if(i.isQuestion()){
                 ArrayList<SpeechInfo> list = holder.getQuestionFrase();
@@ -339,9 +355,9 @@ public class SpeechActFactory {
             IThoughtList.size();
             temp = new SpeechAct(i.toString(),speaker.getName(),listener.getName(),SpeechType.DONT_KNOW,prop,IThoughtList);
         }
-        Debug.printDebugMessage("SPEEACHACTFACTORY: Right before the retrun statement, will run the speachActs debug method",
-                                Debug.Channel.SPEECH_ACTS);
-        temp.deBugString();
+        //Debug.printDebugMessage("SPEEACHACTFACTORY: Right before the retrun statement, will run the speachActs debug method",
+           //                     Debug.Channel.SPEECH_ACTS);
+        //temp.deBugString();
         return temp;
 
     }

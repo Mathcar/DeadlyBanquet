@@ -108,8 +108,9 @@ public class SomebodyElse implements IThought, Comparable<IThought>{
 
     @Override
     public Boolean dontKnow(){
-        System.err.println("dont know method in this SomebodeElse class are NOT done");
-        return false;
+        System.err.println("dont know method in this SomebodeElse class can be wrong");
+        //return false;
+        return aboutPerson==null || opinion==null || what==null;
     }
 
 }
