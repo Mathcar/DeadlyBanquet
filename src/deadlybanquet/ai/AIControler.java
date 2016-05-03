@@ -52,8 +52,9 @@ public class AIControler {
 	        }
 		}else{
             path = null; //Remove current path if destination has been reached
+            return true;
         }
-        return false;
+		return false;
 	}
 
 	//Called on every person in origin and destination rooms on room change.
@@ -169,23 +170,30 @@ public class AIControler {
 		}*/
 
 		if(isTalking())
-			return;			//Do not update anything if in a conversations
+			return;		//Do not update anything if in a conversations
 							//Conversation "updates" are handled in ConversationModel and NPCBrain
 		if(hasPath() || masterPath != null) {
 			if (hasPath() && movtim < 1) {
 				if(!moveNPC(world)){
 					path = null;
-					character.setBlocked(true);
+					statebasedAI.setCondition(ConditionState.INTERUPTED);
+					//character.setBlocked(true);
 				}else{
 					movtim = MOVEMNET_DELAY;
 				}
 			}else if (!hasPath() && masterPath != null && !masterPath.isEmpty()) {
+				Direction d = world.getRoomOfCharacter(getCharacter()).getAdjacentDoorDirection(getCharacter().getPos());
+				if(d != null){
+					getCharacter().setDirection(d);
+				}
 				world.attemptCreatePathToDoor(this, masterPath.getNext());
 				if (world.attemptChangeRooms(getCharacter())) {
 					masterPath.removeNext();
 				}
+				if(masterPath.isEmpty()){
+					masterPath = null;
+				}
 			}
-			
 			movtim--;
 		}else if(!getCharacter().isMoving()){
 			Debug.printDebugMessage(getCharacterName() + " had no path and is now thinking", Debug.Channel.NPC,

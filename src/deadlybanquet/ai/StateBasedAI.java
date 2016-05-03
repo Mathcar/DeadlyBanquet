@@ -86,26 +86,26 @@ public class StateBasedAI {
     }
 
     private void generateSchedule(AIControler aic, World world, TaskExecuter taskEx) {
-        if (!schedule.isEmpty())
-            return;					/*this should not be neccessary, but for some reason
+        if (!schedule.isEmpty()){}
+           /* return;					/*this should not be neccessary, but for some reason
                                         the condition below always returns true! */
         Debug.printDebugMessage("Amount of conditions = " + conditions.size(), Debug.Channel.NPC, aic.getCharacterName());
         for (Condition c : conditions) {
             Debug.printDebugMessage(c.toString(), Debug.Channel.NPC, aic.getCharacterName());
         }
-
+        
         if (schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))) {
             Debug.printDebugMessage("generating new schedule!", Debug.Channel.NPC, aic.getCharacterName());
             schedule.clear();
             switch (state) {
                 case IDLE_STATE:
                     if (aic.getCharacterName().equals("BURT"))
-                    	//schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
-                        talkToCharacterSchedule("Frido", world, aic, taskEx);
+                    	schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
+                        //talkToCharacterSchedule("Candy", world, aic, taskEx);
                     //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
                     break;
                 case TALKING_STATE:
-                    schedule.add(new TaskIdle());
+                    //schedule.add(new TaskIdle());
                     break;
                 case MOVEING_STATE:
                 	//talkToCharacterSchedule("Daisy", world, aic, taskEx);
@@ -122,14 +122,21 @@ public class StateBasedAI {
         if (aic.isTalking()) {
             conditions.add(new Condition(ConditionState.TALKING));
         }
-        if (aic.isBlocked()) {
+        /*if (aic.isBlocked()) {
+        	if(aic.getCharacterName().equals("BURT")){
+        		System.out.println("ildsaksdah");
+        	}
             aic.setBlocked(false);
             conditions.add(new Condition(ConditionState.INTERUPTED));
-        }
+        }*/
 
         //add more conditions
     }
 
+    public void setCondition(ConditionState condState){
+    	conditions.add(new Condition(condState));
+    }
+    
     private void selectState(AIControler aic) {
         switch (state) {
             case IDLE_STATE:
@@ -183,16 +190,15 @@ public class StateBasedAI {
             }
         }
         
-
+        
 		/*if(characters.contains(character)){
 			schedule.add(new TaskMove(character.getName(),taskEx,MoveTypes.PERSON));
 		}else{
 			//schedule.add(new TaskMove(world.getRoomOfCharacter(character).getName(), taskEx, MoveTypes.ROOM));
 		}*/
-        schedule.add(new TaskInteract(taskEx));
+        //schedule.add(new TaskInteract(taskEx));
         Debug.printDebugMessage(aic.getCharacterName() + " added taskInteract in talkToCharacterSchedule",
                 Debug.Channel.NPC, aic.getCharacterName());
-
         //find character
         //walk to character
         //interact (with character)
