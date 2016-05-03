@@ -127,32 +127,15 @@ public class StateBasedAI {
 	            		}
                 	}
                 	if(conditions.contains(new Condition(ConditionState.STANDING_NEXT_TO_DOOR))){
+                		System.out.println("==============================================================");
                 		System.out.println(aic.getCharacter().getName() + " whants to move away form dooor");
-                		for(Door d: doors){
-    	                	if(Math.abs(d.getPos().getX()-aic.getCharacter().getPos().getX()) < 2 
-    	                			&& Math.abs(d.getPos().getY()-aic.getCharacter().getPos().getY()) < 2){
-    	                		if(d.getPos().getX()-aic.getCharacter().getPos().getX() < 0){
-    	                			System.out.println(aic.getCharacter().getName() + " moves East");
-									schedule.add(new TaskMoveStep(Direction.EAST, world));
-    	                		}else if(d.getPos().getX()-aic.getCharacter().getPos().getX() > 0){
-    	                			System.out.println(aic.getCharacter().getName() + " moves West");
-    	                			schedule.add(new TaskMoveStep(Direction.WEST, world));
-    	                		}else if(d.getPos().getY()-aic.getCharacter().getPos().getY() < 0){
-    	                			System.out.println(aic.getCharacter().getName() + " moves South");
-    	                			schedule.add(new TaskMoveStep(Direction.SOUTH, world));
-    	                		}else{
-    	                			System.out.println(aic.getCharacter().getName() + " moves North");
-    	                			schedule.add(new TaskMoveStep(Direction.NORTH, world));
-    	                		}
-    	            			break;
-    	            		}
-                    	}
+                		moveAwayFromDoorSchedule(aic, world);
                 	}
 	            	schedule.add(new TaskIdle());
-                    if (aic.getCharacterName().equals("BURT"))
-                    	//schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
-                        talkToCharacterSchedule("Frido", world, aic, taskEx);
-                    //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
+//                    if (aic.getCharacterName().equals("BURT"))
+//                    	//schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
+//                        talkToCharacterSchedule("Frido", world, aic, taskEx);
+//                    //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
                     break;
                 case TALKING_STATE:
                     schedule.add(new TaskIdle());
@@ -168,7 +151,31 @@ public class StateBasedAI {
         }
     }
 
-    private void genConditions(AIControler aic) {
+    private void moveAwayFromDoorSchedule(AIControler aic, World world) {
+    	for(Door d: doors){
+        	if(Math.abs(d.getPos().getX()-aic.getCharacter().getPos().getX()) < 2 
+        			&& Math.abs(d.getPos().getY()-aic.getCharacter().getPos().getY()) < 2){
+        		if(d.getPos().getX()-aic.getCharacter().getPos().getX() < 0){
+        			System.out.println(aic.getCharacter().getName() + " moves East");
+					schedule.add(new TaskMoveStep(Direction.EAST, world));
+        		}else if(d.getPos().getX()-aic.getCharacter().getPos().getX() > 0){
+        			System.out.println(aic.getCharacter().getName() + " moves West");
+        			schedule.add(new TaskMoveStep(Direction.WEST, world));
+        		}else if(d.getPos().getY()-aic.getCharacter().getPos().getY() < 0){
+        			System.out.println(aic.getCharacter().getName() + " moves South");
+        			schedule.add(new TaskMoveStep(Direction.SOUTH, world));
+        		}else{
+        			System.out.println(aic.getCharacter().getName() + " moves North");
+        			schedule.add(new TaskMoveStep(Direction.NORTH, world));
+        		}
+        		System.out.println("===================================");
+    			break;
+    		}
+    	}
+	}
+
+
+	private void genConditions(AIControler aic) {
         if (aic.isTalking()) {
             conditions.add(new Condition(ConditionState.TALKING));
         }
