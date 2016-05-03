@@ -39,6 +39,8 @@ public class Menu extends BasicGameState{
 	public void render(GameContainer gc, StateBasedGame s, Graphics g) throws SlickException {
 		g.drawString("1. Start Game",100,60);
 		g.drawString("2. Quit Game",100,100);
+		g.drawString("When you think you know who is the murderer press Q.",100,140);
+		g.drawString("But you only have one chance to pick the correct one!",100,155);
 		image.draw(250,200,3);
 		text1.render(gc, g);
 	}
