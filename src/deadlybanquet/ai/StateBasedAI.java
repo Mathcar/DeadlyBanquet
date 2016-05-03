@@ -9,6 +9,7 @@ import deadlybanquet.ai.Condition.ConditionState;
 import deadlybanquet.model.Character;
 import deadlybanquet.model.Debug;
 import deadlybanquet.model.Direction;
+import deadlybanquet.model.Door;
 import deadlybanquet.speech.SpeechAct;
 import deadlybanquet.model.World;
 import deadlybanquet.speech.SpeechActFactory;
@@ -33,18 +34,22 @@ public class StateBasedAI {
     private Queue<Task> schedule;
 
     private List<Character> characters;
+    private List<Door> doors;
 
     public StateBasedAI() {
         schedule = new LinkedList<Task>();
         state = AIState.IDLE_STATE;
         conditions = new ArrayList<Condition>();
         characters = new ArrayList<Character>();
+        doors = new ArrayList<Door>();
     }
+    
 
     public void think(AIControler aic, World world, TaskExecuter taskEx) { //method is not runnable
 
-        getCharactersInRoom(aic, world);
-
+    	
+        getObjectsInRoom(aic, world);
+        
         genConditions(aic);
 
         selectState(aic);
@@ -53,7 +58,11 @@ public class StateBasedAI {
             Debug.printDebugMessage(aic.getCharacterName() + " has an empty schedule!", Debug.Channel.NPC,
                     aic.getCharacterName());
         }
-
+        
+//        System.out.println("Condition is empty?: " + conditions.isEmpty());
+//        System.out.println("Schedule is empty?: " + schedule.isEmpty());
+//        System.out.println("Contains INTERUPTED?: " + conditions.contains(new Condition(ConditionState.INTERUPTED)));
+//        System.out.println("Final question: " + (schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))));
         generateSchedule(aic, world, taskEx);
 
         conditions.clear();
@@ -80,9 +89,11 @@ public class StateBasedAI {
         return intendedPhrase;
     }
 
-    private void getCharactersInRoom(AIControler aic, World world) {
+    private void getObjectsInRoom(AIControler aic, World world) {
         characters.clear();
         characters.addAll(world.getRoomOfCharacter(aic.getCharacter()).getAllCharacters());
+        doors.clear();
+        doors.addAll(world.getRoomOfCharacter(aic.getCharacter()).getAllDoors());
     }
 
     private void generateSchedule(AIControler aic, World world, TaskExecuter taskEx) {
@@ -93,16 +104,44 @@ public class StateBasedAI {
         for (Condition c : conditions) {
             Debug.printDebugMessage(c.toString(), Debug.Channel.NPC, aic.getCharacterName());
         }
-        
+
+
         if (schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))) {
             Debug.printDebugMessage("generating new schedule!", Debug.Channel.NPC, aic.getCharacterName());
             schedule.clear();
             switch (state) {
                 case IDLE_STATE:
+
                     if (aic.getCharacterName().equals("BURT"))
                     	schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
                         //talkToCharacterSchedule("Candy", world, aic, taskEx);
                     //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
+                	if(characters.size()>1){
+                		for(Character c: characters){
+                			if(!c.equals(aic.getCharacter()) && Math.random()>0.999){
+                				talkToCharacterSchedule(c.getName(), world, aic, taskEx);
+                				break;
+                			}
+                			schedule.add(new TaskIdle());
+                		}
+                	}
+                	for(Door d: doors){
+	                	if(Math.random()>0.999){
+	                		System.out.println(aic.getCharacter().getName() + " walks to " + d.getDestinationRoom());
+	                		schedule.add(new TaskMove(d.getDestinationRoom(), taskEx, MoveTypes.ROOM));
+	            			break;
+	            		}
+                	}
+                	if(conditions.contains(new Condition(ConditionState.STANDING_NEXT_TO_DOOR))){
+                		System.out.println("==============================================================");
+                		System.out.println(aic.getCharacter().getName() + " whants to move away form dooor");
+                		moveAwayFromDoorSchedule(aic, world);
+                	}
+	            	schedule.add(new TaskIdle());
+//                    if (aic.getCharacterName().equals("BURT"))
+//                    	//schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
+//                        talkToCharacterSchedule("Frido", world, aic, taskEx);
+//                    //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
                     break;
                 case TALKING_STATE:
                     //schedule.add(new TaskIdle());
@@ -118,7 +157,31 @@ public class StateBasedAI {
         }
     }
 
-    private void genConditions(AIControler aic) {
+    private void moveAwayFromDoorSchedule(AIControler aic, World world) {
+    	for(Door d: doors){
+        	if(Math.abs(d.getPos().getX()-aic.getCharacter().getPos().getX()) < 2 
+        			&& Math.abs(d.getPos().getY()-aic.getCharacter().getPos().getY()) < 2){
+        		if(d.getPos().getX()-aic.getCharacter().getPos().getX() < 0){
+        			System.out.println(aic.getCharacter().getName() + " moves East");
+					schedule.add(new TaskMoveStep(Direction.EAST, world));
+        		}else if(d.getPos().getX()-aic.getCharacter().getPos().getX() > 0){
+        			System.out.println(aic.getCharacter().getName() + " moves West");
+        			schedule.add(new TaskMoveStep(Direction.WEST, world));
+        		}else if(d.getPos().getY()-aic.getCharacter().getPos().getY() < 0){
+        			System.out.println(aic.getCharacter().getName() + " moves South");
+        			schedule.add(new TaskMoveStep(Direction.SOUTH, world));
+        		}else{
+        			System.out.println(aic.getCharacter().getName() + " moves North");
+        			schedule.add(new TaskMoveStep(Direction.NORTH, world));
+        		}
+        		System.out.println("===================================");
+    			break;
+    		}
+    	}
+	}
+
+
+	private void genConditions(AIControler aic) {
         if (aic.isTalking()) {
             conditions.add(new Condition(ConditionState.TALKING));
         }
@@ -128,7 +191,17 @@ public class StateBasedAI {
         	}
             aic.setBlocked(false);
             conditions.add(new Condition(ConditionState.INTERUPTED));
+<<<<<<< HEAD
         }*/
+        
+        
+        for(Door d: doors){
+        	if(Math.abs(d.getPos().getX()-aic.getCharacter().getPos().getX()) < 2 
+        			&& Math.abs(d.getPos().getY()-aic.getCharacter().getPos().getY()) < 2){
+        		conditions.add(new Condition(ConditionState.STANDING_NEXT_TO_DOOR));
+        	}
+        }
+
 
         //add more conditions
     }

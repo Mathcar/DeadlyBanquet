@@ -69,7 +69,6 @@ public class Position {
 
     @Override
     public String toString(){
-        String temp = "(" + x + ", " + y + ")";
-        return temp;
+        return "(" + x + ", " + y + ")";
     }
 }

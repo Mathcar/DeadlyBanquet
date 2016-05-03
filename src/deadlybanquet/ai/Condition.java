@@ -8,7 +8,8 @@ public class Condition {
 		WANT_TO_TALK_TO,
 		STANDING_NEXT_TO,
 		DONT_WANT_TO_SE,
-		TALKING
+		TALKING,
+		STANDING_NEXT_TO_DOOR
 	}
 	
 	private ConditionState condition;
