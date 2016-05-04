@@ -133,8 +133,6 @@ public class StateBasedAI {
 	            		}
                 	}
                 	if(conditions.contains(new Condition(ConditionState.STANDING_NEXT_TO_DOOR))){
-                		System.out.println("==============================================================");
-                		System.out.println(aic.getCharacter().getName() + " whants to move away form dooor");
                 		moveAwayFromDoorSchedule(aic, world);
                 	}
 	            	schedule.add(new TaskIdle());
@@ -174,7 +172,6 @@ public class StateBasedAI {
         			System.out.println(aic.getCharacter().getName() + " moves North");
         			schedule.add(new TaskMoveStep(Direction.NORTH, world));
         		}
-        		System.out.println("===================================");
     			break;
     		}
     	}
@@ -226,6 +223,7 @@ public class StateBasedAI {
                 break;
             case TALKING_STATE:
                 if (!conditions.contains(new Condition(ConditionState.TALKING))) {
+                	System.out.println(aic.getCharacter().getName() +" is no longer Talking.");
                     state = AIState.IDLE_STATE;
                 }
                 break;
