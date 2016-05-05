@@ -55,9 +55,13 @@ public class World implements TileBasedMap, TaskExecuter {
         Debug.init();
         //Set which npc will be able to print messages to debug, if none is set then all of them will be able to send
         Debug.setDebugNPC("BURT");
-        Debug.setChannelStatus(Debug.Channel.NPC, false);
-        Debug.setChannelStatus(Debug.Channel.SPEECH_ACTS, false);
+        Debug.openAllChannels();
+        Debug.setChannelStatus(Debug.Channel.WORLD, false);
         Debug.setChannelStatus(Debug.Channel.PATHFINDING, false);
+        Debug.setChannelStatus(Debug.Channel.CONVERSATION, true);
+        Debug.setChannelStatus(Debug.Channel.SPEECH_ACTS, false);
+        Debug.setChannelStatus(Debug.Channel.PLAYER, true);
+        Debug.setChannelStatus(Debug.Channel.BRAIN, true);
         current=this;
 
         npcConversations = new ArrayList<>();
@@ -99,6 +103,14 @@ public class World implements TileBasedMap, TaskExecuter {
                 }
             }
         }
+        //init player basic memories
+        Room r = getRoomOfCharacter(player.getCharacter());
+        for(Character c : r.getAllCharacters()){
+            playerBrain.plantWhereabout(new Whereabouts(c.getName(),
+                    r.getName()));
+
+        }
+
     }
 
     private void initPlayer(){
@@ -323,11 +335,25 @@ public class World implements TileBasedMap, TaskExecuter {
     		}
             else{       //Character attempting to talk is an npc
                 AIControler attempter = getRelatedControler(chr);
-                c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
-                setUpConversation(attempter, target);
-                Debug.printDebugMessage(attempter.getCharacterName() + " started a conversation with " +
-                                    target.getCharacterName(), Debug.Channel.WORLD);
-                return true;
+                if(player.isCharacter(c)){
+                    playerConv = new ConversationModel(controlerBrainMap.get(attempter), playerBrain, player.getCharacter().getDefaultImage(),
+                            attempter.getCharacter().getDefaultImage()
+                            );
+                    player.getCharacter().setTalking(true);
+                    attempter.getCharacter().setTalking(true);
+                    Debug.printDebugMessage(attempter.getCharacterName() + " started a conversation with " +
+                            player.getName(), Debug.Channel.CONVERSATION);
+                    //player is talking so needs to change state
+                    c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
+                    talk = true;
+                    return true;
+                }else{
+                    setUpConversation(attempter, target);
+                    c.setDirection(Direction.getOppositeDirection(chr.getDirection()));
+                    Debug.printDebugMessage(attempter.getCharacterName() + " started a conversation with " +
+                            target.getCharacterName(), Debug.Channel.CONVERSATION);
+                    return true;
+                }
             }
     	}
     	return false;

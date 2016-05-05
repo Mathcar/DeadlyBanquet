@@ -111,9 +111,6 @@ public class StateBasedAI {
             schedule.clear();
             switch (state) {
                 case IDLE_STATE:
-
-                    if (aic.getCharacterName().equals("BURT"))
-                    	schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
                         //talkToCharacterSchedule("Candy", world, aic, taskEx);
                     //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
                 	if(characters.size()>1){
@@ -140,6 +137,10 @@ public class StateBasedAI {
 //                    	//schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
 //                        talkToCharacterSchedule("Frido", world, aic, taskEx);
 //                    //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
+                    if (aic.getCharacterName().equals("BURT")) {
+                        schedule.clear();
+                        talkToCharacterSchedule("ChooseName", world, aic, taskEx);
+                    }
                     break;
                 case TALKING_STATE:
                     //schedule.add(new TaskIdle());
@@ -267,7 +268,7 @@ public class StateBasedAI {
 		}else{
 			//schedule.add(new TaskMove(world.getRoomOfCharacter(character).getName(), taskEx, MoveTypes.ROOM));
 		}*/
-        //schedule.add(new TaskInteract(taskEx));
+        schedule.add(new TaskInteract(taskEx));
         Debug.printDebugMessage(aic.getCharacterName() + " added taskInteract in talkToCharacterSchedule",
                 Debug.Channel.NPC, aic.getCharacterName());
         //find character

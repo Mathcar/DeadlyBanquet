@@ -153,6 +153,10 @@ public class SpeechActFactory {
                 }*/
                 text=createText(text,list,SpeechType.GREET,prop);
                 text=parseSpeechAct(text,speaker,listener);
+                speaker.getName();
+                listener.getName();
+                prop.toString();
+                IThoughtList.size();
                 temp = new SpeechAct(text,speaker.getName(),listener.getName(),SpeechType.GREET,prop,IThoughtList);
             }
             else if(i.equals(BeingPolite.GOODBYE)) {

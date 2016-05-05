@@ -31,6 +31,8 @@ public class ConversationModel {
     //Used to record the conversation
     private HashMap<IPerceiver, ArrayList<SpeechAct>> actHistory;
     private SpeechAct decidedAnswer;
+    private SpeechAct questionToAnswer;
+    private SpeechAct playerAnwer;
 
     //Constructor needed when player is a part of the conversation
     public ConversationModel(IPerceiver player, IPerceiver npc, Image playerImage, Image npcImage){
@@ -58,6 +60,8 @@ public class ConversationModel {
         actHistory.put(perceiver1, new ArrayList<SpeechAct>());
         actHistory.put(perceiver2, new ArrayList<SpeechAct>());
         conversationCompleted = false;
+        questionToAnswer = null;
+        playerAnwer = null;
     }
 
     public void runConversation(){
@@ -71,27 +75,44 @@ public class ConversationModel {
                 doOneRound(sa);
             }
         }else if(perceiver2.isPlayer()){
-            if(iteration<maxIterations){
+            if(iteration<maxIterations+1){
                 if(iteration==0) {
                     TextPropertyEnum tpe = perceiver1.chooseProperty(perceiver2.getName());
                     SpeechAct greeting = SpeechActFactory.convertIThoughtToSpeechAct(BeingPolite.GREET,
                             tpe, perceiver1, perceiver2);
-                    sendActToPerceiver(perceiver2, greeting); //TODO NPC cant handle the Yes, GREET response
-                    Debug.printDebugMessage("NPCs actually greeted each other without crash, score!",
+                    playerAnwer = sendActToPerceiver(perceiver2, greeting);
+                    setQuestionToAnswer(greeting);
+                    Debug.printDebugMessage("NPC greeted the player",
                             Debug.Channel.CONVERSATION);
                     iteration++;
                 }else if(iteration==1){
-                    if(playersChoice!=null){
+                    if(playersChoice!=null) {
+                        //send the selected getting back to the npc
                         sendActToPerceiver(perceiver1, getPlayerChoice());
+                        // Send the intended question and save the cache the answer
+                        playerAnwer = sendActToPerceiver(perceiver2, perceiver1.getIntendedPhrase());
+                        setQuestionToAnswer(perceiver1.getIntendedPhrase());
+                        Debug.printDebugMessage("Player greeted and NPC asked its question",
+                                Debug.Channel.CONVERSATION);
+                        iteration++;
                     }
+                }else{
+                    if(playersChoice!=null){
+                        //Send answer to former question and cache npc response
+                        SpeechAct response = sendActToPerceiver(perceiver1, getPlayerChoice());
+                        iteration++;
+                        if(iteration<maxIterations+1) {
+                            //Send cached response to the playerBrain
+                            playerAnwer = sendActToPerceiver(perceiver2, response);
+                            //Set the questionToAnswer that the conversationTree looks at to the response
+                            setQuestionToAnswer(response);
+                        }
 
-
-                    SpeechAct answer = sendActToPerceiver(perceiver2, perceiver1.getIntendedPhrase());
-                    decidedAnswer = sendActToPerceiver(perceiver1,answer);
-                    Debug.printDebugMessage("NPC actually asked the intended question and got an answer without crash, score!",
-                            Debug.Channel.CONVERSATION);
-                    iteration++;
+                    }
                 }
+            }else{
+                Debug.printDebugMessage("Conversation reached max iterations", Debug.Channel.CONVERSATION);
+                conversationCompleted = true;
             }
 
 
@@ -166,13 +187,19 @@ public class ConversationModel {
         ArrayList<SpeechAct> temp = new ArrayList<>();
         ArrayList<IThought> tempI = new ArrayList<IThought>();
         //Debug.printDebugMessage("speaker = " + perceiver1.getName());
+        IPerceiver speaker = perceiver1;
+        IPerceiver listener = perceiver2;
+        if(perceiver2.isPlayer()){
+            speaker = perceiver2;
+            listener = perceiver1;
+        }
         tempI.add(thought);
         temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI,
-                                TextPropertyEnum.NEUTRAL, perceiver1, perceiver2));
+                                TextPropertyEnum.NEUTRAL, speaker, listener));
         temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI, TextPropertyEnum.PROPER,
-                                                            perceiver1, perceiver2));
+                                             speaker, listener));
         temp.add(SpeechActFactory.convertIThoughtToSpeechAct(tempI, TextPropertyEnum.COLLOQUIAL,
-                                                                perceiver1, perceiver2));
+                                                    speaker, listener));
         /*for(SpeechAct sa : temp)
             Debug.printDebugMessage("Speaker =  " + sa.getSpeaker() + "   Listener = " + sa.getListener());
         */
@@ -212,7 +239,12 @@ public class ConversationModel {
     //Returns the latest string sent by the 2nd perciever.
     //Intended for use with the view and therefore only get the second perceivers answer
     public String getLatestResponse(){
-        ArrayList<SpeechAct>  acts = actHistory.get(perceiver2);
+        ArrayList<SpeechAct> acts;
+        //Get the response of the perceiver that is NOT the player
+        if(perceiver1.isPlayer())
+            acts = actHistory.get(perceiver2);
+        else
+            acts = actHistory.get(perceiver1);
         //Debug.printDebugMessage("current size of responses : " + acts.size());
         if(acts.size() == 0)
             return "";      //No act has been sent yet so there is nothing to display
@@ -233,6 +265,21 @@ public class ConversationModel {
         return temp;
     }
 
+    private void setQuestionToAnswer(SpeechAct question){
+        questionToAnswer =question;
+    }
+
+    public SpeechAct getQuestionToAnswer(){
+        return questionToAnswer;
+    }
+
+    public boolean isPlayerAnswering(){
+        return perceiver2.isPlayer();
+    }
+
+    public SpeechAct getIntendedAnswerFromPlayer(){
+        return playerAnwer;
+    }
     public Image getPlayerImage(){
     	return playerImage;
     }
