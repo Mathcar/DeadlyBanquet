@@ -59,10 +59,6 @@ public class StateBasedAI {
                     aic.getCharacterName());
         }
         
-//        System.out.println("Condition is empty?: " + conditions.isEmpty());
-//        System.out.println("Schedule is empty?: " + schedule.isEmpty());
-//        System.out.println("Contains INTERUPTED?: " + conditions.contains(new Condition(ConditionState.INTERUPTED)));
-//        System.out.println("Final question: " + (schedule.isEmpty() || conditions.contains(new Condition(ConditionState.INTERUPTED))));
         generateSchedule(aic, world, taskEx);
 
         conditions.clear();
@@ -112,8 +108,8 @@ public class StateBasedAI {
             switch (state) {
                 case IDLE_STATE:
 
-                    if (aic.getCharacterName().equals("BURT"))
-                    	schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
+//                    if (aic.getCharacterName().equals("BURT"))
+//                    	schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
                         //talkToCharacterSchedule("Candy", world, aic, taskEx);
                     //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
                 	if(characters.size()>1){
@@ -160,16 +156,12 @@ public class StateBasedAI {
         	if(Math.abs(d.getPos().getX()-aic.getCharacter().getPos().getX()) < 2 
         			&& Math.abs(d.getPos().getY()-aic.getCharacter().getPos().getY()) < 2){
         		if(d.getPos().getX()-aic.getCharacter().getPos().getX() < 0){
-        			System.out.println(aic.getCharacter().getName() + " moves East");
 					schedule.add(new TaskMoveStep(Direction.EAST, world));
         		}else if(d.getPos().getX()-aic.getCharacter().getPos().getX() > 0){
-        			System.out.println(aic.getCharacter().getName() + " moves West");
         			schedule.add(new TaskMoveStep(Direction.WEST, world));
         		}else if(d.getPos().getY()-aic.getCharacter().getPos().getY() < 0){
-        			System.out.println(aic.getCharacter().getName() + " moves South");
         			schedule.add(new TaskMoveStep(Direction.SOUTH, world));
         		}else{
-        			System.out.println(aic.getCharacter().getName() + " moves North");
         			schedule.add(new TaskMoveStep(Direction.NORTH, world));
         		}
     			break;
