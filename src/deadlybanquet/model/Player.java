@@ -55,8 +55,9 @@ public class Player implements Talkable {
 				movementTimer = MOVEMENT_DELAY;
 			}
 			if(in.isKeyPressed(Input.KEY_E)){
-				world.attemptChangeRooms(this.getCharacter());
-				world.attemptTalk(this.getCharacter());
+				if(!world.attemptChangeRooms(this.getCharacter())){
+					world.attemptTalk(this.getCharacter());
+				}
 				//character.attemptRoomChange();
 				//character.tryTalk();
 			}

@@ -1,5 +1,6 @@
 package deadlybanquet.ai;
 
+import deadlybanquet.model.Debug;
 import deadlybanquet.model.World;
 /**
  * This class is the memory of the NPC or player. 
@@ -9,27 +10,51 @@ import deadlybanquet.model.World;
 import deadlybanquet.speech.SpeechAct;
 import java.util.*;
 
+import deadlybanquet.speech.SpeechActFactory;
 import deadlybanquet.speech.TextPropertyEnum;
+import jdk.nashorn.internal.objects.annotations.Where;
 import org.newdawn.slick.Image;
 public class PlayerBrain implements IPerceiver {
     private Memory information;
     private World world;
     private String name;
+    private ArrayList<Whereabouts> whereabouts;
+    private ArrayList<Do> dos;
+
+
+
     //TODO CONSTRUCTOR ONLY TEMPORARILY ADDED, NOT SURE IF EMPTY MEMORY IS SUPPPOSED TO BE MADE
     public PlayerBrain(String name){
         information = new Memory(new SortedList());
         this.name = name;
+        whereabouts = new ArrayList<>();
     }
     public PlayerBrain(SortedList s, World world){
         information = new Memory(s);
         this.world = world;
+        whereabouts = new ArrayList<>();
+
     }
     
     //this method accepts a speech act and adds the information to its memory.
     //This method should not evaluate memory as that is the (human) player's or brains job.
     @Override
     public SpeechAct hear(SpeechAct act){
+        SpeechAct answer = null;
+        IThought answerContent = null;
     	for(IThought i: act.getContent()){
+            switch(i.getClass().getSimpleName()){
+                case "Whereabouts" :
+                    IThought intent = processWhereabouts((Whereabouts)i);
+                    if(intent != null)
+                        answerContent = intent;
+                    break;
+                case "Do" :
+                    answerContent = processDo((Do)i);
+                    break;
+            }
+
+
     		Opinion compOpinion = new Opinion(act.getSpeaker(), new PAD(0,0,0));
     		SortedList tempSet = information.find(compOpinion);
     		
@@ -42,9 +67,44 @@ public class PlayerBrain implements IPerceiver {
     		
     		this.information.add(new SomebodyElse(i, act.getSpeaker(), speeker.getPAD(), 1));
     	}
+
+        if(answerContent != null) {
+            Debug.printDebugMessage(answerContent.toString() + " is the ithought answer", Debug.Channel.PLAYER);
+            return SpeechActFactory.convertIThoughtToSpeechAct(answerContent, TextPropertyEnum.NEUTRAL,
+                    act.getListener(), act.getSpeaker());
+        }
         //TODO Return something sensible
         return null;
     }
+
+    private IThought processWhereabouts(Whereabouts wa ){
+        Debug.printDebugMessage("processWhereabouts in playerBrain is attempted!", Debug.Channel.PLAYER);
+        for(Whereabouts w : whereabouts){
+            if(w.getCharacter().equals(wa.getCharacter())){
+                Debug.printDebugMessage("Corresponding memory found! " + w.toString(), Debug.Channel.PLAYER);
+                return w;
+            }
+        }
+        return null;
+    }
+
+    private IThought processDo(Do doQ){
+        Debug.printDebugMessage("processDo in playerBrain not done yet!", Debug.Channel.PLAYER);
+        /*
+        for(Do d : dos){
+            if(d.isQuestion()){
+
+            }
+        }*/
+        return null;
+
+    }
+
+    public void plantWhereabout(Whereabouts w){
+        whereabouts.add(w);
+    }
+
+
     
     //Called on every person in origin and destination rooms on room change.
     @Override

@@ -2,6 +2,7 @@ package deadlybanquet.model;
 
 import deadlybanquet.ai.*;
 import deadlybanquet.speech.SpeechAct;
+import deadlybanquet.speech.SpeechActFactory;
 import deadlybanquet.speech.TextPropertyEnum;
 import org.newdawn.slick.Input;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public class ConversationTree {
     private enum State{
         GREETING,
+        ANSWER,
         INITIAL,
         QUESTION,
         GOODBYE,
@@ -85,6 +87,8 @@ public class ConversationTree {
             case GREETING :
                 parseInputGreeting(input);
                 break;
+            case ANSWER :
+                parseInputAnswer(input,cm);
             case INITIAL :
                 parseInputInitial(input, cm);
                 break;
@@ -127,6 +131,9 @@ public class ConversationTree {
                 if(hasFinalChoiceBeenFetched){
                     resetToDefaults();          //Would be nicer to do this during the fetch,
                                                 //TODO Need a copy for SpeechAct to fix this
+                    if(cm.isPlayerAnswering()){
+                        setCurrentState(State.ANSWER);
+                    }
                 }
                 break;
         }
@@ -139,6 +146,9 @@ public class ConversationTree {
         switch (currentState){
             case GREETING :
                 text = getPrintGreeting();
+                break;
+            case ANSWER :
+                text = getPrintAnswer();
                 break;
             case INITIAL :
                 text = getPrintInitial();
@@ -197,6 +207,44 @@ public class ConversationTree {
         for(int i = 0; i<3; i++){
             temp += "  " + (i+1) + ".  " + alternatives.get(i).getLine() + " \n";
         }
+        return temp;
+    }
+
+    private void parseInputAnswer(Input input, ConversationModel cm){
+        if(alternatives== null){
+            alternatives = new ArrayList<>();
+            Debug.printDebugMessage("Answer alternative list size was 0, so now creating answers!", Debug.Channel.CONVERSATION);
+            alternatives = formAnswers(cm.getQuestionToAnswer(), cm);
+        }else{
+            SpeechAct act = chooseSpeecActFromList(input, alternatives, "Answer chosen = ");
+            if(act != null){
+                alternatives = cm.getAllPropertyVariations(act.getContent().get(0));
+                setCurrentState(State.TEXT_PROPERTY_CHOICE);
+
+            }
+        }
+    }
+
+    private ArrayList<SpeechAct> formAnswers(SpeechAct question, ConversationModel cm){
+        ArrayList<SpeechAct> acts = new ArrayList<SpeechAct>();
+        //Add I Don't know
+        Whereabouts w = new Whereabouts("","",-1,new TimeStamp(0,0,0));
+        acts.add(SpeechActFactory.convertIThoughtToSpeechAct(w, TextPropertyEnum.NEUTRAL, cm.getIPerceiver2(), cm.getIPerceiver1()));
+        //Add I don't care
+            //TODO No idea how to represent this in text
+        acts.add(cm.getIntendedAnswerFromPlayer());
+        //Add Real asnwer
+
+        //Add Lie?
+
+        return acts;
+    }
+
+
+    private String getPrintAnswer(){
+        String temp = "ANSWER ALTERNATIVES OUGHTA BE PRINTED HERE";
+        if( alternatives != null)
+            temp = getPrintChooseSpeechAct("\tChoose your answer: ", alternatives);
         return temp;
     }
 
@@ -454,6 +502,50 @@ public class ConversationTree {
         else
             return null;                //This should never happen, so a crash is intended
     }
+
+    private SpeechAct chooseSpeecActFromList(Input input, ArrayList<SpeechAct> choices, String debugLine){
+        SpeechAct act = null;
+        if(input.isKeyPressed(Input.KEY_1)){
+            Debug.printDebugMessage(debugLine + choices.get((currentCounter)).getLine(), Debug.Channel.CONVERSATION);
+            act = choices.get(currentCounter);
+        } else if(input.isKeyPressed(Input.KEY_2) && choices.size()>currentCounter+1) {
+            Debug.printDebugMessage(debugLine + choices.get((currentCounter + 1)).getLine(), Debug.Channel.CONVERSATION);
+            act = choices.get(currentCounter + 1);
+        } else if(input.isKeyPressed(Input.KEY_3) && choices.size()>currentCounter+2) {
+            Debug.printDebugMessage(debugLine + choices.get((currentCounter + 2)).getLine(), Debug.Channel.CONVERSATION);
+            act = choices.get(currentCounter + 2);
+        } else if(choices.size()>currentCounter+3) {
+            if (input.isKeyPressed((Input.KEY_4))) {
+                currentCounter += 3;
+                Debug.printDebugMessage("currentCounter has been set to " + currentCounter, Debug.Channel.CONVERSATION);
+            } else if (input.isKeyPressed(Input.KEY_5) && currentCounter >= 3) {
+                currentCounter -= 3;
+                Debug.printDebugMessage("currentCounter has been set to " + currentCounter, Debug.Channel.CONVERSATION);
+            }
+        }else if(input.isKeyPressed(Input.KEY_4) && currentCounter>=3) {
+            currentCounter-=3;
+            Debug.printDebugMessage("currentCounter has been set to " + currentCounter, Debug.Channel.CONVERSATION);
+        }
+        return act;
+    }
+
+    private String getPrintChooseSpeechAct(String heading, ArrayList<SpeechAct> choices){
+        String temp = heading;
+        int numberDisplayed = 1;
+        for(int i = currentCounter; i<choices.size() && i<currentCounter+3; i++) {
+            temp += "\n  " + numberDisplayed + ".  " + choices.get(i).getLine();
+            numberDisplayed++;
+        }
+        if(choices.size()>currentCounter+3) {
+            temp += "\n  " + numberDisplayed + ".  Next 3";
+            numberDisplayed++;
+        }
+        if(currentCounter >= 3) {
+            temp += "\n  " + numberDisplayed + ".  Previous 3";
+        }
+        return temp;
+    }
+
 
     private String chooseStringFromList(Input input, ArrayList<String> choices, String debugLine){
         String item = "";
