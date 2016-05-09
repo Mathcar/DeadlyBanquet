@@ -47,7 +47,7 @@ public class Do implements IThought{
 
     public String whatToString(){
         if(what.equals(What.MURDER)){
-            return "murderd";
+            return "murdered";
         }else if(what.equals(What.MOVETO)){
             return "moved to";
         }else if(what.equals(What.PICKUP)){
