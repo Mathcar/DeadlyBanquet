@@ -135,7 +135,7 @@ public class World implements TileBasedMap, TaskExecuter {
     	controlerBrainMap = new HashMap<>();
     	createNpc(new Position(9,5), "Frido", "Living Room" );
     	createNpc(new Position(10,13), "Candy", "Living Room" );
-    	createNpc(new Position(2,2), "BURT", "Living Room" );
+    	createNpc(new Position(2,2), "Burt", "Living Room" );
     	createNpc(new Position(7,12), "Cindy", "Kitchen" );
     	createNpc(new Position(9,7), "Aragorn", "Kitchen" );
     	createNpc(new Position(9,3), "Daisy", "Bedroom" );

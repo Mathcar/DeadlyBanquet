@@ -45,8 +45,8 @@ public class EndGame extends BasicGameState {
 			g.drawString("2. Daisy",100,90);
 			g.drawString("3. Cindy",100,105);
 			g.drawString("4. Frido",100,120);
-			g.drawString("5. BURT",100,135);
-			g.drawString("6. Sandy",100,150);
+			g.drawString("5. Burt",100,135);
+			g.drawString("6. Candy",100,150);
 		}
 	}
 	
