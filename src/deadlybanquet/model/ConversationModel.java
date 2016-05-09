@@ -259,9 +259,11 @@ public class ConversationModel {
         ArrayList<SpeechAct> p2strings = actHistory.get(perceiver2);
         for(int i = 0; i<p1strings.size();i++){
             SpeechAct saP1  = p1strings.get(i);
-            SpeechAct saP2  = p2strings.get(i);
             temp+= saP1.getSpeaker() + " said: " + saP1.getLine() + "\n";
-            temp+= saP2.getSpeaker() + " said: " + saP2.getLine() + "\n";
+            if(p2strings.size()>i) {
+                SpeechAct saP2 = p2strings.get(i);
+                temp += saP2.getSpeaker() + " said: " + saP2.getLine() + "\n";
+            }
         }
         return temp;
     }
