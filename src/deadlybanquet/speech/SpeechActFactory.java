@@ -132,7 +132,7 @@ public class SpeechActFactory {
             if(((Say)i).content instanceof BeingPolite){
                 i=((Say) i).content;
             }else{
-                return new SpeechAct("ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
+                return new SpeechAct("Ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
             }
         }else if(i instanceof SomebodyElse){
             i=((SomebodyElse)i).what;
