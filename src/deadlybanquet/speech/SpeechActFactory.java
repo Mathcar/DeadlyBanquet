@@ -131,6 +131,8 @@ public class SpeechActFactory {
         if(i instanceof Say){
             if(((Say)i).content instanceof BeingPolite){
                 i=((Say) i).content;
+            }else if(((Say)i).content instanceof Do){
+                i=((Say)i).content;
             }else{
                 return new SpeechAct("Ok.",speaker.getName(),listener.getName(),SpeechType.OK,prop,IThoughtList);
             }

@@ -86,7 +86,7 @@ public class Do implements IThought{
 
     @Override
     public boolean isQuestion() {
-        return doer=="" || withWhat=="" || when.getDay()<0;
+        return doer=="" || withWhat=="" /*|| when.getDay()<0*/;
     }
 
     @Override
