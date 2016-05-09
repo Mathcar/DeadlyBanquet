@@ -306,7 +306,7 @@ public class NPCBrain implements IPerceiver, Talkable {
             else
                 foundData.add(new Say(me, you, inWhere, YESNO));
         }
-        Whereabouts w = (Whereabouts)foundData.first();
+        //Whereabouts w = (Whereabouts)foundData.first();
         possibleAnswers.add(foundData.first());
         if (!inWhere.isQuestion()&&!inWhere.dontKnow())
             acceptUncritically(you, inWhere);

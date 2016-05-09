@@ -73,6 +73,7 @@ public class ConversationTree {
         currentCounter = 0;
         who = "";
         who2 = "";
+        stateToSkip = null;
         //when = "";
         what = null;
         alternatives = null;
@@ -216,7 +217,7 @@ public class ConversationTree {
             Debug.printDebugMessage("Answer alternative list size was 0, so now creating answers!", Debug.Channel.CONVERSATION);
             alternatives = formAnswers(cm.getQuestionToAnswer(), cm);
         }else{
-            SpeechAct act = chooseSpeecActFromList(input, alternatives, "Answer chosen = ");
+            SpeechAct act = chooseSpeechActFromList(input, alternatives, "Answer chosen = ");
             if(act != null){
                 alternatives = cm.getAllPropertyVariations(act.getContent().get(0));
                 setCurrentState(State.TEXT_PROPERTY_CHOICE);
@@ -232,9 +233,10 @@ public class ConversationTree {
         acts.add(SpeechActFactory.convertIThoughtToSpeechAct(w, TextPropertyEnum.NEUTRAL, cm.getIPerceiver2(), cm.getIPerceiver1()));
         //Add I don't care
             //TODO No idea how to represent this in text
-        acts.add(cm.getIntendedAnswerFromPlayer());
-        //Add Real asnwer
 
+        //Add Real asnwer
+        if(cm.getIntendedAnswerFromPlayer()!=null)
+            acts.add(cm.getIntendedAnswerFromPlayer());
         //Add Lie?
 
         return acts;
@@ -503,7 +505,7 @@ public class ConversationTree {
             return null;                //This should never happen, so a crash is intended
     }
 
-    private SpeechAct chooseSpeecActFromList(Input input, ArrayList<SpeechAct> choices, String debugLine){
+    private SpeechAct chooseSpeechActFromList(Input input, ArrayList<SpeechAct> choices, String debugLine){
         SpeechAct act = null;
         if(input.isKeyPressed(Input.KEY_1)){
             Debug.printDebugMessage(debugLine + choices.get((currentCounter)).getLine(), Debug.Channel.CONVERSATION);
@@ -533,6 +535,9 @@ public class ConversationTree {
         String temp = heading;
         int numberDisplayed = 1;
         for(int i = currentCounter; i<choices.size() && i<currentCounter+3; i++) {
+            if(choices.get(i) == null)
+                Debug.printDebugMessage("ITS NULL", Debug.Channel.CONVERSATION);
+            choices.get(i).getContent();
             temp += "\n  " + numberDisplayed + ".  " + choices.get(i).getLine();
             numberDisplayed++;
         }

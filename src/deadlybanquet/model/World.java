@@ -90,6 +90,7 @@ public class World implements TileBasedMap, TaskExecuter {
         // All the items and names are added in the singelton class.
         //Create initialization memories (like who is in the same room and such)
         initBasicMemories();
+        initMurderMemories();
     }
 
     //plant basic memories like the positions of the people in the same room in all the AIs
@@ -111,6 +112,13 @@ public class World implements TileBasedMap, TaskExecuter {
 
         }
 
+    }
+
+    private void initMurderMemories(){
+        //Since we cannot ask about things happening during a specific timeframe,
+        //I will just add the memory of Burt murdering Sandy to Cindy
+        Do d = new Do(Do.What.MURDER, "BURT", "Sandy");
+        getControlerBrain(getRelatedControler(getCharacterRef("Cindy"))).plantFalseMemory(d);
     }
 
     private void initPlayer(){
@@ -451,6 +459,8 @@ public class World implements TileBasedMap, TaskExecuter {
         for(AIControler aic : aiss){
             names.add(aic.getCharacterName());
         }
+        //Add murdered character since she does not exist aas a character anymore
+        names.add("Sandy");
         return names;
     }
 

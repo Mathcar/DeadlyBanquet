@@ -107,9 +107,9 @@ public class StateBasedAI {
             schedule.clear();
             switch (state) {
                 case IDLE_STATE:
-//                    if (aic.getCharacterName().equals("BURT"))
+                    if (aic.getCharacterName().equals("BURT"))
 //                    	schedule.add(new TaskMove("Bedroom", taskEx, MoveTypes.ROOM));
-                        //talkToCharacterSchedule("Candy", world, aic, taskEx);
+                        talkToCharacterSchedule("ChooseName", world, aic, taskEx);
                     //schedule.add(new TaskTurn(getDirectionToClosestCharacter(aic)));
                 	if(characters.size()>1){
                 		for(Character c: characters){
