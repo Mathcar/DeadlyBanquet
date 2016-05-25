@@ -483,9 +483,9 @@ public class ConversationTree {
     private String getPrintTextProperty(){
         String temp = "        Choose what to say:    ";
         for(int i = 0; i<3; i++){
-            temp += "\n  " + (i+1) + ".  \"" + alternatives.get(i).getLine() + "\"";
+            temp += "\n " + (i+1) + ". \"" + alternatives.get(i).getLine() + "\"";
         }
-        temp += "\n  4.  abort mission";
+        temp += "\n 4. cancel selection";
         return temp;
     }
 
